@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View} from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import { Foundation } from '@expo/vector-icons'
 
@@ -19,25 +19,25 @@ export default function SearchComponent() {
 }
 
 const styles = StyleSheet.create({
-    textInputBox: {
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#F0F0F0',
-        backgroundColor: '#F0F0F0',
-        flexDirection: 'row',
-      },
-      magnifyIcon: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      textInput: {
-        flex: 5,
-        padding: 10,
-        alignContent: 'flex-start',
-      },
-      menu: {
-        paddingHorizontal: 50,
-        paddingTop: 50,
-       
-      },
+  textInputBox: {
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    backgroundColor: '#F0F0F0',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  magnifyIcon: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  textInput: {
+    flex: 5,
+    padding: 10,
+    alignContent: 'flex-start',
+  },
+  menu: {
+    paddingHorizontal: 50,
+    paddingTop: 50,
+  },
 })

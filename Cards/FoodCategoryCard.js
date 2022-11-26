@@ -3,6 +3,7 @@ import React from 'react'
 
 export default function FoodCategoryCard({ foodCategory }) {
   return (
+    // note: this card is to filter the categories displayed on the screen, still needs the functionality to do so
     <TouchableOpacity style={styles.foodCategoryStyle}>
       <View>
         <Image source={foodCategory.foodType} />
@@ -23,6 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
     borderRadius: 16,
     margin: 10,
-    padding: 7
+    padding: 12,
   },
 })
