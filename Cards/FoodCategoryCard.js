@@ -1,13 +1,14 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 
-export default function FoodCategoryCard({ foodCategory }) {
+export default function FoodCategoryCard(props) {
+  
   return (
     // note: this card is to filter the categories displayed on the screen, still needs the functionality to do so
-    <TouchableOpacity style={styles.foodCategoryStyle}>
+    <TouchableOpacity id={props.foodCategory.key} style={styles.foodCategoryStyle} onPress={() => props.handlePress(props.foodCategory.key)}>
       <View>
-        <Image source={foodCategory.foodType} />
-        <Text style={styles.categoryText}>{foodCategory.text}</Text>
+        <Image source={props.foodCategory.foodType} />
+        <Text style={styles.categoryText}>{props.foodCategory.text}</Text>
       </View>
     </TouchableOpacity>
   )

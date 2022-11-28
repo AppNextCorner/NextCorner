@@ -6,7 +6,7 @@ import {
   Image,
   ScrollView,
 } from 'react-native'
-import { useState } from 'react'
+import { useState, } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import SearchComponent from '../components/SearchComponent'
 import FoodCategoryCard from '../Cards/FoodCategoryCard'
@@ -14,6 +14,7 @@ import FoodsCard from '../Cards/FoodsCard'
 import FoodListComponent from '../components/FoodListComponent'
 
 export default function HomePage() {
+  const [shouldShow, setShouldShow] = useState(true)
   // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
   const [categoryList, setCategoryList] = useState([
     {
@@ -48,6 +49,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 1,
+          foodCategoryId: 1,
         },
         {
           name: 'fruit',
@@ -56,6 +58,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 2,
+          foodCategoryId: 2,
         },
         {
           name: 'churros',
@@ -64,6 +67,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 3,
+          foodCategoryId: 2,
         },
         {
           name: 'fruit',
@@ -72,6 +76,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 4,
+          foodCategoryId: 4,
         },
       ],
     },
@@ -85,6 +90,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 1,
+          foodCategoryId: 3,
         },
         {
           name: 'fruit',
@@ -93,6 +99,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 2,
+          foodCategoryId: 4,
         },
         {
           name: 'churros',
@@ -101,6 +108,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 3,
+          foodCategoryId: 2,
         },
         {
           name: 'fruit',
@@ -109,6 +117,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 4,
+          foodCategoryId: 2,
         },
       ],
     },
@@ -122,6 +131,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 1,
+          foodCategoryId: 1,
         },
         {
           name: 'fruit',
@@ -130,6 +140,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 2,
+          foodCategoryId: 1,
         },
         {
           name: 'churros',
@@ -138,6 +149,7 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 3,
+          foodCategoryId: 2,
         },
         {
           name: 'fruit',
@@ -146,10 +158,43 @@ export default function HomePage() {
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
           key: 4,
+          foodCategoryId: 3,
         },
       ],
     },
   ])
+
+  const [itemId, setItemId] = useState(0)
+
+  let lol = trendingFood.map((person) =>
+    person.category.map((comment) => comment),
+  )
+  let findingFilter = trendingFood.map((person) =>
+    person.category.map((comment) => comment.foodCategoryId),
+  )
+  let lol3 = lol.flat().filter((i) => i.foodCategoryId === 2)
+
+  var person = findingFilter.filter((person) => person !== 2)
+
+  let myTitle = categoryList.map((title) => title)
+  console.log(
+    'Among us: ' + lol3, //use the argument here.
+  )
+
+  function showItem(id) {
+    setItemId(id)
+    console.log(id)
+
+    if (itemId === id) {
+      setShouldShow(!shouldShow)
+    }
+
+    if (itemId !== id) {
+      setShouldShow(shouldShow)
+    }
+  }
+
+  
 
   return (
     <View style={styles.container}>
@@ -175,7 +220,10 @@ export default function HomePage() {
                   numColumns={categoryList.length}
                   data={categoryList}
                   renderItem={({ item }) => (
-                    <FoodCategoryCard title={item.title} foodCategory={item} />
+                    <FoodCategoryCard
+                      handlePress={showItem}
+                      foodCategory={item}
+                    />
                   )}
                 />
               </ScrollView>
@@ -185,16 +233,42 @@ export default function HomePage() {
           <Text style={styles.margin}></Text>
 
           {/* Restaurant trending */}
-          <FlatList
-            data={trendingFood}
-            renderItem={({ item }) => (
-              <FoodListComponent
-                title={item.title}
-                style={styles.list}
-                categoryItems={item.category}
-              />
-            )}
-          />
+          {shouldShow ? (
+            <FlatList
+              data={trendingFood}
+              renderItem={({ item }) => {
+                console.log('LOOk at the categories home: ' + item.category)
+                return (
+                  <FoodListComponent
+                    title={item.title}
+                    style={styles.list}
+                    categoryItems={item.category}
+                  />
+                )
+              }}
+            />
+          ) : (
+            // stack lists because we don't want to only render 3 items being 3 category on the state, rather we want to render every item individually
+            <FlatList
+              data={lol}
+              renderItem={({ item }) => {
+                let lol2 = item
+                  .flat()
+                  .filter((i) => i.foodCategoryId === itemId)
+                console.log(
+                  'really' +
+                    item.flat().filter((i) => i.foodCategoryId === itemId),
+                )
+
+                return (
+                  <FlatList
+                    data={lol2}
+                    renderItem={({ item }) => <FoodsCard foodCategory={item} />}
+                  />
+                )
+              }}
+            />
+          )}
         </View>
       </ScrollView>
     </View>

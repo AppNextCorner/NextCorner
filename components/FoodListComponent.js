@@ -3,6 +3,7 @@ import React from 'react'
 import FoodsCard from '../Cards/FoodsCard'
 
 export default function FoodListComponent(props) {
+  console.log("LOOk" +props.categoryItems)
   return (
     <View>
       {/* props is used to allow the use of multiple cards of */}
