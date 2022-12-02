@@ -8,7 +8,7 @@ export default function FoodsCard({ foodCategory }) {
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
-      onPress={() => navigation.navigate('FoodDetails', foodCategory)}
+      onPress={() => navigation.navigate('MenuList', foodCategory)}
       
       style={styles.foodCategoryStyle}
     >
@@ -16,7 +16,10 @@ export default function FoodsCard({ foodCategory }) {
         <Image style={styles.foodImages} source={foodCategory.foodImage} />
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{foodCategory.name}</Text>
-          <Text style={styles.priceText}>{foodCategory.price}</Text>
+          
+        </View>
+        <View>
+          <Text style={styles.categoryText}>{foodCategory.distanceFromUser}</Text>
         </View>
       </View>
     </TouchableOpacity>

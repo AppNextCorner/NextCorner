@@ -1,11 +1,11 @@
-import { StyleSheet, View, Text, Image, Pressable } from 'react-native'
+import { StyleSheet, View, Text, Image, Pressable, FlatList } from 'react-native'
 import React from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 
-export default function FoodDetailsPage() {
+export default function MenuListPage() {
   const route = useRoute()
   const navigation = useNavigation()
 
@@ -14,20 +14,39 @@ export default function FoodDetailsPage() {
     navigation.navigate('Home')
   }
 
+  // accessing and pinpointing data
+  const menuArray = route.params.menu.map(val => val)
+
+  
+  console.log(route.params.menu)
   return (
     <>
       <StatusBar style="light" />
-      
       <View style={styles.container}>
         <Pressable style={styles.goBackButton} onPress={goHome}>
           <Feather name="arrow-left-circle" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={route.params.image} />
-        <Text style={styles.title}>{route.params.text}</Text>
-        {/* <View style={styles.description}>
+        <Image style={styles.image} source={route.params.foodImage} />
+        <Text style={styles.title}>{route.params.name}</Text>
+        <View style={styles.description}>
           <Text style={styles.textDescription}>{route.params.description}</Text>
-        </View> */}
+        </View>
+
+        {/* Menu list containing food items */}
+        <View>
+            <FlatList 
+                data={route.params.menu}
+                renderItem={({ item }) => {
+                    
+                    return(
+
+                           <MenuListPage foodItem={item} /> 
+
+                    )
+                }}
+            />
+        </View>
       </View>
     </>
   )

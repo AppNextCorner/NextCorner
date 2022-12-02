@@ -6,20 +6,20 @@ import {
   Image,
   ScrollView,
 } from 'react-native'
-import { useState, } from 'react'
+import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import SearchComponent from '../components/SearchComponent'
-import FoodCategoryCard from '../Cards/FoodCategoryCard'
-import FoodsCard from '../Cards/FoodsCard'
-import FoodListComponent from '../components/FoodListComponent'
+import RestaurantCategoryCard from '../Cards/RestaurantCategoryCard'
+import RestaurantCard from '../Cards/RestaurantCard'
+import RestaurantListComponent from '../components/RestaurantListComponent'
 
 export default function HomePage() {
-  const [shouldShow, setShouldShow] = useState(true)
   // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
   const [categoryList, setCategoryList] = useState([
     {
       text: 'sweet',
       foodType: require('../assets/foodImages/sweet.png'),
+      color: 'blue',
       key: 1,
     },
     {
@@ -44,10 +44,22 @@ export default function HomePage() {
       category: [
         {
           name: "Henry Benry's almighty churros",
-          price: '$150.00',
+
           foodImage: require('../assets/foodImages/churro.png'),
           description:
             "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
+          menu: [
+            {
+              title: 'Churro',
+              image: require('../assets/foodImages/churro.png'),
+              price: '$150.00',
+            },
+            {
+              title: 'Chicken',
+              image: require('../assets/foodImages/fruit.png'),
+              price: '$150.00',
+            },
+          ],
           key: 1,
           foodCategoryId: 1,
         },
@@ -164,6 +176,9 @@ export default function HomePage() {
     },
   ])
 
+  // did we select an item - category
+  const [categoryWasSelected, setCategoryWasSelected] = useState(false)
+  // what category did we select
   const [itemId, setItemId] = useState(0)
 
   let lol = trendingFood.map((person) =>
@@ -180,21 +195,22 @@ export default function HomePage() {
   console.log(
     'Among us: ' + lol3, //use the argument here.
   )
-
+  // shows item when category is selected and compares the id of the category with the id's of every card in the category list
   function showItem(id) {
-    setItemId(id)
-    console.log(id)
-
+    // want to check if the pressed category is the same as the selected category
+    // if it is the same then the state of categoryWasSelected should be false because this is the initial state of the category list
     if (itemId === id) {
-      setShouldShow(!shouldShow)
-    }
+      setCategoryWasSelected(false)
+      setItemId(0)
 
-    if (itemId !== id) {
-      setShouldShow(shouldShow)
+      // setting to true because the id is already selected when the category is selected -> meaning that the if the id is not selected to a new value and is the same as the current value of itemId, then go back to default because the category was selected twice -> until the new value is selected by the newId / category
+      //
+    } else {
+      setItemId(id)
+
+      setCategoryWasSelected(true)
     }
   }
-
-  
 
   return (
     <View style={styles.container}>
@@ -220,9 +236,10 @@ export default function HomePage() {
                   numColumns={categoryList.length}
                   data={categoryList}
                   renderItem={({ item }) => (
-                    <FoodCategoryCard
+                    <RestaurantCategoryCard
                       handlePress={showItem}
                       foodCategory={item}
+                      foodId={itemId}
                     />
                   )}
                 />
@@ -232,14 +249,14 @@ export default function HomePage() {
 
           <Text style={styles.margin}></Text>
 
-          {/* Restaurant trending */}
-          {shouldShow ? (
+          {/* Restaurant trending -> Bottom Part of the category options */}
+          {!categoryWasSelected ? (
             <FlatList
               data={trendingFood}
               renderItem={({ item }) => {
                 console.log('LOOk at the categories home: ' + item.category)
                 return (
-                  <FoodListComponent
+                  <RestaurantListComponent
                     title={item.title}
                     style={styles.list}
                     categoryItems={item.category}
@@ -249,25 +266,39 @@ export default function HomePage() {
             />
           ) : (
             // stack lists because we don't want to only render 3 items being 3 category on the state, rather we want to render every item individually
-            <FlatList
-              data={lol}
-              renderItem={({ item }) => {
-                let lol2 = item
-                  .flat()
-                  .filter((i) => i.foodCategoryId === itemId)
-                console.log(
-                  'really' +
-                    item.flat().filter((i) => i.foodCategoryId === itemId),
-                )
+            <>
+              {/* <View>
+                {categoryList.map((item) =>
+                  item.key === itemId ? <Text>{item.text}</Text> : null,
+                )}
+              </View> */}
+              <FlatList
+                data={lol}
+                renderItem={({ item }) => {
+                  let lol2 = item
+                    .flat()
+                    .filter((i) => i.foodCategoryId === itemId)
+                  console.log(
+                    'really' +
+                      item.flat().filter((i) => i.foodCategoryId === itemId),
+                  )
 
-                return (
-                  <FlatList
-                    data={lol2}
-                    renderItem={({ item }) => <FoodsCard foodCategory={item} />}
-                  />
-                )
-              }}
-            />
+                  return (
+                    // rendering the restaurants item here
+                    <>
+                      <FlatList
+                        data={lol2}
+                        renderItem={({ item }) => (
+                          <RestaurantCard
+                            foodCategory={item}
+                          />
+                        )}
+                      />
+                    </>
+                  )
+                }}
+              />
+            </>
           )}
         </View>
       </ScrollView>
@@ -276,6 +307,9 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
+  selectedCategory: {
+    backgroundColor: 'blue',
+  },
   title: {
     marginLeft: 10,
     marginTop: 10,

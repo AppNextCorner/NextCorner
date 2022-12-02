@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, ScrollView, FlatList } from 'react-native'
 import React from 'react'
-import FoodsCard from '../Cards/FoodsCard'
+import FoodsCard from '../Cards/RestaurantCard'
 
-export default function FoodListComponent(props) {
+export default function RestaurantListComponent(props) {
   console.log("LOOk" +props.categoryItems)
   return (
     <View>
@@ -24,6 +24,8 @@ export default function FoodListComponent(props) {
       </View>
       {/* For dividing each section of the trending categories */}
       <Text style={styles.margin}></Text>
+
+      
     </View>
   )
 }

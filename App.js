@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MenuListPage from './pages/MenuListPage'
 
 //Screen names to easily find in the route
 const homeName = 'HomePage'
@@ -64,7 +65,7 @@ export default function App() {
         >
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="FoodDetails" component={FoodDetailsPage} />
-          <Stack.Screen name="Orders" component={OrdersPage} />
+          <Stack.Screen name="MenuList" component={MenuListPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
