@@ -36,13 +36,12 @@ function Home() {
         return <MaterialCommunityIcons name={iconName} size={size} color={color} />
       },
       headerShown: false,
+      tabBarActiveTintColor: '#78DBFF',
+      tabBarInactiveTintColor: 'grey',
+      tabBarShowLabel: false,
+      tabBarStyle: { padding: 10, height: 80 },
     })}
-    tabBarOptions={{
-      activeTintColor: '#78DBFF',
-      inactiveTintColor: 'grey',
-      showLabel: false,
-      style: { padding: 10, height: 80 },
-    }}
+
     
   >
     <Tab.Screen name={homeName} component={HomePage} />
