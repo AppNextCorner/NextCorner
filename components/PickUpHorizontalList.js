@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import RestaurantCard from "../Cards/RestaurantCard";
 
-export default function RestaurantListComponent(props) {
+export default function PickUpHorizontalList(props) {
 
   return (
     <View>

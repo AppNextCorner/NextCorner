@@ -1,9 +1,17 @@
-import { StyleSheet, View, Text, Image, Pressable, FlatList } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  FlatList,
+} from 'react-native'
 import React from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
+import MenuItemCard from '../Cards/MenuItemCard'
 
 export default function MenuListPage() {
   const route = useRoute()
@@ -15,10 +23,9 @@ export default function MenuListPage() {
   }
 
   // accessing and pinpointing data
-  const menuArray = route.params.menu.map(val => val)
+  const menuArray = route.params.menu.map((val) => val)
 
   
-  console.log(route.params.menu)
   return (
     <>
       <StatusBar style="light" />
@@ -34,18 +41,17 @@ export default function MenuListPage() {
         </View>
 
         {/* Menu list containing food items */}
-        <View>
-            <FlatList 
-                data={route.params.menu}
-                renderItem={({ item }) => {
-                    
-                    return(
-
-                           <MenuListPage foodItem={item} /> 
-
-                    )
-                }}
-            />
+        <View style={styles.restaurantCard}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={route.params.menu}
+            renderItem={({ item }) => {
+              
+              return <MenuItemCard foodItem={item} />
+              // return <Text>{item.title}</Text>
+            }}
+          />
         </View>
       </View>
     </>
@@ -53,6 +59,9 @@ export default function MenuListPage() {
 }
 
 const styles = StyleSheet.create({
+  restaurantCard: {
+    flex: 1,
+  },  
   goBackButton: {
     zIndex: 2,
     margin: 20,

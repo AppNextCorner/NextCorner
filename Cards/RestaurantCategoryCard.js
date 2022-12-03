@@ -16,7 +16,7 @@ export default function RestaurantCategoryCard(props) {
       
       onPress={() => {
         props.handlePress(props.foodCategory.key)
-        console.log("Clicked a category")
+        
         
       }}
     >

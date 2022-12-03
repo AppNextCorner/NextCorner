@@ -5,29 +5,28 @@ import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 
-export default function FoodDetailsPage() {
+export default function FoodDetailsPage(props) {
+  const { foodItem } = props
   const route = useRoute()
   const navigation = useNavigation()
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
-    navigation.navigate('Home')
+    navigation.goBack()
   }
 
   return (
     <>
       <StatusBar style="light" />
-      
+
       <View style={styles.container}>
         <Pressable style={styles.goBackButton} onPress={goHome}>
           <Feather name="arrow-left-circle" size={40} color="white" />
         </Pressable>
 
         <Image style={styles.image} source={route.params.image} />
-        <Text style={styles.title}>{route.params.text}</Text>
-        {/* <View style={styles.description}>
-          <Text style={styles.textDescription}>{route.params.description}</Text>
-        </View> */}
+        <Text style={styles.title}>{route.params.title}</Text>
+        
       </View>
     </>
   )
