@@ -15,8 +15,8 @@ export default function RestaurantListComponent(props) {
           horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={props.categoryItems}
-          renderItem={({ item }) => <RestaurantCard foodCategory={item} />}
+          data={props.restaurants}
+          renderItem={({ item }) => <RestaurantCard restaurantItem={item} />}
         />
       </View>
       
@@ -28,10 +28,12 @@ export default function RestaurantListComponent(props) {
 
 const styles = StyleSheet.create({
   title: {
-    marginLeft: 20,
+    marginLeft: 10,
     marginTop: 10,
     marginBottom: 10,
     fontSize: 24,
+    fontWeight: 'bold',
+    // fontFamily: 'monospace',
   },
   margin: {
     backgroundColor: "#f2f3f5",

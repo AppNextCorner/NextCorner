@@ -2,17 +2,17 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
-export default function FoodsCard({ foodCategory, checkForStyleChange }) {
+export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
   const changeStyle = (checkForStyleChange) => {
     let change =
       checkForStyleChange === true
         ? {
-          // For the category restaurant list
+            // For the category restaurant list
             height: 250,
-            width: '100%',
+            width: '98%',
           }
-          // for the default restaurant list on home screen to display it smaller then the category restaurant list
-        : {
+        : // for the default restaurant list on home screen to display it smaller then the category restaurant list
+          {
             height: 175,
             width: 250,
           }
@@ -24,13 +24,15 @@ export default function FoodsCard({ foodCategory, checkForStyleChange }) {
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
-      onPress={() => navigation.navigate('MenuList', foodCategory)}
+
+    // pass in data of restaurant items / all of restaurants, but pin pointing which restaurant data to get
+      onPress={() => navigation.navigate('MenuList', restaurantItem)}
       style={styles.foodCategoryStyle}
     >
       <View style={changeStyle(checkForStyleChange)}>
-        <Image style={styles.foodImages} source={foodCategory.foodImage} />
+        <Image style={styles.foodImages} source={restaurantItem.foodImage} />
         <View style={styles.foodTexts}>
-          <Text style={styles.categoryText}>{foodCategory.name}</Text>
+          <Text style={styles.restaurantText}>{restaurantItem.name}</Text>
         </View>
 
         <Text style={styles.distanceText}>0.1 m</Text>
@@ -45,10 +47,10 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 5,
   },
-  categoryText: {
+  restaurantText: {
     fontSize: 11,
     fontWeight: 'bold',
-    fontFamily: 'monospace',
+    // fontFamily: 'monospace',
     flex: 0,
   },
   foodImages: {
@@ -71,13 +73,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginTop: 5,
-    
   },
   foodCategoryStyle: {
     flex: 1,
     flexDirection: 'row',
     alignContent: 'center',
-    backgroundColor: '#F0F0F0',
+
     borderRadius: 5,
 
     marginLeft: 10,

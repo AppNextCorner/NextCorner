@@ -18,7 +18,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.NextCorner",
+      "config": {
+        "googleMapsApiKey": "AIzaSyAS72L13wBvNQjzKcw6VPr5CMtBhp1b8yI"
+      }
+      
+}
     },
     "android": {
       "adaptiveIcon": {
@@ -30,4 +36,4 @@
       "favicon": "./assets/favicon.png"
     }
   }
-}
+

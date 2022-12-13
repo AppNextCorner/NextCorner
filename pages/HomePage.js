@@ -1,247 +1,23 @@
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
-  Image,
-  ScrollView,
+
 } from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import SearchComponent from '../components/SearchComponent'
-import RestaurantCategoryCard from '../Cards/RestaurantCategoryCard'
 import RestaurantCard from '../Cards/RestaurantCard'
 import RestaurantListComponent from '../components/RestaurantListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
 
-export default function HomePage() {
-  // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
-  const [categoryList, setCategoryList] = useState([
-    {
-      text: 'sweet',
-      foodType: require('../assets/foodImages/sweet.png'),
-      color: 'blue',
-      key: 1,
-    },
-    {
-      text: 'burger',
-      foodType: require('../assets/foodImages/burger.png'),
-      key: 2,
-    },
-    {
-      text: 'sushi',
-      foodType: require('../assets/foodImages/sushi.png'),
-      key: 3,
-    },
-    {
-      text: 'healthy',
-      foodType: require('../assets/foodImages/healthy.png'),
-      key: 4,
-    },
-  ])
-  const [trendingFood, setTrendingFood] = useState([
-    {
-      title: 'Trending',
-      category: [
-        {
-          name: "Henry Benry's almighty churros",
+import useFoodItemData from '../data/useFoodItemData'
 
-          foodImage: require('../assets/foodImages/churro.png'),
-          description:
-            "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-          menu: [
-            {
-              title: 'Churro',
-              image: require('../assets/foodImages/churro.png'),
-              price: '$150.00',
-            },
-            {
-              title: 'Chicken',
-              image: require('../assets/foodImages/fruit.png'),
-              price: '$150.00',
-            },
-          ],
-          key: 2,
-          foodCategoryId: 1,
-        },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 2,
-        //   foodCategoryId: 2,
-        // },
-        // {
-        //   name: "churros",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/churro.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 3,
-        //   foodCategoryId: 2,
-        // },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 4,
-        //   foodCategoryId: 4,
-        // },
-      ],
-    },
-    {
-      title: 'Hot Foods',
-      category: [
-        {
-          name: "Henry Benry's almighty churros 2",
-          price: '$30.00',
-          foodImage: require('../assets/foodImages/churro.png'),
-          description:
-            "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-          menu: [
-            {
-              title: 'Churro',
-              image: require('../assets/foodImages/churro.png'),
-              price: '$150.00',
-            },
-            {
-              title: 'Chicken',
-              image: require('../assets/foodImages/fruit.png'),
-              price: '$150.00',
-            },
-          ],
-          key: 3,
-          foodCategoryId: 3,
-        },
-        {
-          name: "Henry Benry's almighty churros 2",
-          price: '$30.00',
-          foodImage: require('../assets/foodImages/churro.png'),
-          description:
-            "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-          menu: [
-            {
-              title: 'Churro',
-              image: require('../assets/foodImages/churro.png'),
-              price: '$150.00',
-            },
-            {
-              title: 'Chicken',
-              image: require('../assets/foodImages/fruit.png'),
-              price: '$150.00',
-            },
-          ],
-          key: 4,
-          foodCategoryId: 3,
-        },
-        {
-          name: "Henry Benry's almighty churros 2",
-          price: '$30.00',
-          foodImage: require('../assets/foodImages/churro.png'),
-          description:
-            "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-          menu: [
-            {
-              title: 'Churro',
-              image: require('../assets/foodImages/churro.png'),
-              price: '$150.00',
-            },
-            {
-              title: 'Chicken',
-              image: require('../assets/foodImages/fruit.png'),
-              price: '$150.00',
-            },
-          ],
-          key: 5,
-          foodCategoryId: 3,
-        },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 2,
-        //   foodCategoryId: 4,
-        // },
-        // {
-        //   name: "churros",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/churro.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 3,
-        //   foodCategoryId: 2,
-        // },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 4,
-        //   foodCategoryId: 2,
-        // },
-      ],
-    },
-    {
-      title: 'Best for Budget',
-      category: [
-        {
-          name: "Henry Benry's almighty Fruits",
-          price: '$10.00',
-          foodImage: require('../assets/foodImages/fruit.png'),
-          description:
-            "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-          menu: [
-            {
-              title: 'Churro',
-              image: require('../assets/foodImages/churro.png'),
-              price: '$150.00',
-            },
-            {
-              title: 'Chicken',
-              image: require('../assets/foodImages/fruit.png'),
-              price: '$150.00',
-            },
-          ],
-          key: 6,
-          foodCategoryId: 1,
-        },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 2,
-        //   foodCategoryId: 1,
-        // },
-        // {
-        //   name: "churros",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/churro.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 3,
-        //   foodCategoryId: 2,
-        // },
-        // {
-        //   name: "fruit",
-        //   price: "$3.00",
-        //   foodImage: require("../assets/foodImages/fruit.png"),
-        //   description:
-        //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        //   key: 4,
-        //   foodCategoryId: 3,
-        // },
-      ],
-    },
-  ])
+export default function HomePage() {
+
+  const {categoryList,  trendingFood,  } = useFoodItemData();
+  // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
+  
   const [dataToRender, setDataToRender] = useState(trendingFood)
 
   // did we select an item - category
@@ -253,7 +29,7 @@ export default function HomePage() {
 
   // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
   let findingCategory = dataToRender.map((trendingRestaurants) =>
-    trendingRestaurants.category.map((cardData) => cardData),
+    trendingRestaurants.restaurantList.map((restaurantData) => restaurantData),
   )
 
   // shows item when category is selected and compares the id of the category with the id's of every card in the category list
@@ -305,7 +81,7 @@ export default function HomePage() {
               <RestaurantListComponent
                 title={item.title}
                 style={styles.list}
-                categoryItems={item.category}
+                restaurants={item.restaurantList}
               />
             )}
           />
@@ -314,6 +90,7 @@ export default function HomePage() {
         // screen for displaying the list of category restaurants after changing the state of the categoryWasSelected
         <>
           <FlatList
+            showsVerticalScrollIndicator={false}
             ListHeaderComponent={
               <CategoryScrollBar
                 categoryList={categoryList}
@@ -327,7 +104,7 @@ export default function HomePage() {
               return (
                 <RestaurantCard
                   checkForStyleChange={checkForStyleChange}
-                  foodCategory={item}
+                  restaurantItem={item}
                 />
               )
             }}
@@ -347,6 +124,7 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 10,
     marginTop: 10,
+    
   },
   margin: {
     backgroundColor: '#f2f3f5',
@@ -364,6 +142,7 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     flex: 0,
     alignContent: 'center',
+    
   },
   list: {
     alignContent: 'center',

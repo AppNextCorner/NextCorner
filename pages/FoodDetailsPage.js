@@ -4,9 +4,10 @@ import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
+import MultipleOptionSelectedList from '../components/MultipleOptionSelectedList'
 
-export default function FoodDetailsPage(props) {
-  const { foodItem } = props
+export default function FoodDetailsPage() {
+
   const route = useRoute()
   const navigation = useNavigation()
 
@@ -26,6 +27,10 @@ export default function FoodDetailsPage(props) {
 
         <Image style={styles.image} source={route.params.image} />
         <Text style={styles.title}>{route.params.title}</Text>
+
+        {/* Showing off the list options for the user - passing data from route.params to our component list */}
+        <MultipleOptionSelectedList />
+
         
       </View>
     </>

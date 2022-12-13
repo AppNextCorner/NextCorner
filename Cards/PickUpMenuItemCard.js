@@ -1,22 +1,25 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, Image, Pressable } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { useRoute } from '@react-navigation/native'
 
 export default function MenuItemCard({ foodItem }) {
   const navigation = useNavigation()
+  const route = useRoute()
 
-  let text =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'
+  let text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a."
 
-  let limitTextAmount = text.slice(0, 75) + '...'
+  let limitTextAmount = text.slice(0, 75) + "...";
 
+  
+ 
+  console.log('LOOOOKKKKKK: ', foodItem);
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
-    <TouchableOpacity
-    // passing data through the FoodDetails page to access the selection data from the menu list
+    <Pressable
       onPress={() => navigation.navigate('FoodDetails', foodItem)}
       style={styles.foodCategoryStyle}
+      
     >
       <View style={styles.card}>
         <View style={styles.foodTexts}>
@@ -29,7 +32,7 @@ export default function MenuItemCard({ foodItem }) {
           <Image style={styles.foodImages} source={foodItem.image} />
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
@@ -37,14 +40,15 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
-
+    
     //fontFamily: 'monospace',
   },
   imageBox: {
     flex: 1,
     width: '100%',
     height: '100%',
-  },
+    
+  },  
   distanceText: {
     marginLeft: 10,
     fontSize: 11,
@@ -54,9 +58,10 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 17,
     fontWeight: 'bold',
-    // fontFamily: 'monospace',
+    //fontFamily: 'monospace',
     marginTop: 15,
     flex: 1,
+    
   },
   foodImages: {
     width: '50%',
@@ -75,6 +80,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     borderRadius: 10,
+    
   },
   priceText: {
     flex: 1,
@@ -87,6 +93,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginLeft: 10,
     marginTop: 5,
+    
+    
   },
   foodCategoryStyle: {
     flex: 1,
@@ -95,10 +103,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#d6d6d6',
     borderStyle: 'solid',
-
+    
     borderBottomWidth: 1,
-
+    
+    
     marginBottom: -0.1,
     marginTop: 0,
+    
   },
 })

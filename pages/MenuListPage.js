@@ -12,6 +12,7 @@ import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
+import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
 
 export default function MenuListPage() {
   const route = useRoute()
@@ -23,31 +24,41 @@ export default function MenuListPage() {
   }
 
   // accessing and pinpointing data
-  const menuArray = route.params.menu.map((val) => val)
 
-  
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        <Pressable style={styles.goBackButton} onPress={goHome}>
-          <Feather name="arrow-left-circle" size={40} color="white" />
-        </Pressable>
-
-        <Image style={styles.image} source={route.params.foodImage} />
-        <Text style={styles.title}>{route.params.name}</Text>
-        <View style={styles.description}>
-          <Text style={styles.textDescription}>{route.params.description}</Text>
-        </View>
+        {/* Google Maps tap to view section */}
+        {/* <GoogleMapsMenuSection /> */}
 
         {/* Menu list containing food items */}
         <View style={styles.restaurantCard}>
           <FlatList
+            ListHeaderComponent={
+              <>
+                <Pressable style={styles.goBackButton} onPress={goHome}>
+                  <Feather name="arrow-left-circle" size={40} color="white" />
+                </Pressable>
+
+                <Image style={styles.image} source={route.params.foodImage} />
+                <Text style={styles.title}>{route.params.name}</Text>
+                <View style={styles.description}>
+                  <Text style={styles.textDescription}>
+                    {route.params.description}
+                  </Text>
+                </View>
+                <View style={styles.marginSet}>
+                  <Text style={styles.titleOfMenu}>Full Menu</Text>
+                  <Text style={styles.timeOfMenu}>10:30 am - 11:20 pm</Text>
+                </View>
+              </>
+            }
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
+            // pass in the menu list coming from the route.params of the restaurants items which we can access through params
             data={route.params.menu}
             renderItem={({ item }) => {
-              
               return <MenuItemCard foodItem={item} />
               // return <Text>{item.title}</Text>
             }}
@@ -59,9 +70,27 @@ export default function MenuListPage() {
 }
 
 const styles = StyleSheet.create({
+  titleOfMenu: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    // fontFamily: 'monospace',
+    paddingLeft: 10,
+    marginTop: 10,
+  },
+  timeOfMenu: {
+    fontSize: 15,
+
+    paddingLeft: 10,
+    borderBottomColor: '#d6d6d6',
+    borderBottomWidth: 1,
+    paddingBottom: 25,
+  },
+  marginSet: {
+    marginBottom: 25,
+  },
   restaurantCard: {
     flex: 1,
-  },  
+  },
   goBackButton: {
     zIndex: 2,
     margin: 20,
@@ -69,24 +98,28 @@ const styles = StyleSheet.create({
   },
   description: {
     flex: 0,
-    backgroundColor: 'yellow',
+
     marginHorizontal: 20,
     marginTop: 15,
   },
   image: {
     width: '100%',
-    height: 250,
+    height: 200,
     resizeMode: 'cover',
     marginTop: -105,
   },
   container: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 30,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 10,
+    // fontFamily: 'monospace',
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginTop: 30,
+    marginLeft: 10,
+    flex: 0,
   },
 })

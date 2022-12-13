@@ -22,7 +22,7 @@ export default function CategoryScrollBar(props) {
             renderItem={({ item }) => (
               <RestaurantCategoryCard
                 handlePress={showItem}
-                foodCategory={item}
+                restaurantItem={item}
                 foodId={itemId}
               />
             )}

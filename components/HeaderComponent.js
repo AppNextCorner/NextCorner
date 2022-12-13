@@ -7,7 +7,7 @@ export default function HeaderComponent() {
   return (
     <View style={styles.header}>
       <Image style={styles.nextCornerIcon} source={HomeIcon} />
-      <Text style={styles.address}>w st 90050</Text>
+      <Text style={styles.address}>2167 w ave</Text>
       <View>
         <FontAwesome5
           style={styles.shoppingIcon}

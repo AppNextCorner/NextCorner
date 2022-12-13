@@ -5,24 +5,24 @@ export default function RestaurantCategoryCard(props) {
   
 
   let touchButton = {
-    style: props.foodCategory.key !== props.foodId ? styles.foodCategoryStyle : styles.btnPress,
+    style: props.restaurantItem.key !== props.foodId ? styles.foodCategoryStyle : styles.btnPress,
   }
 
   return (
     // note: this card is to filter the categories displayed on the screen, still needs the functionality to do so
     <TouchableOpacity
-      id={props.foodCategory.key}
+      id={props.restaurantItem.key}
       {...touchButton}
       
       onPress={() => {
-        props.handlePress(props.foodCategory.key)
+        props.handlePress(props.restaurantItem.key)
         
         
       }}
     >
       <View>
-        <Image source={props.foodCategory.foodType} />
-        <Text style={styles.categoryText}>{props.foodCategory.text}</Text>
+        <Image source={props.restaurantItem.foodType} />
+        <Text style={styles.categoryText}>{props.restaurantItem.text}</Text>
       </View>
     </TouchableOpacity>
   )
