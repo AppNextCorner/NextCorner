@@ -1,11 +1,8 @@
 import { StyleSheet, View, Text, FlatList } from 'react-native'
 import React from 'react'
-import RestaurantCard from '../Cards/RestaurantCard'
-import PickUpMenuItemCard from '../Cards/PickUpMenuItemCard'
 import useFoodItemData from '../data/useFoodItemData'
-import BottomSheet, {
+import  {
   BottomSheetFlatList,
-  BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import PickUpHorizontalList from './PickUpHorizontalList'
 
@@ -14,27 +11,37 @@ export default function VerticalPickUpList() {
     const { trendingFood } = useFoodItemData()
     let getRestaurant = trendingFood
       .map((restaurant) => restaurant.restaurantList)
-      .flat()
-    let getFoodItem = getRestaurant.map((restaurantList) => restaurantList.menu).flat();
-  
-    console.log(getFoodItem)
-
+      .flat();
 
   return (
+    
     <BottomSheetFlatList
       
-      
+        ListHeaderComponent={
+          <Text >Restaurants Near You</Text>
+        }
       // style={{flex: 1}}
         data={getRestaurant}
+        style={{ flex: 1}}
         renderItem={({ item }) => {
+          
           return (
             <>
-              <Text style={{marginBottom: 100}}>{item.name}</Text>
-              <PickUpHorizontalList restaurantItem={getFoodItem} />
+              <Text style={styles.headerTitle}>{item.name}</Text>
+              <PickUpHorizontalList
+              style={{ flex: 1}} restaurantItem={item.menu} />
               
             </>
           )
         }}
       />
+     
   )
 }
+
+const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 20,
+textAlign: 'center'
+  }
+})

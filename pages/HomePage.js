@@ -6,6 +6,7 @@ import {
 } from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
+import { StatusBar } from 'expo-status-bar'
 import SearchComponent from '../components/SearchComponent'
 import RestaurantCard from '../Cards/RestaurantCard'
 import RestaurantListComponent from '../components/RestaurantListComponent'
@@ -55,6 +56,8 @@ export default function HomePage() {
     .filter((i) => i.foodCategoryId === itemId)
 
   return (
+    <>
+    <StatusBar style="auto" />
     <View style={styles.container}>
       {/* Top header for the user to be able to display address and access items in their order */}
 
@@ -112,6 +115,7 @@ export default function HomePage() {
         </>
       )}
     </View>
+    </>
   )
 }
 

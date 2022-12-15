@@ -12,7 +12,6 @@ import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
-import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
 
 export default function MenuListPage() {
   const route = useRoute()

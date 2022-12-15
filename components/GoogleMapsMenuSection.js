@@ -1,37 +1,49 @@
-import React from 'react'
-import MapView, { PROVIDER_GOOGLE, mapRegion} from 'react-native-maps'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import { StyleSheet, View, Dimensions } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import MapView, { PROVIDER_GOOGLE} from 'react-native-maps'
 
+import { StyleSheet, View} from 'react-native'
+import  MapStyle from '../constants/MapStyle.json'
+import * as Location from 'expo-location'
 
-
-// grab the screen of the current device
-const { width, height } = Dimensions.get('window')
-
-// grab the screen size of the current device
-const ASPECT_RATIO = width / height
-
-//
-const LATITUDE_DELTA = 0.02
-
-// gives the zoom factor
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-const INITIAL_POSITION = {
-  latitude: 40.76711,
-  longitude: -73.979704,
-  latitudeData: LATITUDE_DELTA,
-  longitudeData: LONGITUDE_DELTA,
-}
 
 export default function GoogleMapsMenuSection() {
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 30.78825,
+    longitude: -1.4324,
+    latitudeData: 0.0922,
+    longitudeData: 0.0421,
+  })
+  
+  const userLocation = async () => {
+    let {status} = await Location.requestForegroundPermissionsAsync();
+    if( status !== 'granted') {
+      setErrorMsg('Permissionto access location was denied');
+    }
+    let location = await Location.getCurrentPositionAsync({enableHighAccuracy: true});
+    setMapRegion({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.0106,
+      longitudeDelta: 0.0121,
+    });
+    
+  }
+
+  useEffect(() => {
+    userLocation();
+  }, []);
+
   return (
     <View style={styles.container}>
+      
       <MapView
-        initialRegion={INITIAL_POSITION}
+        customMapStyle={MapStyle}
+        region={mapRegion}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         style={{ flex: 1}}
       />
+
       {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
           placeholder="Search"
