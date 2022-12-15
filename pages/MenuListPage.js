@@ -1,3 +1,8 @@
+/**
+ * Purpose of File: Displays the contents of the restaurant on what it offers
+ * - For example: it displays the food of the restaurant, image of it, opening text, etc
+ */
+
 import {
   StyleSheet,
   View,
@@ -14,6 +19,7 @@ import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
 
 export default function MenuListPage() {
+  // using routes for getting the data and navigation to navigate through a different screen
   const route = useRoute()
   const navigation = useNavigation()
 
@@ -36,6 +42,7 @@ export default function MenuListPage() {
           <FlatList
             ListHeaderComponent={
               <>
+              {/* Pressable for the purpose of using an icon to go back home  */}
                 <Pressable style={styles.goBackButton} onPress={goHome}>
                   <Feather name="arrow-left-circle" size={40} color="white" />
                 </Pressable>
@@ -59,7 +66,7 @@ export default function MenuListPage() {
             data={route.params.menu}
             renderItem={({ item }) => {
               return <MenuItemCard foodItem={item} />
-              // return <Text>{item.title}</Text>
+              
             }}
           />
         </View>

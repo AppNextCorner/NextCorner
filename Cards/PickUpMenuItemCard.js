@@ -5,15 +5,10 @@ import { useRoute } from '@react-navigation/native'
 
 export default function MenuItemCard({ foodItem }) {
   const navigation = useNavigation()
-  const route = useRoute()
 
   let text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a."
 
   let limitTextAmount = text.slice(0, 75) + "...";
-
-  
- 
-  console.log('LOOOOKKKKKK: ', foodItem);
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <Pressable

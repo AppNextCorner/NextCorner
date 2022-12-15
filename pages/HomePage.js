@@ -1,9 +1,9 @@
-import {
-  StyleSheet,
-  View,
-  FlatList,
+/**
+ * Purpose of the file: It is used to be the first page the user has access to after opening the app / login in through the app
+ * - Displays restaurants based on location or depending on the section from either the category or default sections
+ */
 
-} from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
@@ -15,12 +15,10 @@ import CategoryScrollBar from '../components/CategoryScrollBar'
 import useFoodItemData from '../data/useFoodItemData'
 
 export default function HomePage() {
-
-  const {categoryList,  trendingFood,  } = useFoodItemData();
+  // import our boilerplate data we want to display being the restaurants and category list
+  const { categoryList, trendingFood } = useFoodItemData()
   // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
-  
   const [dataToRender, setDataToRender] = useState(trendingFood)
-
   // did we select an item - category
   const [categoryWasSelected, setCategoryWasSelected] = useState(false)
   // what category did we select
@@ -57,69 +55,69 @@ export default function HomePage() {
 
   return (
     <>
-    <StatusBar style="auto" />
-    <View style={styles.container}>
-      {/* Top header for the user to be able to display address and access items in their order */}
+      <StatusBar style="auto" />
+      <View style={styles.container}>
+        {/* Top header for the user to be able to display address and access items in their order */}
 
-      <HeaderComponent />
-      <SearchComponent />
-      {/* If the category has not been selected, show the default restaurants page */}
-      {!categoryWasSelected ? (
-        <>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            ListHeaderComponent={
-              <CategoryScrollBar
-                categoryList={categoryList}
-                itemId={itemId}
-                style={styles.margin}
-                showItem={showItem}
-              />
-            }
-            data={dataToRender}
-            renderItem={({ item }) => (
-              // renders the nested data three times -> due to having three objects in the dataToRender array
-              // if no category selected, render the default treding
-
-              <RestaurantListComponent
-                title={item.title}
-                style={styles.list}
-                restaurants={item.restaurantList}
-              />
-            )}
-          />
-        </>
-      ) : (
-        // screen for displaying the list of category restaurants after changing the state of the categoryWasSelected
-        <>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            ListHeaderComponent={
-              <CategoryScrollBar
-                categoryList={categoryList}
-                itemId={itemId}
-                style={styles.margin}
-                showItem={showItem}
-              />
-            }
-            data={filterRestaurantCards}
-            renderItem={({ item }) => {
-              return (
-                <RestaurantCard
-                  checkForStyleChange={checkForStyleChange}
-                  restaurantItem={item}
+        <HeaderComponent />
+        <SearchComponent />
+        {/* If the category has not been selected, show the default restaurants page */}
+        {!categoryWasSelected ? (
+          <>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              ListHeaderComponent={
+                <CategoryScrollBar
+                  categoryList={categoryList}
+                  itemId={itemId}
+                  style={styles.margin}
+                  showItem={showItem}
                 />
-              )
-            }}
-          />
-        </>
-      )}
-    </View>
+              }
+              data={dataToRender}
+              renderItem={({ item }) => (
+                // renders the nested data three times -> due to having three objects in the dataToRender array
+                // if no category selected, render the default treding
+
+                <RestaurantListComponent
+                  title={item.title}
+                  style={styles.list}
+                  restaurants={item.restaurantList}
+                />
+              )}
+            />
+          </>
+        ) : (
+          // screen for displaying the list of category restaurants after changing the state of the categoryWasSelected
+          <>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              ListHeaderComponent={
+                // Scroll bar for the list of categories
+                <CategoryScrollBar
+                  categoryList={categoryList}
+                  itemId={itemId}
+                  style={styles.margin}
+                  showItem={showItem}
+                />
+              }
+              data={filterRestaurantCards}
+              renderItem={({ item }) => {
+                // RestaurantCard is each individual restaurant card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
+                return (
+                  <RestaurantCard
+                    checkForStyleChange={checkForStyleChange}
+                    restaurantItem={item}
+                  />
+                )
+              }}
+            />
+          </>
+        )}
+      </View>
     </>
   )
 }
-
-
 
 const styles = StyleSheet.create({
   selectedCategory: {
@@ -128,7 +126,6 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 10,
     marginTop: 10,
-    
   },
   margin: {
     backgroundColor: '#f2f3f5',
@@ -146,7 +143,6 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     flex: 0,
     alignContent: 'center',
-    
   },
   list: {
     alignContent: 'center',

@@ -1,3 +1,7 @@
+/**
+ * Purpose of the component: It is going to display the user's location and as well as a clickable icon to navigate through the order page to show the user their orders
+ */
+
 import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import HomeIcon from '../assets/icon/nextCornerLogo.png'

@@ -1,3 +1,8 @@
+/**
+ * Purpose of the component: It contains right now only the UI, but it woulc be used to search for businesses the user may now and look for without having to look through the whole app to find a business that they know
+ * - Going to implement a filter for this to work or another expo npm library
+ */
+
 import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import { Foundation } from '@expo/vector-icons'

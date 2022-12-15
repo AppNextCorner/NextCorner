@@ -1,3 +1,8 @@
+/**
+ * Purpose of the file: It is used to display the current food items the user has selected after exiting from the foodDetails page and selecting their preference
+ * - Work in Progess -> needs to completed in terms of passing data from the FoodDetails page and need to display both components of current and completed order
+ */
+
 import { StyleSheet, View, Text, FlatList, Button } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
@@ -51,22 +56,20 @@ export default function OrdersPage() {
         title="Done"
       />
       <FlatList
-          data={orderType}
-          renderItem={({ item }) => {
-            console.log('Among Us ' + item.name)
-            if (item.name == 'Done') {
-              return <Text style={styles.text}>Hello World</Text>
-            } else {
-              return <Text>Descpi</Text>
-            }
-          }}
-          keyExtractor={(item) => item.id}
-        />
+        data={orderType}
+        renderItem={({ item }) => {
+          console.log('Among Us ' + item.name)
+          if (item.name == 'Done') {
+            return <Text style={styles.text}>Hello World</Text>
+          } else {
+            return <Text>Descpi</Text>
+          }
+        }}
+        keyExtractor={(item) => item.id}
+      />
 
       {/* 2 column list to navigate easily between in progress and completed orders */}
-      <View>
-        
-      </View>
+      <View></View>
     </View>
   )
 }
