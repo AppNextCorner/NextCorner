@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
-import { useRoute } from '@react-navigation/native'
 
 export default function MenuItemCard({ foodItem }) {
   const navigation = useNavigation()
@@ -19,15 +18,16 @@ export default function MenuItemCard({ foodItem }) {
       style={styles.foodCategoryStyle}
     >
       <View style={styles.card}>
+      <View style={styles.imageBox}>
+          <Image style={styles.foodImages} source={foodItem.image} />
+        </View>
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{foodItem.title}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
           <Text style={styles.priceText}>{foodItem.price}</Text>
         </View>
         {/* Store image with button  */}
-        <View style={styles.imageBox}>
-          <Image style={styles.foodImages} source={foodItem.image} />
-        </View>
+        
       </View>
     </TouchableOpacity>
   )

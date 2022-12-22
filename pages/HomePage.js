@@ -3,7 +3,7 @@
  * - Displays restaurants based on location or depending on the section from either the category or default sections
  */
 
-import { StyleSheet, View, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
@@ -13,10 +13,14 @@ import RestaurantListComponent from '../components/RestaurantListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
 
 import useFoodItemData from '../data/useFoodItemData'
+import OrderButton from '../components/OrderButton'
+import { useAppSelector } from '../store/hook'
+import { getButton } from '../store/addToCart'
 
 export default function HomePage() {
+
   // import our boilerplate data we want to display being the restaurants and category list
-  const { categoryList, trendingFood } = useFoodItemData()
+  const { categoryList, trendingFood, buttonVisibility } = useFoodItemData()
   // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
   const [dataToRender, setDataToRender] = useState(trendingFood)
   // did we select an item - category
@@ -52,6 +56,7 @@ export default function HomePage() {
   let filterRestaurantCards = findingCategory
     .flat()
     .filter((i) => i.foodCategoryId === itemId)
+    const isClicked = useAppSelector(getButton);
 
   return (
     <>
@@ -115,6 +120,10 @@ export default function HomePage() {
           </>
         )}
       </View>
+      {isClicked === true ?  <OrderButton /> : null
+      }
+     
+      
     </>
   )
 }

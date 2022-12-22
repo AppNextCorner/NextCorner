@@ -17,8 +17,14 @@ import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
+import useFoodItemData from '../data/useFoodItemData'
+import OrderButton from '../components/OrderButton'
+import {useAppSelector} from '../store/hook'
+import {getButton} from '../store/addToCart'
+
 
 export default function MenuListPage() {
+  const isClicked = useAppSelector(getButton);
   // using routes for getting the data and navigation to navigate through a different screen
   const route = useRoute()
   const navigation = useNavigation()
@@ -27,6 +33,7 @@ export default function MenuListPage() {
   const goHome = () => {
     navigation.navigate('Home')
   }
+
 
   // accessing and pinpointing data
 
@@ -39,6 +46,7 @@ export default function MenuListPage() {
 
         {/* Menu list containing food items */}
         <View style={styles.restaurantCard}>
+        
           <FlatList
             ListHeaderComponent={
               <>
@@ -69,8 +77,11 @@ export default function MenuListPage() {
               
             }}
           />
+          
         </View>
       </View>
+      {isClicked === true ?  <OrderButton /> : null
+      }
     </>
   )
 }

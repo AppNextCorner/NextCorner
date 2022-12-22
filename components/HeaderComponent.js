@@ -6,14 +6,22 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import HomeIcon from '../assets/icon/nextCornerLogo.png'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 export default function HeaderComponent() {
+  const navigation = useNavigation();
+
+  const navigateCart = () => {
+    navigation.navigate('Cart');
+  }
+
   return (
     <View style={styles.header}>
       <Image style={styles.nextCornerIcon} source={HomeIcon} />
       <Text style={styles.address}>2167 w ave</Text>
       <View>
         <FontAwesome5
+          onPress={navigateCart}
           style={styles.shoppingIcon}
           name="shopping-basket"
           size={24}

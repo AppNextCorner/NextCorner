@@ -1,34 +1,52 @@
-import { StyleSheet, View, Text, Image, Pressable, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import MultipleOptionSelectedList from '../components/MultipleOptionSelectedList'
 import SingleOptionSelectionComponent from '../components/SingleOptionSelectionComponent'
+import useFoodItemData from '../data/useFoodItemData'
+import { useAppDispatch } from '../store/hook'
+import {  setCart } from '../store/addToCart'
 
 export default function FoodDetailsPage() {
   //create our options
+  
+  const { buttonVisibility} = useFoodItemData();
 
-  const data = [
-    {
-      label: 'data 1',
-    },
-    {
-      label: 'data 2',
-    },
-  ]
+  const dispatch = useAppDispatch();
 
   const route = useRoute()
   const navigation = useNavigation()
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
+    
     navigation.goBack()
   }
+  const goToCartButton = () => {
+    dispatch(setCart({
+      cartData: route.params
+    }))
+    navigation.goBack();
+  }
 
+  useEffect(() => {
+    console.log("lmao",buttonVisibility);
+  },[])
+  
+
+  // list component for the options page
   const Header = () => {
-    return(
+    return (
       <>
         <Pressable style={styles.goBackButton} onPress={goHome}>
           <Feather name="arrow-left-circle" size={40} color="white" />
@@ -45,15 +63,22 @@ export default function FoodDetailsPage() {
       <StatusBar style="light" />
 
       <View style={styles.container}>
-        
-
         {/* Showing off the list options for the user - passing data from route.params to our component list */}
         {/* <MultipleOptionSelectedList /> */}
 
-       <SingleOptionSelectionComponent header={Header} optionData={route.params.optionTitle} data={route.params.singularOptionSelectionList} />
-       <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderButtonText}>Ready to Order</Text>
-      </TouchableOpacity>
+        <SingleOptionSelectionComponent
+          header={Header}
+          optionData={route.params.optionTitle}
+          data={route.params.singularOptionSelectionList}
+        />
+       
+        <TouchableOpacity
+         style={styles.orderButton}
+         onPress={goToCartButton}
+         >
+          <Text style={styles.orderButtonText}>Add to Cart {route.params.price}</Text>
+        </TouchableOpacity>
+        
       </View>
     </>
   )
@@ -78,7 +103,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   image: {
-    
     width: '100%',
     height: 200,
     resizeMode: 'cover',
@@ -99,6 +123,5 @@ const styles = StyleSheet.create({
     margin: 15,
     padding: 15,
     borderRadius: 20,
-    
   },
 })

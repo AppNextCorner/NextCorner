@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import * as React from 'react'
 // components / pages imported
 import HomePage from '../pages/HomePage'
@@ -7,6 +7,7 @@ import OrdersPage from '../pages/OrdersPage'
 import MenuListPage from '../pages/MenuListPage'
 import PickUpPage from '../pages/PickUpPage'
 import SignInPage from '../pages/logged-out/SignInPage'
+import CartPage from '../pages/CartPage'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -64,6 +65,7 @@ function Home() {
         tabBarStyle: { padding: 10, height: 60 },
       })}
     >
+      
       {/* Tabs we want to use  */}
       <Tab.Screen name={homeName} component={HomePage} />
       <Tab.Screen name={pickUpName} component={PickUpPage} />
@@ -91,9 +93,11 @@ export default function Route() {
         >
           {/* Home -> main tab / default where it contains only orders and home  */}
           <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="Cart" component={CartPage} />
           <Stack.Screen name="FoodDetails" component={FoodDetailsPage} />
           <Stack.Screen name="MenuList" component={MenuListPage} />
         </Stack.Navigator>
+        
       </NavigationContainer>
     </>
   )}
@@ -108,6 +112,7 @@ export default function Route() {
                     options={{headerShown: false}}
                 />
             </Stack.Navigator>
+            
         </NavigationContainer>
     )
   }

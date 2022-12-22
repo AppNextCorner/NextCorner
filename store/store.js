@@ -3,6 +3,7 @@
  */
 
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import addToCart from "./addToCart";
 import userSession from "./userSession";
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
     reducer: {
         // copy the original state and assign changes to the copied values we chooose
         userSession: userSession,
+        addToCart: addToCart
     },
     devTools: true,
 })
