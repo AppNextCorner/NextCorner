@@ -1,3 +1,7 @@
+/**
+ * Purpose: Takes in data from the MenuListPage for a specific menu item and displays the data of that menu item here - the user should be able to select their own preference for that item
+ */
+
 import {
   StyleSheet,
   View,
@@ -6,7 +10,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'

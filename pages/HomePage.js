@@ -3,7 +3,14 @@
  * - Displays restaurants based on location or depending on the section from either the category or default sections
  */
 
-import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  Button
+} from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
@@ -14,13 +21,63 @@ import CategoryScrollBar from '../components/CategoryScrollBar'
 
 import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
-import { useAppSelector } from '../store/hook'
-import { getButton } from '../store/addToCart'
+import { useAppDispatch, useAppSelector } from '../store/hook'
+import { getButton} from '../store/addToCart'
+import { logOut} from '../store/userSession'
+
+// firebase authentication -> grabbing the user data from firebase to use here after user is logged in
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
+import { firebaseConfig } from '../firebase/firebase-config'
 
 export default function HomePage() {
+  const dispatch = useAppDispatch();
+  const [user, setUser] = useState({
+    email: '',
+  })
+  const app = initializeApp(firebaseConfig)
+  const auth = getAuth(app)
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      const email = user.email;
+      console.log(email);
+      setUser(user,
+        email)
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  })
+
+  const handleSignOut = async() => {
+    try {
+      console.log(auth.currentUser.email);
+      dispatch(logOut());
+      const result = await signOut(auth);
+      
+      console.log("entered sign out functions");
+      console.log(auth.currentUser.email);
+      
+    }catch (err) {
+      console.log(err.message)
+    }
+    // add try catch if you want
+    
+}
+const test = async() => {
+  try {
+    dispatch(logOut());
+  } catch (err) {
+    console.log(err.message)
+  }
+}
 
   // import our boilerplate data we want to display being the restaurants and category list
-  const { categoryList, trendingFood, buttonVisibility } = useFoodItemData()
+  const { categoryList, trendingFood} = useFoodItemData()
   // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
   const [dataToRender, setDataToRender] = useState(trendingFood)
   // did we select an item - category
@@ -56,7 +113,7 @@ export default function HomePage() {
   let filterRestaurantCards = findingCategory
     .flat()
     .filter((i) => i.foodCategoryId === itemId)
-    const isClicked = useAppSelector(getButton);
+  const isClicked = useAppSelector(getButton)
 
   return (
     <>
@@ -65,6 +122,9 @@ export default function HomePage() {
         {/* Top header for the user to be able to display address and access items in their order */}
 
         <HeaderComponent />
+        <Text>{user.email}</Text>
+        <Button onPress={handleSignOut} title="Sign Out"/>
+        <Button onPress={test} title="exit"/>
         <SearchComponent />
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
@@ -120,10 +180,7 @@ export default function HomePage() {
           </>
         )}
       </View>
-      {isClicked === true ?  <OrderButton /> : null
-      }
-     
-      
+      {isClicked === true ? <OrderButton /> : null}
     </>
   )
 }

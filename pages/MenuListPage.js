@@ -19,12 +19,11 @@ import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
 import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
-import {useAppSelector} from '../store/hook'
-import {getButton} from '../store/addToCart'
-
+import { useAppSelector } from '../store/hook'
+import { getButton } from '../store/addToCart'
 
 export default function MenuListPage() {
-  const isClicked = useAppSelector(getButton);
+  const isClicked = useAppSelector(getButton)
   // using routes for getting the data and navigation to navigate through a different screen
   const route = useRoute()
   const navigation = useNavigation()
@@ -33,7 +32,6 @@ export default function MenuListPage() {
   const goHome = () => {
     navigation.navigate('Home')
   }
-
 
   // accessing and pinpointing data
 
@@ -46,11 +44,10 @@ export default function MenuListPage() {
 
         {/* Menu list containing food items */}
         <View style={styles.restaurantCard}>
-        
           <FlatList
             ListHeaderComponent={
               <>
-              {/* Pressable for the purpose of using an icon to go back home  */}
+                {/* Pressable for the purpose of using an icon to go back home  */}
                 <Pressable style={styles.goBackButton} onPress={goHome}>
                   <Feather name="arrow-left-circle" size={40} color="white" />
                 </Pressable>
@@ -74,14 +71,11 @@ export default function MenuListPage() {
             data={route.params.menu}
             renderItem={({ item }) => {
               return <MenuItemCard foodItem={item} />
-              
             }}
           />
-          
         </View>
       </View>
-      {isClicked === true ?  <OrderButton /> : null
-      }
+      {isClicked === true ? <OrderButton /> : null}
     </>
   )
 }

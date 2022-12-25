@@ -12,6 +12,7 @@ export const DEFAULT_TENDING_DATA = [
         menu: [
           {
             title: 'Churro',
+            itemId: 1,
             image: require('../assets/foodImages/churro.png'),
             price: '$150.00',
             multipleOptionSelectionList: [
@@ -88,6 +89,7 @@ export const DEFAULT_TENDING_DATA = [
             title: 'Chicken',
             image: require('../assets/foodImages/fruit.png'),
             price: '$150.00',
+            itemId: 2,
             singularOptionSelectionList: [
               {
                 optionTitle: 'Type of churros',
@@ -147,7 +149,7 @@ export const DEFAULT_TENDING_DATA = [
             price: '$150.00',
           },
         ],
-        key: 2,
+        key: 1,
         foodCategoryId: 1,
       },
       // {

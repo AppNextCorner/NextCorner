@@ -1,3 +1,8 @@
+/**
+ * Purpose: After user has selected items, then this screen would be updated to include the selected items
+ * note: Total number of selected items, price, etc will need to be added here
+ */
+
 import React from 'react'
 
 import { getCart } from '../store/addToCart'
@@ -14,35 +19,39 @@ import {
   FlatList,
   Button,
 } from 'react-native'
-
+import { useEffect } from 'react'
+import { calculateTotals } from '../store/addToCart'
+import { useAppDispatch } from '../store/hook'
+import { increase } from '../store/addToCart'
+import { getAmount } from '../store/addToCart'
 const CartPage = () => {
+  const dispatch = useAppDispatch()
+
   const navigation = useNavigation()
   const goHome = () => {
     navigation.goBack()
   }
-  const isCartFull = useAppSelector(getCart);
-  const cartList = isCartFull.map(val => val.cartData)
+  const isCartFull = useAppSelector(getCart)
+  const amount = useAppSelector(getAmount)
+  const cartList = isCartFull.map((val) => val.cartData)
   console.log(cartList)
-  let text =
-    'Lorem ipsum dol'
+  let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''
 
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
-      
+    <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <Button title="Button" onPress={goHome} />
       <FlatList
         data={cartList}
         renderItem={({ item }) => (
           <>
-            
             <TouchableOpacity
               onPress={() => navigation.navigate('FoodDetails', item)}
               style={styles.foodCategoryStyle}
             >
               <View style={styles.card}>
-              <View style={styles.imageBox}>
+                <View style={styles.imageBox}>
                   <Image style={styles.foodImages} source={item.image} />
                 </View>
                 <View style={styles.foodTexts}>
@@ -53,8 +62,19 @@ const CartPage = () => {
                   <Text style={styles.priceText}>{item.price}</Text>
                 </View>
                 {/* Store image with button  */}
-                <Text style={{flex: 1, textAlign: 'center', top: 50}}>
-                    1
+                <Button
+                  title="Increment"
+                  onPress={() => {
+                    console.log(item.itemId)
+                    dispatch(
+                      increase({
+                        id: item.itemId,
+                      }),
+                    )
+                  }}
+                />
+                <Text style={{ flex: 1, textAlign: 'center', top: 50 }}>
+                  {amount}
                 </Text>
               </View>
             </TouchableOpacity>

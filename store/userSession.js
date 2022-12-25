@@ -36,7 +36,7 @@ export const userSession = createSlice({
 });
 
 // export the case / function action from the userSession and access the object 
-export const {setUser} = userSession.actions;
+export const {setUser, logOut} = userSession.actions;
 
 // create getters
 
