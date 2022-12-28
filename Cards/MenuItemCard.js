@@ -19,12 +19,12 @@ export default function MenuItemCard({ foodItem }) {
     >
       <View style={styles.card}>
       <View style={styles.imageBox}>
-          <Image style={styles.foodImages} source={foodItem.image} />
+          <Image style={styles.foodImages} source={foodItem.menuItemImage} />
         </View>
         <View style={styles.foodTexts}>
-          <Text style={styles.categoryText}>{foodItem.title}</Text>
+          <Text style={styles.categoryText}>{foodItem.menuItemName}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
-          <Text style={styles.priceText}>{foodItem.price}</Text>
+          <Text style={styles.priceText}>{foodItem.menuItemPrice}</Text>
         </View>
         {/* Store image with button  */}
         

@@ -52,11 +52,11 @@ export default function MenuListPage() {
                   <Feather name="arrow-left-circle" size={40} color="white" />
                 </Pressable>
 
-                <Image style={styles.image} source={route.params.foodImage} />
-                <Text style={styles.title}>{route.params.name}</Text>
+                <Image style={styles.image} source={route.params.restaurantImage} />
+                <Text style={styles.title}>{route.params.restaurantName}</Text>
                 <View style={styles.description}>
                   <Text style={styles.textDescription}>
-                    {route.params.description}
+                    {route.params.restaurantDescription}
                   </Text>
                 </View>
                 <View style={styles.marginSet}>
@@ -68,7 +68,7 @@ export default function MenuListPage() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             // pass in the menu list coming from the route.params of the restaurants items which we can access through params
-            data={route.params.menu}
+            data={route.params.restaurantMenu}
             renderItem={({ item }) => {
               return <MenuItemCard foodItem={item} />
             }}

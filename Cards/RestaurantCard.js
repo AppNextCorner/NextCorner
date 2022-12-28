@@ -30,9 +30,9 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
       style={styles.foodCategoryStyle}
     >
       <View style={changeStyle(checkForStyleChange)}>
-        <Image style={styles.foodImages} source={restaurantItem.foodImage} />
+        <Image style={styles.foodImages} source={restaurantItem.restaurantImage} />
         <View style={styles.foodTexts}>
-          <Text style={styles.restaurantText}>{restaurantItem.name}</Text>
+          <Text style={styles.restaurantText}>{restaurantItem.restaurantName}</Text>
         </View>
 
         <Text style={styles.distanceText}>0.1 m</Text>

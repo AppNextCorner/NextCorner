@@ -40,8 +40,8 @@ const CartPage = () => {
   let limitTextAmount = text.slice(0, 75) + ''
 
   return (
-    <View style={{ backgroundColor: '#fff', flex: 1 }}>
-      <Button title="Button" onPress={goHome} />
+    <View style={{ backgroundColor: '#fff', flex: 1, marginTop: 200 }}>
+      <Button style={{marginTop: '20%',}} title="Button" onPress={goHome} />
       <FlatList
         data={cartList}
         renderItem={({ item }) => (

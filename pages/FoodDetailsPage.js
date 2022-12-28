@@ -56,8 +56,8 @@ export default function FoodDetailsPage() {
           <Feather name="arrow-left-circle" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={route.params.image} />
-        <Text style={styles.title}>{route.params.title}</Text>
+        <Image style={styles.image} source={route.params.menuItemImage} />
+        <Text style={styles.title}>{route.params.menuItemName}</Text>
       </>
     )
   }

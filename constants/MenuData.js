@@ -1,20 +1,19 @@
 /* Placeholder data  */
 export const DEFAULT_TENDING_DATA = [
   {
-    title: 'Trending',
+    trendingCategoryTitle: 'Trending',
     restaurantList: [
       {
-        name: 'space churros',
-
-        foodImage: require('../assets/restaurantImages/redFoodCart.png'),
-        description:
+        restaurantName: 'space churros',
+        restaurantImage: require('../assets/restaurantImages/redFoodCart.png'),
+        restaurantDescription:
           "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        menu: [
+        restaurantMenu: [
           {
-            title: 'Churro',
+            menuItemName: 'Churro',
             itemId: 1,
-            image: require('../assets/foodImages/churro.png'),
-            price: '$150.00',
+            menuItemImage: require('../assets/foodImages/churro.png'),
+            menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
               {
                 optionTitle: 'spice',
@@ -86,10 +85,122 @@ export const DEFAULT_TENDING_DATA = [
             ],
           },
           {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
+            menuItemName: 'Fruit',
             itemId: 2,
+            menuItemImage: require('../assets/foodImages/fruit.png'),
+            menuItemPrice: '$150.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        key: 1,
+        restaurantCategoryId: 4,
+      },
+      {
+        restaurantName: 'Super Churros',
+        restaurantImage: require('../assets/restaurantImages/redFoodCart.png'),
+        restaurantDescription:
+          "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
+        restaurantMenu: [
+          {
+            menuItemName: 'Churro',
+            itemId: 3,
+            menuItemImage: require('../assets/foodImages/churro.png'),
+            menuItemPrice: '$150.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
             singularOptionSelectionList: [
               {
                 optionTitle: 'Type of churros',
@@ -134,206 +245,412 @@ export const DEFAULT_TENDING_DATA = [
             ],
           },
           {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
-          },
-          {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
-          },
-          {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
+            menuItemName: 'Fruit',
+            itemId: 4,
+            menuItemImage: require('../assets/foodImages/fruit.png'),
+            menuItemPrice: '$150.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
           },
         ],
-        key: 1,
-        foodCategoryId: 1,
+        key: 2,
+        restaurantCategoryId: 4,
       },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 2,
-      //   foodCategoryId: 2,
-      // },
-      // {
-      //   name: "churros",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/churro.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 3,
-      //   foodCategoryId: 2,
-      // },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 4,
-      //   foodCategoryId: 4,
-      // },
     ],
   },
   {
-    title: 'Hot Foods',
+    trendingCategoryTitle: 'Holiday Sale',
     restaurantList: [
       {
-        name: "Henry Benry's almighty churros 2",
-        price: '$30.00',
-        foodImage: require('../assets/restaurantImages/redFoodCart.png'),
-        description:
+        restaurantName: 'Holiday sweets',
+        restaurantImage: require('../assets/restaurantImages/redFoodCart.png'),
+        restaurantDescription:
           "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        menu: [
+        restaurantMenu: [
           {
-            title: 'Churro',
-            image: require('../assets/foodImages/churro.png'),
-            price: '$150.00',
+            menuItemName: 'Churro',
+            itemId: 5,
+            menuItemImage: require('../assets/foodImages/churro.png'),
+            menuItemPrice: '$150.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
           },
           {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
-          },
-          {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
+            menuItemName: 'Fruit',
+            itemId: 6,
+            menuItemImage: require('../assets/foodImages/fruit.png'),
+            menuItemPrice: '$150.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
           },
         ],
         key: 3,
-        foodCategoryId: 3,
+        restaurantCategoryId: 1,
       },
       {
-        name: "Henry Benry's almighty churros 2",
-        price: '$30.00',
-        foodImage: require('../assets/restaurantImages/redFoodCart.png'),
-        description:
+        restaurantName: 'Super Churros',
+        restaurantImage: require('../assets/restaurantImages/redFoodCart.png'),
+        restaurantDescription:
           "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        menu: [
+        restaurantMenu: [
           {
-            title: 'Churro',
-            image: require('../assets/foodImages/churro.png'),
-            price: '$150.00',
+            menuItemName: 'Churro',
+            itemId: 7,
+            menuItemImage: require('../assets/foodImages/churro.png'),
+            menuItemPrice: '$1.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
           },
           {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
+            menuItemName: 'Fruit',
+            itemId: 8,
+            menuItemImage: require('../assets/foodImages/fruit.png'),
+            menuItemPrice: '$1.00',
+            multipleOptionSelectionList: [
+              {
+                optionTitle: 'spice',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'Mild',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+                options: [
+                  {
+                    label: 'Mild',
+                    label: 'amogus',
+                  },
+                ],
+              },
+            ],
+            singularOptionSelectionList: [
+              {
+                optionTitle: 'Type of churros',
+              },
+              {
+                options: [
+                  // label is a prop from RadioButtonRN
+                  {
+                    label: 'Mild?',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogus',
+                  },
+                ],
+              },
+              {
+                optionTitle: 'Extra',
+              },
+              {
+                options: [
+                  {
+                    label: 'Mild',
+                  },
+                  {
+                    label: 'amogusAgain',
+                  },
+                ],
+              },
+            ],
           },
         ],
         key: 4,
-        foodCategoryId: 3,
+        restaurantCategoryId: 3,
       },
-      {
-        name: "Henry Benry's almighty churros 2",
-        price: '$30.00',
-        foodImage: require('../assets/restaurantImages/redFoodCart.png'),
-        description:
-          "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        menu: [
-          {
-            title: 'Churro',
-            image: require('../assets/foodImages/churro.png'),
-            price: '$150.00',
-          },
-          {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
-          },
-        ],
-        key: 5,
-        foodCategoryId: 3,
-      },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 2,
-      //   foodCategoryId: 4,
-      // },
-      // {
-      //   name: "churros",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/churro.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 3,
-      //   foodCategoryId: 2,
-      // },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 4,
-      //   foodCategoryId: 2,
-      // },
     ],
   },
-  {
-    title: 'Best for Budget',
-    restaurantList: [
-      {
-        name: "Henry Benry's almighty Fruits",
-        price: '$10.00',
-        foodImage: require('../assets/restaurantImages/redFoodCart.png'),
-        description:
-          "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-        menu: [
-          {
-            title: 'Churro',
-            image: require('../assets/foodImages/churro.png'),
-            price: '$150.00',
-          },
-          {
-            title: 'Chicken',
-            image: require('../assets/foodImages/fruit.png'),
-            price: '$150.00',
-          },
-        ],
-        key: 6,
-        foodCategoryId: 1,
-      },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 2,
-      //   foodCategoryId: 1,
-      // },
-      // {
-      //   name: "churros",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/churro.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 3,
-      //   foodCategoryId: 2,
-      // },
-      // {
-      //   name: "fruit",
-      //   price: "$3.00",
-      //   foodImage: require("../assets/foodImages/fruit.png"),
-      //   description:
-      //     "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
-      //   key: 4,
-      //   foodCategoryId: 3,
-      // },
-    ],
-  },
+  
 ]
 
 export const DEFAULT_CATEGORY_DATA = [

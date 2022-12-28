@@ -112,7 +112,7 @@ const test = async() => {
   // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
   let filterRestaurantCards = findingCategory
     .flat()
-    .filter((i) => i.foodCategoryId === itemId)
+    .filter((i) => i.restaurantCategoryId === itemId)
   const isClicked = useAppSelector(getButton)
 
   return (
@@ -145,7 +145,7 @@ const test = async() => {
                 // if no category selected, render the default treding
 
                 <RestaurantListComponent
-                  title={item.title}
+                  title={item.trendingCategoryTitle}
                   style={styles.list}
                   restaurants={item.restaurantList}
                 />
