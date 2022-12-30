@@ -1,9 +1,16 @@
 /**
- * Purpose of file: Currently has basic firebase functionality for authentication 
- * Note: It still requires "forgot password" functionality and styling for the page 
+ * Purpose of file: Currently has basic firebase functionality for authentication
+ * Note: It still requires "forgot password" functionality and styling for the page
  */
 
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  StyleSheet,
+} from 'react-native'
 import { useAppDispatch } from '../../store/hook'
 import { setUser } from '../../store/userSession'
 import { useState } from 'react'
@@ -44,16 +51,16 @@ export default function SignInPage() {
         Alert.alert(err.message)
       })
   }
-/* 
+  /* 
   Function that handles an existing account 
 */
   const handleSignIn = () => {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
     signInWithEmailAndPassword(auth, email, password)
-    // takes in the credentials from email and password
+      // takes in the credentials from email and password
       .then((userCredential) => {
         console.log('Signed In')
-        // set the user as a variable 
+        // set the user as a variable
         const user = userCredential.user
         dispatch(
           setUser({
@@ -69,7 +76,7 @@ export default function SignInPage() {
         Alert.alert(err.message)
       })
   }
-// test function to enter the page without an account
+  // test function to enter the page without an account
   const signIn = () => {
     if (!isLoading) {
       setIsLoading(true)
@@ -85,11 +92,18 @@ export default function SignInPage() {
       }, 2000)
     }
   }
+
+  // loading the sign in page
   return (
-    <View
-      style={{ justifyContent: 'center', alignItems: 'center', marginTop: 100 }}
-    >
-      <Text>Hey i am not signed in</Text>
+    <View style={styles.signInContainer}>
+      <View style={styles.headerTag}>
+        <Text style={styles.mainHeader}>Create an account</Text>
+        <Text>
+          Welcome friend, entr your details so lets get started in ordering food
+        </Text>
+      </View>
+
+      <Text>Email Address</Text>
       <TextInput
         readOnly={false}
         onChangeText={(text) => {
@@ -110,8 +124,8 @@ export default function SignInPage() {
         <Text>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleCreateAccount}>
-        <Text>Create New Account</Text>
+      <TouchableOpacity style={styles.signInButton} onPress={handleCreateAccount}>
+        <Text style={styles.signInText}>Sign Up</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -123,3 +137,39 @@ export default function SignInPage() {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  signInText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 15,
+  },
+  signInButton: {
+    backgroundColor: '#78DBFF',
+    marginTop: '75%',
+    padding: '5%',
+    justifyContent: 'flex-end',
+
+    borderRadius: 20,
+  },
+  headerTag: {
+    
+    margin: '5%',
+    
+
+  },
+  signInContainer: {
+    
+    padding: '10%',
+    paddingTop: '20%',
+    flex: 1,
+    backgroundColor: '#fff'
+  },
+  mainHeader: {
+    fontWeight: 'bold',
+    marginBottom: '5%',
+    fontSize: 25,
+    
+    
+  }
+})

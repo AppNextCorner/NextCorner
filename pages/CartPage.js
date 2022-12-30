@@ -7,7 +7,7 @@ import React from 'react'
 
 import { getCart } from '../store/addToCart'
 import { useAppSelector } from '../store/hook'
-
+import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import {
   StyleSheet,
@@ -40,8 +40,10 @@ const CartPage = () => {
   let limitTextAmount = text.slice(0, 75) + ''
 
   return (
-    <View style={{ backgroundColor: '#fff', flex: 1, marginTop: 200 }}>
-      <Button style={{marginTop: '20%',}} title="Button" onPress={goHome} />
+    <View style={{ backgroundColor: '#fff', flex: 1 }}>
+      <Pressable style={styles.goBackButton} onPress={goHome}>
+        <Feather name="arrow-left-circle" size={40} color="black" />
+      </Pressable>
       <FlatList
         data={cartList}
         renderItem={({ item }) => (
@@ -52,17 +54,20 @@ const CartPage = () => {
             >
               <View style={styles.card}>
                 <View style={styles.imageBox}>
-                  <Image style={styles.foodImages} source={item.image} />
+                  <Image
+                    style={styles.foodImages}
+                    source={item.menuItemImage}
+                  />
                 </View>
                 <View style={styles.foodTexts}>
-                  <Text style={styles.categoryText}>{item.title}</Text>
+                  <Text style={styles.categoryText}>{item.menuItemName}</Text>
                   <Text style={styles.descriptionOfItem}>
                     {limitTextAmount}
                   </Text>
-                  <Text style={styles.priceText}>{item.price}</Text>
+                  <Text style={styles.priceText}>{item.menuItemPrice}</Text>
                 </View>
                 {/* Store image with button  */}
-                <Button
+                {/* <Button
                   title="Increment"
                   onPress={() => {
                     console.log(item.itemId)
@@ -72,7 +77,7 @@ const CartPage = () => {
                       }),
                     )
                   }}
-                />
+                /> */}
                 <Text style={{ flex: 1, textAlign: 'center', top: 50 }}>
                   {amount}
                 </Text>
@@ -90,6 +95,9 @@ const CartPage = () => {
 export default CartPage
 
 const styles = StyleSheet.create({
+  goBackButton: {
+    margin: '10%'
+  },
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,

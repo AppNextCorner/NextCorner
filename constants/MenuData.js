@@ -50,12 +50,19 @@ export const DEFAULT_TENDING_DATA = [
                   // label is a prop from RadioButtonRN
                   {
                     label: 'Mild?',
+                    id: 0,
+                    status: false,
                   },
                   {
                     label: 'amogus',
+                    id: 1,
                   },
                 ],
               },
+              {
+                selectedOption: '',
+              },
+
               {
                 optionTitle: 'Extra',
               },
@@ -63,24 +70,16 @@ export const DEFAULT_TENDING_DATA = [
                 options: [
                   {
                     label: 'Mild',
+                    id: 2,
                   },
                   {
-                    label: 'amogus',
+                    label: 'WOW',
+                    id: 3,
                   },
                 ],
               },
               {
-                optionTitle: 'Extra',
-              },
-              {
-                options: [
-                  {
-                    label: 'Mild',
-                  },
-                  {
-                    label: 'amogusAgain',
-                  },
-                ],
+                selectedOption: '',
               },
             ],
           },
@@ -650,7 +649,6 @@ export const DEFAULT_TENDING_DATA = [
       },
     ],
   },
-  
 ]
 
 export const DEFAULT_CATEGORY_DATA = [

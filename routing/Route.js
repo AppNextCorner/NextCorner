@@ -68,7 +68,7 @@ function Home() {
         tabBarInactiveTintColor: 'grey',
 
         tabBarShowLabel: true,
-        tabBarStyle: { padding: 10, height: 60 },
+        tabBarStyle: { padding: 10, height: 90},
       })}
     >
       {/* Tabs we want to use  */}
