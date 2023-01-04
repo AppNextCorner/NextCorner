@@ -9,44 +9,52 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
-} from 'react-native'
-import React, { useEffect } from 'react'
-import { useRoute } from '@react-navigation/native'
-import { Feather } from '@expo/vector-icons'
-import { StatusBar } from 'expo-status-bar'
-import { useNavigation } from '@react-navigation/native'
-import MultipleOptionSelectedList from '../components/MultipleOptionSelectedList'
-import SingleOptionSelectionComponent from '../components/SingleOptionSelectionComponent'
-import useFoodItemData from '../data/useFoodItemData'
-import { useAppDispatch } from '../store/hook'
-import {  setCart } from '../store/addToCart'
+} from "react-native";
+import React, { useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
+import MultipleOptionSelectedList from "../components/MultipleOptionSelectedList";
+import SingleOptionSelectionComponent from "../components/SingleOptionSelectionComponent";
+import useFoodItemData from "../data/useFoodItemData";
+import { useAppDispatch } from "../store/hook";
+import { setCart } from "../store/addToCart";
 
-export default function FoodDetailsPage() {
+export default function FoodDetailsPage(props) {
   //create our options
   
-  const { buttonVisibility} = useFoodItemData();
+  const { buttonVisibility } = useFoodItemData();
 
   const dispatch = useAppDispatch();
 
-  const route = useRoute()
-  const navigation = useNavigation()
+  const route = useRoute();
+  const navigation = useNavigation();
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
-    
-    navigation.goBack()
-  }
-  const goToCartButton = () => {
-    dispatch(setCart({
-      cartData: route.params
-    }))
     navigation.goBack();
-  }
+  };
+  const goToCartButton = () => {
+    dispatch(
+      setCart({
+        cartData: route.params,
+        singularOptionSelectionList: [
+
+        ]
+      })
+    );
+    navigation.goBack();
+  };
 
   useEffect(() => {
-    console.log("lmao",buttonVisibility);
-  },[])
-  
+    console.log("lmao", buttonVisibility);
+  }, []);
+
+  const onSizeChange = (sizeVal) => {
+    console.log(sizeVal);
+
+  };
 
   // list component for the options page
   const Header = () => {
@@ -59,8 +67,8 @@ export default function FoodDetailsPage() {
         <Image style={styles.image} source={route.params.menuItemImage} />
         <Text style={styles.title}>{route.params.menuItemName}</Text>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -74,24 +82,24 @@ export default function FoodDetailsPage() {
           header={Header}
           optionData={route.params.optionTitle}
           data={route.params.singularOptionSelectionList}
+          onChange={onSizeChange}
         />
-       
-        <TouchableOpacity
-         style={styles.orderButton}
-         onPress={goToCartButton}
-         >
-          <Text style={styles.orderButtonText}>Add to Cart {route.params.price}</Text>
+
+
+        <TouchableOpacity style={styles.orderButton} onPress={goToCartButton}>
+          <Text style={styles.orderButtonText}>
+            Add to Cart {route.params.price}
+          </Text>
         </TouchableOpacity>
-        
       </View>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   orderButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     fontSize: 15,
   },
   goBackButton: {
@@ -102,30 +110,30 @@ const styles = StyleSheet.create({
   },
   description: {
     flex: 0,
-    backgroundColor: 'yellow',
+    backgroundColor: "yellow",
     marginHorizontal: 20,
     marginTop: 15,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 200,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginTop: -105,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginTop: 10,
   },
   orderButton: {
-    backgroundColor: '#78DBFF',
+    backgroundColor: "#78DBFF",
     margin: 15,
     padding: 15,
     borderRadius: 20,
   },
-})
+});

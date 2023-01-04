@@ -1,3 +1,26 @@
+export const DATA = [
+  {
+    categoryName: 'Trending',
+    restaurantList: [
+      {
+        name: 'Taco Truck',
+        image:  require('../assets/restaurantImages/redFoodCart.png'),
+        description:
+          "Henry benry's churros are one of the best in town. With precise use of homemade ingredients and love to bring you the best churros",
+        menu: [
+          {
+          name: 'Churro',
+          id: 1,
+          quantity: 1,
+          image: require('../assets/foodImages/churro.png'),
+          price: '$150.00',
+        }
+        ]
+      }
+    ]
+  }
+]
+
 /* Placeholder data  */
 export const DEFAULT_TENDING_DATA = [
   {
@@ -11,7 +34,8 @@ export const DEFAULT_TENDING_DATA = [
         restaurantMenu: [
           {
             menuItemName: 'Churro',
-            itemId: 1,
+            menuItemId: 1,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/churro.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -85,7 +109,8 @@ export const DEFAULT_TENDING_DATA = [
           },
           {
             menuItemName: 'Fruit',
-            itemId: 2,
+            menuItemId: 2,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/fruit.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -170,7 +195,8 @@ export const DEFAULT_TENDING_DATA = [
         restaurantMenu: [
           {
             menuItemName: 'Churro',
-            itemId: 3,
+            menuItemId: 3,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/churro.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -202,16 +228,16 @@ export const DEFAULT_TENDING_DATA = [
             ],
             singularOptionSelectionList: [
               {
-                optionTitle: 'Type of churros',
+                optionTitle: 'Size of churros',
               },
               {
                 options: [
                   // label is a prop from RadioButtonRN
                   {
-                    label: 'Mild?',
+                    label: 'Small',
                   },
                   {
-                    label: 'amogus',
+                    label: 'Medium',
                   },
                 ],
               },
@@ -245,7 +271,8 @@ export const DEFAULT_TENDING_DATA = [
           },
           {
             menuItemName: 'Fruit',
-            itemId: 4,
+            menuItemId: 4,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/fruit.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -335,7 +362,8 @@ export const DEFAULT_TENDING_DATA = [
         restaurantMenu: [
           {
             menuItemName: 'Churro',
-            itemId: 5,
+            menuItemId: 5,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/churro.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -410,7 +438,8 @@ export const DEFAULT_TENDING_DATA = [
           },
           {
             menuItemName: 'Fruit',
-            itemId: 6,
+            menuItemId: 6,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/fruit.png'),
             menuItemPrice: '$150.00',
             multipleOptionSelectionList: [
@@ -495,7 +524,8 @@ export const DEFAULT_TENDING_DATA = [
         restaurantMenu: [
           {
             menuItemName: 'Churro',
-            itemId: 7,
+            menuItemId: 7,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/churro.png'),
             menuItemPrice: '$1.00',
             multipleOptionSelectionList: [
@@ -570,7 +600,8 @@ export const DEFAULT_TENDING_DATA = [
           },
           {
             menuItemName: 'Fruit',
-            itemId: 8,
+            menuItemId: 8,
+            menuItemCartAmount: 1,
             menuItemImage: require('../assets/foodImages/fruit.png'),
             menuItemPrice: '$1.00',
             multipleOptionSelectionList: [

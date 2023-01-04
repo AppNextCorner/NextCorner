@@ -80,7 +80,7 @@ export default function SignInPage() {
   const signIn = () => {
     if (!isLoading) {
       setIsLoading(true)
-      setTimeout(() => {
+
         setIsLoading(false)
 
         dispatch(
@@ -89,7 +89,7 @@ export default function SignInPage() {
             age: 16,
           }),
         )
-      }, 2000)
+
     }
   }
 
@@ -102,43 +102,67 @@ export default function SignInPage() {
           Welcome friend, entr your details so lets get started in ordering food
         </Text>
       </View>
+      {/* Email and Password input - still needs to add confirm password feature */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputText}>Email Address</Text>
+        <TextInput
+          style={styles.textInput}
+          readOnly={false}
+          onChangeText={(text) => {
+            console.log(email)
+            setEmail(text)
+          }}
+          placeholder="email@gmail.com"
+        />
+        <Text style={styles.inputText}>Password</Text>
+        <TextInput
+          style={styles.textInput}
+          readOnly={false}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="password"
+        />
+      </View>
 
-      <Text>Email Address</Text>
-      <TextInput
-        readOnly={false}
-        onChangeText={(text) => {
-          console.log(email)
-          setEmail(text)
-        }}
-        placeholder="email@gmail.com"
-      />
-
-      <TextInput
-        readOnly={false}
-        onChangeText={setPassword}
-        value={password}
-        placeholder="password"
-      />
-
-      <TouchableOpacity onPress={handleSignIn}>
-        <Text>Login</Text>
+      <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
+        <Text style={styles.signInText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.signInButton} onPress={handleCreateAccount}>
-        <Text style={styles.signInText}>Sign Up</Text>
+      <TouchableOpacity onPress={signIn} style={styles.signInButton}>
+        <Text style={styles.signInText}>{isLoading ? 'loading' : 'Test without user'}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={signIn}
-        style={{ backgroundColor: 'red', marginTop: 50 }}
-      >
-        <Text>{isLoading ? 'loading' : 'log in'}</Text>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          style={styles.signInButton}
+          onPress={handleCreateAccount}
+        >
+          <Text style={styles.signInText}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  inputText: {
+    marginLeft: 10,
+  },
+  inputContainer: {
+    marginTop: '15%',
+  },
+  textInput: {
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderRadius: 15,
+    borderColor: '#F0F0F0',
+    padding: '5%',
+    marginVertical: '3%',
+  },
+  bottom: {
+    flex: 1,
+    marginBottom: 36,
+  },
   signInText: {
     color: '#fff',
     textAlign: 'center',
@@ -146,30 +170,23 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     backgroundColor: '#78DBFF',
-    marginTop: '75%',
     padding: '5%',
-    justifyContent: 'flex-end',
-
     borderRadius: 20,
+    marginTop: '5%',
   },
   headerTag: {
-    
     margin: '5%',
-    
-
   },
   signInContainer: {
-    
     padding: '10%',
     paddingTop: '20%',
     flex: 1,
-    backgroundColor: '#fff'
+
+    backgroundColor: 'white',
   },
   mainHeader: {
     fontWeight: 'bold',
     marginBottom: '5%',
     fontSize: 25,
-    
-    
-  }
+  },
 })

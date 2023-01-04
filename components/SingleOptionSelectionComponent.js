@@ -9,17 +9,17 @@
 // if the button is clicked again, then remove the option label from the array
 // if another option is clicked, then, remove the option label from the array
 
-import { Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import RadioButtonRN from 'radio-buttons-react-native'
+import { Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import RadioButtonRN from "radio-buttons-react-native";
 
 export default function SingleOptionSelectionComponent(props) {
   const [value, setValue] = useState({
-    option: '',
+    option: "",
     id: 0,
-  })
+  });
 
-  console.log(value)
+  console.log(value);
   return (
     <>
       {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
@@ -31,41 +31,40 @@ export default function SingleOptionSelectionComponent(props) {
             <>
               <Text style={styles.optionTitle}>{item.optionTitle}</Text>
               {/* <Text>{item.selectedOption}</Text> */}
-              {
-                value !== '' ? <Text>{item.selectedOption}</Text> : null
-              }
-              
+              {value !== "" ? <Text>{item.selectedOption}</Text> : null}
+
               <FlatList
                 data={item.options}
                 renderItem={({ item }) => {
                   return (
                     <TouchableOpacity
                       onPress={(event) => {
-                        
-                        setValue(
-                          {
-                            option: item.label,
-                            id: item.id,
-                          },
-                          // Put old items at the end
-                        )
+                        // setValue(
+                        // {
+                        //   option: item.label,
+                        //   id: item.id,
+                        // }
+                        //   // Put old items at the end
+                        // );
 
-
+                        props.onChange({
+                          option: item.label,
+                          id: item.id,
+                        });
                       }}
                     >
                       <Text>{item.label}</Text>
                     </TouchableOpacity>
-                  )
+                  );
                 }}
               />
             </>
-          )
+          );
         }}
       />
-       <Text>{value.option}</Text>
-     
+      <Text>{value.option}</Text>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -76,4 +75,4 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 20,
   },
-})
+});
