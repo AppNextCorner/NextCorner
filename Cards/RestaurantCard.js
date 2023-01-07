@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
+
   const changeStyle = (checkForStyleChange) => {
     let change =
       checkForStyleChange === true
@@ -26,13 +27,14 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
     <TouchableOpacity
 
     // pass in data of restaurant items / all of restaurants, but pin pointing which restaurant data to get
-      onPress={() => navigation.navigate('MenuList', restaurantItem)}
+      onPress={() => navigation.navigate('MenuList', {restaurant:restaurantItem})}
       style={styles.foodCategoryStyle}
+     
     >
       <View style={changeStyle(checkForStyleChange)}>
-        <Image style={styles.foodImages} source={restaurantItem.restaurantImage} />
+        <Image style={styles.foodImages} source={restaurantItem.image} />
         <View style={styles.foodTexts}>
-          <Text style={styles.restaurantText}>{restaurantItem.restaurantName}</Text>
+          <Text style={styles.restaurantText}>{restaurantItem.name}</Text>
         </View>
 
         <Text style={styles.distanceText}>0.1 m</Text>

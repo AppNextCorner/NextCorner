@@ -3,13 +3,7 @@
  * - Displays restaurants based on location or depending on the section from either the category or default sections
  */
 
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Text,
-  Button
-} from 'react-native'
+import { StyleSheet, View, FlatList, Text, Button } from 'react-native'
 import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
@@ -21,98 +15,94 @@ import CategoryScrollBar from '../components/CategoryScrollBar'
 import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
 import { useAppDispatch, useAppSelector } from '../store/hook'
-import { getButton} from '../store/addToCart'
-import { logOut} from '../store/userSession'
+import { getButton } from '../store/addToCart'
+import { logOut } from '../store/userSession'
+import useCategoryList from '../hooks/useCategoryList'
+import useRestaurants from '../hooks/useRestaurants'
+import { restaurant } from '../constants/MenuData'
 
 // firebase authentication -> grabbing the user data from firebase to use here after user is logged in
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
-import { firebaseConfig } from '../firebase/firebase-config'
+// import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+// import { initializeApp } from 'firebase/app'
+// import { firebaseConfig } from '../firebase/firebase-config'
 
 export default function HomePage() {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   const [user, setUser] = useState({
-    email: '',
-  })
-  const app = initializeApp(firebaseConfig)
-  const auth = getAuth(app)
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      const email = user.email;
-      console.log(email);
-      setUser(user,
-        email)
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
+    email: 'roberto@urbantxt.com',
   })
 
-  const handleSignOut = async() => {
+  // const app = initializeApp(firebaseConfig)
+
+  // const auth = getAuth(app)
+
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     const email = user.email;
+  //     console.log(email);
+  //     setUser(user,
+  //       email)
+  //     // https://firebase.google.com/docs/reference/js/firebase.User
+  //     const uid = user.uid
+  //     // ...
+  //   } else {
+  //     // User is signed out
+  //     // ...
+  //   }
+  // })
+
+  const handleSignOut = async () => {
     try {
-      console.log(auth.currentUser.email);
-      dispatch(logOut());
-      const result = await signOut(auth);
-      
-      console.log("entered sign out functions");
-      console.log(auth.currentUser.email);
-      
-    }catch (err) {
+      console.log(auth.currentUser.email)
+      dispatch(logOut())
+      const result = await signOut(auth)
+
+      console.log('entered sign out functions')
+      console.log(auth.currentUser.email)
+    } catch (err) {
       console.log(err.message)
     }
     // add try catch if you want
-    
-}
-const test = async() => {
-  try {
-    dispatch(logOut());
-  } catch (err) {
-    console.log(err.message)
   }
-}
-
-  // import our boilerplate data we want to display being the restaurants and category list
-  const { categoryList, trendingFood} = useFoodItemData()
-  // test data for the cards and images passed through props and looped through the flatlist -> needs to replace with API soon
-  const [dataToRender, setDataToRender] = useState(trendingFood)
-  // did we select an item - category
-  const [categoryWasSelected, setCategoryWasSelected] = useState(false)
-  // what category did we select
-  const [itemId, setItemId] = useState(0)
-
-  const [checkForStyleChange, setCheckForStyleChange] = useState(false)
-
-  // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
-  let findingCategory = dataToRender.map((trendingRestaurants) =>
-    trendingRestaurants.restaurantList.map((restaurantData) => restaurantData),
-  )
-
-  // shows item when category is selected and compares the id of the category with the id's of every card in the category list
-  function showItem(id) {
-    // want to check if the pressed category is the same as the selected category
-    // if it is the same then the state of categoryWasSelected should be false because this is the initial state of the category list
-    if (itemId === id) {
-      setCategoryWasSelected(false)
-      setItemId(0)
-      setCheckForStyleChange(false)
-
-      // setting to true because the id is already selected when the category is selected -> meaning that the if the id is not selected to a new value and is the same as the current value of itemId, then go back to default because the category was selected twice -> until the new value is selected by the newId / category
-      //
-    } else {
-      setItemId(id)
-      setCategoryWasSelected(true)
-      setCheckForStyleChange(true)
+  const test = async () => {
+    try {
+      dispatch(logOut())
+    } catch (err) {
+      console.log(err.message)
     }
   }
-  // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
-  let filterRestaurantCards = findingCategory
+
+  const {
+    categoryWasSelected,
+    categoryId,
+    categoryList,
+    checkForStyleChange,
+    onSelectCategory,
+  } = useCategoryList()
+
+  const { trendingRestaurants, restaurants } = useRestaurants()
+  // access the restaurant data
+  const getRestaurants = trendingRestaurants
+    .map((val) => val.restaurantsWithCategories)
     .flat()
-    .filter((i) => i.restaurantCategoryId === itemId)
+  // // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
+
+  // // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
+
   const isClicked = useAppSelector(getButton)
+  let list = []
+
+  // filter out restaraunts from every category - get restrautns from every category
+  const getRestaurant = restaurants.forEach((r) => {
+    // list join up with the restaurnt list
+    list = list.concat(r)
+  })
+
+  // filter out restaurants that have matching category id
+  const filterRestaurantCards = restaurants.filter((i) => {
+    return i.categoryId === categoryId
+  })
 
   return (
     <>
@@ -121,32 +111,48 @@ const test = async() => {
         {/* Top header for the user to be able to display address and access items in their order */}
 
         <HeaderComponent />
-        <Text>{user.email}</Text>
-        <Button onPress={handleSignOut} title="Sign Out"/>
-        <Button onPress={test} title="exit"/>
-        <SearchComponent />
+        {/* <Text>{user.email}</Text> */}
+        {/* <Button onPress={handleSignOut} title="Sign Out"/>
+        <Button onPress={test} title="exit"/> */}
+
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
           <>
             <FlatList
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={
-                <CategoryScrollBar
-                  categoryList={categoryList}
-                  itemId={itemId}
-                  style={styles.margin}
-                  showItem={showItem}
+                <>
+                  <SearchComponent />
+                  <CategoryScrollBar
+                    categoryList={categoryList}
+                    itemId={categoryId}
+                    style={styles.margin}
+                    showItem={onSelectCategory}
+                  />
+                </>
+              }
+              data={getRestaurants}
+              ListFooterComponent={
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                  data={restaurants}
+                  keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
+                  renderItem={({ item }) => (
+                    // RestaurantCard is each individual restaurant card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
+                    <RestaurantCard
+                      restaurantItem={item}
+                      checkForStyleChange={!checkForStyleChange}
+                    />
+                  )}
                 />
               }
-              data={dataToRender}
               renderItem={({ item }) => (
                 // renders the nested data three times -> due to having three objects in the dataToRender array
                 // if no category selected, render the default treding
-
                 <RestaurantListComponent
-                  title={item.trendingCategoryTitle}
+                  title={item.name}
                   style={styles.list}
-                  restaurants={item.restaurantList}
+                  restaurants={item.categorizedRestaurants}
                 />
               )}
             />
@@ -160,21 +166,21 @@ const test = async() => {
                 // Scroll bar for the list of categories
                 <CategoryScrollBar
                   categoryList={categoryList}
-                  itemId={itemId}
+                  itemId={categoryId}
                   style={styles.margin}
-                  showItem={showItem}
+                  showItem={onSelectCategory}
                 />
               }
               data={filterRestaurantCards}
-              renderItem={({ item }) => {
+              keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
+              renderItem={({ item }) => (
                 // RestaurantCard is each individual restaurant card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
-                return (
-                  <RestaurantCard
-                    checkForStyleChange={checkForStyleChange}
-                    restaurantItem={item}
-                  />
-                )
-              }}
+
+                <RestaurantCard
+                  checkForStyleChange={checkForStyleChange}
+                  restaurantItem={item}
+                />
+              )}
             />
           </>
         )}

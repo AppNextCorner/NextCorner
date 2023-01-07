@@ -38,7 +38,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "@redux-devtools/core": "^3.13.1"
+    "@faker-js/faker": "^7.6.0",
+    "@redux-devtools/core": "^3.13.1",
+    "faker": "^6.6.6",
+    "faker-js": "^1.0.0"
   },
   "resolutions": {
     "@babel/core": "^7.20.2",

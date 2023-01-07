@@ -6,8 +6,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // setting the default state for the app
 const initialState = {
-  loggedIn: false, // user is not logged in by default
-  user: null
+  loggedIn: true, // user is not logged in by default
+  user: {email:'roberto@urbantxt.com'}
 };
 
 // create a slice object to store the state -> creates action creators for each case inside reducers and can safely mutate the state

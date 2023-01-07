@@ -36,7 +36,7 @@ const CartPage = () => {
   const isCartFull = useAppSelector(getCart)
 
   const cartList = isCartFull.map((val) => val.cartData)
-  console.log(cartList)
+
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''

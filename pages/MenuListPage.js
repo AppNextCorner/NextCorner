@@ -25,6 +25,7 @@ export default function MenuListPage() {
   const isClicked = useAppSelector(getButton)
   // using routes for getting the data and navigation to navigate through a different screen
   const route = useRoute()
+  const {restaurant} = route.params;
   const navigation = useNavigation()
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
@@ -51,11 +52,11 @@ export default function MenuListPage() {
                   <Feather name="arrow-left-circle" size={40} color="white" />
                 </Pressable>
 
-                <Image style={styles.image} source={route.params.restaurantImage} />
-                <Text style={styles.title}>{route.params.restaurantName}</Text>
+                <Image style={styles.image} source={restaurant.image} />
+                <Text style={styles.title}>{restaurant.name}</Text>
                 <View style={styles.description}>
                   <Text style={styles.textDescription}>
-                    {route.params.restaurantDescription}
+                    {restaurant.description}
                   </Text>
                 </View>
                 <View style={styles.marginSet}>
@@ -67,7 +68,7 @@ export default function MenuListPage() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             // pass in the menu list coming from the route.params of the restaurants items which we can access through params
-            data={route.params.restaurantMenu}
+            data={restaurant.menu}
             renderItem={({ item }) => {
               return <MenuItemCard foodItem={item} />
             }}

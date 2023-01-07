@@ -48,7 +48,7 @@ export default function FoodDetailsPage(props) {
   };
 
   useEffect(() => {
-    console.log("lmao", buttonVisibility);
+    console.log(buttonVisibility);
   }, []);
 
   const onSizeChange = (sizeVal) => {
@@ -64,8 +64,8 @@ export default function FoodDetailsPage(props) {
           <Feather name="arrow-left-circle" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={route.params.menuItemImage} />
-        <Text style={styles.title}>{route.params.menuItemName}</Text>
+        <Image style={styles.image} source={route.params.image} />
+        <Text style={styles.title}>{route.params.name}</Text>
       </>
     );
   };
@@ -80,8 +80,8 @@ export default function FoodDetailsPage(props) {
 
         <SingleOptionSelectionComponent
           header={Header}
-          optionData={route.params.optionTitle}
-          data={route.params.singularOptionSelectionList}
+          optionData={route.params.name}
+          data={route.params.options}
           onChange={onSizeChange}
         />
 

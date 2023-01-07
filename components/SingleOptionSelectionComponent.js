@@ -19,7 +19,7 @@ export default function SingleOptionSelectionComponent(props) {
     id: 0,
   });
 
-  console.log(value);
+
   return (
     <>
       {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
@@ -29,9 +29,9 @@ export default function SingleOptionSelectionComponent(props) {
         renderItem={({ item }) => {
           return (
             <>
-              <Text style={styles.optionTitle}>{item.optionTitle}</Text>
+              <Text style={styles.optionTitle}>{item.name}</Text>
               {/* <Text>{item.selectedOption}</Text> */}
-              {value !== "" ? <Text>{item.selectedOption}</Text> : null}
+             
 
               <FlatList
                 data={item.options}
