@@ -15,6 +15,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  View
 } from 'react-native'
 import React, { useState } from 'react'
 import RadioButtonRN from 'radio-buttons-react-native'
@@ -89,6 +90,9 @@ export default function SingleOptionSelectionComponent(props) {
                   );
                 }}
               /> */}
+              {/* <View style={{display:'flex', flexDirection: 'row', overflow: 'scroll'}}>
+
+             */}
               {item.customizations.map((stack, index) => {
                 for (let i= 0; i < item.customizations.length; i++) {
                   item.customizations[i].selected = i === stack.id;
@@ -136,20 +140,41 @@ export default function SingleOptionSelectionComponent(props) {
                   </TouchableOpacity>
                 )
               })}
+              {/* </View> */}
             </>
+            
+
           )
         }}
+        
       />
+      
+      
       {/* <Text>{value}</Text> */}
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  nullButtonStyle: {},
+  nullButtonStyle: {
+    display: 'flex',
+    width: 150,
+    padding: '5%',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'grey',
+    borderRadius: 20,
+    overflow: 'scroll'
+    },
   optionStyle: {
-    
+    display: 'flex',
     backgroundColor: 'red',
+    padding: '5%',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'grey',
+    borderRadius: 20,
+    overflow: 'scroll'
   },
   radioButtonStyle: {
     marginTop: 15,
