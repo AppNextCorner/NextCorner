@@ -15,7 +15,7 @@ import CategoryScrollBar from '../components/CategoryScrollBar'
 import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
 import { useAppDispatch, useAppSelector } from '../store/hook'
-import { getButton } from '../store/addToCart'
+import { getButton, getCart } from '../store/addToCart'
 import { logOut } from '../store/userSession'
 import useCategoryList from '../hooks/useCategoryList'
 import useRestaurants from '../hooks/useRestaurants'
@@ -91,6 +91,8 @@ export default function HomePage() {
   // // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
 
   const isClicked = useAppSelector(getButton)
+  const isCartFull = useAppSelector(getCart)
+  console.log(isCartFull)
   let list = []
 
   // filter out restaraunts from every category - get restrautns from every category

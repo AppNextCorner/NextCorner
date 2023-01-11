@@ -11,7 +11,7 @@ import {
   Pressable,
   FlatList,
 } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
@@ -28,6 +28,22 @@ export default function MenuListPage() {
   const {restaurant} = route.params;
   const navigation = useNavigation()
 
+  const [cart, setCart] = useState(restaurant.menu)
+
+  // const updateCustomizations = (id, newCustomizations) => {
+  //   const i = cart.map((item) => item.id).indexOf(id);
+
+  //   if (i > -1){
+  //     const temp = {...cart[i], customizations: newCustomizations}
+  //     setCart(cart.filter((item, index) => {
+  //       if(index === i){
+  //         return temp
+  //       }
+  //       return item
+  //     }))
+  //   }
+
+  // }
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate('Home')
@@ -68,8 +84,9 @@ export default function MenuListPage() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             // pass in the menu list coming from the route.params of the restaurants items which we can access through params
-            data={restaurant.menu}
+            data={cart}
             renderItem={({ item }) => {
+              console.log("INformation on one menu item", item)
               return <MenuItemCard foodItem={item} />
             }}
           />

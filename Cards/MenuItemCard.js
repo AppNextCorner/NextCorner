@@ -2,8 +2,8 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
-export default function MenuItemCard({ foodItem }) {
-  const navigation = useNavigation()
+export default function MenuItemCard({ foodItem}) {
+  const navigation = useNavigation();
 
   let text =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'

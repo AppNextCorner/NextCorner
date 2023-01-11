@@ -36,7 +36,7 @@ const CartPage = () => {
   const isCartFull = useAppSelector(getCart)
 
   const cartList = isCartFull.map((val) => val.cartData)
-
+  console.log(cartList);
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''
@@ -57,15 +57,15 @@ const CartPage = () => {
                 <View style={styles.imageBox}>
                   <Image
                     style={styles.foodImages}
-                    source={item.menuItemImage}
+                    source={item.image}
                   />
                 </View>
                 <View style={styles.foodTexts}>
-                  <Text style={styles.categoryText}>{item.menuItemName}</Text>
+                  <Text style={styles.categoryText}>{item.name}</Text>
                   <Text style={styles.descriptionOfItem}>
                     {limitTextAmount}
                   </Text>
-                  <Text style={styles.priceText}>{item.menuItemPrice}</Text>
+                  <Text style={styles.priceText}>{item.price}</Text>
                 </View>
 
                 {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
@@ -78,13 +78,13 @@ const CartPage = () => {
                     onPress={() =>
                       dispatch(
                         decrease({
-                          id: item.menuItemId,
+                          id: item.itemId,
                           type: randomId,
                         }),
                       )
                     }
                   />
-                  <Text>{item.menuItemCartAmount}</Text>
+                  <Text>{item.amountInCart}</Text>
                   <AntDesign
                     style={styles.icon}
                     name="pluscircle"
@@ -94,7 +94,7 @@ const CartPage = () => {
                       dispatch(
                         increase({
                           // change the idea towards that of a new concatted one
-                          id: item.menuItemId,
+                          id: item.itemId,
                           type: randomId,
                         }),
                       )

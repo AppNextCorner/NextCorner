@@ -8,18 +8,17 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   cartButton: false, // user is not logged in by default
   cart: [
-    {
-      name: "Coffee",
-      quantity: 1,
-      price: 2.99,
-      customizations: [
-        {
-          size: "m",
-        },
-      ],
-    },
+    // {
+    //   name: "Coffee",
+    //   quantity: 1,
+    //   price: 2.99,
+    //   customizations: [
+    //     {
+    //       size: "m",
+    //     },
+    //   ],
+    // },
   ],
-  amount: 0,
   total: 0,
 };
 
@@ -54,9 +53,9 @@ export const addToCart = createSlice({
       const mapCart = state.cart.map((itemList) => itemList.cartData);
       console.log(mapCart);
       const cartItem = mapCart.find(
-        (item) => item.menuItemId + payload.type === payload.id + payload.type
+        (item) => item.itemId === payload.id
       );
-      cartItem.menuItemCartAmount += 1;
+      cartItem.amountInCart += 1;
 
       /**
        * CHECK IN FOR LATER ON DUPLICATE ITEMS with different options -> if they have the same options add one more and if their OPTIONS ARE DIFFERENT then they will be a new item
@@ -87,15 +86,15 @@ export const addToCart = createSlice({
       // get the data of each object in the state array
       const mapCart = state.cart.map((itemList) => itemList.cartData);
       //
-      const cartItem = mapCart.find(
-        (item) => item.menuItemId + payload.type === payload.id + payload.type
+      const cartItem = mapCart.find((item) =>
+        item.itemId === payload.id
       );
       // function to remove the item from the state array with the find index method
       function removeObjectWithId(arr, id) {
         const mapAnotherCart = arr.map((item) => item.cartData);
         // find the index of the item in the array that the item belongs to with the given id from the payload
         const objWithIdIndex = mapAnotherCart.findIndex(
-          (obj) => obj.menuItemId + payload.type === id + payload.type
+          (obj) => obj.itemId === id 
         );
         // confirm if the item exists in the array
         if (objWithIdIndex > -1) {
@@ -106,12 +105,12 @@ export const addToCart = createSlice({
         return arr;
       }
       // checks if the object property is below or over 1 to either eliminate it from the array with the removeObjectWithId function
-      if (cartItem.menuItemCartAmount - 1 < 1) {
+      if (cartItem.amountInCart - 1 < 1) {
         // pass the global state to the removeObjectWithId function to mutate the array and the payload if to remove the item from the array
         removeObjectWithId(state.cart, payload.id);
-      } else if (cartItem.menuItemCartAmount >= 1) {
+      } else if (cartItem.amountInCart >= 1) {
         // remove the item from the cart item counter
-        cartItem.menuItemCartAmount -= 1;
+        cartItem.amountInCart -= 1;
       }
     },
     // WORK IN PROGRESS

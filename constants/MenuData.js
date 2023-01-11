@@ -14,28 +14,46 @@ const singleOption = () => {
   }
 }
 
-const option = () => {
-  return {
-    id: faker.datatype.number(),
-    name: faker.name.fullName(),
-    type: 'single',
-    options:
-      // label is a prop from RadioButtonRN
-      SINGLE_OPTION,
-  }
-}
+// const option = () => {
+//   return {
+//     id: faker.datatype.number(),
+//     name: faker.name.fullName(),
+//     type: 'single',
+//     itemId: 0,
+//     customizations: [
+//       {
+//         label: faker.lorem.word(),
+//         id: faker.datatype.number(),
+//         selected: false,
+//       },
+//       {
+//         label: faker.lorem.word(),
+//         id: faker.datatype.number(),
+//         selected: false,
+//       },
+//       {
+//         label: faker.lorem.word(),
+//         id: faker.datatype.number(),
+//         selected: false,
+//       },
+//     ],
+//     // label is a prop from RadioButtonRN
+//   }
+// }
 
-const menuItem = () => {
-  return {
-    name: faker.commerce.productName(),
-    itemId: faker.datatype.number(),
-    image: {
-      uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
-    },
-    price: faker.commerce.price(5, 15),
-    options: OPTIONS,
-  }
-}
+// const menuItem = () => {
+//   return {
+//     name: faker.commerce.productName(),
+//     itemId: faker.datatype.number(),
+//     image: {
+//       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
+//     },
+//     price: faker.commerce.price(5, 15),
+//     options: OPTIONS,
+//     amountInCart: 0,
+//     customizations: [],
+//   }
+// }
 
 export const restaurant = () => {
   const id = faker.datatype.number(4)
@@ -47,7 +65,130 @@ export const restaurant = () => {
       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
     },
     description: faker.lorem.paragraph(),
-    menu: MENU_ITEM,
+    menu: [
+      {
+        name: faker.commerce.productName(),
+        itemId: faker.datatype.number(),
+        image: {
+          uri: `${faker.image.food()}?random=${Math.round(
+            Math.random() * 1000,
+          )}`,
+        },
+        price: faker.commerce.price(5, 15),
+        options: [
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          
+          
+        ],
+        amountInCart: 0,
+        customizations: [],
+      },
+      {
+        name: faker.commerce.productName(),
+        itemId: faker.datatype.number(),
+        image: {
+          uri: `${faker.image.food()}?random=${Math.round(
+            Math.random() * 1000,
+          )}`,
+        },
+        price: faker.commerce.price(5, 15),
+        options: [
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+        ],
+        amountInCart: 0,
+        customizations: [],
+      },
+    ],
     id: faker.datatype.uuid(),
     categoryId: id,
     rating: stars,
@@ -131,15 +272,15 @@ Array.from({ length: 10 }).forEach(() => {
 Array.from({ length: 10 }).forEach(() => {
   TRENDING_TITLE.push(trendingTitle())
 })
-Array.from({ length: 3 }).forEach(() => {
-  OPTIONS.push(option())
-})
-Array.from({ length: 1 }).forEach(() => {
-  SINGLE_OPTION.push(singleOption())
-})
-Array.from({ length: 5 }).forEach(() => {
-  MENU_ITEM.push(menuItem())
-})
+// Array.from({ length: 3 }).forEach(() => {
+//   OPTIONS.push(option())
+// })
+// Array.from({ length: 3 }).forEach(() => {
+//   SINGLE_OPTION.push(singleOption())
+// })
+// Array.from({ length: 5 }).forEach(() => {
+//   MENU_ITEM.push(menuItem())
+// })
 Array.from({ length: 1 }).forEach(() => {
   TRENDING_RESTAURANTS.push(trendingRestaurants()) // {name: asdasd, resutrant: []}
 })

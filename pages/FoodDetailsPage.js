@@ -21,9 +21,9 @@ import useFoodItemData from "../data/useFoodItemData";
 import { useAppDispatch } from "../store/hook";
 import { setCart } from "../store/addToCart";
 
-export default function FoodDetailsPage(props) {
+export default function FoodDetailsPage() {
   //create our options
-  
+ 
   const { buttonVisibility } = useFoodItemData();
 
   const dispatch = useAppDispatch();
@@ -35,20 +35,22 @@ export default function FoodDetailsPage(props) {
   const goHome = () => {
     navigation.goBack();
   };
+  /**
+   * WIll run after the options are selected - such as if one or however much options is required to make an order
+   */
   const goToCartButton = () => {
+    
     dispatch(
       setCart({
         cartData: route.params,
-        singularOptionSelectionList: [
-
-        ]
+        
       })
     );
     navigation.goBack();
   };
 
   useEffect(() => {
-    console.log(buttonVisibility);
+    //console.log(buttonVisibility);
   }, []);
 
   const onSizeChange = (sizeVal) => {
@@ -79,6 +81,7 @@ export default function FoodDetailsPage(props) {
         {/* <MultipleOptionSelectedList /> */}
 
         <SingleOptionSelectionComponent
+          
           header={Header}
           optionData={route.params.name}
           data={route.params.options}
