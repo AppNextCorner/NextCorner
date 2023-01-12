@@ -186,8 +186,9 @@ export default function HomePage() {
             />
           </>
         )}
+        {isClicked === true ? <OrderButton /> : null}
       </View>
-      {isClicked === true ? <OrderButton /> : null}
+      
     </>
   )
 }
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   margin: {
-    backgroundColor: '#f2f3f5',
+    backgroundColor: '#f7fafa',
     flex: 1,
     margin: 0,
   },

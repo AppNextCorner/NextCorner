@@ -125,7 +125,7 @@ export const restaurant = () => {
           
           
         ],
-        amountInCart: 0,
+        amountInCart: 1,
         customizations: [],
       },
       {
@@ -185,7 +185,7 @@ export const restaurant = () => {
             ],
           },
         ],
-        amountInCart: 0,
+        amountInCart: 1,
         customizations: [],
       },
     ],

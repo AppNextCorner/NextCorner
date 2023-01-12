@@ -44,9 +44,7 @@ export default function FoodDetailsPage() {
       setCart({
         cartData: route.params,
         id: route.params.itemId,
-        customizations: [
-
-        ]
+        customizations:    []                           
       })
     );
     navigation.goBack();

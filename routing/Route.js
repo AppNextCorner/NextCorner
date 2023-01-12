@@ -26,6 +26,8 @@ import { Octicons } from '@expo/vector-icons'
 import { useAppSelector } from '../store/hook'
 import { getIsLoggedIn } from '../store/userSession'
 import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
+import OrderPlacedPage from '../pages/OrderPlacedPage'
+import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 
 //Screen names to easily find in the route
 const homeName = 'HomePage'
@@ -102,6 +104,8 @@ export default function Route() {
             <Stack.Screen name="FoodDetails" component={FoodDetailsPage} />
             <Stack.Screen name="MenuList" component={MenuListPage} />
             <Stack.Screen name="PaymentDetails" component={PaymentDetailsPage} />
+            <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
+            <Stack.Screen name="AddPayment" component={AddPaymentPage} />
           </Stack.Navigator>
         </NavigationContainer>
       </>

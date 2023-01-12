@@ -39,19 +39,33 @@ export const addToCart = createSlice({
       // assign the null value of the user to the value we get from the setUser dispatch method
       const mapCart = state.cart.map((itemList) => itemList.cartData)
 
-     
-      
-      const cartItem = mapCart.find((item) => item.itemId === action.payload.id )
+      const mapCartMenuItem = mapCart.map((item) => item.customizations).flat()
+      //const mapCartOptions = mapCartMenuItem
+       // .map((item) => item.customizations)
+        
+      //const mapCartOptionsMenuItem = mapCartOptions.map((item) => item.selected)
+
+      console.log('HERE IS OPTIONS',  mapCartMenuItem);
+      console.log('payload of customizations', action.payload.customizations)
+
+      const cartItem = mapCart.find(
+        (item) =>
+          item.itemId === action.payload.id 
+          // &&
+          // item
+          //   .map((object) => object.customizations)
+          //   .flat()
+          //   .map((object) => object.selected) === action.payload.customizations,
+      )
       const index = mapCart.indexOf(cartItem)
       if (index > -1) {
         cartItem.amountInCart += 1
         // only splice array when item is found
         mapCart.splice(index, 1) // 2nd parameter means remove one item only
-      }
-      else {
+      } else {
         state.cart.push(action.payload)
       }
-      
+
       console.log('MAPCART:', mapCart)
 
       state.cartButton = true

@@ -9,6 +9,7 @@ import { getCart } from '../store/addToCart'
 import { useAppSelector } from '../store/hook'
 import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+
 import {
   StyleSheet,
   View,
@@ -22,6 +23,7 @@ import {
 import { useAppDispatch } from '../store/hook'
 import { increase, decrease, calculateTotals } from '../store/addToCart'
 import { getAmount } from '../store/addToCart'
+
 const CartPage = () => {
   const dispatch = useAppDispatch()
   // navigation part of the screen
@@ -36,7 +38,7 @@ const CartPage = () => {
   const isCartFull = useAppSelector(getCart)
 
   const cartList = isCartFull.map((val) => val.cartData)
-  console.log(cartList);
+  console.log(cartList)
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''
@@ -47,6 +49,7 @@ const CartPage = () => {
       <Pressable style={styles.goBackButton} onPress={goHome}>
         <Feather name="arrow-left-circle" size={40} color="black" />
       </Pressable>
+
       <FlatList
         data={cartList}
         renderItem={({ item }) => (
@@ -55,10 +58,7 @@ const CartPage = () => {
             <TouchableOpacity disabled={true} style={styles.foodCategoryStyle}>
               <View style={styles.card}>
                 <View style={styles.imageBox}>
-                  <Image
-                    style={styles.foodImages}
-                    source={item.image}
-                  />
+                  <Image style={styles.foodImages} source={item.image} />
                 </View>
                 <View style={styles.foodTexts}>
                   <Text style={styles.categoryText}>{item.name}</Text>
@@ -107,12 +107,24 @@ const CartPage = () => {
         )}
       />
       <View>
-        
-      </View>
-      <View style={styles.proceedToPaymentContainer}>
-        <TouchableOpacity onPress={goToPayment} style={styles.proceedToPaymentButton}>
-          <Text style={styles.proceedToPaymentText}>Proceed to payment</Text>
-        </TouchableOpacity>
+        <View style={styles.bottomButtons}>
+          <View style={styles.addItemsButtonContainer}>
+            <TouchableOpacity style={styles.addItemsButton}>
+              <Text>Add More Items</Text>
+            </TouchableOpacity>
+          </View>
+          {/* Payment button */}
+          <View style={styles.proceedToPaymentContainer}>
+            <TouchableOpacity
+              onPress={goToPayment}
+              style={styles.proceedToPaymentButton}
+            >
+              <Text style={styles.proceedToPaymentText}>
+                Proceed to payment
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   )
@@ -120,25 +132,35 @@ const CartPage = () => {
 export default CartPage
 
 const styles = StyleSheet.create({
+  bottomButtons: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  addItemsButtonContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    paddingRight: '1%',
+  },
+  addItemsButton: {
+    backgroundColor: '#DFDFDF',
+    padding: '4%',
+    borderRadius: 20,
+  },
   proceedToPaymentText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 14,
-
-    padding: '5%',
-    justifyContent: 'center',
   },
   proceedToPaymentButton: {
-    marginTop: '25%',
     backgroundColor: '#78DBFF',
-    padding: '3%',
+    padding: '5%',
     borderRadius: 20,
-    paddingHorizontal: '25%',
+    paddingHorizontal: '30%',
   },
   proceedToPaymentContainer: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: '40%',
+    marginBottom: '6%',
   },
   amountContainer: {
     flex: 1,
@@ -217,7 +239,6 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
 
     borderBottomWidth: 1,
-    //marginHorizontal: 10,
     marginBottom: -0.1,
     marginTop: 0,
   },

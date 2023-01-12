@@ -59,7 +59,6 @@ export default function MenuListPage() {
         {/* <GoogleMapsMenuSection /> */}
 
         {/* Menu list containing food items */}
-        <View style={styles.restaurantCard}>
           <FlatList
             ListHeaderComponent={
               <>
@@ -90,9 +89,12 @@ export default function MenuListPage() {
               return <MenuItemCard foodItem={item} />
             }}
           />
-        </View>
+          
+
+        
+          {isClicked === true ? <OrderButton /> : null}
       </View>
-      {isClicked === true ? <OrderButton /> : null}
+      
     </>
   )
 }

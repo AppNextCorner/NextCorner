@@ -15,7 +15,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-  View
+  View,
+  ScrollView,
 } from 'react-native'
 import React, { useState } from 'react'
 import RadioButtonRN from 'radio-buttons-react-native'
@@ -34,10 +35,10 @@ export default function SingleOptionSelectionComponent(props) {
   const handlePress = (stack, index, idFromParent) => {
     // if the id is the same, then set it back to false
     if (idFromParent === stack.id) {
-      idFromParent.itemId = 0;
+      idFromParent.itemId = 0
       setCustomStyle(null)
       stack.selected = false
-    } else  {
+    } else {
       stack.selected = true
       idFromParent.itemId = stack.id
       console.log('stack id', stack.id)
@@ -46,7 +47,7 @@ export default function SingleOptionSelectionComponent(props) {
         style:
           stack.id === itemId ? styles.nullButtonStyle : styles.optionStyle,
       })
-      console.log("SELECTED", stack.selected)
+      console.log('SELECTED', stack.selected)
     }
   }
 
@@ -93,94 +94,102 @@ export default function SingleOptionSelectionComponent(props) {
               {/* <View style={{display:'flex', flexDirection: 'row', overflow: 'scroll'}}>
 
              */}
-              {item.customizations.map((stack, index) => {
-                for (let i= 0; i < item.customizations.length; i++) {
-                  item.customizations[i].selected = i === stack.id;
-                  
-              }
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    // {...touchButton}
-                    style={
-                      stack.id !== item.itemId
-                        ? styles.nullButtonStyle
-                        : styles.optionStyle
+              <ScrollView
+                style={styles.optionCardContainer}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={styles.buttonOptionContainer}>
+                  {item.customizations.map((stack, index) => {
+                    for (let i = 0; i < item.customizations.length; i++) {
+                      item.customizations[i].selected = i === stack.id
                     }
-                    // style={[
-                    //   styles.menuStyle,
-                    //   index === activeLink
-                    //     ? { backgroundColor: 'red' }
-                    //     : { backgroundColor: 'white' },
-                    // ]}
-                    onPress={() => {
-                      // updateCustomizations(id, customizations)
-                      console.log("INDEX", index)
-                     handlePress(stack, index, item)
-                      console.log("STACK", stack)
-                      //toggle(stack.selected)
-                      // testBool = testBool? false : true
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        // {...touchButton}
+                        style={
+                          stack.id !== item.itemId
+                            ? styles.nullButtonStyle
+                            : styles.optionStyle
+                        }
+                        // style={[
+                        //   styles.menuStyle,
+                        //   index === activeLink
+                        //     ? { backgroundColor: 'red' }
+                        //     : { backgroundColor: 'white' },
+                        // ]}
+                        onPress={() => {
+                          // updateCustomizations(id, customizations)
+                          console.log('INDEX', index)
+                          handlePress(stack, index, item)
+                          console.log('STACK', stack)
+                          //toggle(stack.selected)
+                          // testBool = testBool? false : true
 
-                      console.log(stack.selected, stack.id, item.itemId)
-                      // setValue(oldArray => [...oldArray, stack.label]);
-                      // console.log("Value selected", value)
+                          console.log(stack.selected, stack.id, item.itemId)
+                          // setValue(oldArray => [...oldArray, stack.label]);
+                          // console.log("Value selected", value)
 
-                      // if(boolean === true){
-                      //   console.log("false", !boolean)
-                      // }
-                      // else if (boolean === false){
-                      //   console.log("true", !boolean)
-                      // }
-                      console.log('Custom options', item.customizations)
-                    }}
-                  >
-                    <Text style={{ width: '70%', fontWeight: '500' }}>
-                      {stack.label}
-                    </Text>
-                  </TouchableOpacity>
-                )
-              })}
-              {/* </View> */}
+                          // if(boolean === true){
+                          //   console.log("false", !boolean)
+                          // }
+                          // else if (boolean === false){
+                          //   console.log("true", !boolean)
+                          // }
+                          console.log('Custom options', item.customizations)
+                        }}
+                      >
+                        <Text
+                          style={{ fontWeight: '500', textAlign: 'center' }}
+                        >
+                          {stack.label}
+                        </Text>
+                      </TouchableOpacity>
+                    )
+                  })}
+                </View>
+              </ScrollView>
             </>
-            
-
           )
         }}
-        
       />
-      
-      
+
       {/* <Text>{value}</Text> */}
     </>
   )
 }
 
 const styles = StyleSheet.create({
+	optionMenuContainer: {
+		
+	},
+  buttonOptionContainer: {
+		 flexDirection: 'row',
+		 
+	},
   nullButtonStyle: {
-    display: 'flex',
+    padding: 20,
+    borderRadius: 20,
     width: 150,
-    padding: '5%',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'grey',
-    borderRadius: 20,
-    overflow: 'scroll'
-    },
-  optionStyle: {
-    display: 'flex',
-    backgroundColor: 'red',
-    padding: '5%',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'grey',
-    borderRadius: 20,
-    overflow: 'scroll'
+		backgroundColor: '#f7fafa',
+		borderWidth: 1,
+		borderColor: '#f7fafa',
+    marginLeft: 10,
   },
-  radioButtonStyle: {
-    marginTop: 15,
-    marginBottom: 15,
+  optionStyle: {
+    padding: 20,
+    borderWidth: 1,
+		backgroundColor: '#f7fafa',
+    borderStyle: 'solid',
+    borderColor: '#6BD8FF',
+    borderRadius: 20,
+    width: 150,
+    marginLeft: 10,
   },
   optionTitle: {
     fontSize: 20,
+		margin: '5%'
+		
   },
 })
