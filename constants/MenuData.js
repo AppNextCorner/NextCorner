@@ -56,7 +56,7 @@ const singleOption = () => {
 // }
 
 export const restaurant = () => {
-  const id = faker.datatype.number(4)
+  const id = faker.datatype.number({ min: 1, max: 5, })
   const stars = faker.datatype.number(5)
   return {
     // RESTAURANT WORKED
@@ -447,6 +447,11 @@ export const DEFAULT_CATEGORY_DATA = [
     text: 'healthy',
     foodType: require('../assets/foodImages/healthy.png'),
     key: 4,
+  },
+  {
+    text: 'burger',
+    foodType: require('../assets/foodImages/burger.png'),
+    key: 5,
   },
 ]
 

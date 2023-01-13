@@ -14,14 +14,26 @@ import {
   Feather,
 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { getCart, setOrder, getTotal } from '../../store/addToCart'
 
 const PaymentDetailsPage = () => {
+  const cart = useAppSelector(getCart);
+  const totalCost = useAppSelector(getTotal);
+  const dispatch = useAppDispatch()
+
   const navigation = useNavigation()
     const navigateToAddPaymentMethod = () => {
         navigation.navigate('AddPayment')
     }
+  // Passing in the cart to the order to be delete it from the cart list and add it to the order list 
   const navigateToOrderComplete = () => {
     navigation.navigate('OrderPlaced')
+    dispatch(
+      setOrder({
+        order: cart,
+      })
+    )
   }
   const goBack = () => navigation.goBack()
   return (
@@ -91,7 +103,7 @@ const PaymentDetailsPage = () => {
           </View>
           <View style={styles.individualCostInfoContainer}>
             <Text style={styles.costLabel}>SubTotal</Text>
-            <Text style={styles.costNumber}>$13</Text>
+            <Text style={styles.costNumber}>${totalCost}</Text>
           </View>
           <View style={styles.individualCostInfoContainer}>
             <Text style={styles.costTotalLabel}>Total</Text>
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
   },
   placeOrderContainer: {
     flex: 1,
-    alignItems: 'center',
+
   },
   placeOrderButton: {
     backgroundColor: '#78DBFF',
@@ -134,12 +146,16 @@ const styles = StyleSheet.create({
   },
   costLabel: {
     fontSize: 18,
+    marginRight: '10%'
   },
   costNumber: {
     fontSize: 18,
+    textAlign: 'right',
+    
   },
   individualCostInfoContainer: {
     flexDirection: 'row',
+    flex: 1,
   },
   pickUpInformationButtonText: {
     color: '#78DBFF',
@@ -147,7 +163,6 @@ const styles = StyleSheet.create({
   costInfoContainer: {
     flex: 2,
     marginLeft: '10%',
-    alignItems: 'center',
   },
   payOnArrivalDetailText: {
     marginTop: '5%',

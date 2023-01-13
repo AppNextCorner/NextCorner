@@ -23,6 +23,11 @@ import {
 import { useAppDispatch } from '../store/hook'
 import { increase, decrease, calculateTotals } from '../store/addToCart'
 import { getAmount } from '../store/addToCart'
+/**
+ * 
+ * Remove from items cart list
+ * Add to order page
+ */
 
 const CartPage = () => {
   const dispatch = useAppDispatch()
@@ -35,7 +40,7 @@ const CartPage = () => {
     navigation.navigate('PaymentDetails')
   }
 
-  const isCartFull = useAppSelector(getCart)
+  const isCartFull = useAppSelector(getCart);
 
   const cartList = isCartFull.map((val) => val.cartData)
   console.log(cartList)

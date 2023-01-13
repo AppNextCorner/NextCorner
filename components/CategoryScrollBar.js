@@ -15,8 +15,6 @@ export default function CategoryScrollBar(props) {
   const { categoryList, showItem, itemId } = props;
   return (
     <View style={styles.category}>
-      <Text style={styles.title}>Category</Text>
-
       <View style={styles.list}>
         {/* Scroll View used to be able to quickly scroll horizontally with properties allowing it to do */}
         <ScrollView

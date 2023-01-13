@@ -19,6 +19,7 @@ const initialState = {
     //   ],
     // },
   ],
+  order: [],
   total: 0,
 }
 
@@ -30,6 +31,15 @@ export const addToCart = createSlice({
   initialState,
   // object where the keys are strings and the values are functions that handle specific actions
   reducers: {
+    setOrder: (state, { payload }) => {
+      console.log('here is order')
+      console.log(payload.order)
+      console.log('HERE is order cart right now')
+      let removeCart = state.cart.splice(0, state.cart.length)
+      let order = state.order.push(payload.order)
+      console.log(state.order)
+      state.cartButton = false
+    },
     // case reducer functions
     // action is what values we want to assign the state to and receive it from payload
     setCart: (state, action) => {
@@ -41,21 +51,20 @@ export const addToCart = createSlice({
 
       const mapCartMenuItem = mapCart.map((item) => item.customizations).flat()
       //const mapCartOptions = mapCartMenuItem
-       // .map((item) => item.customizations)
-        
+      // .map((item) => item.customizations)
+
       //const mapCartOptionsMenuItem = mapCartOptions.map((item) => item.selected)
 
-      console.log('HERE IS OPTIONS',  mapCartMenuItem);
+      console.log('HERE IS OPTIONS', mapCartMenuItem)
       console.log('payload of customizations', action.payload.customizations)
 
       const cartItem = mapCart.find(
-        (item) =>
-          item.itemId === action.payload.id 
-          // &&
-          // item
-          //   .map((object) => object.customizations)
-          //   .flat()
-          //   .map((object) => object.selected) === action.payload.customizations,
+        (item) => item.itemId === action.payload.id,
+        // &&
+        // item
+        //   .map((object) => object.customizations)
+        //   .flat()
+        //   .map((object) => object.selected) === action.payload.customizations,
       )
       const index = mapCart.indexOf(cartItem)
       if (index > -1) {
@@ -139,13 +148,17 @@ export const addToCart = createSlice({
     },
     // WORK IN PROGRESS
     calculateTotals: (state) => {
-      let amount = 0
+      const mapCart = state.cart.map((itemList) => itemList.cartData)
       let total = 0
-      state.cart.forEach((item) => {
-        amount += item.amount
-        total += item.amount * item.price
-      })
-      state.amount = amount
+      for(let i = 0; i < mapCart.length; i++) {
+        total += mapCart[i].price
+
+      }
+      console.log(total)
+      // mapCart.forEach((item) => {
+      //   amount += item.amount
+      //   total += item.amount * item.price
+      // })
       state.total = total
     },
   },
@@ -158,6 +171,7 @@ export const {
   increase,
   decrease,
   calculateTotals,
+  setOrder,
 } = addToCart.actions
 
 // create getters
@@ -166,7 +180,8 @@ export const {
 // export state values through a function
 export const getButton = (state) => state.addToCart.cartButton
 export const getCart = (state) => state.addToCart.cart
-export const getAmount = (state) => state.addToCart.amount
+export const getTotal = (state) => state.addToCart.total
+export const getOrder = (state) => state.addToCart.order
 
 // export the reducer of the slice
 export default addToCart.reducer

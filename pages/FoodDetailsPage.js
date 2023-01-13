@@ -43,8 +43,7 @@ export default function FoodDetailsPage() {
     dispatch(
       setCart({
         cartData: route.params,
-        id: route.params.itemId,
-        customizations:    []                           
+        id: route.params.itemId,                         
       })
     );
     navigation.goBack();

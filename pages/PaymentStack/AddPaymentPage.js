@@ -1,11 +1,13 @@
-import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Pressable, TouchableOpacity  } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+
 
 const AddPaymentPage = () => {
-  const navigation = useNavigation()
+
+ 
+  const navigation = useNavigation();
   const goBack = () => navigation.navigate('PaymentDetails')
   return (
     <View style={styles.addPaymentContainer}>
