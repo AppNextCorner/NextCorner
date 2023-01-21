@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Pressable,
+  Alert,
 } from 'react-native'
 import {
   Fontisto,
@@ -16,23 +17,73 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
 import { getCart, setOrder, getTotal } from '../../store/addToCart'
-
+import { useStripe } from '@stripe/stripe-react-native'
+import { IP } from '../../constants/StripeApiKey'
 const PaymentDetailsPage = () => {
-  const cart = useAppSelector(getCart);
-  const totalCost = useAppSelector(getTotal);
+  const stripe = useStripe()
+  const name = "henrybenry";
+
+  const cart = useAppSelector(getCart)
+  const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch()
 
   const navigation = useNavigation()
-    const navigateToAddPaymentMethod = () => {
-        navigation.navigate('AddPayment')
+  const navigateToAddPaymentMethod = async () => {
+    // navigation.navigate('AddPayment')
+
+    try {
+      //turning the 
+      
+      
+      const response = await fetch(`http://${IP}:4020/payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({amount: totalCost, name}),
+      })
+      
+      const data = await response.json()
+      console.log("Data of Client", data.clientSecret)
+      if (!response.ok) {
+        return Alert.alert(data.message)
+      }
+
+      // Initiate the pop up on payment through stripe's built in methods
+      const initSheet = await stripe.initPaymentSheet({
+        paymentIntentClientSecret: data.clientSecret,
+      })
+      console.log("Grabbing the secret: ",initSheet.paymentIntentClientSecret)
+      // check for errors -> show / alert the user on the error message
+      if (initSheet.error) {
+        console.error(initSheet.error)
+        return Alert.alert(initSheet.error.message)
+      }
+      // show the stripe API sheet -> update the clientSecret to the response data
+      const presentSheet = await stripe.presentPaymentSheet({
+        clientSecret: data.clientSecret,
+      })
+      console.log("Present Sheet", presentSheet)
+      console.log("Client Secret", data.clientSecret)
+      
+
+      if (presentSheet.error) {
+        console.error(presentSheet.error)
+        return Alert.alert(presentSheet.error.message)
+      }
+      Alert.alert('Order Placed Successfully');
+    } catch (err) {
+      console.error(err)
+      Alert.alert('Payment failed!')
     }
-  // Passing in the cart to the order to be delete it from the cart list and add it to the order list 
+  }
+  // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = () => {
     navigation.navigate('OrderPlaced')
     dispatch(
       setOrder({
         order: cart,
-      })
+      }),
     )
   }
   const goBack = () => navigation.goBack()
@@ -63,6 +114,8 @@ const PaymentDetailsPage = () => {
       </View>
       <View style={styles.paymentInformationContainer}>
         <Text style={styles.headerText}>Payment</Text>
+
+        {/* ICONS FOR PAYMENTS */}
         <View style={styles.paymentOptionList}>
           <TouchableOpacity onPress={navigateToAddPaymentMethod}>
             <AntDesign name="pluscircleo" size={50} color="black" />
@@ -112,9 +165,10 @@ const PaymentDetailsPage = () => {
         </View>
         {/* Place Order Button */}
         <View style={styles.placeOrderContainer}>
-          <TouchableOpacity 
-          onPress={navigateToOrderComplete}
-          style={styles.placeOrderButton}>
+          <TouchableOpacity
+            onPress={navigateToOrderComplete}
+            style={styles.placeOrderButton}
+          >
             <Text style={styles.placeOrderText}>Place Order</Text>
           </TouchableOpacity>
         </View>
@@ -129,7 +183,6 @@ const styles = StyleSheet.create({
   },
   placeOrderContainer: {
     flex: 1,
-
   },
   placeOrderButton: {
     backgroundColor: '#78DBFF',
@@ -146,12 +199,11 @@ const styles = StyleSheet.create({
   },
   costLabel: {
     fontSize: 18,
-    marginRight: '10%'
+    marginRight: '10%',
   },
   costNumber: {
     fontSize: 18,
     textAlign: 'right',
-    
   },
   individualCostInfoContainer: {
     flexDirection: 'row',

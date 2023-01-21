@@ -97,6 +97,54 @@ export const restaurant = () => {
                 id: faker.datatype.number(),
                 selected: false,
               },
+              
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              
             ],
           },
           {
@@ -123,7 +171,6 @@ export const restaurant = () => {
             ],
           },
           
-          
         ],
         amountInCart: 1,
         customizations: [],
@@ -136,7 +183,7 @@ export const restaurant = () => {
             Math.random() * 1000,
           )}`,
         },
-        price: faker.commerce.price(5, 15),
+        price:faker.commerce.price(5, 15),
         options: [
           {
             id: faker.datatype.number(),

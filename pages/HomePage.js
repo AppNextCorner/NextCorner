@@ -4,7 +4,7 @@
  */
 
 import { StyleSheet, View, FlatList, Text, Button } from 'react-native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
 import SearchComponent from '../components/SearchComponent'
@@ -15,42 +15,47 @@ import CategoryScrollBar from '../components/CategoryScrollBar'
 import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
 import { useAppDispatch, useAppSelector } from '../store/hook'
-import { getButton, getCart } from '../store/addToCart'
+import { fetchCart, getButton, getCart } from '../store/addToCart'
 import { logOut } from '../store/userSession'
 import useCategoryList from '../hooks/useCategoryList'
 import useRestaurants from '../hooks/useRestaurants'
-import { restaurant } from '../constants/MenuData'
+import useCart from '../hooks/useCart'
+
+import { auth } from '../App'
 
 // firebase authentication -> grabbing the user data from firebase to use here after user is logged in
-// import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 // import { initializeApp } from 'firebase/app'
-// import { firebaseConfig } from '../firebase/firebase-config'
+import { firebaseConfig } from '../firebase/firebase-config'
 
 export default function HomePage() {
   const dispatch = useAppDispatch()
   const [user, setUser] = useState({
     email: 'roberto@urbantxt.com',
   })
+  const { getCurrentCartItems } = useCart()
 
-  // const app = initializeApp(firebaseConfig)
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      const email = user.email;
+      console.log(email);
+      setUser(user,
+        email)
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      const uid = user.uid
+      console.log("user uid: ",uid)
+      
+      // FIREBASE JWT TOKEN
+      //auth.currentUser.getIdToken().then((token) => console.log("TOKEN:", token))
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  })
+  // auth.currentUser.getIdToken().then((token) => console.log(token))
 
-  // const auth = getAuth(app)
-
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     // User is signed in, see docs for a list of available properties
-  //     const email = user.email;
-  //     console.log(email);
-  //     setUser(user,
-  //       email)
-  //     // https://firebase.google.com/docs/reference/js/firebase.User
-  //     const uid = user.uid
-  //     // ...
-  //   } else {
-  //     // User is signed out
-  //     // ...
-  //   }
-  // })
 
   const handleSignOut = async () => {
     try {
@@ -105,6 +110,9 @@ export default function HomePage() {
   const filterRestaurantCards = restaurants.filter((i) => {
     return i.categoryId === categoryId
   })
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [])
 
   return (
     <>
@@ -114,8 +122,8 @@ export default function HomePage() {
 
         <HeaderComponent />
         {/* <Text>{user.email}</Text> */}
-        {/* <Button onPress={handleSignOut} title="Sign Out"/>
-        <Button onPress={test} title="exit"/> */}
+        <Button onPress={handleSignOut} title="Sign Out"/>
+        <Button onPress={test} title="exit"/>
 
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
@@ -186,7 +194,10 @@ export default function HomePage() {
             />
           </>
         )}
+        
         {isClicked === true ? <OrderButton /> : null}
+        {/* <Button onPress={handleSignOut} title="Sign Out"/>
+        <Button onPress={test} title="exit"/> */}
       </View>
       
     </>

@@ -5,7 +5,7 @@
 
 import React from 'react'
 
-import { getCart } from '../store/addToCart'
+import { getCart, orderPlaced } from '../store/addToCart'
 import { useAppSelector } from '../store/hook'
 import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -21,7 +21,7 @@ import {
   Button,
 } from 'react-native'
 import { useAppDispatch } from '../store/hook'
-import { increase, decrease, calculateTotals } from '../store/addToCart'
+import { increase, decrease, calculateTotals} from '../store/addToCart'
 import { getAmount } from '../store/addToCart'
 /**
  * 
@@ -35,15 +35,21 @@ const CartPage = () => {
   const navigation = useNavigation()
   const goHome = () => {
     navigation.goBack()
+    dispatch(
+      orderPlaced()
+    )
   }
   const goToPayment = () => {
     navigation.navigate('PaymentDetails')
+    dispatch(
+      calculateTotals()
+    )
   }
 
   const isCartFull = useAppSelector(getCart);
-
+  console.log('isCartFull', isCartFull)
   const cartList = isCartFull.map((val) => val.cartData)
-  console.log(cartList)
+  console.log("cart list data:", cartList)
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''

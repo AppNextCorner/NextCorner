@@ -21,7 +21,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 // Icon list for the menu bar in the navigation container
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { Octicons } from '@expo/vector-icons'
+import { Octicons, Ionicons } from '@expo/vector-icons'
 
 import { useAppSelector } from '../store/hook'
 import { getIsLoggedIn } from '../store/userSession'
@@ -29,16 +29,29 @@ import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
 import OrderPlacedPage from '../pages/OrderPlacedPage'
 import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 
+import { useEffect } from 'react'
+import useCart from '../hooks/useCart'
+import { useDispatch } from 'react-redux'
+import { fetchCart } from '../store/addToCart'
+
 //Screen names to easily find in the route
 const homeName = 'HomePage'
 const ordersName = 'Orders'
-const pickUpName = 'PickUp'
+const pickUpName = 'Profile'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
+
+
 // tab navigation stack
 function Home() {
+  const dispatch = useDispatch();
+  const { getCurrentCartItems } = useCart();
+  useEffect(() => {
+    dispatch(fetchCart())
+  }, []);
+  
   // set up bottom bar navigation style settings and icons
   return (
     <Tab.Navigator
@@ -61,8 +74,8 @@ function Home() {
             iconName = focused ? 'checklist' : 'checklist'
             return <Octicons name={iconName} size={size} color={color} />
           } else if (rn === pickUpName) {
-            iconName = focused ? 'walking' : 'walking'
-            return <FontAwesome5 name={iconName} size={size} color={color} />
+            iconName = focused ? 'person' : 'person'
+            return <Ionicons name={iconName} size={size} color={color} />
           }
         },
         headerShown: false,
@@ -71,13 +84,13 @@ function Home() {
         tabBarInactiveTintColor: 'grey',
 
         tabBarShowLabel: true,
-        tabBarStyle: { padding: 10, height: 90},
+        tabBarStyle: { padding: 10, height: 75},
       })}
     >
       {/* Tabs we want to use  */}
       <Tab.Screen name={homeName} component={HomePage} />
-      <Tab.Screen name={pickUpName} component={PickUpPage} />
       <Tab.Screen name={ordersName} component={OrdersPage} />
+      <Tab.Screen name={pickUpName} component={PickUpPage} />
     </Tab.Navigator>
   )
 }

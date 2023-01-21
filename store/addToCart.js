@@ -2,25 +2,74 @@
  * Purpose of file: Contains our slice to use for our state
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { firebaseConfig } from '../firebase/firebase-config'
+
+import { IP } from '../constants/StripeApiKey'
+import { auth } from '../App'
+
+const POSTS_URL = `http://${IP}:4020/api`
+
+const createToken = async () => {
+  let user = auth.currentUser
+  const token = user && (await user.getIdToken())
+
+  const payloadHeader = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  return payloadHeader
+}
+
+export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
+  const headers = await createToken()
+  console.log('headers', headers.headers)
+  try {
+    console.log('Here is headers: ', headers)
+    const response = await axios.get(POSTS_URL, headers)
+    console.log('Here is response data: ', response.data)
+    return response.data // Return a value synchronously using Async-await
+  } catch (err) {
+    if (!err.response) {
+      console.log(err.response)
+      throw err
+    }
+  }
+})
+
+export const addNewCartItem = createAsyncThunk(
+  'addToCart/addNewCartItem',
+  async (cartItem) => {
+    const headers = await createToken()
+    console.log('payload item: ', cartItem)
+    // It isn't clear if you intended to use 'newUser' in this function or not.
+    // But it is sent from your 'signupBtn' event handler function when
+    // dispatch(registerNewUser(newUser)) is called.
+
+    try {
+      console.log('payloadffff: ', cartItem)
+      const resp = await axios.post(POSTS_URL, cartItem, headers)
+      console.log('Here is response: ', resp.data)
+      console.log('cart data from post: ', cartItem['item'].cartData)
+      return resp.data
+    } catch (error) {
+      console.log('error')
+    }
+  },
+)
+// console.log('ADDED', addNewPost)
 
 // setting the default state for the app
 const initialState = {
   cartButton: false, // user is not logged in by default
-  cart: [
-    // {
-    //   name: "Coffee",
-    //   quantity: 1,
-    //   price: 2.99,
-    //   customizations: [
-    //     {
-    //       size: "m",
-    //     },
-    //   ],
-    // },
-  ],
+  cart: [],
   order: [],
   total: 0,
+  status: 'idle',
+  error: null,
 }
 
 // create a slice object to store the state -> creates action creators for each case inside reducers and can safely mutate the state
@@ -44,6 +93,7 @@ export const addToCart = createSlice({
     // action is what values we want to assign the state to and receive it from payload
     setCart: (state, action) => {
       console.log('DATA SENT', action.payload)
+
       // when user logs in, update logged in state by assigning it a new value -> could do more actions such as push to an array, but it all depends on the data type and current state
 
       // assign the null value of the user to the value we get from the setUser dispatch method
@@ -76,45 +126,55 @@ export const addToCart = createSlice({
       }
 
       console.log('MAPCART:', mapCart)
-
-      state.cartButton = true
-
+      if (state.cart.length > 0) {
+        state.cartButton = true
+      } else {
+        state.cartButton = false
+      }
       console.log('CURRENT STATE OF CART', state.cart)
     },
     orderPlaced: (state) => {
       // when user logs in, update logged in state
-      state.cartButton = false
-      state.cart = null
+      if (state.cart.length == 0) {
+        state.cartButton = false
+      } else {
+        state.cartButton = true
+      }
     },
+
+    increaseInFoodDetails: (state, { payload }) => {
+      payload.amountInCart += 1
+      console.log(payload.amountInCart)
+    },
+
     increase: (state, { payload }) => {
-      const mapCart = state.cart.map((itemList) => itemList.cartData)
-      console.log(mapCart)
-      const cartItem = mapCart.find((item) => item.itemId === payload.id)
-      cartItem.amountInCart += 1
-
-      /**
-       * CHECK IN FOR LATER ON DUPLICATE ITEMS with different options -> if they have the same options add one more and if their OPTIONS ARE DIFFERENT then they will be a new item
-       */
-      //function removeObjectWithId(arr, id) {
-      // const mapAnotherCart = arr.map((item) => item.cartData)
-
-      // const objWithIdIndex = mapAnotherCart.findIndex(
-      //   (obj) => obj.menuItemId === id,
-      // )
-
-      // console.log(objWithIdIndex)
-      // if (objWithIdIndex > -1) {
-      //   let bruh = arr.at(objWithIdIndex)
-      //   let bruh2 = bruh.cartData
-      //   let bruh3 = arr[objWithIdIndex].cartData.menuItemCartAmount + 1
-      //   let bruh4 = bruh3 + 1
-      //   console.log(bruh4)
-      //   arr[objWithIdIndex].cartData.menuItemCartAmount = bruh3
-      // }
-
-      // return arr
-      // }
-      //removeObjectWithId(state.cart, payload.id)
+       // get the data of each object in the state array
+       const mapCart = state.cart.map((itemList) => itemList.cartData)
+       //
+       const cartItem = mapCart.find((item) => item.itemId === payload.id)
+       // function to remove the item from the state array with the find index method
+       function removeObjectWithId(arr, id) {
+         const mapAnotherCart = arr.map((item) => item.cartData)
+         // find the index of the item in the array that the item belongs to with the given id from the payload
+         const objWithIdIndex = mapAnotherCart.findIndex(
+           (obj) => obj.itemId === id,
+         )
+         // confirm if the item exists in the array
+         if (objWithIdIndex > -1) {
+           // if the item is already in the array, remove it from the array with the index found
+           arr.splice(objWithIdIndex, 1)
+         }
+         // mutated the array to avoid copying the original / modified array
+         return arr
+       }
+       // checks if the object property is below or over 1 to either eliminate it from the array with the removeObjectWithId function
+       if (cartItem.amountInCart - 1 < 1) {
+         // pass the global state to the removeObjectWithId function to mutate the array and the payload if to remove the item from the array
+         removeObjectWithId(state.cart, payload.id)
+       } else if (cartItem.amountInCart >= 1) {
+         // remove the item from the cart item counter
+         cartItem.amountInCart += 1
+       }
     },
     // status: completed
     decrease: (state, { payload }) => {
@@ -150,18 +210,42 @@ export const addToCart = createSlice({
     calculateTotals: (state) => {
       const mapCart = state.cart.map((itemList) => itemList.cartData)
       let total = 0
-      for(let i = 0; i < mapCart.length; i++) {
-        total += mapCart[i].price
-
+      for (let i = 0; i < mapCart.length; i++) {
+        total += Number(mapCart[i].price * mapCart[i].amountInCart)
       }
       console.log(total)
-      // mapCart.forEach((item) => {
-      //   amount += item.amount
-      //   total += item.amount * item.price
-      // })
       state.total = total
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchCart.pending, (state, { payload }) => {
+      console.log('pending')
+    })
+    builder.addCase(fetchCart.rejected, (state, { payload }) => {
+      console.log('Rejected')
+    })
+    builder.addCase(fetchCart.fulfilled, (state, { payload }) => {
+      state.cartButton = true
+      console.log('payload from backend', payload)
+      state.cart = state.cart.concat(payload).filter(uidItem => uidItem.userId === auth.currentUser.uid)
+      
+      console.log('Cart state: ', state.cart)
+    })
+    builder.addCase(addNewCartItem.pending, (state, { payload }) => {
+      console.log('pending')
+    })
+    builder.addCase(addNewCartItem.rejected, (state, { payload }) => {
+      console.log('Rejected')
+    })
+    builder.addCase(addNewCartItem.fulfilled, (state, { payload }) => {
+      state.cartButton = true
+      console.log('payload from backend', payload)
+      //state.cart = state.cart.concat(payload)
+
+    })
+  },
+
+  // Thunk API requests
 })
 
 // export the case / function action from the userSession and access the object
@@ -172,6 +256,7 @@ export const {
   decrease,
   calculateTotals,
   setOrder,
+  increaseInFoodDetails,
 } = addToCart.actions
 
 // create getters

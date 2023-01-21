@@ -29,6 +29,7 @@ export default function GoogleMapsMenuSection() {
     let location = await Location.getCurrentPositionAsync({
       enableHighAccuracy: true,
     })
+    console.log(location)
     setMapRegion({
       // Get location from the object data we received from the position async and set the previous latitude and longitude of the previous state mapRegion, to the current location
       latitude: location.coords.latitude,

@@ -16,12 +16,10 @@ import { setUser } from '../../store/userSession'
 import { useState } from 'react'
 // importing firebase
 import {
-  getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
-// import { firebaseConfig } from '../../firebase/firebase-config'
+import { auth } from '../../App'
 
 export default function SignInPage() {
   const dispatch = useAppDispatch()
@@ -29,67 +27,43 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  // initializing the firebase app and entering the firebase configuration
-  // const app = initializeApp(firebaseConfig)
-
-  // access the authorization feature from firebase web
-  // const auth = getAuth(app)
-
-  const handleCreateAccount = () => {
-    // creating a new account
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     console.log('Created user')
-    //     // set a new user and access with it from the credentials from firebase
-    //     const user = userCredential.user
-    //     console.log(user)
-    //     setIsLoading(false)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     Alert.alert(err.message)
-    //   })
-  }
   /* 
   Function that handles an existing account 
 */
   const handleSignIn = () => {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
-    // signInWithEmailAndPassword(auth, email, password)
-    //   // takes in the credentials from email and password
-    //   .then((userCredential) => {
-    //     console.log('Signed In')
-    //     // set the user as a variable
-    //     const user = userCredential.user
-    //     dispatch(
-    //       setUser({
-    //         name: user.displayName,
-    //         age: user.lastLoggedIn,
-    //       }),
-    //     )
-    //     console.log(user)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     // error message for lack of password characters, email existing, etc...
-    //     Alert.alert(err.message)
-    //   })
+    signInWithEmailAndPassword(auth, email, password)
+      // takes in the credentials from email and password
+      .then((userCredential) => {
+        console.log('Signed In')
+        // set the user as a variable
+        const user = userCredential.user
+        dispatch(
+          setUser({
+            name: user.displayName
+          }),
+        )
+        console.log(user)
+      })
+      .catch((err) => {
+        console.log(err)
+        // error message for lack of password characters, email existing, etc...
+        Alert.alert(err.message)
+      })
   }
   // test function to enter the page without an account
   const signIn = () => {
     if (!isLoading) {
       setIsLoading(true)
 
-        setIsLoading(false)
+      setIsLoading(false)
 
-        dispatch(
-          setUser({
-            name: 'HenryBenry',
-            age: 16,
-          }),
-        )
-
+      dispatch(
+        setUser({
+          name: 'HenryBenry',
+          age: 16,
+        }),
+      )
     }
   }
 
@@ -129,17 +103,19 @@ export default function SignInPage() {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={signIn} style={styles.signInButton}>
-        <Text style={styles.signInText}>{isLoading ? 'loading' : 'Test without user'}</Text>
+        <Text style={styles.signInText}>
+          {isLoading ? 'loading' : 'Test without user'}
+        </Text>
       </TouchableOpacity>
 
-      <View>
+      {/* <View>
         <TouchableOpacity
           style={styles.signInButton}
           onPress={handleCreateAccount}
         >
           <Text style={styles.signInText}>Sign Up</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   )
 }

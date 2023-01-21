@@ -37,7 +37,7 @@ export default function SingleOptionSelectionComponent(props) {
     if (idFromParent === stack.id) {
       idFromParent.itemId = 0
       setCustomStyle(null)
-      stack.selected = false
+      stack.selected = false;
     } else {
       stack.selected = true
       idFromParent.itemId = stack.id
