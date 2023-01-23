@@ -31,8 +31,8 @@ import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 
 import { useEffect } from 'react'
 import useCart from '../hooks/useCart'
-import { useDispatch } from 'react-redux'
-import { fetchCart } from '../store/addToCart'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchCart, getCart } from '../store/addToCart'
 
 //Screen names to easily find in the route
 const homeName = 'HomePage'
@@ -46,11 +46,7 @@ const Stack = createNativeStackNavigator()
 
 // tab navigation stack
 function Home() {
-  const dispatch = useDispatch();
-  const { getCurrentCartItems } = useCart();
-  useEffect(() => {
-    dispatch(fetchCart())
-  }, []);
+  
   
   // set up bottom bar navigation style settings and icons
   return (
@@ -96,12 +92,18 @@ function Home() {
 }
 
 export default function Route() {
+ 
   // assign the variable a value of the state of the getIsLoggedIn according to the state of the userSession
   const isLoggedin = useAppSelector(getIsLoggedIn)
 
   console.log('the user is logged in: ', isLoggedin)
   // using the state of the login which we got from the hook useAppSelector will help use the component / method value
   if (isLoggedin) {
+    const userItems = useAppSelector(getCart)
+    const { getCurrentCartItems } = useCart();
+    useEffect(() => {
+      getCurrentCartItems()
+    }, []);
     return (
       <>
         <NavigationContainer>

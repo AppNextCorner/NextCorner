@@ -43,12 +43,10 @@ export default function FoodDetailsPage() {
   // "JSON"
   const parse = { cartData: JSON.parse(JSON.stringify(route.params)) }
   const name = (parse || {}).cartData
-  console.log('JSON of item', name)
-
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.goBack()
-    
+    getCurrentCartItems();
   }
   /**
    * WIll run after the options are selected - such as if one or however much options is required to make an order
@@ -59,11 +57,7 @@ export default function FoodDetailsPage() {
 
     console.log('add item: ', addItem)
     addToCart(addItem, userId)
-    dispatch(
-      increase({
-        id: name.itemId,
-      }),
-    )
+    getCurrentCartItems();
     navigation.goBack()
   }
 

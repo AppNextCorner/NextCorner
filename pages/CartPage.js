@@ -21,35 +21,33 @@ import {
   Button,
 } from 'react-native'
 import { useAppDispatch } from '../store/hook'
-import { increase, decrease, calculateTotals} from '../store/addToCart'
+import { increase, decrease, calculateTotals } from '../store/addToCart'
 import { getAmount } from '../store/addToCart'
+import useCart from '../hooks/useCart'
 /**
- * 
+ *
  * Remove from items cart list
  * Add to order page
  */
 
 const CartPage = () => {
+  const { updateCartItemData } = useCart()
   const dispatch = useAppDispatch()
   // navigation part of the screen
   const navigation = useNavigation()
   const goHome = () => {
     navigation.goBack()
-    dispatch(
-      orderPlaced()
-    )
+    dispatch(orderPlaced())
   }
   const goToPayment = () => {
     navigation.navigate('PaymentDetails')
-    dispatch(
-      calculateTotals()
-    )
+    dispatch(calculateTotals())
   }
 
-  const isCartFull = useAppSelector(getCart);
+  const isCartFull = useAppSelector(getCart)
+
   console.log('isCartFull', isCartFull)
-  const cartList = isCartFull.map((val) => val.cartData)
-  console.log("cart list data:", cartList)
+
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''
@@ -62,61 +60,85 @@ const CartPage = () => {
       </Pressable>
 
       <FlatList
-        data={cartList}
-        renderItem={({ item }) => (
-          <>
-            {/* Display cards added */}
-            <TouchableOpacity disabled={true} style={styles.foodCategoryStyle}>
-              <View style={styles.card}>
-                <View style={styles.imageBox}>
-                  <Image style={styles.foodImages} source={item.image} />
-                </View>
-                <View style={styles.foodTexts}>
-                  <Text style={styles.categoryText}>{item.name}</Text>
-                  <Text style={styles.descriptionOfItem}>
-                    {limitTextAmount}
-                  </Text>
-                  <Text style={styles.priceText}>{item.price}</Text>
-                </View>
+        data={isCartFull}
+        renderItem={({ item }) => {
+          const grabCartItem = item.cartData
+          console.log(grabCartItem)
+          return (
+            <>
+              {/* Display cards added */}
+              <TouchableOpacity
+                disabled={true}
+                style={styles.foodCategoryStyle}
+              >
+                <View style={styles.card}>
+                  <View style={styles.imageBox}>
+                    <Image
+                      style={styles.foodImages}
+                      source={grabCartItem.image}
+                    />
+                  </View>
+                  <View style={styles.foodTexts}>
+                    <Text style={styles.categoryText}>{grabCartItem.name}</Text>
+                    <Text style={styles.descriptionOfItem}>
+                      {limitTextAmount}
+                    </Text>
+                    <Text style={styles.priceText}>{grabCartItem.price}</Text>
+                  </View>
 
-                {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
-                <View style={styles.amountContainer}>
-                  <AntDesign
-                    style={styles.icon}
-                    name="minuscircle"
-                    size={24}
-                    color="#78DBFF"
-                    onPress={() =>
-                      dispatch(
-                        decrease({
-                          id: item.itemId,
-                          type: randomId,
-                        }),
-                      )
-                    }
-                  />
-                  <Text>{item.amountInCart}</Text>
-                  <AntDesign
-                    style={styles.icon}
-                    name="pluscircle"
-                    size={24}
-                    color="#78DBFF"
-                    onPress={() =>
-                      dispatch(
-                        increase({
-                          // change the idea towards that of a new concatted one
-                          id: item.itemId,
-                          type: randomId,
-                        }),
-                      )
-                    }
-                  />
+                  {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
+                  <View style={styles.amountContainer}>
+                    <AntDesign
+                      style={styles.icon}
+                      name="minuscircle"
+                      size={24}
+                      color="#78DBFF"
+                      onPress={() => {
+                        // console.log('dispatch')
+                        const updatedCartItem = {
+                          ...grabCartItem,
+                          amountInCart: (grabCartItem.amountInCart -= 1),
+                        }
+                        console.log('Item id: ', item.id)
+                        //console.log(updatedCartItem)
+                        updateCartItemData({
+                          updatedCartItem: updatedCartItem,
+                          id: item.id,
+                        })
+                        // dispatch(
+                        //   updateCartItem({
+
+                        //   }),
+                        // )
+                      }}
+                    />
+                    <Text>{grabCartItem.amountInCart}</Text>
+                    <AntDesign
+                      style={styles.icon}
+                      name="pluscircle"
+                      size={24}
+                      color="#78DBFF"
+                      onPress={() => {
+                        const updatedCartItem = {
+                          ...grabCartItem,
+                          amountInCart: (grabCartItem.amountInCart += 1),
+                        }
+                        console.log('Item id: ', item.id)
+                        //console.log(updatedCartItem)
+                        updateCartItemData({
+                          updatedCartItem: updatedCartItem,
+                          id: item.id,
+                        })
+                      }}
+                    />
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          </>
-        )}
+              </TouchableOpacity>
+            </>
+          )
+        }}
       />
+
       <View>
         <View style={styles.bottomButtons}>
           <View style={styles.addItemsButtonContainer}>

@@ -22,32 +22,30 @@ import React, { useState } from 'react'
 import RadioButtonRN from 'radio-buttons-react-native'
 
 export default function SingleOptionSelectionComponent(props) {
-  const [isActive, setIsActive] = useState(false)
+
   const [itemId, setItemId] = useState(0)
   const [customStyle, setCustomStyle] = useState(null)
-  // const mapThroughOptions = props.data.map(val => val.customizations)
-  // const [value, setValue] = useState(mapThroughOptions)
   const { updateCustomizations, data, header, optionData } = props
-  // console.log('Here are custom values', value)
-  // console.log(props.data)
-  console.log(props)
 
-  const handlePress = (stack, index, idFromParent) => {
+  const handlePress = (stack, idFromParent, item) => {
+    // setting the default values for the stack item options to false
+    const selectMap = item.customizations.map((val) => (val.selected = false))
+    selectMap
+    setCustomStyle(null)
+    stack.selected = false
+
+    // making the itemId equal to that of the selected stack item id
+    idFromParent = stack.id
+
     // if the id is the same, then set it back to false
     if (idFromParent === stack.id) {
-      idFromParent.itemId = 0
-      setCustomStyle(null)
-      stack.selected = false;
-    } else {
+      // if one of the children is selected, then set the selected value to true
       stack.selected = true
-      idFromParent.itemId = stack.id
-      console.log('stack id', stack.id)
-      console.log('HEre is itemID', idFromParent)
+      // setting the selected value its style
       setCustomStyle({
         style:
           stack.id === itemId ? styles.nullButtonStyle : styles.optionStyle,
       })
-      console.log('SELECTED', stack.selected)
     }
   }
 
@@ -57,43 +55,10 @@ export default function SingleOptionSelectionComponent(props) {
       <FlatList
         ListHeaderComponent={header}
         data={data}
-        // keyExtractor={(item) => {
-        //   item.id
-        // }}
         renderItem={({ item }) => {
           return (
             <>
               <Text style={styles.optionTitle}>{item.name}</Text>
-              {/* <Text>{item.selectedOption}</Text> */}
-
-              {/* <FlatList
-                data={item.customizations}
-                renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={(event) => {
-                        // setValue(
-                        // {
-                        //   option: item.label,
-                        //   id: item.id,
-                        // }
-                        //   // Put old items at the end
-                        // );
-                        value.push({customization: item.label})
-                        // props.onChange({
-                        //   option: item.label,
-                        //   id: item.id,
-                        // });
-                      }}
-                    >
-                      <Text>{item.label}</Text>
-                    </TouchableOpacity>
-                  );
-                }}
-              /> */}
-              {/* <View style={{display:'flex', flexDirection: 'row', overflow: 'scroll'}}>
-
-             */}
               <ScrollView
                 style={styles.optionCardContainer}
                 horizontal={true}
@@ -101,43 +66,16 @@ export default function SingleOptionSelectionComponent(props) {
               >
                 <View style={styles.buttonOptionContainer}>
                   {item.customizations.map((stack, index) => {
-                    for (let i = 0; i < item.customizations.length; i++) {
-                      item.customizations[i].selected = i === stack.id
-                    }
                     return (
                       <TouchableOpacity
                         key={index}
-                        // {...touchButton}
                         style={
-                          stack.id !== item.itemId
+                          stack.selected === false
                             ? styles.nullButtonStyle
                             : styles.optionStyle
                         }
-                        // style={[
-                        //   styles.menuStyle,
-                        //   index === activeLink
-                        //     ? { backgroundColor: 'red' }
-                        //     : { backgroundColor: 'white' },
-                        // ]}
                         onPress={() => {
-                          // updateCustomizations(id, customizations)
-                          console.log('INDEX', index)
-                          handlePress(stack, index, item)
-                          console.log('STACK', stack)
-                          //toggle(stack.selected)
-                          // testBool = testBool? false : true
-
-                          console.log(stack.selected, stack.id, item.itemId)
-                          // setValue(oldArray => [...oldArray, stack.label]);
-                          // console.log("Value selected", value)
-
-                          // if(boolean === true){
-                          //   console.log("false", !boolean)
-                          // }
-                          // else if (boolean === false){
-                          //   console.log("true", !boolean)
-                          // }
-                          console.log('Custom options', item.customizations)
+                          handlePress(stack, item.itemId, item)
                         }}
                       >
                         <Text
@@ -154,33 +92,28 @@ export default function SingleOptionSelectionComponent(props) {
           )
         }}
       />
-
-      {/* <Text>{value}</Text> */}
     </>
   )
 }
 
 const styles = StyleSheet.create({
-	optionMenuContainer: {
-		
-	},
+  optionMenuContainer: {},
   buttonOptionContainer: {
-		 flexDirection: 'row',
-		 
-	},
+    flexDirection: 'row',
+  },
   nullButtonStyle: {
     padding: 20,
     borderRadius: 20,
     width: 150,
-		backgroundColor: '#f7fafa',
-		borderWidth: 1,
-		borderColor: '#f7fafa',
+    backgroundColor: '#f7fafa',
+    borderWidth: 1,
+    borderColor: '#f7fafa',
     marginLeft: 10,
   },
   optionStyle: {
     padding: 20,
     borderWidth: 1,
-		backgroundColor: '#f7fafa',
+    backgroundColor: '#f7fafa',
     borderStyle: 'solid',
     borderColor: '#6BD8FF',
     borderRadius: 20,
@@ -189,7 +122,6 @@ const styles = StyleSheet.create({
   },
   optionTitle: {
     fontSize: 20,
-		margin: '5%'
-		
+    margin: '5%',
   },
 })
