@@ -1,20 +1,25 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
+import useOrderButton from '../hooks/useOrderButton';
 
-export default function MenuItemCard({ foodItem}) {
+export default function MenuItemCard({ foodItem, businessName}) {
   const navigation = useNavigation();
+  const { setOrder, order} = useOrderButton();
 
   let text =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'
 
   let limitTextAmount = text.slice(0, 75) + '...'
-
+  const goToOrderPage = () => {
+    setOrder(false);
+    navigation.navigate('FoodDetails',  {business: businessName, foodItem: foodItem})
+  }
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
     // passing data through the FoodDetails page to access the selection data from the menu list
-      onPress={() => navigation.navigate('FoodDetails', foodItem)}
+      onPress={() => goToOrderPage()}
       style={styles.foodCategoryStyle}
     >
       <View style={styles.card}>

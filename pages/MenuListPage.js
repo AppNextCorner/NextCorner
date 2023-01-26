@@ -19,16 +19,19 @@ import { useNavigation } from '@react-navigation/native'
 import MenuItemCard from '../Cards/MenuItemCard'
 import OrderButton from '../components/OrderButton'
 import { useAppSelector } from '../store/hook'
-import { getButton } from '../store/addToCart'
+import { getButton } from '../store/slices/addToCart'
 
 export default function MenuListPage() {
-  const isClicked = useAppSelector(getButton)
-  // using routes for getting the data and navigation to navigate through a different screen
   const route = useRoute()
   const {restaurant} = route.params;
+  const [cart, setCart] = useState(restaurant.menu)
+  const isClicked = useAppSelector(getButton)
+  // using routes for getting the data and navigation to navigate through a different screen
+ 
+ 
   const navigation = useNavigation()
 
-  const [cart, setCart] = useState(restaurant.menu)
+  
 
   // const updateCustomizations = (id, newCustomizations) => {
   //   const i = cart.map((item) => item.id).indexOf(id);
@@ -86,7 +89,7 @@ export default function MenuListPage() {
             data={cart}
             renderItem={({ item }) => {
               console.log("INformation on one menu item", item)
-              return <MenuItemCard foodItem={item} />
+              return <MenuItemCard businessName={restaurant.name} foodItem={item} />
             }}
           />
           

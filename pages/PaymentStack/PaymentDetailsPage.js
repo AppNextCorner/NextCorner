@@ -16,10 +16,15 @@ import {
 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
-import { getCart, setOrder, getTotal } from '../../store/addToCart'
+import { getCart, setOrder, getTotal, deleteItem } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '../../constants/StripeApiKey'
+import { auth } from '../../App'
+import useCart from '../../hooks/useCart'
+import UseOrders from '../../hooks/useOrders'
 const PaymentDetailsPage = () => {
+  const { deleteCartData } = useCart();
+  const { addCartToOrder, getCurrentOrder} = UseOrders();
   const stripe = useStripe()
   const name = "henrybenry";
 
@@ -78,13 +83,30 @@ const PaymentDetailsPage = () => {
     }
   }
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
-  const navigateToOrderComplete = () => {
+  const navigateToOrderComplete = async () => {
+    // grab the user id from the cart list
+    const mapIdInCart = cart.map(item => item.id)
+    console.log("user id: " + mapIdInCart);
     navigation.navigate('OrderPlaced')
-    dispatch(
-      setOrder({
-        order: cart,
-      }),
-    )
+
+    try{
+      await addCartToOrder(cart)
+      for(let i = 0; i < mapIdInCart.length; i++){
+        deleteCartData({id: mapIdInCart[i]})
+      }
+      getCurrentOrder();
+
+    } catch(e){
+      console.log(e);
+    }
+
+   
+    
+    // dispatch(
+    //   setOrder({
+    //     order: cart,
+    //   }),
+    // )
   }
   const goBack = () => navigation.goBack()
   return (
@@ -117,7 +139,7 @@ const PaymentDetailsPage = () => {
 
         {/* ICONS FOR PAYMENTS */}
         <View style={styles.paymentOptionList}>
-          <TouchableOpacity onPress={navigateToAddPaymentMethod}>
+          <TouchableOpacity onPress={() => navigateToAddPaymentMethod()}>
             <AntDesign name="pluscircleo" size={50} color="black" />
           </TouchableOpacity>
           <Fontisto

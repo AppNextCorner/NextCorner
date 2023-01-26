@@ -1,20 +1,54 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, {useState} from 'react'
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { getCart, setBusinessName } from '../store/slices/addToCart'
+import { useAppDispatch, useAppSelector } from '../store/hook'
 
 const OrderButton = () => {
+  
   const navigation = useNavigation()
-  const goToCartButton = () => {
-    navigation.navigate('Cart')
+  const dispatch = useAppDispatch();
+  const cartList = useAppSelector(getCart);
+  const waitForCartToFill = () => {
+    dispatch(setBusinessName(cartList[0].businessOrderedFrom))
+    cartList.filter((item, index) => cartList.indexOf(item) === index)
+   
+  }
+ 
+  const goToCartButton = async() => {
+    try{
+      await waitForCartToFill();
+      
+      // if(change === false){
+      //   console.log("Please wait");
+      //   navigation.navigate('Cart')
+      // }
+        navigation.navigate('Cart')
+
+      
+    } catch(err){
+      console.error(err);
+    }
+    
+    // setTimeout(function () {
+      
+    // }, 50)
+    
   }
 
-  return (
-    <View style={styles.orderButtonContainer}>
-    <TouchableOpacity style={styles.orderButton} onPress={goToCartButton}>
-      <Text style={styles.orderButtonText}>View Cart</Text>
-    </TouchableOpacity>
-    </View>
-  )
+  
+  if(cartList.length > 0){
+    return (
+      // <Text>Hello</Text>
+      <View style={styles.orderButtonContainer}>
+      <TouchableOpacity style={styles.orderButton} onPress={goToCartButton}>
+        <Text style={styles.orderButtonText}>View Cart</Text>
+      </TouchableOpacity>
+      </View>
+    )
+  }
+
+  
 }
 
 const styles = StyleSheet.create({

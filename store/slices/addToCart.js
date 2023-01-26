@@ -4,10 +4,9 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { firebaseConfig } from '../firebase/firebase-config'
 
-import { IP } from '../constants/StripeApiKey'
-import { auth } from '../App'
+import { IP } from '../../constants/StripeApiKey'
+import { auth } from '../../App'
 
 const POSTS_URL = `http://${IP}:4020/api/`
 
@@ -135,8 +134,7 @@ const initialState = {
   cart: [],
   order: [],
   total: 0,
-  status: 'idle',
-  error: null,
+  businessName: '',
 }
 
 // create a slice object to store the state -> creates action creators for each case inside reducers and can safely mutate the state
@@ -147,6 +145,9 @@ export const addToCart = createSlice({
   initialState,
   // object where the keys are strings and the values are functions that handle specific actions
   reducers: {
+    setBusinessName: (state, { payload }) => {
+      state.businessName = payload
+    },
     setOrder: (state, { payload }) => {
       console.log('here is order')
       console.log(payload.order)
@@ -173,10 +174,7 @@ export const addToCart = createSlice({
       console.log('HERE IS OPTIONS', mapCartMenuItem)
       console.log('payload of customizations', action.payload.customizations)
 
-      const cartItem = mapCart.find(
-        (item) => item.itemId === action.payload.id,
-
-      )
+      const cartItem = mapCart.find((item) => item.itemId === action.payload.id)
       const index = mapCart.indexOf(cartItem)
       if (index > -1) {
         cartItem.amountInCart += 1
@@ -291,11 +289,12 @@ export const addToCart = createSlice({
         cartItem.amountInCart -= 1
       }
     },
-    // WORK IN PROGRESS
+    // After the cart item has been moved to the payment screen, we need to update the total state object with the new price of the total items
     calculateTotals: (state) => {
       const mapCart = state.cart.map((itemList) => itemList.cartData)
       let total = 0
       for (let i = 0; i < mapCart.length; i++) {
+        //convert the items to an integer -> multiply the amount of one item price with the total amount in one particular item of the cart
         total += Number(mapCart[i].price * mapCart[i].amountInCart)
       }
       console.log(total)
@@ -304,6 +303,7 @@ export const addToCart = createSlice({
   },
   // update the state of the cart asynchronously
   extraReducers: (builder) => {
+    // fetch the data of the cart and update the state with the data from the payload
     builder.addCase(fetchCart.pending, (state, { payload }) => {
       console.log('pending')
     })
@@ -313,9 +313,23 @@ export const addToCart = createSlice({
     builder.addCase(fetchCart.fulfilled, (state, { payload }) => {
       state.cartButton = true
       console.log('payload from backend', payload)
+      // due to using authentication, we need to filter out the payload with each object's User id
       state.cart = payload.filter(
         (uidItem) => uidItem.userId === auth.currentUser.uid,
       )
+      state.cart.filter((item, index) => state.cart.indexOf(item) === index)
+      // if (state.cart !== null) {
+      //   console.log("no items")
+      //   //state.businessName = payload[0].businessOrderedFrom
+      // } else if (state.cart === null) {
+      //   console.log("no items")
+      //   state.businessName = ''
+
+      // console.log(
+      //   'business name from backend',
+      //   payload[state.cart.length - 1].businessOrderedFrom,
+      // )
+      //}
     })
     builder.addCase(addNewCartItem.pending, (state, { payload }) => {
       console.log('pending')
@@ -327,7 +341,7 @@ export const addToCart = createSlice({
       state.cartButton = true
       console.log('payload from backend', payload)
       state.cart.push(payload)
-
+      state.cart.filter((item, index) => state.cart.indexOf(item) === index)
     })
     builder.addCase(updateCartItemAmount.pending, (state, { payload }) => {
       console.log('pending')
@@ -335,6 +349,7 @@ export const addToCart = createSlice({
     builder.addCase(updateCartItemAmount.rejected, (state, { payload }) => {
       console.log('Rejected', payload)
     })
+    // depending if the amount is decremented one time or incrememented on the object on its data, change the visual state of the cart object accordingly
     builder.addCase(updateCartItemAmount.fulfilled, (state, { payload }) => {
       console.log('payload from backend', payload)
       const cartItem = state.cart.find((item) => item.id === payload.id)
@@ -344,6 +359,7 @@ export const addToCart = createSlice({
       updateRemoveCartItemAmount.fulfilled,
       (state, { payload }) => {
         console.log('payload from backend', payload)
+
         const cartItem = state.cart.find((item) => item.id === payload.id)
         //const findMapAmount = payload.cartData
 
@@ -371,6 +387,7 @@ export const {
   setOrder,
   increaseInFoodDetails,
   deleteItemReducer,
+  setBusinessName,
 } = addToCart.actions
 
 // create getters
@@ -381,6 +398,7 @@ export const getButton = (state) => state.addToCart.cartButton
 export const getCart = (state) => state.addToCart.cart
 export const getTotal = (state) => state.addToCart.total
 export const getOrder = (state) => state.addToCart.order
+export const getBusinessName = (state) => state.addToCart.businessName
 
 // export the reducer of the slice
 export default addToCart.reducer

@@ -4,58 +4,44 @@
  */
 
 import { StyleSheet, View, FlatList, Text, Button } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
 import SearchComponent from '../components/SearchComponent'
 import RestaurantCard from '../Cards/RestaurantCard'
 import RestaurantListComponent from '../components/RestaurantListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
-
-import useFoodItemData from '../data/useFoodItemData'
 import OrderButton from '../components/OrderButton'
 import { useAppDispatch, useAppSelector } from '../store/hook'
-import { fetchCart, getButton, getCart } from '../store/addToCart'
-import { logOut } from '../store/userSession'
+import { getButton, getCart } from '../store/slices/addToCart'
+import { logOut } from '../store/slices/userSession'
 import useCategoryList from '../hooks/useCategoryList'
 import useRestaurants from '../hooks/useRestaurants'
-import useCart from '../hooks/useCart'
+import useGetUserData from '../hooks/useGetUserData'
 
 import { auth } from '../App'
 
 // firebase authentication -> grabbing the user data from firebase to use here after user is logged in
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-// import { initializeApp } from 'firebase/app'
-import { firebaseConfig } from '../firebase/firebase-config'
 
 export default function HomePage() {
   const dispatch = useAppDispatch()
-  const [user, setUser] = useState({
-    email: 'roberto@urbantxt.com',
-  })
-  const { getCurrentCartItems } = useCart()
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      const email = user.email;
-      console.log(email);
-      setUser(user,
-        email)
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      const uid = user.uid
-      console.log("user uid: ",uid)
-      
-      // FIREBASE JWT TOKEN
-      //auth.currentUser.getIdToken().then((token) => console.log("TOKEN:", token))
-      // ...
-    } else {
-      // User is signed out
-      // ...
-    }
-  })
+  const {
+    categoryWasSelected,
+    categoryId,
+    categoryList,
+    checkForStyleChange,
+    onSelectCategory,
+  } = useCategoryList()
+
+  const { trendingRestaurants, restaurants } = useRestaurants()
+  // access the restaurant data
+  const getRestaurants = trendingRestaurants
+    .map((val) => val.restaurantsWithCategories)
+    .flat()
+
   // auth.currentUser.getIdToken().then((token) => console.log(token))
-
 
   const handleSignOut = async () => {
     try {
@@ -72,25 +58,12 @@ export default function HomePage() {
   }
   const test = async () => {
     try {
-      dispatch(logOut())
+      await dispatch(logOut())
     } catch (err) {
       console.log(err.message)
     }
   }
 
-  const {
-    categoryWasSelected,
-    categoryId,
-    categoryList,
-    checkForStyleChange,
-    onSelectCategory,
-  } = useCategoryList()
-
-  const { trendingRestaurants, restaurants } = useRestaurants()
-  // access the restaurant data
-  const getRestaurants = trendingRestaurants
-    .map((val) => val.restaurantsWithCategories)
-    .flat()
   // // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
 
   // // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
@@ -110,10 +83,6 @@ export default function HomePage() {
   const filterRestaurantCards = restaurants.filter((i) => {
     return i.categoryId === categoryId
   })
-  useEffect(() => {
-    dispatch(fetchCart());
-  }, [])
-
   return (
     <>
       <StatusBar style="auto" />
@@ -122,8 +91,8 @@ export default function HomePage() {
 
         <HeaderComponent />
         {/* <Text>{user.email}</Text> */}
-        <Button onPress={handleSignOut} title="Sign Out"/>
-        <Button onPress={test} title="exit"/>
+        <Button onPress={handleSignOut} title="Sign Out" />
+        <Button onPress={test} title="exit" />
 
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
@@ -194,12 +163,11 @@ export default function HomePage() {
             />
           </>
         )}
-        
+
         {isClicked === true ? <OrderButton /> : null}
         {/* <Button onPress={handleSignOut} title="Sign Out"/>
         <Button onPress={test} title="exit"/> */}
       </View>
-      
     </>
   )
 }

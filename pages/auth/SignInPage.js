@@ -12,7 +12,7 @@ import {
   StyleSheet,
 } from 'react-native'
 import { useAppDispatch } from '../../store/hook'
-import { setUser } from '../../store/userSession'
+import { setUser } from '../../store/slices/userSession'
 import { useState } from 'react'
 // importing firebase
 import {
@@ -22,11 +22,13 @@ import {
 import { auth } from '../../App'
 
 export default function SignInPage() {
-  const dispatch = useAppDispatch()
+  
 
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const dispatch = useAppDispatch()
   /* 
   Function that handles an existing account 
 */

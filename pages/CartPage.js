@@ -3,9 +3,14 @@
  * note: Total number of selected items, price, etc will need to be added here
  */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
-import { getCart, orderPlaced } from '../store/addToCart'
+import {
+  getBusinessName,
+  getCart,
+  orderPlaced,
+  setBusinessName,
+} from '../store/slices/addToCart'
 import { useAppSelector } from '../store/hook'
 import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -21,8 +26,7 @@ import {
   Button,
 } from 'react-native'
 import { useAppDispatch } from '../store/hook'
-import { increase, decrease, calculateTotals } from '../store/addToCart'
-import { getAmount } from '../store/addToCart'
+import { calculateTotals } from '../store/slices/addToCart'
 import useCart from '../hooks/useCart'
 /**
  *
@@ -45,14 +49,24 @@ const CartPage = () => {
   }
 
   const isCartFull = useAppSelector(getCart)
-
+  const businessName = useAppSelector(getBusinessName)
   console.log('isCartFull', isCartFull)
+  //isCartFull.filter((item,
+  //index) => isCartFull.indexOf(item) === index);
+
+  useEffect(() => {
+    if (isCartFull.length === 0) {
+      console.log('empty cart')
+      dispatch(setBusinessName(''))
+      isCartFull.filter((item, index) => isCartFull.indexOf(item) === index)
+    } else if (isCartFull.length > 0) {
+      isCartFull.filter((item, index) => isCartFull.indexOf(item) === index)
+    }
+  }, [isCartFull, dispatch])
 
   let text = 'Lorem ipsum dol'
 
   let limitTextAmount = text.slice(0, 75) + ''
-  let randomId = Math.floor(Math.random() * 10) + 1
-
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <Pressable style={styles.goBackButton} onPress={goHome}>
@@ -60,6 +74,9 @@ const CartPage = () => {
       </Pressable>
 
       <FlatList
+        ListHeaderComponent={() => {
+          return <Text>Ordered from: {businessName}</Text>
+        }}
         data={isCartFull}
         renderItem={({ item }) => {
           const grabCartItem = item.cartData
@@ -149,7 +166,7 @@ const CartPage = () => {
           {/* Payment button */}
           <View style={styles.proceedToPaymentContainer}>
             <TouchableOpacity
-              onPress={goToPayment}
+              onPress={() => goToPayment()}
               style={styles.proceedToPaymentButton}
             >
               <Text style={styles.proceedToPaymentText}>

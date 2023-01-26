@@ -9,6 +9,7 @@ import {
   Image,
   Pressable,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import React, { useEffect } from 'react'
 import { useRoute } from '@react-navigation/native'
@@ -18,47 +19,64 @@ import { useNavigation } from '@react-navigation/native'
 import MultipleOptionSelectedList from '../components/MultipleOptionSelectedList'
 import SingleOptionSelectionComponent from '../components/SingleOptionSelectionComponent'
 import useFoodItemData from '../data/useFoodItemData'
-import { useAppDispatch } from '../store/hook'
+import { useAppDispatch, useAppSelector } from '../store/hook'
 import addToCart, {
   decrease,
+  getBusinessName,
+  getCart,
   increase,
-} from '../store/addToCart'
+  setBusinessName,
+} from '../store/slices/addToCart'
 import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
 import useCart from '../hooks/useCart'
 import { auth } from '../App'
+import useOrderButton from '../hooks/useOrderButton'
 
 export default function FoodDetailsPage() {
   const { addToCart, getCurrentCartItems } = useCart()
+  const { setOrder, order} = useOrderButton();
   //create our options
 
   const dispatch = useAppDispatch()
   const route = useRoute()
   const navigation = useNavigation()
+  const { business, foodItem } = route.params
+  console.log('business route : ' + business)
 
-
-
+  const businessName = useAppSelector(getBusinessName)
+  const getCartItems = useAppSelector(getCart)
   // "Object.assign"
-  Object.assign({}, { ...route.params })
+  Object.assign({}, { ...foodItem })
 
   // "JSON"
-  const parse = { cartData: JSON.parse(JSON.stringify(route.params)) }
+  const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) }
   const name = (parse || {}).cartData
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.goBack()
-    getCurrentCartItems();
   }
   /**
    * WIll run after the options are selected - such as if one or however much options is required to make an order
    */
-  const goToCartButton = () => {
+  const goToCartButton = async () => {
     const userId = auth.currentUser.uid
     const addItem = name
-
+    setOrder(true)
     console.log('add item: ', addItem)
-    addToCart(addItem, userId)
-    getCurrentCartItems();
-    navigation.goBack()
+    if (businessName === '' || business === businessName) {
+      try {
+        await addToCart(addItem, userId, business)
+        console.log('business is empty')
+        dispatch(setBusinessName(business))
+        navigation.goBack()
+        // getCurrentCartItems()
+      } catch (e) {
+        console.log('error')
+      }
+    } else {
+      Alert.alert('added item from a business already')
+    }
+    
   }
 
   const onSizeChange = (sizeVal) => {
@@ -73,8 +91,8 @@ export default function FoodDetailsPage() {
           <Feather name="arrow-left-circle" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={route.params.image} />
-        <Text style={styles.title}>{route.params.name}</Text>
+        <Image style={styles.image} source={foodItem.image} />
+        <Text style={styles.title}>{foodItem.name}</Text>
       </>
     )
   }
@@ -89,8 +107,8 @@ export default function FoodDetailsPage() {
 
         <SingleOptionSelectionComponent
           header={Header}
-          optionData={route.params.name}
-          data={route.params.options}
+          optionData={foodItem.name}
+          data={foodItem.options}
           onChange={onSizeChange}
         />
         {/* <View style={styles.amountContainer}>
@@ -128,9 +146,9 @@ export default function FoodDetailsPage() {
 
         {/* <GoogleMapsMenuSection /> */}
 
-        <TouchableOpacity style={styles.orderButton} onPress={goToCartButton}>
+        <TouchableOpacity disabled={order}  style={styles.orderButton} onPress={goToCartButton}>
           <Text style={styles.orderButtonText}>
-            Add to Cart {route.params.price}
+            Add to Cart {foodItem.price}
           </Text>
         </TouchableOpacity>
       </View>
@@ -177,5 +195,6 @@ const styles = StyleSheet.create({
     margin: 15,
     padding: 15,
     borderRadius: 20,
+    marginBottom: '20%',
   },
 })

@@ -15,13 +15,14 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useAppSelector } from '../store/hook'
-import { getOrder } from '../store/addToCart'
+
+import { getOrders } from '../store/slices/addToOrders'
 
 export default function OrdersPage() {
   const { orderSelection, setOrderSelection } = useState(false)
 
-  const orderData = useAppSelector(getOrder)
-  const orderList = orderData.flat().map((val) => val.cartData)
+  const orderData = useAppSelector(getOrders)
+  const orderList = orderData.map((val) => val.singleOrderList).flat().map(item => item.cartData)
   console.log(' order list')
   console.log(orderList)
 

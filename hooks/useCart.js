@@ -9,14 +9,12 @@ import {
   updateRemoveCartItemAmount,
   deleteItem,
   deleteItemReducer,
-} from '../store/addToCart'
+} from '../store/slices/addToCart'
 // import { initializeApp } from 'firebase/app'
 import { auth } from '../App'
 import { useDispatch } from 'react-redux'
 import { app } from '../App'
 import { getAuth } from 'firebase/auth'
-
-import axios from 'axios'
 export default UseCart = () => {
   const auth = getAuth(app)
 
@@ -49,9 +47,10 @@ export default UseCart = () => {
     }
   }
 
-  const addToCart = async (item, userId) => {
+  const addToCart = async (item, userId, businessOrderedFrom) => {
     const cartItem = {
       cartData: item,
+      businessOrderedFrom,
       userId,
     }
     try {
@@ -59,6 +58,14 @@ export default UseCart = () => {
       
     } catch (e) {
       console.error(e)
+    }
+  }
+  const deleteCartData = async (id) => {
+    try{
+      await dispatch(deleteItem(id));
+    }
+    catch (e) {
+      console.log(e);
     }
   }
 
@@ -73,7 +80,7 @@ export default UseCart = () => {
     const cartItemMap = findAmount.find((item) => item.id === updateItem.id)
 
     if (
-      updateItem.updatedCartItem.amountInCart - 1 ==
+      updateItem.updatedCartItem.amountInCart - 1 ===
       cartItemMap.cartData.amountInCart
     ) {
       dispatch(updateCartItemAmount(cartItem))
@@ -100,5 +107,6 @@ export default UseCart = () => {
     addToCart,
     getCurrentCartItems,
     updateCartItemData,
+    deleteCartData 
   }
 }

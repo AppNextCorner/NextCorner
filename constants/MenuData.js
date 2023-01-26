@@ -60,7 +60,8 @@ export const restaurant = () => {
   const stars = faker.datatype.number(5)
   return {
     // RESTAURANT WORKED
-    name: faker.company.name(),
+    name: 
+    faker.company.name(),
     image: {
       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
     },
@@ -69,6 +70,7 @@ export const restaurant = () => {
       {
         name: faker.commerce.productName(),
         itemId: faker.datatype.number(),
+        timeToMake: faker.datatype.number({ min: 1, max: 3, precision: 1 }),
         image: {
           uri: `${faker.image.food()}?random=${Math.round(
             Math.random() * 1000,
@@ -178,6 +180,7 @@ export const restaurant = () => {
       {
         name: faker.commerce.productName(),
         itemId: faker.datatype.number(),
+        timeToMake:  faker.datatype.number({ min: 1, max: 3, precision: 1 }),
         image: {
           uri: `${faker.image.food()}?random=${Math.round(
             Math.random() * 1000,

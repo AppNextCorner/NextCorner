@@ -3,8 +3,9 @@
  */
 
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import addToCart from "./addToCart";
-import userSession from "./userSession";
+import addToCart from "./slices/addToCart";
+import addToOrders from "./slices/addToOrders";
+import userSession from "./slices/userSession";
 
 export const store = configureStore({
     // function that receives the current state of the action object and decide when to update the userSession state 
@@ -12,7 +13,8 @@ export const store = configureStore({
     reducer: {
         // copy the original state and assign changes to the copied values we chooose
         userSession: userSession,
-        addToCart: addToCart
+        addToCart: addToCart,
+        addToOrders: addToOrders
     },
     devTools: true,
 })
