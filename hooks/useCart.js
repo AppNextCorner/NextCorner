@@ -62,13 +62,16 @@ export default UseCart = () => {
   }
   const deleteCartData = async (id) => {
     try{
+      dispatch(
+        deleteItemReducer(id),
+      )
       await dispatch(deleteItem(id));
     }
     catch (e) {
       console.log(e);
     }
   }
-
+// takes in the updated object and the item id to be updated 
   const updateCartItemData = async (updateItem) => {
     console.log('run updateCartItemData')
     const cartItem = {
@@ -77,15 +80,18 @@ export default UseCart = () => {
     }
 
     console.log(cartItem.updatedItem)
+    // find the item in the cart items list and look for the one that matches the updated item
     const cartItemMap = findAmount.find((item) => item.id === updateItem.id)
 
     if (
       updateItem.updatedCartItem.amountInCart - 1 ===
       cartItemMap.cartData.amountInCart
     ) {
+      // increment the amount of one cart item
       dispatch(updateCartItemAmount(cartItem))
     } else {
-      if (cartItemMap.cartData.amountInCart - 1 < 1) {
+      // if less
+      if (cartItemMap.cartData.amountInCart <= 1) {
         //removeObjectWithId(findAmount, updateItem.id)
         dispatch(
           deleteItemReducer({

@@ -7,17 +7,24 @@ import { useAppDispatch, useAppSelector } from '../store/hook'
 const OrderButton = () => {
   
   const navigation = useNavigation()
-  const dispatch = useAppDispatch();
-  const cartList = useAppSelector(getCart);
-  const waitForCartToFill = () => {
-    dispatch(setBusinessName(cartList[0].businessOrderedFrom))
-    cartList.filter((item, index) => cartList.indexOf(item) === index)
-   
+  const getCartOption = useAppSelector(getCart)
+  const dispatch = useAppDispatch()
+
+  const navigateCart = () => {
+    if (getCartOption.length > 0) {
+      //;
+      navigation.navigate('Cart')
+      dispatch(setBusinessName(getCartOption[0].businessOrderedFrom))
+      getCartOption.filter((item, index) => getCartOption.indexOf(item) === index)
+    } else {
+      Alert.alert("Buy some items to proceed...")
+      //console.log('Buy some items to proceed...')
+    }
   }
  
   const goToCartButton = async() => {
     try{
-      await waitForCartToFill();
+     // await waitForCartToFill();
       
       // if(change === false){
       //   console.log("Please wait");
@@ -37,11 +44,11 @@ const OrderButton = () => {
   }
 
   
-  if(cartList.length > 0){
+  if(getCartOption.length > 0){
     return (
       // <Text>Hello</Text>
       <View style={styles.orderButtonContainer}>
-      <TouchableOpacity style={styles.orderButton} onPress={goToCartButton}>
+      <TouchableOpacity style={styles.orderButton} onPress={() => navigateCart()}>
         <Text style={styles.orderButtonText}>View Cart</Text>
       </TouchableOpacity>
       </View>

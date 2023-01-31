@@ -28,6 +28,7 @@ import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
 import OrderPlacedPage from '../pages/OrderPlacedPage'
 import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 import useGetUserData from '../hooks/useGetUserData'
+import InProgressPage from '../pages/OrdersStack/InProgressPage'
 
 //Screen names to easily find in the route
 const homeName = 'HomePage'
@@ -69,6 +70,7 @@ export default function Route() {
               <Stack.Screen name="PaymentDetails" component={PaymentDetailsPage} />
               <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
               <Stack.Screen name="AddPayment" component={AddPaymentPage} />
+              <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             </Stack.Navigator>
           </NavigationContainer>
         </>

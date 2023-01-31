@@ -31,10 +31,13 @@ import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
 import useCart from '../hooks/useCart'
 import { auth } from '../App'
 import useOrderButton from '../hooks/useOrderButton'
+import { useState } from 'react'
 
 export default function FoodDetailsPage() {
   const { addToCart, getCurrentCartItems } = useCart()
-  const { setOrder, order} = useOrderButton();
+  const { setOrder, order } = useOrderButton()
+
+  const [render, setRender] = useState(false)
   //create our options
 
   const dispatch = useAppDispatch()
@@ -46,11 +49,23 @@ export default function FoodDetailsPage() {
   const businessName = useAppSelector(getBusinessName)
   const getCartItems = useAppSelector(getCart)
   // "Object.assign"
-  Object.assign({}, { ...foodItem })
 
   // "JSON"
+  useEffect(() => {
+    Object.assign({}, { ...foodItem })
+  }, [render])
   const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) }
   const name = (parse || {}).cartData
+  // IT ONLY CHANGES WHEN IT IS REFRESHED
+  console.log(
+    'f',
+    name.options
+      .map((c) => c.customizations)
+      .flat()
+      .map((c) => c.selected),
+  )
+
+  //.map(options => options.options).map(v => v.customizations).map(l => l.selected))
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.goBack()
@@ -76,7 +91,6 @@ export default function FoodDetailsPage() {
     } else {
       Alert.alert('added item from a business already')
     }
-    
   }
 
   const onSizeChange = (sizeVal) => {
@@ -104,13 +118,17 @@ export default function FoodDetailsPage() {
       <View style={styles.container}>
         {/* Showing off the list options for the user - passing data from route.params to our component list */}
         {/* <MultipleOptionSelectedList /> */}
-
-        <SingleOptionSelectionComponent
-          header={Header}
-          optionData={foodItem.name}
-          data={foodItem.options}
-          onChange={onSizeChange}
-        />
+        <View style={{ flex: 1 }}>
+          <SingleOptionSelectionComponent
+            header={Header}
+            optionData={foodItem.name}
+            data={foodItem.options}
+            onChange={onSizeChange}
+            render={setRender}
+            stateRender={render}
+          />
+          {/* <MultipleOptionSelectedList /> */}
+        </View>
         {/* <View style={styles.amountContainer}>
                   <AntDesign
                     style={styles.icon}
@@ -146,7 +164,11 @@ export default function FoodDetailsPage() {
 
         {/* <GoogleMapsMenuSection /> */}
 
-        <TouchableOpacity disabled={order}  style={styles.orderButton} onPress={goToCartButton}>
+        <TouchableOpacity
+          disabled={order}
+          style={styles.orderButton}
+          onPress={goToCartButton}
+        >
           <Text style={styles.orderButtonText}>
             Add to Cart {foodItem.price}
           </Text>

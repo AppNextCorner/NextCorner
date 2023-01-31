@@ -1,104 +1,134 @@
-import React, { useState } from 'react'
+/**
+ * Purpose of the file: This component is responsible for listing the options for the food item in the FoodDetails page
+ * - This list is going to be first displayed, then the multiple options component
+ * - We use the header component here due to the fact that it is first
+ */
+
+// make a list of options start vertical, then format
+// if the button is clicked -> add the option label to an array
+// if the button is clicked again, then remove the option label from the array
+// if another option is clicked, then, remove the option label from the array
+
 import {
   Text,
-  View,
-  StyleSheet,
   FlatList,
+  StyleSheet,
   TouchableOpacity,
+  Pressable,
+  View,
+  ScrollView,
 } from 'react-native'
+import React, { useState } from 'react'
 
-// // You can import from local files
-// import AssetExample from './components/AssetExample';
 
-// // or any pure javascript modules available in npm
-// import { Card } from 'react-native-paper';
+export default function MultipleOptionSelectedList(props) {
 
-const BRANDS = [
-  {
-    optionTitle: 'spice',
-    options: [
-      {
-        optionOne: 'Mild',
-        optionOne: 'Mild',
-        optionOne: 'Mild',
-      },
-    ],
-  },
-  {
-    optionTitle: 'Extra',
-    options: [
-      {
-        optionOne: 'Mild',
-        optionOne: 'amogus',
-      },
-    ],
-  },
-]
+  const [itemId, setItemId] = useState(0)
+  const [customStyle, setCustomStyle] = useState(null)
+  const {data, header } = props
 
-export default function MultipleOptionSelectedList() {
-  const [brands, setBrands] = useState(BRANDS)
-  const [selectedBrands, setSelectedBrands] = useState([])
+  const handlePress = (stack, idFromParent, item) => {
+    // setting the default values for the stack item options to false
+    const selectMap = item.customizations.map((val) => (val.selected = false))
+    selectMap
+    setCustomStyle(null)
+    stack.selected = false
 
-  const renderBrands = ({ item, index }) => {
-    const { name, slug } = item
-    const isSelected = selectedBrands.filter((i) => i === slug).length > 0
+    // making the itemId equal to that of the selected stack item id
+    idFromParent = stack.id
 
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          {isSelected ?
-            setSelectedBrands((prev) => prev.filter((i) => i !== slug))
-          :
-            setSelectedBrands((prev) => [...prev, slug])
-          }
-        }}
-        //style={[styles.item, isSelected && { backgroundColor: 'black' }]}
-      >
-        <Text style={{ color: isSelected ? 'white' : 'black' }}>{name}</Text>
-      </TouchableOpacity>
-    )
+    // if the id is the same, then set it back to false
+    if (idFromParent === stack.id) {
+      // if one of the children is selected, then set the selected value to true
+      stack.selected = true
+      // setting the selected value its style
+      setCustomStyle({
+        style:
+          stack.id === itemId ? styles.nullButtonStyle : styles.optionStyle,
+      })
+    }
   }
 
   return (
-    <View style={styles.container}>
+    <>
+      {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
       <FlatList
-        data={brands}
+       
+        data={data}
         renderItem={({ item }) => {
           return (
             <>
-              <Text>{item.optionTitle}</Text>
-              <FlatList
-                style={styles.flatListScrollContainer}
-                data={brands}
-                renderItem={renderBrands}
-                scrollEnabled={true}
-              />
+              <Text style={styles.optionTitle}>{item.name}</Text>
+              {/* <ScrollView
+                style={styles.optionCardContainer}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              > */}
+                <View style={styles.buttonOptionContainer}>
+                {item.customizations.map((stack) => {
+                   
+                      // console.log('selection', item.customizations)
+                      return (
+                        <>
+                          <TouchableOpacity
+                            key={stack.id}
+                            style={
+                              stack.selected === false
+                                ? styles.nullButtonStyle
+                                : styles.optionStyle
+                            }
+                            onPress={() => {
+                              handleMultiplePress(stack, item.itemId, item)
+                            }}
+                          >
+                            <Text
+                              style={{ fontWeight: '500', textAlign: 'center' }}
+                            >
+                              {stack.label}
+                            </Text>
+                          </TouchableOpacity>
+                        </>
+                      )
+                    
+                  })}
+                  
+                </View>
+                
+              {/* </ScrollView> */}
             </>
           )
         }}
       />
-    </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  flatListScrollContainer: {
-    flex: 1,
+  optionMenuContainer: {},
+  buttonOptionContainer: {
+    flexDirection: 'row',
   },
-  container: {
-    flex: 1,
-
-    backgroundColor: '#fff',
-    padding: 8,
-  },
-
-  item: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  nullButtonStyle: {
+    padding: 20,
+    borderRadius: 20,
+    width: 150,
+    backgroundColor: '#f7fafa',
     borderWidth: 1,
-    margin: 2,
-    width: '99%',
-    height: 75,
+    borderColor: '#f7fafa',
+    marginLeft: 10,
+  },
+  optionStyle: {
+    padding: 20,
+    borderWidth: 1,
+    backgroundColor: '#f7fafa',
+    borderStyle: 'solid',
+    borderColor: '#6BD8FF',
+    borderRadius: 20,
+    width: 150,
+    marginLeft: 10,
+  },
+  optionTitle: {
+    fontSize: 20,
+    margin: '5%',
   },
 })

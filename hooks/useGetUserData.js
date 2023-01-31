@@ -8,7 +8,6 @@ import { getAuth } from 'firebase/auth'
 import { getOrderList } from '../store/slices/addToOrders'
 
 const useGetUserData = () => {
-
   const [isDone, setIsDone] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -38,8 +37,7 @@ const useGetUserData = () => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         fetchUserAsync()
-        
-        
+
         setIsDone(true)
       } else {
         // User is signed out
@@ -55,4 +53,3 @@ const useGetUserData = () => {
 }
 
 export default useGetUserData
-

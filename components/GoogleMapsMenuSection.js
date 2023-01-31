@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import MapStyle from '../constants/MapStyle.json'
 import * as Location from 'expo-location'
 
@@ -47,6 +47,9 @@ export default function GoogleMapsMenuSection() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.overlay}>
+        <Text style={styles.text}>Touchable Opacity</Text>
+      </TouchableOpacity>
       <MapView
         // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
         customMapStyle={MapStyle}
@@ -88,5 +91,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '90%',
     backgroundColor: '#fff',
+    
+  },
+   overlay: {
+    position: 'absolute',
+    bottom: 50,
+    backgroundColor: 'red',
+    zIndex: 2
   },
 })

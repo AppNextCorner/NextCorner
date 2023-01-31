@@ -25,10 +25,11 @@ export default function SingleOptionSelectionComponent(props) {
 
   const [itemId, setItemId] = useState(0)
   const [customStyle, setCustomStyle] = useState(null)
-  const { updateCustomizations, data, header, optionData } = props
+  const { updateCustomizations, data, header, optionData, render, stateRender } = props
 
   const handlePress = (stack, idFromParent, item) => {
     // setting the default values for the stack item options to false
+    render(!stateRender)
     const selectMap = item.customizations.map((val) => (val.selected = false))
     selectMap
     setCustomStyle(null)
@@ -76,10 +77,11 @@ export default function SingleOptionSelectionComponent(props) {
                         }
                         onPress={() => {
                           handlePress(stack, item.itemId, item)
+
                         }}
                       >
                         <Text
-                          style={{ fontWeight: '500', textAlign: 'center' }}
+                          style={{ fontWeight: '500', textAlign: 'cent`er' }}
                         >
                           {stack.label}
                         </Text>

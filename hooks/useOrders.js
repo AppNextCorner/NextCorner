@@ -1,11 +1,20 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { auth } from '../App'
-import { useAppDispatch } from '../store/hook'
-import { addOrder, getOrderList } from '../store/slices/addToOrders'
+import { useAppDispatch, useAppSelector } from '../store/hook'
+import {
+  addOrder,
+  getOrderList,
+  getTime,
+  getOrders,
+  updateOrderStatus,
+  updateOrderStatusReducer
+} from '../store/slices/addToOrders'
 
 const UseOrders = () => {
   const dispatch = useAppDispatch()
+
+  const orders = useAppSelector(getOrders)
 
   const getCurrentOrder = async () => {
     try {
@@ -40,9 +49,34 @@ const UseOrders = () => {
     }
   }
 
+  const updateOrder = async (updatedStatus, timeLeft) => {
+    
+      console.log('run updateOrderStatus')
+
+      const itemStatus = {
+        status: updatedStatus.orderStatus,
+        id: updatedStatus.id,
+      }
+      console.log('item status: ' + itemStatus.status)
+
+    //   if (timeLeft === 0) {
+        // dispatch the update staatus and pas in item id
+      try{
+        // change the state
+        dispatch(updateOrderStatusReducer(itemStatus))
+        // send in axios put request
+        dispatch(updateOrderStatus(itemStatus))
+        console.log('dispatch update order status')
+      //}
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return {
     addCartToOrder,
     getCurrentOrder,
+    updateOrder,
   }
 }
 

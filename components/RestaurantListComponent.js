@@ -47,7 +47,4 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
 
-  list: {
-    
-  },
 });

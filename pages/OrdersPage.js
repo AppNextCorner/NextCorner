@@ -14,19 +14,56 @@ import {
   Image,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { useAppSelector } from '../store/hook'
+import { useAppSelector, useAppDispatch } from '../store/hook'
 
-import { getOrders } from '../store/slices/addToOrders'
+import { getOrderList, getOrders, getTime } from '../store/slices/addToOrders'
+
+import InProgressOrderCard from '../Cards/OrderPageCards/InProgressOrderCard'
+import InProgressPage from './OrdersStack/InProgressPage'
+import { useNavigation } from '@react-navigation/native'
+import CompletedOrderCard from '../Cards/OrderPageCards/CompletedOrderCard'
 
 export default function OrdersPage() {
-  const { orderSelection, setOrderSelection } = useState(false)
+  const [orderSelection, setOrderSelection] = useState(false)
+  const dispatch = useAppDispatch()
 
   const orderData = useAppSelector(getOrders)
-  const orderList = orderData.map((val) => val.singleOrderList).flat().map(item => item.cartData)
+  const navigation = useNavigation()
+  ///const getTimeLeft = useAppSelector(getTime);
+  const orderList = orderData
+    .map((val) => val.singleOrderList)
+    .flat()
+    .map((item) => item.cartData)
   console.log(' order list')
   console.log(orderList)
+  console.log(orderData.map((val) => val.id))
+
+  const goToProgressPage = (item) => {
+    navigation.navigate('InProgressOrder', { item: item })
+  }
+
+  useEffect(() => {
+    dispatch(getOrderList())
+    console.log(orderData)
+    orderData.filter((item, index) => orderData.indexOf(item) === index)
+  }, [dispatch])
+
+  const filterCompletedData = orderData.filter(
+    (item) => item.orderStatus === 'Order taking longer than expected',
+  )
+  console.log(filterCompletedData)
+  const filterInProgressData = orderData.filter(
+    (item) => item.orderStatus === 'In Progress',
+  )
 
   let text = 'Lorem ipsum dol'
+
+  const inProgress = () => {
+    setOrderSelection(false)
+  }
+  const completedOrders = () => {
+    setOrderSelection(true)
+  }
 
   let limitTextAmount = text.slice(0, 75) + ''
   let randomId = Math.floor(Math.random() * 10) + 1
@@ -38,57 +75,74 @@ export default function OrdersPage() {
         {orderSelection !== true ? (
           <View>
             <View style={styles.headerOfOrder}>
-              <TouchableOpacity style={styles.sectionButton}>
+              <TouchableOpacity
+                onPress={() => inProgress()}
+                style={styles.sectionButton}
+              >
                 <Text style={styles.sectionHeader}>In progress</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.sectionButton}>
+              <TouchableOpacity
+                onPress={() => completedOrders()}
+                style={styles.sectionButton}
+              >
                 <Text style={styles.sectionHeader}>Complete</Text>
               </TouchableOpacity>
             </View>
-            
             <FlatList
-              data={orderList}
+              data={filterInProgressData}
+              showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
+                console.log('Item: ', item)
                 return (
                   <>
-                    {/* Display cards added */}
-                    <TouchableOpacity
-                      disabled={true}
-                      style={styles.foodCategoryStyle}
-                    >
-                      <View style={styles.card}>
-                        <View style={styles.imageBox}>
-                          <Image
-                            style={styles.foodImages}
-                            source={item.image}
-                          />
-                        </View>
-                        <View style={styles.foodTexts}>
-                          <Text style={styles.categoryText}>{item.name}</Text>
-                          <Text style={styles.descriptionOfItem}>
-                            {limitTextAmount}
-                          </Text>
-                          <Text style={styles.priceText}>{item.price}</Text>
-                        </View>
-
-                        {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
-                        <View style={styles.amountContainer}>
-                          <Text>{item.amountInCart}</Text>
-                        </View>
-                      </View>
+                    <TouchableOpacity onPress={() => goToProgressPage(item)}>
+                      <InProgressOrderCard
+                        orderTimeData={item}
+                        orderItemId={item.id}
+                        orderStatusData={item.orderStatus}
+                      />
                     </TouchableOpacity>
                   </>
                 )
               }}
             />
-            
           </View>
         ) : (
           <View>
             <View style={styles.headerOfOrder}>
-              <Text style={styles.sectionHeader}>In progress</Text>
-              <Text style={styles.sectionHeader}>Complete</Text>
+              <TouchableOpacity
+                onPress={() => inProgress()}
+                style={styles.sectionButton}
+              >
+                <Text style={styles.sectionHeader}>In progress</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => completedOrders()}
+                style={styles.sectionButton}
+              >
+                <Text style={styles.sectionHeader}>Complete</Text>
+              </TouchableOpacity>
             </View>
+            <FlatList
+              ListHeaderComponent={
+                <>
+                  <Text style={styles.completedPageHeader}>Completed</Text>
+                </>
+              }
+              showsVerticalScrollIndicator={false}
+              data={filterCompletedData}
+              style={styles.completedPageList}
+              renderItem={({ item }) => {
+                console.log('Item: ', item)
+                return (
+                  <>
+                    <TouchableOpacity>
+                      <CompletedOrderCard completedOrder={item} />
+                    </TouchableOpacity>
+                  </>
+                )
+              }}
+            />
           </View>
         )}
       </View>
@@ -273,7 +327,17 @@ export default function OrdersPage() {
 }
 
 const styles = StyleSheet.create({
-  sectionButton: {},
+  // header for completed page / completed page styles
+  completedPageList: {
+    marginHorizontal: '-2%',
+  },
+  
+  completedPageHeader: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    marginBottom: '5%',
+    padding: '5%'
+  },
   // header
   amountContainer: {
     flex: 1,
