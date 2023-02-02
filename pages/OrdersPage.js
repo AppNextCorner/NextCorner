@@ -136,9 +136,10 @@ export default function OrdersPage() {
                 console.log('Item: ', item)
                 return (
                   <>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => goToProgressPage(item)}>
                       <CompletedOrderCard completedOrder={item} />
                     </TouchableOpacity>
+                    <View style={styles.margin}></View>
                   </>
                 )
               }}
@@ -327,16 +328,22 @@ export default function OrdersPage() {
 }
 
 const styles = StyleSheet.create({
+  // margin for every card to be splitted
+  margin: {
+    backgroundColor: '#f2f3f5',
+    flex: 1,
+    paddingVertical: 5,
+  },
   // header for completed page / completed page styles
   completedPageList: {
     marginHorizontal: '-2%',
   },
-  
+
   completedPageHeader: {
     fontWeight: 'bold',
     fontSize: 30,
     marginBottom: '5%',
-    padding: '5%'
+    padding: '5%',
   },
   // header
   amountContainer: {

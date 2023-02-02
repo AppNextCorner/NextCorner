@@ -4,6 +4,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import MapStyle from '../constants/MapStyle.json'
 import * as Location from 'expo-location'
+import MapViewDirections from 'react-native-maps-directions'
 
 export default function GoogleMapsMenuSection() {
   // if the google maps api fails or the user does not have permission, then display this location
@@ -30,6 +31,7 @@ export default function GoogleMapsMenuSection() {
       enableHighAccuracy: true,
     })
     console.log(location)
+    
     setMapRegion({
       // Get location from the object data we received from the position async and set the previous latitude and longitude of the previous state mapRegion, to the current location
       latitude: location.coords.latitude,
@@ -39,17 +41,17 @@ export default function GoogleMapsMenuSection() {
       longitudeDelta: 0.0121,
     })
   }
-
+  console.log(mapRegion)
+const destination = {latitude: 37.771707, longitude: -122.4053769}
   // after the page is loaded, call the async function to update the location of the user
   useEffect(() => {
     userLocation()
   }, [])
+  
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.overlay}>
-        <Text style={styles.text}>Touchable Opacity</Text>
-      </TouchableOpacity>
+      
       <MapView
         // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
         customMapStyle={MapStyle}
@@ -60,7 +62,16 @@ export default function GoogleMapsMenuSection() {
         // show a blue icon of the user on the map
         showsUserLocation={true}
         style={{ flex: 1 }}
-      />
+      >
+        {/* <MapViewDirections
+            origin={mapRegion}
+            destination={destination}
+            apikey={GOOGLE_API_KEY}
+            strokeColor="#6644ff"
+            strokeWidth={4}
+            //onReady={traceRouteOnReady}
+          /> */}
+      </MapView>
 
       {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete
@@ -82,6 +93,7 @@ export default function GoogleMapsMenuSection() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+   
   },
   map: {
     width: '100%',

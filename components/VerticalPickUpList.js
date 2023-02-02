@@ -4,8 +4,7 @@
 
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
 import React from 'react'
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet'
-
+import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
 
 export default function VerticalPickUpList({ orderItemDetails }) {
   // grabbing the data of the trendingFood from the data folder
@@ -21,40 +20,82 @@ export default function VerticalPickUpList({ orderItemDetails }) {
   let limitTextAmount = text.slice(0, 75) + ''
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
-    <BottomSheetFlatList
-      ListHeaderComponent={
-        <Text>{orderItemDetails.singleOrderList[0].businessOrderedFrom}</Text>
-      }
-      data={mapThroughOrder}
-      style={{ flex: 1 }}
-      renderItem={({ item }) => {
-        return (
-          <>
-            {/* Containing the name of the restaurant  */}
+    <>
+      <BottomSheetView style={styles.statusContainer}>
+        <Text style={styles.statusText}>Distance: </Text>
+        <Text style={styles.statusText}>Time To Walk:</Text>
+      </BottomSheetView>
+      <BottomSheetFlatList
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.businessName}>
+              {orderItemDetails.singleOrderList[0].businessOrderedFrom}
+            </Text>
+            <View style={styles.margin}></View>
+          </View>
+        }
+        data={mapThroughOrder}
+        style={styles.bottomModalContainer}
+        renderItem={({ item }) => {
+          return (
+            <>
+              {/* Containing the name of the restaurant  */}
 
-            {/* Pass in the order item detail through props  */}
-            <TouchableOpacity disabled={true} style={styles.foodCategoryStyle}>
-              <View style={styles.card}>
-                <View style={styles.imageBox}>
-                  <Image style={styles.foodImages} source={item.image} />
+              {/* Pass in the order item detail through props  */}
+              <TouchableOpacity
+                disabled={true}
+                style={styles.foodCategoryStyle}
+              >
+                <View style={styles.card}>
+                  <View style={styles.imageBox}>
+                    <Image style={styles.foodImages} source={item.image} />
+                  </View>
+                  <View style={styles.foodTexts}>
+                    <Text style={styles.categoryText}>{item.name}</Text>
+                    <Text style={styles.descriptionOfItem}>
+                      {limitTextAmount}
+                    </Text>
+                    <Text style={styles.priceText}>{item.price}</Text>
+                  </View>
                 </View>
-                <View style={styles.foodTexts}>
-                  <Text style={styles.categoryText}>{item.name}</Text>
-                  <Text style={styles.descriptionOfItem}>
-                    {limitTextAmount}
-                  </Text>
-                  <Text style={styles.priceText}>{item.price}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </>
-        )
-      }}
-    />
+              </TouchableOpacity>
+            </>
+          )
+        }}
+      />
+    </>
   )
 }
 
 const styles = StyleSheet.create({
+  statusContainer: {
+   margin: '5%',
+  },
+  statusText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+
+  margin: {
+    backgroundColor: '#f2f3f5',
+    flex: 1,
+    paddingVertical: 5,
+  },
+  // modal container
+  bottomModalContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderTopEndRadius: 20,
+    borderTopStartRadius: 20
+  },
+  // business name styles
+  businessName: {
+    margin: '5%',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  // header
   headerTitle: {
     fontSize: 20,
     textAlign: 'center',

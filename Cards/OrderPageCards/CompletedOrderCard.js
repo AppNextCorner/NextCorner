@@ -68,7 +68,7 @@ const CompletedOrderCard = ({ completedOrder }) => {
           {/* Margin for every card */}
         </View>
       </View>
-      <View style={styles.margin}></View>
+      
     </>
   )
 }
@@ -92,12 +92,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: '1%'
     },
-    // margin for every card to be splitted
-  margin: {
-    backgroundColor: '#f2f3f5',
-    flex: 1,
-    paddingVertical: 5,
-  },
+  
   // button styles
   selectionButtonText: {
     fontWeight: 'bold',
@@ -128,7 +123,7 @@ const styles = StyleSheet.create({
   },
   // Price and Time
   priceOfOrder: {
-    flex: 2,
+    flex: 1.5,
     color: '#8f8f8f',
   },
   timeOrdered: {

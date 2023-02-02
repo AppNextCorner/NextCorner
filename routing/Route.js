@@ -8,7 +8,7 @@ import HomePage from '../pages/HomePage'
 import FoodDetailsPage from '../pages/FoodDetailsPage'
 import OrdersPage from '../pages/OrdersPage'
 import MenuListPage from '../pages/MenuListPage'
-import PickUpPage from '../pages/PickUpPage'
+import PickUpPage from '../pages/ProfilePage'
 import SignInPage from '../pages/auth/SignInPage'
 import CartPage from '../pages/CartPage'
 
@@ -33,7 +33,7 @@ import InProgressPage from '../pages/OrdersStack/InProgressPage'
 //Screen names to easily find in the route
 const homeName = 'HomePage'
 const ordersName = 'Orders'
-const pickUpName = 'Profile'
+const profileName = 'Profile'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -118,7 +118,7 @@ function Home() {
           } else if (rn === ordersName) {
             iconName = focused ? 'checklist' : 'checklist'
             return <Octicons name={iconName} size={size} color={color} />
-          } else if (rn === pickUpName) {
+          } else if (rn === profileName) {
             iconName = focused ? 'person' : 'person'
             return <Ionicons name={iconName} size={size} color={color} />
           }
@@ -135,7 +135,7 @@ function Home() {
       {/* Tabs we want to use  */}
       <Tab.Screen name={homeName} component={HomePage} />
       <Tab.Screen name={ordersName} component={OrdersPage} />
-      <Tab.Screen name={pickUpName} component={PickUpPage} />
+      <Tab.Screen name={profileName} component={PickUpPage} />
     </Tab.Navigator>
   )
 }

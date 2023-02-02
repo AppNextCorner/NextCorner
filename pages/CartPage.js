@@ -3,7 +3,7 @@
  * note: Total number of selected items, price, etc will need to be added here
  */
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   getBusinessName,
@@ -35,6 +35,7 @@ import useCart from '../hooks/useCart'
  */
 
 const CartPage = () => {
+  
   const { updateCartItemData } = useCart()
   const dispatch = useAppDispatch()
   // navigation part of the screen
@@ -45,6 +46,7 @@ const CartPage = () => {
   }
   const goToPayment = () => {
     navigation.navigate('PaymentDetails')
+
     dispatch(calculateTotals())
   }
 

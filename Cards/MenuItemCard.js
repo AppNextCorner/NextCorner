@@ -29,7 +29,7 @@ export default function MenuItemCard({ foodItem, businessName}) {
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{foodItem.name}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
-          <Text style={styles.priceText}>{foodItem.price}</Text>
+          <Text style={styles.priceText}>${foodItem.price}</Text>
         </View>
         {/* Store image with button  */}
         
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginLeft: 25,
     marginTop: '18%',
     marginBottom: '70%',
-    borderRadius: 10,
+    borderRadius: 5,
   },
   card: {
     width: 250,

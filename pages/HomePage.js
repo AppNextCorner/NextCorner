@@ -43,27 +43,6 @@ export default function HomePage() {
 
   // auth.currentUser.getIdToken().then((token) => console.log(token))
 
-  const handleSignOut = async () => {
-    try {
-      console.log(auth.currentUser.email)
-      dispatch(logOut())
-      const result = await signOut(auth)
-
-      console.log('entered sign out functions')
-      console.log(auth.currentUser.email)
-    } catch (err) {
-      console.log(err.message)
-    }
-    // add try catch if you want
-  }
-  const test = async () => {
-    try {
-      await dispatch(logOut())
-    } catch (err) {
-      console.log(err.message)
-    }
-  }
-
   // // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
 
   // // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
@@ -91,9 +70,6 @@ export default function HomePage() {
 
         <HeaderComponent />
         {/* <Text>{user.email}</Text> */}
-        <Button onPress={handleSignOut} title="Sign Out" />
-        <Button onPress={test} title="exit" />
-
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
           <>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {
   View,
   StyleSheet,
@@ -14,7 +14,7 @@ import {
   FontAwesome,
   Feather,
 } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
 import { getCart, setOrder, getTotal, deleteItem } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
@@ -28,18 +28,17 @@ const PaymentDetailsPage = () => {
   const stripe = useStripe()
   const name = "henrybenry";
 
+  const route = useRoute();
+  const [proceed, setProceed] = useState(false);
+
   const cart = useAppSelector(getCart)
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch()
 
   const navigation = useNavigation()
   const navigateToAddPaymentMethod = async () => {
-    // navigation.navigate('AddPayment')
 
     try {
-      //turning the 
-      
-      
       const response = await fetch(`http://${IP}:4020/payment`, {
         method: 'POST',
         headers: {
@@ -84,29 +83,24 @@ const PaymentDetailsPage = () => {
   }
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = async () => {
+    setProceed(true);
     // grab the user id from the cart list
     const mapIdInCart = cart.map(item => item.id)
     console.log("user id: " + mapIdInCart);
     navigation.navigate('OrderPlaced')
-
     try{
       await addCartToOrder(cart)
       for(let i = 0; i < mapIdInCart.length; i++){
         deleteCartData({id: mapIdInCart[i]})
       }
+      // change the state of the order
+      
+      console.log(" proceed: ",route.params.proceed)
       getCurrentOrder();
 
     } catch(e){
       console.log(e);
     }
-
-   
-    
-    // dispatch(
-    //   setOrder({
-    //     order: cart,
-    //   }),
-    // )
   }
   const goBack = () => navigation.goBack()
   return (
@@ -139,7 +133,7 @@ const PaymentDetailsPage = () => {
 
         {/* ICONS FOR PAYMENTS */}
         <View style={styles.paymentOptionList}>
-          <TouchableOpacity onPress={() => navigateToAddPaymentMethod()}>
+          <TouchableOpacity  onPress={() => navigateToAddPaymentMethod()}>
             <AntDesign name="pluscircleo" size={50} color="black" />
           </TouchableOpacity>
           <Fontisto
@@ -187,12 +181,13 @@ const PaymentDetailsPage = () => {
         </View>
         {/* Place Order Button */}
         <View style={styles.placeOrderContainer}>
-          <TouchableOpacity
+          <Pressable
+            disabled={proceed}
             onPress={navigateToOrderComplete}
             style={styles.placeOrderButton}
           >
             <Text style={styles.placeOrderText}>Place Order</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>

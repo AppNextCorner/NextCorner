@@ -22,10 +22,16 @@ import React, { useState } from 'react'
 import RadioButtonRN from 'radio-buttons-react-native'
 
 export default function SingleOptionSelectionComponent(props) {
-
   const [itemId, setItemId] = useState(0)
   const [customStyle, setCustomStyle] = useState(null)
-  const { updateCustomizations, data, header, optionData, render, stateRender } = props
+  const {
+    updateCustomizations,
+    data,
+    header,
+    optionData,
+    render,
+    stateRender,
+  } = props
 
   const handlePress = (stack, idFromParent, item) => {
     // setting the default values for the stack item options to false
@@ -50,6 +56,30 @@ export default function SingleOptionSelectionComponent(props) {
     }
   }
 
+  // For multiple options selected
+  const handleMultiplePress = (stack, idFromParent, item) => {
+    // setting the default values for the stack item options to false
+    // const selectMap = item.customizations.map((val) => (val.selected = false))
+    // selectMap
+    setCustomStyle(null)
+    render(!stateRender)
+
+    // making the itemId equal to that of the selected stack item id
+    idFromParent = stack.id
+
+    // if the id is the same, then set it back to false
+    if (idFromParent === stack.id) {
+      // if one of the children is selected, then set the selected value to true
+      stack.selected = !stack.selected
+      // setting the selected value its style
+      setCustomStyle({
+        style:
+          stack.id === itemId ? styles.nullButtonStyle : styles.optionStyle,
+      })
+    }
+    console.log(stack.selected)
+  }
+
   return (
     <>
       {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
@@ -67,26 +97,52 @@ export default function SingleOptionSelectionComponent(props) {
               >
                 <View style={styles.buttonOptionContainer}>
                   {item.customizations.map((stack, index) => {
-                    return (
-                      <TouchableOpacity
-                        key={index}
-                        style={
-                          stack.selected === false
-                            ? styles.nullButtonStyle
-                            : styles.optionStyle
-                        }
-                        onPress={() => {
-                          handlePress(stack, item.itemId, item)
-
-                        }}
-                      >
-                        <Text
-                          style={{ fontWeight: '500', textAlign: 'cent`er' }}
+                    if (item.type === 'single') {
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          style={
+                            stack.selected === false
+                              ? styles.nullButtonStyle
+                              : styles.optionStyle
+                          }
+                          onPress={() => {
+                            handlePress(stack, item.itemId, item)
+                          }}
                         >
-                          {stack.label}
-                        </Text>
-                      </TouchableOpacity>
-                    )
+                          <Text
+                            style={{ fontWeight: '500', textAlign: 'center' }}
+                          >
+                            {stack.label}
+                          </Text>
+                        </TouchableOpacity>
+                      )
+                    }
+                    if (item.type === 'multiple') {
+                      //console.log('selection', item.customizations)
+                      return (
+                        <>
+                          <Text>Multiple</Text>
+                          <TouchableOpacity
+                            key={index}
+                            style={
+                              stack.selected === false
+                                ? styles.nullButtonStyle
+                                : styles.optionStyle
+                            }
+                            onPress={() => {
+                              handleMultiplePress(stack, item.itemId, item)
+                            }}
+                          >
+                            <Text
+                              style={{ fontWeight: '500', textAlign: 'center' }}
+                            >
+                              {stack.label}
+                            </Text>
+                          </TouchableOpacity>
+                        </>
+                      )
+                    }
                   })}
                 </View>
               </ScrollView>
@@ -99,6 +155,7 @@ export default function SingleOptionSelectionComponent(props) {
 }
 
 const styles = StyleSheet.create({
+  
   optionMenuContainer: {},
   buttonOptionContainer: {
     flexDirection: 'row',

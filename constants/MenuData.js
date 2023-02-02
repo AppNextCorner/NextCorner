@@ -57,6 +57,8 @@ const singleOption = () => {
 
 export const restaurant = () => {
   const id = faker.datatype.number({ min: 1, max: 5, })
+  const hourTime = faker.datatype.number({ min: 1, max: 12});
+  const minuteTime = faker.datatype.number({min: 10, max: 59});
   const stars = faker.datatype.number(5)
   return {
     // RESTAURANT WORKED
@@ -65,7 +67,30 @@ export const restaurant = () => {
     image: {
       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
     },
+    // change these values to something more reasonable
+    location: {
+      longitude: 0,
+      latitude: 0,
+    },
+    // change later with accurate times and whether it is AM or PM
+    open: `${hourTime}:${minuteTime} am`,
+    close: `${hourTime}:${minuteTime} pm`,
     description: faker.lorem.paragraph(),
+    menuTypes: [
+      {
+        type: faker.music.genre()
+      },
+      {
+        type: 'Burger',
+        //faker.music.genre()
+      },
+      {
+        type: faker.music.genre()
+      },
+      {
+        type: faker.music.genre()
+      },
+    ],
     menu: [
       {
         name: faker.commerce.productName(),
@@ -172,10 +197,308 @@ export const restaurant = () => {
               },
             ],
           },
-          
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'multiple',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
         ],
         amountInCart: 1,
-        customizations: [],
+        // food type means that it could be sauce, burger, taco, etc
+        type: 'Burger',
+        //faker.music.genre(),
+        // featured on top of the details page and checks if it is featured with the boolean value
+        featured: faker.datatype.boolean(),
+      },
+      {
+        name: faker.commerce.productName(),
+        itemId: faker.datatype.number(),
+        timeToMake: faker.datatype.number({ min: 1, max: 3, precision: 1 }),
+        image: {
+          uri: `${faker.image.food()}?random=${Math.round(
+            Math.random() * 1000,
+          )}`,
+        },
+        price: faker.commerce.price(5, 15),
+        options: [
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'multiple',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+        ],
+        amountInCart: 1,
+        // food type means that it could be sauce, burger, taco, etc
+        type: 'Burger',
+        //faker.music.genre(),
+        // featured on top of the details page and checks if it is featured with the boolean value
+        featured: faker.datatype.boolean(),
+      },
+      {
+        name: faker.commerce.productName(),
+        itemId: faker.datatype.number(),
+        timeToMake: faker.datatype.number({ min: 1, max: 3, precision: 1 }),
+        image: {
+          uri: `${faker.image.food()}?random=${Math.round(
+            Math.random() * 1000,
+          )}`,
+        },
+        price: faker.commerce.price(5, 15),
+        options: [
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'single',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+          {
+            id: faker.datatype.number(),
+            name: faker.name.fullName(),
+            type: 'multiple',
+            itemId: 0,
+            customizations: [
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+              {
+                label: faker.lorem.word(),
+                id: faker.datatype.number(),
+                selected: false,
+              },
+            ],
+          },
+        ],
+        amountInCart: 1,
+        // food type means that it could be sauce, burger, taco, etc
+        type: 'Burger',
+        //faker.music.genre(),
+        // featured on top of the details page and checks if it is featured with the boolean value
+        featured: faker.datatype.boolean(),
       },
       {
         name: faker.commerce.productName(),
@@ -236,13 +559,14 @@ export const restaurant = () => {
           },
         ],
         amountInCart: 1,
-        customizations: [],
+        type: faker.music.genre(),
+        featured: faker.datatype.boolean(),
       },
     ],
     id: faker.datatype.uuid(),
     categoryId: id,
     rating: stars,
-    category: faker.commerce.department(),
+    //category: faker.commerce.department(),
   }
 }
 
@@ -480,7 +804,6 @@ export const DEFAULT_CATEGORY_DATA = [
   {
     text: 'sweet',
     foodType: require('../assets/foodImages/sweet.png'),
-    color: 'blue',
     key: 1,
   },
   {
