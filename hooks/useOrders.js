@@ -28,13 +28,13 @@ const UseOrders = () => {
     console.log('list: ', singleOrderList)
     const orderItemTimes = singleOrderList
       .map((order) => order.cartData)
-      .map((time) => time.timeToMake)
+      .map((time) => time.timeToMake * time.amountInCart)
 
     let sum = orderItemTimes.reduce(function (a, b) {
       return a + b
     })
 
-    console.log(sum)
+    console.log("sum", sum)
     console.log('orderItemTimes: ', orderItemTimes)
     const orderList = {
       singleOrderList: singleOrderList,

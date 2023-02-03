@@ -14,8 +14,8 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
           }
         : // for the default restaurant list on home screen to display it smaller then the category restaurant list
           {
-            height: 175,
-            width: 250,
+            height: 200,
+            width: 275,
           }
     return change
   }
@@ -50,10 +50,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   restaurantText: {
-    fontSize: 11,
+    fontSize: 15,
     fontWeight: 'bold',
     // fontFamily: 'monospace',
-    flex: 0,
+    flex: 1,
+    
   },
   foodImages: {
     width: '100%',
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   foodTexts: {
     flexDirection: 'row',
     marginLeft: 10,
-    marginTop: 5,
+    marginTop: '5%',
   },
   foodCategoryStyle: {
     flex: 1,

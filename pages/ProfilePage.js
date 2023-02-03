@@ -17,8 +17,8 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { StatusBar } from 'expo-status-bar'
-import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
-import VerticalPickUpList from '../components/VerticalPickUpList'
+import GoogleMapsMenuSection from '../components/InProgressOrderComponents/GoogleMapsMenuSection'
+import VerticalPickUpList from '../components/InProgressOrderComponents/VerticalPickUpList'
 import BottomSheetView from '@gorhom/bottom-sheet'
 import { useAppDispatch } from '../store/hook'
 

@@ -57,6 +57,7 @@ const singleOption = () => {
 
 export const restaurant = () => {
   const id = faker.datatype.number({ min: 1, max: 5, })
+  console.log('faker id', id)
   const hourTime = faker.datatype.number({ min: 1, max: 12});
   const minuteTime = faker.datatype.number({min: 10, max: 59});
   const stars = faker.datatype.number(5)
@@ -65,6 +66,9 @@ export const restaurant = () => {
     name: 
     faker.company.name(),
     image: {
+      uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
+    },
+    logo: {
       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
     },
     // change these values to something more reasonable
@@ -566,7 +570,7 @@ export const restaurant = () => {
     id: faker.datatype.uuid(),
     categoryId: id,
     rating: stars,
-    //category: faker.commerce.department(),
+    category: faker.commerce.department(),
   }
 }
 
@@ -604,6 +608,7 @@ export const restaurant = () => {
 const trendingTitle = () => {
   return {
     category: faker.commerce.department(),
+    
   }
 }
 export const trendingRestaurants = () => {
@@ -615,9 +620,12 @@ export const trendingRestaurants = () => {
   // compare every of all restaurants if they have a category title -> if it does, then push it onto the restaurantWithCategories array
   for (let j = 0; j < list.length; j++) {
     // check if the category property matches with the list of trending titles
+    console.log("all restaurants", ALL_RESTAURANTS)
+    console.log('trending', TRENDING_TITLE)
     const filterRestaurantCard = ALL_RESTAURANTS.filter(
       (allRestaurants) => allRestaurants.category === list[j].category,
     )
+    console.log('categoryId: ', + filterRestaurantCard)
     // after filtering all the items and comparing them with one of the trending titles list, then push all the items into the restaurantsWithCategory list
     restaurantsWithCategories.push({
       name: list[j].category,

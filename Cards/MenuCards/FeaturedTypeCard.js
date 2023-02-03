@@ -8,7 +8,7 @@ const FeaturedTypeCard = (props) => {
   const { menuItem, businessName } = props
   console.log("businessName: " + businessName)
   const navigation = useNavigation()
-  const nameSplice = menuItem.name.substring(0, 15) + '...'
+  const nameSplice = menuItem.name.substring(0, 20) + '...'
   console.log('menuItem', menuItem)
   const goToFoodDetails = () => {
     setOrder(false);
@@ -20,16 +20,13 @@ const FeaturedTypeCard = (props) => {
         <View>
           <Image
             source={menuItem.image}
-            style={{
-              width: 150,
-              height: 150,
-            }}
+            style={styles.image}
           />
         </View>
 
         <View style={styles.itemDescription}>
-          <Text>{nameSplice}</Text>
-          <Text>{menuItem.price}</Text>
+          <Text style={styles.menuItemName}>{menuItem.name}</Text>
+          <Text style={styles.menuItemPrice}>${menuItem.price}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -39,13 +36,29 @@ const FeaturedTypeCard = (props) => {
 export default FeaturedTypeCard
 
 const styles = StyleSheet.create({
+  menuItemPrice: {
+    marginTop: 5,
+  },
+  menuItemName: {
+    fontWeight: 'bold',
+  },
+  // image styles for card
+  image: {
+    width: '100%',
+    height: 150,
+    borderRadius: 5,
+  },
+  // description of the card styles
   itemDescription: {
     flex: 1,
-    width: '95%',
-    //marginTop: 20
+    width: '100%',
+    paddingTop: 10,
+   
   },
   container: {
     marginLeft: 10,
     flex: 1,
+    width: 150,
+    
   },
 })

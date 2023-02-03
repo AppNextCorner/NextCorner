@@ -28,16 +28,18 @@ const InProgressOrderCard = ({
       console.log('New id: ', orderItemId)
       // const orderTime = orderTimeData.filter((item) => item.id === orderItemId)
 
-      console.log('orderTime: ' + orderTimeData)
+      console.log('orderTime: ' + orderTimeData.timer)
       // const orderTimeCreated = orderTimeData.map((val) => val.createdAt)
       // const orderTimeToMake = orderTimeData.map((val) => val.timer + 1)
+      const timer = orderTimeData.timer * 60;
       const returned_endate = moment(
         new Date(orderTimeData.createdAt),
         'YYYY-M-D H:mm',
       )
         .tz('America/Los_Angeles')
-        .add(orderTimeData.timer, 'minutes')
-        .format('YYYY-MM-DD HH:mm')
+        // only adds minutes from the date and does not consider seconds
+        .add(timer, 'seconds')
+        .format('YYYY-MM-DD HH:mm:ss')
 
       const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm')
 

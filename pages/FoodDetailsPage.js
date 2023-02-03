@@ -16,8 +16,7 @@ import { useRoute } from '@react-navigation/native'
 import { Feather, AntDesign } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
-import MultipleOptionSelectedList from '../components/MultipleOptionSelectedList'
-import SingleOptionSelectionComponent from '../components/SingleOptionSelectionComponent'
+import OptionSelectionComponent from '../components/MenuComponents.js/OptionSelectionComponent'
 import useFoodItemData from '../data/useFoodItemData'
 import { useAppDispatch, useAppSelector } from '../store/hook'
 import addToCart, {
@@ -27,7 +26,7 @@ import addToCart, {
   increase,
   setBusinessName,
 } from '../store/slices/addToCart'
-import GoogleMapsMenuSection from '../components/GoogleMapsMenuSection'
+import GoogleMapsMenuSection from '../components/InProgressOrderComponents/GoogleMapsMenuSection'
 import useCart from '../hooks/useCart'
 import { auth } from '../App'
 import useOrderButton from '../hooks/useOrderButton'
@@ -44,10 +43,15 @@ export default function FoodDetailsPage() {
   const route = useRoute()
   const navigation = useNavigation()
   const { business, foodItem } = route.params
+  const { updateCartItemData } = useCart()
   console.log('business route : ' + business)
 
   const businessName = useAppSelector(getBusinessName)
   const getCartItems = useAppSelector(getCart)
+
+  //const grabCartData = getCartItems.map((item) => item.cartData)
+
+ // console.log(grabCartData)
   // "Object.assign"
 
   // "JSON"
@@ -55,6 +59,8 @@ export default function FoodDetailsPage() {
     Object.assign({}, { ...foodItem })
   }, [render])
   const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) }
+  // for iincrememnt and decrement
+  const getId = (parse || {}).cartData
   const name = (parse || {}).cartData
   // IT ONLY CHANGES WHEN IT IS REFRESHED
   console.log(
@@ -64,6 +70,7 @@ export default function FoodDetailsPage() {
       .flat()
       .map((c) => c.selected),
   )
+  console.log("name", name)
 
   //.map(options => options.options).map(v => v.customizations).map(l => l.selected))
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
@@ -117,9 +124,8 @@ export default function FoodDetailsPage() {
 
       <View style={styles.container}>
         {/* Showing off the list options for the user - passing data from route.params to our component list */}
-        {/* <MultipleOptionSelectedList /> */}
         <View style={{ flex: 1 }}>
-          <SingleOptionSelectionComponent
+          <OptionSelectionComponent
             header={Header}
             optionData={foodItem.name}
             data={foodItem.options}
@@ -127,7 +133,52 @@ export default function FoodDetailsPage() {
             render={setRender}
             stateRender={render}
           />
-          {/* <MultipleOptionSelectedList /> */}
+        </View>
+        {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
+        <View style={styles.amountContainer}>
+          <AntDesign
+            style={styles.icon}
+            name="minuscircle"
+            size={24}
+            color="#78DBFF"
+            onPress={() => {
+              // console.log('dispatch')
+              const updatedCartItem = {
+                ...getId,
+                amountInCart:(getId.amountInCart -= 1),
+              }
+              console.log('Item id: ', getId.id)
+              //console.log(updatedCartItem)
+              updateCartItemData({
+                updatedCartItem: updatedCartItem,
+                id: getId.id,
+              })
+              // dispatch(
+              //   updateCartItem({
+
+              //   }),
+              // )
+            }}
+          />
+          <Text>{getId.amountInCart}</Text>
+          <AntDesign
+            style={styles.icon}
+            getId="pluscircle"
+            size={24}
+            color="#78DBFF"
+            onPress={() => {
+              const updatedCartItem = {
+                ...getId,
+                amountInCart: (getId.amountInCart += 1),
+              }
+              console.log('Item id: ', getId.id)
+              //console.log(updatedCartItem)
+              updateCartItemData({
+                updatedCartItem: updatedCartItem,
+                id: getId.id,
+              })
+            }}
+          />
         </View>
         {/* <View style={styles.amountContainer}>
                   <AntDesign

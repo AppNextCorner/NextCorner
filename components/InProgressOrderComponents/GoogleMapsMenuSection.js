@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import MapStyle from '../constants/MapStyle.json'
+import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
 

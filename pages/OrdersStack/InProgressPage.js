@@ -13,10 +13,10 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { StatusBar } from 'expo-status-bar'
-import GoogleMapsMenuSection from '../../components/GoogleMapsMenuSection'
-import VerticalPickUpList from '../../components/VerticalPickUpList'
+import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
+import VerticalPickUpList from '../../components/InProgressOrderComponents/VerticalPickUpList'
 import BottomSheetView from '@gorhom/bottom-sheet'
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign, Feather } from '@expo/vector-icons'
 
 const InProgressPage = () => {
   const navigation = useNavigation()
@@ -48,7 +48,7 @@ const InProgressPage = () => {
             onPress={() => returnBack()}
             style={styles.goBackButton}
           >
-            <AntDesign name="leftcircle" size={35} color="black" />
+             <Feather name="arrow-left-circle" size={40} color="black" />
           </TouchableOpacity>
           <View style={styles.headerContainer}>
             <Text style={styles.pageHeader}>Your Order</Text>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   // bottom sheet style
   bottomSheetContainer: {
     overflow: 'hidden',
-    backgroundColor: '#424242',
+    backgroundColor: '#78DBFF',
     borderRadius: 20,
 
   },

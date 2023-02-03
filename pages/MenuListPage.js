@@ -49,7 +49,6 @@ export default function MenuListPage() {
   // }
 
   // filter through all items in the cart and see if they match
-  
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
@@ -74,6 +73,10 @@ export default function MenuListPage() {
               </Pressable>
 
               <Image style={styles.image} source={restaurant.image} />
+
+              {/* Business Logo */}
+              <Image style={styles.logoImage} source={restaurant.logo} />
+
               <Text style={styles.title}>{restaurant.name}</Text>
               <View style={styles.description}>
                 <Text style={styles.textDescription}>
@@ -82,14 +85,16 @@ export default function MenuListPage() {
               </View>
               <View style={styles.margin}></View>
               {/* Section for small google maps preview */}
-              
-              <FeaturedList menuData={menu} businessName={restaurant.name}/>
+
+              <FeaturedList menuData={menu} businessName={restaurant.name} />
               {/* Section for Featured Items*/}
 
               {/* ALL menu items located here */}
               <View style={styles.marginSet}>
                 <Text style={styles.titleOfMenu}>Full Menu</Text>
-                <Text style={styles.timeOfMenu}>{restaurant.open} - {restaurant.close}</Text>
+                <Text style={styles.timeOfMenu}>
+                  {restaurant.open} - {restaurant.close}
+                </Text>
               </View>
             </>
           }
@@ -102,19 +107,36 @@ export default function MenuListPage() {
             return (
               <>
                 <Text style={styles.typeText}>{item.type}</Text>
-                <MenuTypeList type={item.type} menuItem={menu} businessName={restaurant.name}/>
+                <MenuTypeList
+                  type={item.type}
+                  menuItem={menu}
+                  businessName={restaurant.name}
+                />
                 <View style={styles.margin}></View>
               </>
             )
           }}
         />
-        {isClicked === true ? <OrderButton /> : null}
+        <View style={styles.cartButton}>
+          {isClicked === true ? <OrderButton /> : null}
+        </View>
       </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  logoImage: {
+    // similar to the go back button, we can put negative margins to this child element as the parent image element has overflow as hidden
+    marginTop: '-10%',
+    marginLeft: '5%',
+    borderRadius: 50,
+    width: 75,
+    height: 75,
+  },
+  cartButton: {
+    marginBottom: '10%',
+  },
   margin: {
     backgroundColor: '#f2f3f5',
     //flex: 1,
@@ -124,12 +146,12 @@ const styles = StyleSheet.create({
   typeText: {
     margin: '3%',
     marginTop: '5%',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
   },
   // menu header styles for business time
   titleOfMenu: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     // fontFamily: 'monospace',
     marginLeft: '3%',
@@ -144,7 +166,9 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
   },
   marginSet: {
-    marginBottom: 25,
+    marginVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#d6d6d6',
   },
   restaurantCard: {
     flex: 1,
@@ -163,6 +187,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 200,
+    overflow: 'hidden',
     resizeMode: 'cover',
     marginTop: -105,
   },
@@ -176,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 30,
+    marginTop: '2%',
     marginLeft: 10,
     flex: 0,
   },

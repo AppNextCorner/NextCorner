@@ -15,6 +15,7 @@ export default function MenuItemCard({ foodItem, businessName}) {
     setOrder(false);
     navigation.navigate('FoodDetails',  {business: businessName, foodItem: foodItem})
   }
+ 
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
+    color: '#97989F'
 
     //fontFamily: 'monospace',
   },
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
   priceText: {
     flex: 1,
     alignContent: 'flex-end',
-    color: '#97989F',
+    color: 'grey',
     marginTop: 0,
   },
   foodTexts: {
