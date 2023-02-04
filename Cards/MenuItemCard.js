@@ -1,30 +1,40 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
-import useOrderButton from '../hooks/useOrderButton';
+import useOrderButton from '../hooks/useOrderButton'
+import { useEffect } from 'react'
 
-export default function MenuItemCard({ foodItem, businessName}) {
-  const navigation = useNavigation();
-  const { setOrder, order} = useOrderButton();
+export default function MenuItemCard({ foodItem, businessName, location, logo }) {
+  const navigation = useNavigation()
+  const { setOrder, order } = useOrderButton()
 
   let text =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'
-
+  useEffect(() => {
+    console.log('location in menu item:', location)
+    location
+  })
   let limitTextAmount = text.slice(0, 75) + '...'
-  const goToOrderPage = () => {
-    setOrder(false);
-    navigation.navigate('FoodDetails',  {business: businessName, foodItem: foodItem})
+  const goToOrderPage = (newLocation) => {
+    setOrder(false)
+    console.log('new location: ' + newLocation)
+    navigation.navigate('FoodDetails', {
+      business: businessName,
+      foodItem: foodItem,
+      location: location,
+      logo: logo
+    })
   }
- 
+
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
-    // passing data through the FoodDetails page to access the selection data from the menu list
-      onPress={() => goToOrderPage()}
+      // passing data through the FoodDetails page to access the selection data from the menu list
+      onPress={() => goToOrderPage(location)}
       style={styles.foodCategoryStyle}
     >
       <View style={styles.card}>
-      <View style={styles.imageBox}>
+        <View style={styles.imageBox}>
           <Image style={styles.foodImages} source={foodItem.image} />
         </View>
         <View style={styles.foodTexts}>
@@ -33,7 +43,6 @@ export default function MenuItemCard({ foodItem, businessName}) {
           <Text style={styles.priceText}>${foodItem.price}</Text>
         </View>
         {/* Store image with button  */}
-        
       </View>
     </TouchableOpacity>
   )
@@ -43,7 +52,7 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
-    color: '#97989F'
+    color: '#97989F',
 
     //fontFamily: 'monospace',
   },

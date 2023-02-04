@@ -5,8 +5,8 @@ import { useRoute } from '@react-navigation/native'
 
 const MenuTypeList = (props) => {
   const route = useRoute()
-  const { menuItem, type, businessName } = props
-
+  const { menuItem, type, businessName, location, logo } = props
+  console.log('props location', location)
   const getItemsThatMatchType = menuItem.filter((item) => item.type === type)
   console.log(menuItem)
   return (
@@ -16,7 +16,7 @@ const MenuTypeList = (props) => {
         renderItem={({ item }) => {
           return (
             <>
-              <MenuItemCard foodItem={item} businessName={businessName} />
+              <MenuItemCard foodItem={item} businessName={businessName} location={location} logo={logo}/>
             </>
           )
         }}

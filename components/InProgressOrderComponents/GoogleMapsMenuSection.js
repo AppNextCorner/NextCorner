@@ -1,19 +1,48 @@
-import React, { useEffect, useState } from 'react'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import React, { useEffect, useState, useRef } from 'react'
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native'
 import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
+import { googleDirectionsAPIKey } from '../../constants/GoogleMapsInfo'
 
-export default function GoogleMapsMenuSection() {
+
+export default function GoogleMapsMenuSection(props) {
+  const { location, logo, setDuration, setDistance } = props
   // if the google maps api fails or the user does not have permission, then display this location
   const [mapRegion, setMapRegion] = useState({
-    latitude: 30.78825,
-    longitude: -1.4324,
+    latitude: parseFloat(location[0]),
+    longitude: parseFloat(location[1]),
     latitudeData: 0.0922,
     longitudeData: 0.0421,
   })
+  const mapRef = useRef()
+
+  const { width, height } = Dimensions.get('window')
+  const traceRouteOnReady = (result) => {
+    // args.distance
+    // args.duration
+
+    setDistance(result.distance)
+    setDuration(result.duration)
+    mapRef.current?.fitToCoordinates(result.coordinates, {
+      edgePadding: {
+        right: (width / 20),
+        bottom: (height / 20),
+        left: (width / 20),
+        top: (height / 20),
+      }
+    }
+    )
+  }
 
   // use an async function to immediately get the user's approval to use maps rather than having to wait for other functions
 
@@ -31,7 +60,7 @@ export default function GoogleMapsMenuSection() {
       enableHighAccuracy: true,
     })
     console.log(location)
-    
+
     setMapRegion({
       // Get location from the object data we received from the position async and set the previous latitude and longitude of the previous state mapRegion, to the current location
       latitude: location.coords.latitude,
@@ -42,17 +71,32 @@ export default function GoogleMapsMenuSection() {
     })
   }
   console.log(mapRegion)
-const destination = {latitude: 37.771707, longitude: -122.4053769}
+  const destination = {
+    latitude: parseFloat(location[0]),
+    longitude: parseFloat(location[1]),
+  }
+  console.log(
+    'desination: ' + destination.latitude + ' ' + destination.longitude,
+  )
   // after the page is loaded, call the async function to update the location of the user
   useEffect(() => {
     userLocation()
   }, [])
-  
-
+  console.log('logo', logo[0])
+  function CustomMarker() {
+    return (
+      <View style={styles.marker}>
+        <Text>Hello</Text>
+        <Image style={{ width: 50, height: 50 }} source={logo[0]} />
+      </View>
+    )
+  }
   return (
     <View style={styles.container}>
-      
       <MapView
+      ref={mapRef}
+        minZoomLevel={15} // default => 0
+        maxZoomLevel={18} // default => 20
         // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
         customMapStyle={MapStyle}
         // after the state of mapRegion is updated from the async function of userLocation() -> display the region according to the location
@@ -63,14 +107,22 @@ const destination = {latitude: 37.771707, longitude: -122.4053769}
         showsUserLocation={true}
         style={{ flex: 1 }}
       >
-        {/* <MapViewDirections
-            origin={mapRegion}
-            destination={destination}
-            apikey={GOOGLE_API_KEY}
-            strokeColor="#6644ff"
-            strokeWidth={4}
-            //onReady={traceRouteOnReady}
-          /> */}
+         <Marker coordinate={destination}>
+            {/* CustomMarker has to be a child of Marker*/}
+            <CustomMarker />
+          </Marker>
+        <MapViewDirections
+          origin={mapRegion}
+          destination={destination}
+          apikey={googleDirectionsAPIKey}
+          strokeColor="#78DBFF"
+          strokeWidth={4}
+          onReady={(result) => {
+
+            traceRouteOnReady(result)
+          }}
+          //onReady={(result) => traceRouteOnReady(result)}
+        />
       </MapView>
 
       {/* <View style={styles.searchContainer}>
@@ -93,7 +145,6 @@ const destination = {latitude: 37.771707, longitude: -122.4053769}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
   },
   map: {
     width: '100%',
@@ -103,12 +154,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '90%',
     backgroundColor: '#fff',
-    
   },
-   overlay: {
+  overlay: {
     position: 'absolute',
     bottom: 50,
     backgroundColor: 'red',
-    zIndex: 2
+    zIndex: 2,
   },
 })

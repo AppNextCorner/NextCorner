@@ -42,10 +42,10 @@ export default function FoodDetailsPage() {
   const dispatch = useAppDispatch()
   const route = useRoute()
   const navigation = useNavigation()
-  const { business, foodItem } = route.params
+  const { business, foodItem, location, logo } = route.params
   const { updateCartItemData } = useCart()
   console.log('business route : ' + business)
-
+  console.log('here is location:', location)
   const businessName = useAppSelector(getBusinessName)
   const getCartItems = useAppSelector(getCart)
 
@@ -87,7 +87,7 @@ export default function FoodDetailsPage() {
     console.log('add item: ', addItem)
     if (businessName === '' || business === businessName) {
       try {
-        await addToCart(addItem, userId, business)
+        await addToCart(addItem, userId, business, location, logo)
         console.log('business is empty')
         dispatch(setBusinessName(business))
         navigation.goBack()

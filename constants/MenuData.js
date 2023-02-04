@@ -72,10 +72,8 @@ export const restaurant = () => {
       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
     },
     // change these values to something more reasonable
-    location: {
-      longitude: 0,
-      latitude: 0,
-    },
+    location: 
+      faker.address.nearbyGPSCoordinate([34.050446895827484, -118.28171222546905], 1, false),
     // change later with accurate times and whether it is AM or PM
     open: `${hourTime}:${minuteTime} am`,
     close: `${hourTime}:${minuteTime} pm`,

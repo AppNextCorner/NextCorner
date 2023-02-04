@@ -111,6 +111,8 @@ export default function MenuListPage() {
                   type={item.type}
                   menuItem={menu}
                   businessName={restaurant.name}
+                  location={restaurant.location}
+                  logo={restaurant.logo}
                 />
                 <View style={styles.margin}></View>
               </>

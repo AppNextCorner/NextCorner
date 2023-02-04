@@ -47,11 +47,14 @@ export default UseCart = () => {
     }
   }
 
-  const addToCart = async (item, userId, businessOrderedFrom) => {
+  const addToCart = async (item, userId, businessOrderedFrom, location, logo) => {
+    console.log("adding to cart", location)
     const cartItem = {
       cartData: item,
       businessOrderedFrom,
       userId,
+      location: location,
+      logo: logo
     }
     try {
       await dispatch(addNewCartItem(cartItem))

@@ -6,7 +6,7 @@ import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
 import React from 'react'
 import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
 
-export default function VerticalPickUpList({ orderItemDetails }) {
+export default function VerticalPickUpList({ orderItemDetails, distance, duration }) {
   // grabbing the data of the trendingFood from the data folder
 
   // mapping through the data
@@ -22,8 +22,9 @@ export default function VerticalPickUpList({ orderItemDetails }) {
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
     <>
       <BottomSheetView style={styles.statusContainer}>
-        <Text style={styles.statusText}>Distance: </Text>
-        <Text style={styles.statusText}>Time To Walk:</Text>
+        {/* Converting distance which is default in km from google maps to miles */}
+        <Text style={styles.statusText}>Distance: {(distance * 0.62137).toString().slice(0, 5)} miles</Text>
+        <Text style={styles.statusText}>Time To Walk: {duration.toString().slice(0, 3)} min</Text>
       </BottomSheetView>
       <BottomSheetFlatList
         ListHeaderComponent={
