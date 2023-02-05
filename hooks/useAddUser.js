@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { useAppDispatch } from '../store/hook';
-
 const useAddUser = () => {
     const dispatch = useAppDispatch();
 
@@ -17,5 +16,5 @@ const useAddUser = () => {
         makeUser
     }
 }
-
+// exporting
 export default useAddUser
