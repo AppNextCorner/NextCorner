@@ -34,7 +34,7 @@ const InProgressOrderCard = ({
       const timer = orderTimeData.timer * 60;
       const returned_endate = moment(
         new Date(orderTimeData.createdAt),
-        'YYYY-M-D H:mm',
+        'YYYY-M-D H:mm:ss',
       )
         .tz('America/Los_Angeles')
         // only adds minutes from the date and does not consider seconds

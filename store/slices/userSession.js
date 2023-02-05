@@ -38,6 +38,7 @@ export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   }
 })
 
+
 // setting the default state for the app
 const initialState = {
   loggedIn: true, // user is not logged in by default

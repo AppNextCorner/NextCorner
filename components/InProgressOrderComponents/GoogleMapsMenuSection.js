@@ -14,6 +14,8 @@ import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
 import { googleDirectionsAPIKey } from '../../constants/GoogleMapsInfo'
 
+// icons
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function GoogleMapsMenuSection(props) {
   const { location, logo, setDuration, setDistance } = props
@@ -35,13 +37,12 @@ export default function GoogleMapsMenuSection(props) {
     setDuration(result.duration)
     mapRef.current?.fitToCoordinates(result.coordinates, {
       edgePadding: {
-        right: (width / 20),
-        bottom: (height / 20),
-        left: (width / 20),
-        top: (height / 20),
-      }
-    }
-    )
+        right: 70,
+        bottom: 70,
+        left: 70,
+        top: 70,
+      },
+    })
   }
 
   // use an async function to immediately get the user's approval to use maps rather than having to wait for other functions
@@ -86,15 +87,26 @@ export default function GoogleMapsMenuSection(props) {
   function CustomMarker() {
     return (
       <View style={styles.marker}>
-        <Text>Hello</Text>
-        <Image style={{ width: 50, height: 50 }} source={logo[0]} />
+        <MaterialCommunityIcons
+          style={{ zIndex: 5 }}
+          name="store"
+          size={24}
+          color="white"
+        />
+      </View>
+    )
+  }
+  const CustomUserMarker = () => {
+    return (
+      <View style={styles.marker}>
+        <Entypo name="home" size={24} color="white" />
       </View>
     )
   }
   return (
     <View style={styles.container}>
       <MapView
-      ref={mapRef}
+        ref={mapRef}
         minZoomLevel={15} // default => 0
         maxZoomLevel={18} // default => 20
         // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
@@ -104,13 +116,17 @@ export default function GoogleMapsMenuSection(props) {
         // provider helps IOS to be able to use google maps
         provider={PROVIDER_GOOGLE}
         // show a blue icon of the user on the map
-        showsUserLocation={true}
+        //showsUserLocation={true}
         style={{ flex: 1 }}
       >
-         <Marker coordinate={destination}>
-            {/* CustomMarker has to be a child of Marker*/}
-            <CustomMarker />
-          </Marker>
+        <Marker coordinate={destination}>
+          {/* CustomMarker has to be a child of Marker*/}
+          <CustomMarker />
+        </Marker>
+        <Marker coordinate={mapRegion}>
+          {/* CustomMarker has to be a child of Marker*/}
+          <CustomUserMarker />
+        </Marker>
         <MapViewDirections
           origin={mapRegion}
           destination={destination}
@@ -118,7 +134,6 @@ export default function GoogleMapsMenuSection(props) {
           strokeColor="#78DBFF"
           strokeWidth={4}
           onReady={(result) => {
-
             traceRouteOnReady(result)
           }}
           //onReady={(result) => traceRouteOnReady(result)}
@@ -143,8 +158,25 @@ export default function GoogleMapsMenuSection(props) {
 }
 
 const styles = StyleSheet.create({
+  marker: {
+    backgroundColor: '#78DBFF',
+    padding: 8,
+    borderRadius: 20,
+  },
+  // map logo icon style
+  logoOnMap: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  userOnMap: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  // container for map
   container: {
-    flex: 1,
+    flex: 0.78,
   },
   map: {
     width: '100%',

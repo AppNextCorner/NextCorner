@@ -16,20 +16,19 @@ import { useRoute } from '@react-navigation/native'
 import { Feather, AntDesign } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
-import OptionSelectionComponent from '../components/MenuComponents.js/OptionSelectionComponent'
-import useFoodItemData from '../data/useFoodItemData'
-import { useAppDispatch, useAppSelector } from '../store/hook'
+import OptionSelectionComponent from '../../components/MenuComponents/OptionSelectionComponent'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
 import addToCart, {
   decrease,
   getBusinessName,
   getCart,
   increase,
   setBusinessName,
-} from '../store/slices/addToCart'
-import GoogleMapsMenuSection from '../components/InProgressOrderComponents/GoogleMapsMenuSection'
-import useCart from '../hooks/useCart'
-import { auth } from '../App'
-import useOrderButton from '../hooks/useOrderButton'
+} from '../../store/slices/addToCart'
+import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
+import useCart from '../../hooks/useCart'
+import { auth } from '../../App'
+import useOrderButton from '../../hooks/useOrderButton'
 import { useState } from 'react'
 
 export default function FoodDetailsPage() {

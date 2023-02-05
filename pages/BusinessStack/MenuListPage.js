@@ -16,12 +16,11 @@ import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
-import MenuItemCard from '../Cards/MenuItemCard'
-import OrderButton from '../components/OrderButton'
-import { useAppSelector } from '../store/hook'
-import { getButton } from '../store/slices/addToCart'
-import MenuTypeList from '../Cards/MenuCards/MenuTypeList'
-import FeaturedList from '../components/MenuComponents.js/FeaturedList'
+import OrderButton from '../../components/OrderButton'
+import { useAppSelector } from '../../store/hook'
+import { getButton } from '../../store/slices/addToCart'
+import MenuTypeList from '../../Cards/MenuCards/MenuTypeList'
+import FeaturedList from '../../components/MenuComponents/FeaturedList'
 
 export default function MenuListPage() {
   const route = useRoute()
@@ -86,7 +85,9 @@ export default function MenuListPage() {
               <View style={styles.margin}></View>
               {/* Section for small google maps preview */}
 
-              <FeaturedList menuData={menu} businessName={restaurant.name} />
+              <FeaturedList menuData={menu}  businessName={restaurant.name}
+                  location={restaurant.location}
+                  logo={restaurant.logo} />
               {/* Section for Featured Items*/}
 
               {/* ALL menu items located here */}

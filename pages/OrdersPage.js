@@ -55,6 +55,10 @@ export default function OrdersPage() {
   const filterInProgressData = orderData.filter(
     (item) => item.orderStatus === 'In Progress',
   )
+  useEffect(() => {
+    filterInProgressData
+    filterCompletedData
+  }, [orderData])
 
   let text = 'Lorem ipsum dol'
 
@@ -124,11 +128,12 @@ export default function OrdersPage() {
               </TouchableOpacity>
             </View>
             <FlatList
-              ListHeaderComponent={
+              ListFooterComponent={
                 <>
                   <Text style={styles.completedPageHeader}>Completed</Text>
                 </>
               }
+              inverted={true}
               showsVerticalScrollIndicator={false}
               data={filterCompletedData}
               style={styles.completedPageList}

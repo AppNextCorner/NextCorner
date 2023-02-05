@@ -5,9 +5,9 @@
 import { StyleSheet, Text } from 'react-native'
 import * as React from 'react'
 import HomePage from '../pages/HomePage'
-import FoodDetailsPage from '../pages/FoodDetailsPage'
+import FoodDetailsPage from '../pages/BusinessStack/FoodDetailsPage'
 import OrdersPage from '../pages/OrdersPage'
-import MenuListPage from '../pages/MenuListPage'
+import MenuListPage from '../pages/BusinessStack/MenuListPage'
 import PickUpPage from '../pages/ProfilePage'
 import SignInPage from '../pages/auth/SignInPage'
 import CartPage from '../pages/CartPage'
@@ -25,10 +25,11 @@ import { Octicons, Ionicons } from '@expo/vector-icons'
 import { useAppDispatch, useAppSelector } from '../store/hook'
 import { getIsLoggedIn } from '../store/slices/userSession'
 import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
-import OrderPlacedPage from '../pages/OrderPlacedPage'
+import OrderPlacedPage from '../pages/PaymentStack/OrderPlacedPage'
 import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 import useGetUserData from '../hooks/useGetUserData'
 import InProgressPage from '../pages/OrdersStack/InProgressPage'
+import SignUpPage from '../pages/auth/SignUpPage'
 
 //Screen names to easily find in the route
 const homeName = 'HomePage'
@@ -84,12 +85,17 @@ export default function Route() {
               component={SignInPage}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="Register"
+              component={SignUpPage}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       )
     }
   } else if (isDone === false) {
-    <Text>Grabbing user</Text>
+    <Text>fetching user...</Text>
   }
   
 }

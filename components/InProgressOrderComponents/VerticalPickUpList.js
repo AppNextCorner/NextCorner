@@ -56,7 +56,7 @@ export default function VerticalPickUpList({ orderItemDetails, distance, duratio
                     <Text style={styles.descriptionOfItem}>
                       {limitTextAmount}
                     </Text>
-                    <Text style={styles.priceText}>${item.price}.00</Text>
+                    <Text style={styles.priceText}>${item.price}</Text>
                   </View>
                 </View>
               </TouchableOpacity>

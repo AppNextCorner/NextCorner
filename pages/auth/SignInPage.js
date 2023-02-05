@@ -20,6 +20,7 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth'
 import { auth } from '../../App'
+import { useNavigation } from '@react-navigation/native'
 
 export default function SignInPage() {
   
@@ -29,6 +30,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState('')
 
   const dispatch = useAppDispatch()
+  const navigation = useNavigation();
   /* 
   Function that handles an existing account 
 */
@@ -53,30 +55,16 @@ export default function SignInPage() {
         Alert.alert(err.message)
       })
   }
-  // test function to enter the page without an account
-  const signIn = () => {
-    if (!isLoading) {
-      setIsLoading(true)
-
-      setIsLoading(false)
-
-      dispatch(
-        setUser({
-          name: 'HenryBenry',
-          age: 16,
-        }),
-      )
-    }
+  const goToSignUp = () => {
+    navigation.navigate('Register');
   }
 
   // loading the sign in page
   return (
     <View style={styles.signInContainer}>
       <View style={styles.headerTag}>
-        <Text style={styles.mainHeader}>Create an account</Text>
-        <Text>
-          Welcome friend, entr your details so lets get started in ordering food
-        </Text>
+        <Text style={styles.mainHeader}>Login</Text>
+        
       </View>
       {/* Email and Password input - still needs to add confirm password feature */}
       <View style={styles.inputContainer}>
@@ -103,12 +91,11 @@ export default function SignInPage() {
       <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
         <Text style={styles.signInText}>Login</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={signIn} style={styles.signInButton}>
-        <Text style={styles.signInText}>
-          {isLoading ? 'loading' : 'Test without user'}
-        </Text>
+      <TouchableOpacity onPress={goToSignUp}>
+        <Text>Create an Account</Text>
       </TouchableOpacity>
+
+     
 
       {/* <View>
         <TouchableOpacity

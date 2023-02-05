@@ -5,14 +5,20 @@ import useOrderButton from '../../hooks/useOrderButton';
 
 const FeaturedTypeCard = (props) => {
     const { setOrder, order} = useOrderButton();
-  const { menuItem, businessName } = props
+  const { menuItem, businessName, location, logo  } = props
   console.log("businessName: " + businessName)
   const navigation = useNavigation()
   const nameSplice = menuItem.name.substring(0, 20) + '...'
   console.log('menuItem', menuItem)
+  console.log('location: ' + location)
   const goToFoodDetails = () => {
     setOrder(false);
-    navigation.navigate('FoodDetails',  {business: businessName, foodItem: menuItem})
+    navigation.navigate('FoodDetails',  {
+      business: businessName,
+      foodItem: menuItem,
+      location: location,
+      logo: logo
+    })
   }
   return (
     <TouchableOpacity onPress={() => goToFoodDetails()}>

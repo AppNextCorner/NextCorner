@@ -48,7 +48,7 @@ const singleOption = () => {
 //     image: {
 //       uri: `${faker.image.food()}?random=${Math.round(Math.random() * 1000)}`,
 //     },
-//     price: faker.commerce.price(5, 15),
+//      price: faker.datatype.float({ min: 5, max: 15, precision: 0.01 }),,
 //     options: OPTIONS,
 //     amountInCart: 0,
 //     customizations: [],
@@ -103,7 +103,7 @@ export const restaurant = () => {
             Math.random() * 1000,
           )}`,
         },
-        price: faker.commerce.price(5, 15),
+        price: faker.datatype.float({ min: 5, max: 15, precision: 0.01 }),
         options: [
           {
             id: faker.datatype.number(),
@@ -239,7 +239,7 @@ export const restaurant = () => {
             Math.random() * 1000,
           )}`,
         },
-        price: faker.commerce.price(5, 15),
+         price: faker.datatype.float({ min: 5, max: 15, precision: 0.01 }),
         options: [
           {
             id: faker.datatype.number(),
@@ -375,7 +375,7 @@ export const restaurant = () => {
             Math.random() * 1000,
           )}`,
         },
-        price: faker.commerce.price(5, 15),
+         price: faker.datatype.float({ min: 5, max: 15, precision: 0.01 }),
         options: [
           {
             id: faker.datatype.number(),
@@ -511,7 +511,7 @@ export const restaurant = () => {
             Math.random() * 1000,
           )}`,
         },
-        price:faker.commerce.price(5, 15),
+        price: faker.datatype.float({ min: 5, max: 15, precision: 0.01 }),
         options: [
           {
             id: faker.datatype.number(),
