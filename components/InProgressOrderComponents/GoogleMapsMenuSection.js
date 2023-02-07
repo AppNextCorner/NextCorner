@@ -18,7 +18,14 @@ import { googleDirectionsAPIKey } from '../../constants/GoogleMapsInfo'
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function GoogleMapsMenuSection(props) {
-  const { location, logo, setDuration, setDistance } = props
+  const {
+    location,
+    logo,
+    setDuration,
+    setDistance,
+    scrollEnabled,
+    pointerEvents
+  } = props
   // if the google maps api fails or the user does not have permission, then display this location
   const [mapRegion, setMapRegion] = useState({
     latitude: parseFloat(location[0]),
@@ -106,6 +113,10 @@ export default function GoogleMapsMenuSection(props) {
   return (
     <View style={styles.container}>
       <MapView
+      
+      pointerEvents={pointerEvents}
+
+        scrollEnabled={scrollEnabled}
         ref={mapRef}
         minZoomLevel={15} // default => 0
         maxZoomLevel={18} // default => 20
@@ -128,6 +139,7 @@ export default function GoogleMapsMenuSection(props) {
           <CustomUserMarker />
         </Marker>
         <MapViewDirections
+        
           origin={mapRegion}
           destination={destination}
           apikey={googleDirectionsAPIKey}

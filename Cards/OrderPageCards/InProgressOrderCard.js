@@ -11,6 +11,7 @@ import {
 import moment from 'moment'
 import 'moment-timezone'
 import UseOrders from '../../hooks/useOrders'
+import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
 
 const InProgressOrderCard = ({
   orderTimeData,
@@ -19,6 +20,21 @@ const InProgressOrderCard = ({
 }) => {
   const [timeLeft, setTimeLeft] = useState()
   const [orderStatus, setOrderStatus] = useState('taking longer')
+  const [duration, setDuration] = useState(0);
+  const [distance, setDistance] = useState(0);
+
+
+  const returnBack = () => {
+    console.log('returning back')
+    navigation.goBack()
+  }
+
+  // const { item } = route.params
+  console.log('orderTimeData: ',  orderTimeData)
+  const mapOrderItem =  orderTimeData.singleOrderList.map(location => location.location).flat()
+  const mapOrderLogo =  orderTimeData.singleOrderList.map(logo => logo.logo)
+  console.log('map order item from route.params: ', mapOrderItem);
+  console.log('map order item from route.params: ', mapOrderLogo);
 
   const { updateOrder } = UseOrders()
   useEffect(() => {
@@ -80,10 +96,11 @@ const InProgressOrderCard = ({
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
-        <Image
+        {/* <Image
           source={require('../../assets/restaurantImages/redFoodCart.png')}
           style={styles.googleMapImage}
-        />
+        /> */}
+        <GoogleMapsMenuSection scrollEnabled={false} pointerEvents={'none'} logo={mapOrderLogo} location={mapOrderItem} setDuration={setDuration} setDistance={setDistance} />
       </View>
 
       <View style={styles.orderDetailTextContainer}>
@@ -110,6 +127,8 @@ const styles = StyleSheet.create({
   },
   googleMapImageContainer: {
     margin: '3%',
+    height: 175,
+    marginBottom: '-10%'
   },
   googleMapImage: {
     width: '100%',

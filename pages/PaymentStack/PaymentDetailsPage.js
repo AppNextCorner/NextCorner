@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   StyleSheet,
@@ -13,51 +13,87 @@ import {
   AntDesign,
   FontAwesome,
   Feather,
+  FontAwesome5,
 } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
-import { getCart, setOrder, getTotal, deleteItem } from '../../store/slices/addToCart'
+import {
+  getCart,
+  setOrder,
+  getTotal,
+  deleteItem,
+  deleteItemReducer,
+} from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '../../constants/StripeApiKey'
 import { auth } from '../../App'
 import useCart from '../../hooks/useCart'
 import UseOrders from '../../hooks/useOrders'
 const PaymentDetailsPage = () => {
-  const { deleteCartData } = useCart();
-  const { addCartToOrder, getCurrentOrder} = UseOrders();
+  const { deleteCartData } = useCart()
+  const { addCartToOrder, getCurrentOrder } = UseOrders()
   const stripe = useStripe()
-  const name = "henrybenry";
+  const name = 'henrybenry'
 
-  const route = useRoute();
-  const [proceed, setProceed] = useState(false);
+  const route = useRoute()
+  const [proceed, setProceed] = useState(false)
 
   const cart = useAppSelector(getCart)
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch()
+  const [clientSecret, setClientSecret] = useState('')
 
   const navigation = useNavigation()
-  const navigateToAddPaymentMethod = async () => {
 
+  // const getClientSecret = async () => {
+  //   try {
+  //     const response = await fetch(`http://${IP}:4020/secret`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       //body: JSON.stringify({ amount: totalCost, name }),
+  //     })
+
+  //     const data = await response.json()
+  //     await setClientSecret(data.clientSecret)
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getClientSecret()
+  // }, [])
+
+  const navigateToAddPaymentMethod = async () => {
     try {
       const response = await fetch(`http://${IP}:4020/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({amount: totalCost, name}),
+        body: JSON.stringify({ amount: totalCost, name }),
       })
-      
+      // getting the client secret after sending the request with client data
       const data = await response.json()
-      console.log("Data of Client", data.clientSecret)
+      console.log('Data of Client', data.client_secret)
       if (!response.ok) {
         return Alert.alert(data.message)
       }
-
       // Initiate the pop up on payment through stripe's built in methods
       const initSheet = await stripe.initPaymentSheet({
-        paymentIntentClientSecret: data.clientSecret,
+        // setting the client secret for the initPaymentSheet without storing it in - key for an individual payment
+        paymentIntentClientSecret: data.client_secret,
+        // applePay: {
+        //   merchantCountryCode: 'US',
+        // },
+
+        // creates a payment flow - one time payments with saving a customer's card without an initial payment
+        customFlow: true,
+
+        returnURL: 'stripe-example://stripe-redirect',
       })
-      console.log("Grabbing the secret: ",initSheet.paymentIntentClientSecret)
       // check for errors -> show / alert the user on the error message
       if (initSheet.error) {
         console.error(initSheet.error)
@@ -65,17 +101,18 @@ const PaymentDetailsPage = () => {
       }
       // show the stripe API sheet -> update the clientSecret to the response data
       const presentSheet = await stripe.presentPaymentSheet({
-        clientSecret: data.clientSecret,
+        clientSecret: clientSecret,
       })
-      console.log("Present Sheet", presentSheet)
-      console.log("Client Secret", data.clientSecret)
-      
+      console.log('Present Sheet', presentSheet)
+      console.log('Client Secret', clientSecret)
 
+      // if payment is cancelled
       if (presentSheet.error) {
-        console.error(presentSheet.error)
+        //console.error(presentSheet.error)
         return Alert.alert(presentSheet.error.message)
       }
-      Alert.alert('Order Placed Successfully');
+      Alert.alert('Order Placed Successfully')
+      navigateToOrderComplete()
     } catch (err) {
       console.error(err)
       Alert.alert('Payment failed!')
@@ -83,23 +120,23 @@ const PaymentDetailsPage = () => {
   }
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = async () => {
-    setProceed(true);
+    setProceed(true)
     // grab the user id from the cart list
-    const mapIdInCart = cart.map(item => item.id)
-    console.log("user id: " + mapIdInCart);
+    const mapIdInCart = cart.map((item) => item.id)
+    console.log('user id: ' + mapIdInCart)
     navigation.navigate('OrderPlaced')
-    try{
+    try {
       await addCartToOrder(cart)
-      for(let i = 0; i < mapIdInCart.length; i++){
-        deleteCartData({id: mapIdInCart[i]})
+      for (let i = 0; i < mapIdInCart.length; i++) {
+        deleteCartData({ id: mapIdInCart[i] })
+        deleteItemReducer({ id: mapIdInCart[i] })
       }
       // change the state of the order
-      
-      console.log(" proceed: ",route.params.proceed)
-      getCurrentOrder();
 
-    } catch(e){
-      console.log(e);
+      console.log(' proceed: ', route.params.proceed)
+      getCurrentOrder()
+    } catch (e) {
+      console.log(e)
     }
   }
   const goBack = () => navigation.goBack()
@@ -129,31 +166,18 @@ const PaymentDetailsPage = () => {
         </View>
       </View>
       <View style={styles.paymentInformationContainer}>
-        <Text style={styles.headerText}>Payment</Text>
+        <Text style={styles.headerTextPayment}>Payment method</Text>
 
         {/* ICONS FOR PAYMENTS */}
         <View style={styles.paymentOptionList}>
-          <TouchableOpacity  onPress={() => navigateToAddPaymentMethod()}>
-            <AntDesign name="pluscircleo" size={50} color="black" />
+          <TouchableOpacity style={styles.paymentCard} onPress={() => navigateToAddPaymentMethod()}>
+            <FontAwesome5
+              style={styles.paymentOption}
+              name="stripe-s"
+              size={50}
+              color="#78DBFF"
+            />
           </TouchableOpacity>
-          <Fontisto
-            style={styles.paymentOption}
-            name="mastercard"
-            size={50}
-            color="black"
-          />
-          <Entypo
-            style={styles.paymentOption}
-            name="paypal"
-            size={50}
-            color="black"
-          />
-          <Fontisto
-            style={styles.paymentOption}
-            name="apple-pay"
-            size={50}
-            color="black"
-          />
         </View>
         <View style={styles.payOnArrivalContainer}>
           <TouchableOpacity style={styles.payOnArrivalButton}>
@@ -195,6 +219,18 @@ const PaymentDetailsPage = () => {
 }
 
 const styles = StyleSheet.create({
+  // payment
+  paymentCard: {
+    padding: '2%',
+    margin: '2%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#e3e3e3',
+    borderWidth: 2,
+    borderRadius: 15,
+
+  },
+  // order container
   placeOrderText: {
     color: '#fff',
   },
@@ -206,6 +242,9 @@ const styles = StyleSheet.create({
     padding: '5%',
     paddingHorizontal: '35%',
     borderRadius: 20,
+    margin: '3%',
+    marginBottom: '5%',
+    flex: 1,
   },
   goBackButton: {
     margin: 20,
@@ -273,6 +312,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 0.5,
     marginHorizontal: '10%',
+  },
+  headerTextPayment: {
+    marginLeft: '10%',
+
+    fontWeight: 'bold',
+    fontSize: 25,
   },
   headerText: {
     margin: '10%',

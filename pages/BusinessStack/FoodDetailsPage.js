@@ -23,6 +23,7 @@ import addToCart, {
   getBusinessName,
   getCart,
   increase,
+  increaseInFoodDetails,
   setBusinessName,
 } from '../../store/slices/addToCart'
 import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
@@ -52,7 +53,7 @@ export default function FoodDetailsPage() {
 
  // console.log(grabCartData)
   // "Object.assign"
-
+  
   // "JSON"
   useEffect(() => {
     Object.assign({}, { ...foodItem })
@@ -84,10 +85,11 @@ export default function FoodDetailsPage() {
     const addItem = name
     setOrder(true)
     console.log('add item: ', addItem)
+    // check to see if the cart already exists with a business
     if (businessName === '' || business === businessName) {
       try {
+        // add the items to the cart - don't need to call another getCart items due to it showing the new data with useEffect
         await addToCart(addItem, userId, business, location, logo)
-        console.log('business is empty')
         dispatch(setBusinessName(business))
         navigation.goBack()
         // getCurrentCartItems()
@@ -102,7 +104,7 @@ export default function FoodDetailsPage() {
   const onSizeChange = (sizeVal) => {
     console.log(sizeVal)
   }
-
+  console.log('foodItem', foodItem)
   // list component for the options page
   const Header = () => {
     return (
@@ -135,7 +137,7 @@ export default function FoodDetailsPage() {
         </View>
         {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
         <View style={styles.amountContainer}>
-          <AntDesign
+          {/* <AntDesign
             style={styles.icon}
             name="minuscircle"
             size={24}
@@ -158,26 +160,23 @@ export default function FoodDetailsPage() {
               //   }),
               // )
             }}
-          />
-          <Text>{getId.amountInCart}</Text>
+          /> */}
+          {/* <Text>{foodItem.amountInCart}</Text>
           <AntDesign
             style={styles.icon}
             getId="pluscircle"
             size={24}
             color="#78DBFF"
             onPress={() => {
-              const updatedCartItem = {
-                ...getId,
-                amountInCart: (getId.amountInCart += 1),
-              }
-              console.log('Item id: ', getId.id)
+              // const updatedCartItem = {
+              //   ...getId,
+              //   amountInCart: (getId.amountInCart += 1),
+              // }
+              console.log('Item id: ',foodItem.itemId)
               //console.log(updatedCartItem)
-              updateCartItemData({
-                updatedCartItem: updatedCartItem,
-                id: getId.id,
-              })
+              increaseInFoodDetails(foodItem)
             }}
-          />
+          /> */}
         </View>
         {/* <View style={styles.amountContainer}>
                   <AntDesign

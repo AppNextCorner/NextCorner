@@ -203,6 +203,7 @@ export const addToCart = createSlice({
 
     increaseInFoodDetails: (state, { payload }) => {
       payload.amountInCart += 1
+      console.log('ran increaseInFoodDetails')
       console.log(payload.amountInCart)
     },
 
