@@ -95,6 +95,7 @@ export default UseCart = () => {
     } else {
       // if less
       if (cartItemMap.cartData.amountInCart <= 1) {
+        
         //removeObjectWithId(findAmount, updateItem.id)
         dispatch(
           deleteItemReducer({

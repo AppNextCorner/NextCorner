@@ -19,6 +19,7 @@ const useGetUserData = () => {
       console.log('no users found with this email address', err)
     }
   }
+  
 
   useEffect(() => {
     const auth = getAuth()
@@ -37,7 +38,7 @@ const useGetUserData = () => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         fetchUserAsync()
-
+        //dispatch(setUser())
         setIsDone(true)
       } else {
         // User is signed out

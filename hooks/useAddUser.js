@@ -1,20 +1,40 @@
-
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { useAppDispatch } from '../store/hook';
+import { Alert } from 'react-native'
+import { useAppDispatch } from '../store/hook'
+import { createUser, getUsers } from '../store/slices/userSession'
 const useAddUser = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
+  const navigation = useNavigation();
 
-    const makeUser = async() => {
-        try {
-            await dispatch(createUser());
-        }catch(err){
-            console.log('user was not created', err);
-        }
+  const makeUser = async (
+    firstName,
+    lastName,
+    email,
+    password,
+    phoneNumber,
+  ) => {
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
     }
-  
-    return {
-        makeUser
+    try {
+      console.log('ran useAddUser')
+      console.log(firstName, lastName, email, password, phoneNumber)
+
+      await dispatch(createUser(userData))
+      
+    } catch (err) {
+      console.log('user was not created', err)
     }
+  }
+
+  return {
+    makeUser,
+  }
 }
 // exporting
 export default useAddUser

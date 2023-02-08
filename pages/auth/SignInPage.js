@@ -36,6 +36,7 @@ export default function SignInPage() {
 */
   const handleSignIn = () => {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
+    
     signInWithEmailAndPassword(auth, email, password)
       // takes in the credentials from email and password
       .then((userCredential) => {
@@ -91,8 +92,8 @@ export default function SignInPage() {
       <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
         <Text style={styles.signInText}>Login</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={goToSignUp}>
-        <Text>Create an Account</Text>
+      <TouchableOpacity style={styles.createAccountButton} onPress={goToSignUp}>
+        <Text style={styles.createAccountText}>Create an Account</Text>
       </TouchableOpacity>
 
      
@@ -110,6 +111,12 @@ export default function SignInPage() {
 }
 
 const styles = StyleSheet.create({
+  createAccountText: {
+    color: '#78DBFF'
+  },
+  createAccountButton: {
+    margin: '5%'
+  },
   inputText: {
     marginLeft: 10,
   },

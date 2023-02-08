@@ -23,6 +23,7 @@ import {
   getTotal,
   deleteItem,
   deleteItemReducer,
+  deleteItemAfterOrder,
 } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '../../constants/StripeApiKey'
@@ -30,7 +31,8 @@ import { auth } from '../../App'
 import useCart from '../../hooks/useCart'
 import UseOrders from '../../hooks/useOrders'
 const PaymentDetailsPage = () => {
-  const { deleteCartData } = useCart()
+  const { deleteCartData, getCurrentCartItems } = useCart()
+
   const { addCartToOrder, getCurrentOrder } = UseOrders()
   const stripe = useStripe()
   const name = 'henrybenry'
@@ -118,6 +120,7 @@ const PaymentDetailsPage = () => {
       Alert.alert('Payment failed!')
     }
   }
+  console.log(cart.map((item) => item.cartData).map((cartItem) => cartItem.itemId))
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = async () => {
     setProceed(true)
@@ -125,16 +128,25 @@ const PaymentDetailsPage = () => {
     const mapIdInCart = cart.map((item) => item.id)
     console.log('user id: ' + mapIdInCart)
     navigation.navigate('OrderPlaced')
+    
+    const mapItemIdInCart = cart.map((item) => item.cartData).map((cartItem) => cartItem.itemId)
+    console.log('item id: ' + mapIdInCart)
     try {
       await addCartToOrder(cart)
       for (let i = 0; i < mapIdInCart.length; i++) {
         deleteCartData({ id: mapIdInCart[i] })
-        deleteItemReducer({ id: mapIdInCart[i] })
+        
+      }
+      for (let i = 0; i < mapItemIdInCart.length; i++) {
+        deleteItemAfterOrder({ id: mapItemIdInCart[i] })
+        
       }
       // change the state of the order
 
       console.log(' proceed: ', route.params.proceed)
-      getCurrentOrder()
+      getCurrentCartItems();
+      getCurrentOrder();
+      
     } catch (e) {
       console.log(e)
     }
