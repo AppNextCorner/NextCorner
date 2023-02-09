@@ -263,10 +263,10 @@ export const addToCart = createSlice({
       }
     },
     deleteItemAfterOrder: (state, { payload }) => {
-      console.log('here is payload for deleteItemReducer: ', payload)
+      console.log('here is payload for deleteItemAfterOrderReducer: ', payload.id)
       //const mapCart = state.cart.map((itemList) => itemList.cartData)
       //
-      const cartItem = state.cart.find((item) => item.itemId === payload.id)
+     
       // function to remove the item from the state array with the find index method
       function removeObjectWithId(arr, id) {
         //const mapAnotherCart = arr.map((item) => item.cartData)
@@ -280,11 +280,9 @@ export const addToCart = createSlice({
         // mutated the array to avoid copying the original / modified array
         return arr
       }
-      // checks if the object property is below or over 1 to either eliminate it from the array with the removeObjectWithId function
-      if (cartItem.cartData.amountInCart - 1 < 1) {
-        // pass the global state to the removeObjectWithId function to mutate the array and the payload if to remove the item from the array
-        removeObjectWithId(state.cart, payload.id)
-      }
+
+      // pass the global state to the removeObjectWithId function to mutate the array and the payload if to remove the item from the array
+      removeObjectWithId(state.cart, payload.id)
     },
     decrease: (state, { payload }) => {
       // get the data of each object in the state array
@@ -414,7 +412,7 @@ export const {
   increaseInFoodDetails,
   deleteItemReducer,
   setBusinessName,
-  deleteItemAfterOrder
+  deleteItemAfterOrder,
 } = addToCart.actions
 
 // create getters

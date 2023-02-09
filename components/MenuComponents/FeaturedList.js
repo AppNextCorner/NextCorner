@@ -3,31 +3,41 @@ import React from 'react'
 import FeaturedTypeCard from '../../Cards/MenuCards/FeaturedTypeCard'
 
 const FeaturedList = (props) => {
-  const { menuData, businessName, location, logo  } = props
+  const { menuData, businessName, location, logo } = props
   console.log('menuData', menuData)
   const findFeaturedList = menuData.filter((item) => item.featured === true)
   console.log('featuredList', findFeaturedList)
   console.log('featured businessName', businessName)
   return (
     <>
-      <Text style={styles.featuredText}>Featured</Text>
-      <FlatList
-        snapToAlignment="start"
-        decelerationRate={'fast'}
-        snapToInterval={Dimensions.get('window').width}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        data={findFeaturedList}
-        style={styles.featuredList}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.featuredCard}>
-              <FeaturedTypeCard menuItem={item} businessName={businessName} location={location} logo={logo} />
-            </View>
-          )
-        }}
-      />
-      <View style={styles.margin}></View>
+      {findFeaturedList.length > 0 ? (
+        <>
+         <Text style={styles.featuredText}>Featured</Text>
+          <FlatList
+            snapToAlignment="start"
+            decelerationRate={'fast'}
+            snapToInterval={Dimensions.get('window').width}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={findFeaturedList}
+            style={styles.featuredList}
+            renderItem={({ item }) => {
+              return (
+                <View style={styles.featuredCard}>
+                  <FeaturedTypeCard
+                    menuItem={item}
+                    businessName={businessName}
+                    location={location}
+                    logo={logo}
+                  />
+                </View>
+              )
+            }}
+          />
+          <View style={styles.margin}></View>
+        </>
+      ) : null}
+     
     </>
   )
 }

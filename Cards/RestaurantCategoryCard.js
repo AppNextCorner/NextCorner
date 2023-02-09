@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   activeImageContainer: {
-    backgroundColor: '#515152',
+    backgroundColor: '#78DBFF',
     flex: 1,
     flexDirection: 'row',
     alignContent: 'center',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     // shadow box for both IOS and Android with elevation
-    shadowColor: '#3d3d3d',
+    shadowColor: '#78DBFF',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
     shadowRadius: 2,  

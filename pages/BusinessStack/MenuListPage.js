@@ -21,6 +21,8 @@ import { useAppSelector } from '../../store/hook'
 import { getButton } from '../../store/slices/addToCart'
 import MenuTypeList from '../../Cards/MenuCards/MenuTypeList'
 import FeaturedList from '../../components/MenuComponents/FeaturedList'
+import PreviousOrdersComponent from '../../components/MenuComponents/PreviousOrdersComponent'
+import { getOrders } from '../../store/slices/addToOrders'
 
 export default function MenuListPage() {
   const route = useRoute()
@@ -48,7 +50,20 @@ export default function MenuListPage() {
   // }
 
   // filter through all items in the cart and see if they match
-
+  const previousOrders = useAppSelector(getOrders)
+  const getSingleOrders = previousOrders
+    .map((item) => item.singleOrderList)
+    .flat()
+  //.map(item => item.businessOrderedFrom);
+  console.log('getSingleOrders', getSingleOrders.filter(val => val.businessOrderedFrom === restaurant.name)
+  
+  //.filter((item) => {
+    //item.businessOrderedFrom === restaurant.name
+  //})
+  )
+  console.log(restaurant.name.toString())
+  const filterOrder = getSingleOrders.filter(val => val.businessOrderedFrom === restaurant.name)
+  console.log('filter order', filterOrder)
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate('Home')
@@ -85,10 +100,23 @@ export default function MenuListPage() {
               <View style={styles.margin}></View>
               {/* Section for small google maps preview */}
 
-              <FeaturedList menuData={menu}  businessName={restaurant.name}
-                  location={restaurant.location}
-                  logo={restaurant.logo} />
               {/* Section for Featured Items*/}
+
+              <FeaturedList
+                menuData={menu}
+                businessName={restaurant.name}
+                location={restaurant.location}
+                logo={restaurant.logo}
+              />
+
+              <PreviousOrdersComponent
+                menuData={menu}
+                location={restaurant.location}
+                logo={restaurant.logo}
+                
+                listData={filterOrder}
+                businessName={restaurant.name}
+              />
 
               {/* ALL menu items located here */}
               <View style={styles.marginSet}>

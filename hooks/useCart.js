@@ -9,6 +9,7 @@ import {
   updateRemoveCartItemAmount,
   deleteItem,
   deleteItemReducer,
+  deleteItemAfterOrder,
 } from '../store/slices/addToCart'
 // import { initializeApp } from 'firebase/app'
 import { auth } from '../App'
@@ -63,12 +64,16 @@ export default UseCart = () => {
       console.error(e)
     }
   }
-  const deleteCartData = async (id) => {
+  const deleteCartData = async (item) => {
+    const idObject = {
+      id: item.id,
+    }
     try{
+      
+      await dispatch(deleteItem(idObject));
       dispatch(
-        deleteItemReducer(id),
+        deleteItemAfterOrder(idObject),
       )
-      await dispatch(deleteItem(id));
     }
     catch (e) {
       console.log(e);

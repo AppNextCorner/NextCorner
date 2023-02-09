@@ -131,16 +131,19 @@ const PaymentDetailsPage = () => {
     
     const mapItemIdInCart = cart.map((item) => item.cartData).map((cartItem) => cartItem.itemId)
     console.log('item id: ' + mapIdInCart)
+    console.log('cart item id: ' + mapItemIdInCart)
     try {
       await addCartToOrder(cart)
+      // for (let i = 0; i < mapItemIdInCart.length; i++) {
+      //   console.log('item id: ' + mapItemIdInCart[i])
+      //   deleteItemAfterOrder({ id: mapItemIdInCart[i] })
+          
+      //   }
       for (let i = 0; i < mapIdInCart.length; i++) {
-        deleteCartData({ id: mapIdInCart[i] })
+        deleteCartData({ id: mapIdInCart[i], itemId: mapItemIdInCart[i] })
         
       }
-      for (let i = 0; i < mapItemIdInCart.length; i++) {
-        deleteItemAfterOrder({ id: mapItemIdInCart[i] })
-        
-      }
+      
       // change the state of the order
 
       console.log(' proceed: ', route.params.proceed)
