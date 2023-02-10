@@ -4,6 +4,7 @@ import {
   View,
   Pressable,
   TouchableOpacity,
+  Image,
 } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons'
@@ -11,24 +12,22 @@ import { useNavigation } from '@react-navigation/native'
 
 const OrderPlacedPage = () => {
   const navigation = useNavigation()
-  const goToHome = () => {
-    navigation.navigate('HomePage')
+  const goToOrders = () => {
+    navigation.navigate('Orders')
   }
   return (
     <View style={styles.orderPlacedContainer}>
       <View style={styles.alertContainer}>
-        <Text>Your order has been successfully placed</Text>
-        <Text>
-          Your orders is being worked on. It'll take 10 minutes before it's
-          ready!
+        <Image source={require('../../assets/completedIcon.png')} style={styles.iconImage}/>
+        <Text style={styles.header}>Your order has been successfully placed</Text>
+        <Text style={styles.text}>
+          Your orders is being worked on. It'll take a couple of minutes to complete!
         </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={goToHome} style={styles.goHomeButton}>
-            <Text style={styles.buttonText}>
-              Go Back Home
-              </Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={goToOrders} style={styles.goHomeButton}>
+          <Text style={styles.buttonText}>Check your order</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -37,19 +36,34 @@ const OrderPlacedPage = () => {
 export default OrderPlacedPage
 
 const styles = StyleSheet.create({
+  header: {
+    textAlign: 'center',
+    fontSize: 25,
+    margin: 10,
+    fontWeight: 'bold',
+  },
+  text: {
+    margin: 10,
+    textAlign: 'center',
+  },
+  iconImage: {
+    width: '50%',
+    height: '25%',
+  },
   buttonText: {
     textAlign: 'center',
     color: '#fff',
   },
   buttonContainer: {
-    flex: 1,
+    flex: 0,
     justifyContent: 'flex-end',
     marginBottom: 50,
     marginHorizontal: 10,
-    
   },
   alertContainer: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   orderPlacedContainer: {

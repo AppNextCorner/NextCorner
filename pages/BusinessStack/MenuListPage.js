@@ -11,7 +11,7 @@ import {
   Pressable,
   FlatList,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
@@ -23,6 +23,7 @@ import MenuTypeList from '../../Cards/MenuCards/MenuTypeList'
 import FeaturedList from '../../components/MenuComponents/FeaturedList'
 import PreviousOrdersComponent from '../../components/MenuComponents/PreviousOrdersComponent'
 import { getOrders } from '../../store/slices/addToOrders'
+import AnnouncementList from '../../components/MenuComponents/AnnouncementList'
 
 export default function MenuListPage() {
   const route = useRoute()
@@ -34,42 +35,18 @@ export default function MenuListPage() {
 
   const navigation = useNavigation()
 
-  // const updateCustomizations = (id, newCustomizations) => {
-  //   const i = cart.map((item) => item.id).indexOf(id);
-
-  //   if (i > -1){
-  //     const temp = {...cart[i], customizations: newCustomizations}
-  //     setCart(cart.filter((item, index) => {
-  //       if(index === i){
-  //         return temp
-  //       }
-  //       return item
-  //     }))
-  //   }
-
-  // }
-
   // filter through all items in the cart and see if they match
   const previousOrders = useAppSelector(getOrders)
   const getSingleOrders = previousOrders
     .map((item) => item.singleOrderList)
     .flat()
-  //.map(item => item.businessOrderedFrom);
-  console.log('getSingleOrders', getSingleOrders.filter(val => val.businessOrderedFrom === restaurant.name)
-  
-  //.filter((item) => {
-    //item.businessOrderedFrom === restaurant.name
-  //})
-  )
-  console.log(restaurant.name.toString())
   const filterOrder = getSingleOrders.filter(val => val.businessOrderedFrom === restaurant.name)
-  console.log('filter order', filterOrder)
+ 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate('Home')
   }
 
-  // accessing and pinpointing data
 
   return (
     <>
@@ -96,10 +73,12 @@ export default function MenuListPage() {
                 <Text style={styles.textDescription}>
                   {restaurant.description}
                 </Text>
+                
               </View>
-              <View style={styles.margin}></View>
-              {/* Section for small google maps preview */}
 
+              {/* Section for small google maps preview */}
+              <AnnouncementList horizontal={true} announcementData={restaurant.announcementCards} />
+              <View style={styles.margin}></View>
               {/* Section for Featured Items*/}
 
               <FeaturedList

@@ -35,7 +35,7 @@ export default function RestaurantCategoryCard(props) {
     >
       <View style={styles.cardContainer}>
         <View {...imageBackground}>
-          <Image source={props.restaurantItem.foodType} />
+          <Image style={styles.icon} source={props.restaurantItem.foodType} />
         </View>
         <View style={styles.defaultCategoryTextContainer}>
           <Text {...categoryTextStyle}>{props.restaurantItem.text}</Text>
@@ -46,6 +46,11 @@ export default function RestaurantCategoryCard(props) {
 }
 
 const styles = StyleSheet.create({
+  // setting default uniform weight and height for icon to fit on the category cards
+  icon: {
+    width: 50,
+    height: 50,
+  },
   cardContainer: {
     flex: 1,
 

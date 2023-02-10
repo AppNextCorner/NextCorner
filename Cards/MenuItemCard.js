@@ -8,13 +8,12 @@ export default function MenuItemCard({ foodItem, businessName, location, logo })
   const navigation = useNavigation()
   const { setOrder, order } = useOrderButton()
 
-  let text =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'
+
   useEffect(() => {
     console.log('location in menu item:', location)
     location
   })
-  let limitTextAmount = text.slice(0, 75) + '...'
+  let limitTextAmount = foodItem.description.slice(0, 75) + '...'
   const goToOrderPage = (newLocation) => {
     setOrder(false)
     console.log('new location: ' + newLocation)
