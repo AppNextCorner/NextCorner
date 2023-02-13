@@ -4,19 +4,21 @@ import { useNavigation } from '@react-navigation/native'
 import useOrderButton from '../hooks/useOrderButton'
 import { useEffect } from 'react'
 
+/**
+ * The default business card
+ * @param {*} props - be able to pass additional properties through the cart after coming from the restaurant property prior to this page
+ * 
+ */
 export default function MenuItemCard({ foodItem, businessName, location, logo }) {
   const navigation = useNavigation()
-  const { setOrder, order } = useOrderButton()
-
-
+  const { setOrder} = useOrderButton()
   useEffect(() => {
-    console.log('location in menu item:', location)
     location
   })
   let limitTextAmount = foodItem.description.slice(0, 75) + '...'
-  const goToOrderPage = (newLocation) => {
+  const goToOrderPage = () => {
     setOrder(false)
-    console.log('new location: ' + newLocation)
+   
     navigation.navigate('FoodDetails', {
       business: businessName,
       foodItem: foodItem,
@@ -29,7 +31,7 @@ export default function MenuItemCard({ foodItem, businessName, location, logo })
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
       // passing data through the FoodDetails page to access the selection data from the menu list
-      onPress={() => goToOrderPage(location)}
+      onPress={() => goToOrderPage()}
       style={styles.foodCategoryStyle}
     >
       <View style={styles.card}>

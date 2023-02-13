@@ -16,6 +16,6 @@ web-build/
 
 app.json
 
-firebase/firebase-config.js
-util/firebase.js
-constants/
+# firebase/firebase-config.js
+# util/firebase.js
+# constants/

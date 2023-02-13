@@ -19,14 +19,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
 // Icon list for the menu bar in the navigation container
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-
 import { Octicons, Ionicons } from '@expo/vector-icons'
 
-import { useAppDispatch, useAppSelector } from '../store/hook'
+import { useAppSelector } from '../store/hook'
 import { getIsLoggedIn } from '../store/slices/userSession'
 import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
 import OrderPlacedPage from '../pages/PaymentStack/OrderPlacedPage'
-import AddPaymentPage from '../pages/PaymentStack/AddPaymentPage'
 import useGetUserData from '../hooks/useGetUserData'
 import InProgressPage from '../pages/OrdersStack/InProgressPage'
 import SignUpPage from '../pages/auth/SignUpPage'
@@ -44,15 +42,10 @@ export default function Route() {
  
   // assign the variable a value of the state of the getIsLoggedIn according to the state of the userSession
   const isLoggedin = useAppSelector(getIsLoggedIn)
-  console.log('the user is logged in: ', isLoggedin)
 
-  // useEffect(() => {
-  //   console.log('currentCartItems')
-
-  //   dispatch(fetchCart())
-  // }, []);
-  // using the state of the login which we got from the hook useAppSelector will help use the component / method value
+  // this is ran before checking if the user is logged in because we want to have already checked if the authentication request was ran successfully
   if(isDone === true){
+    // using the state of the login which we got from the hook useAppSelector will help use the component / method value
     if (isLoggedin) {
       return (
         <>
@@ -70,7 +63,6 @@ export default function Route() {
               <Stack.Screen name="MenuList" component={MenuListPage} />
               <Stack.Screen name="PaymentDetails" component={PaymentDetailsPage} />
               <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
-              <Stack.Screen name="AddPayment" component={AddPaymentPage} />
               <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             </Stack.Navigator>
           </NavigationContainer>
@@ -78,6 +70,7 @@ export default function Route() {
       )
     } else {
       return (
+        // Authentication stack which a user without an account is allowed to access
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen

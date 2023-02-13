@@ -12,19 +12,21 @@ import {
 import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
-import { googleDirectionsAPIKey } from '../../constants/GoogleMapsInfo'
+import { googleDirectionsAPIKey } from '../../constants/ApiKeys'
 
 // icons
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
 
 export default function GoogleMapsMenuSection(props) {
+
+  // used for differentiating the in progress orders through our maps on InProgress page and the InProgress cards
   const {
     location,
     logo,
     setDuration,
     setDistance,
     scrollEnabled,
-    pointerEvents
+    pointerEvents,
   } = props
   // if the google maps api fails or the user does not have permission, then display this location
   const [mapRegion, setMapRegion] = useState({
@@ -33,13 +35,9 @@ export default function GoogleMapsMenuSection(props) {
     latitudeData: 0.0922,
     longitudeData: 0.0421,
   })
+  const [viewLocation, setViewLocation] = useState(false)
   const mapRef = useRef()
-
-  const { width, height } = Dimensions.get('window')
   const traceRouteOnReady = (result) => {
-    // args.distance
-    // args.duration
-
     setDistance(result.distance)
     setDuration(result.duration)
     mapRef.current?.fitToCoordinates(result.coordinates, {
@@ -67,7 +65,7 @@ export default function GoogleMapsMenuSection(props) {
     let location = await Location.getCurrentPositionAsync({
       enableHighAccuracy: true,
     })
-    console.log(location)
+
 
     setMapRegion({
       // Get location from the object data we received from the position async and set the previous latitude and longitude of the previous state mapRegion, to the current location
@@ -77,20 +75,17 @@ export default function GoogleMapsMenuSection(props) {
       latitudeDelta: 0.0106,
       longitudeDelta: 0.0121,
     })
+    setViewLocation(true)
   }
-  console.log(mapRegion)
+
   const destination = {
     latitude: parseFloat(location[0]),
     longitude: parseFloat(location[1]),
   }
-  console.log(
-    'desination: ' + destination.latitude + ' ' + destination.longitude,
-  )
   // after the page is loaded, call the async function to update the location of the user
   useEffect(() => {
     userLocation()
   }, [])
-  console.log('logo', logo[0])
   function CustomMarker() {
     return (
       <View style={styles.marker}>
@@ -112,45 +107,46 @@ export default function GoogleMapsMenuSection(props) {
   }
   return (
     <View style={styles.container}>
-      <MapView
-      
-      pointerEvents={pointerEvents}
-
-        scrollEnabled={scrollEnabled}
-        ref={mapRef}
-        minZoomLevel={15} // default => 0
-        maxZoomLevel={18} // default => 20
-        // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
-        customMapStyle={MapStyle}
-        // after the state of mapRegion is updated from the async function of userLocation() -> display the region according to the location
-        region={mapRegion}
-        // provider helps IOS to be able to use google maps
-        provider={PROVIDER_GOOGLE}
-        // show a blue icon of the user on the map
-        //showsUserLocation={true}
-        style={{ flex: 1 }}
-      >
-        <Marker coordinate={destination}>
-          {/* CustomMarker has to be a child of Marker*/}
-          <CustomMarker />
-        </Marker>
-        <Marker coordinate={mapRegion}>
-          {/* CustomMarker has to be a child of Marker*/}
-          <CustomUserMarker />
-        </Marker>
-        <MapViewDirections
-        
-          origin={mapRegion}
-          destination={destination}
-          apikey={googleDirectionsAPIKey}
-          strokeColor="#78DBFF"
-          strokeWidth={4}
-          onReady={(result) => {
-            traceRouteOnReady(result)
-          }}
-          //onReady={(result) => traceRouteOnReady(result)}
-        />
-      </MapView>
+      {viewLocation === true ? (
+        <MapView
+          pointerEvents={pointerEvents}
+          scrollEnabled={scrollEnabled}
+          ref={mapRef}
+          minZoomLevel={12} // default => 0
+          maxZoomLevel={18} // default => 20
+          // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles
+          customMapStyle={MapStyle}
+          // after the state of mapRegion is updated from the async function of userLocation() -> display the region according to the location
+          region={mapRegion}
+          // provider helps IOS to be able to use google maps
+          provider={PROVIDER_GOOGLE}
+          // show a blue icon of the user on the map
+          //showsUserLocation={true}
+          style={{ flex: 1 }}
+        >
+          <Marker coordinate={destination}>
+            {/* CustomMarker has to be a child of Marker*/}
+            <CustomMarker />
+          </Marker>
+          <Marker coordinate={mapRegion}>
+            {/* CustomMarker has to be a child of Marker*/}
+            <CustomUserMarker />
+          </Marker>
+          <MapViewDirections
+            origin={mapRegion}
+            destination={destination}
+            apikey={googleDirectionsAPIKey}
+            strokeColor="#78DBFF"
+            strokeWidth={4}
+            onReady={(result) => {
+              traceRouteOnReady(result)
+            }}
+            //onReady={(result) => traceRouteOnReady(result)}
+          />
+        </MapView>
+      ) : (
+        <Text>Waiting for Maps</Text>
+      )}
 
       {/* <View style={styles.searchContainer}>
         <GooglePlacesAutocomplete

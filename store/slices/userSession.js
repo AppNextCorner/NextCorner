@@ -1,12 +1,11 @@
 /**
- * Purpose of file: Contains our slice to use for our state
+ * Purpose of file: Used to send our requests to the server and be able to create and get a new user from the server and be able to display the new changes to our frontend after changing our redux state
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { IP } from '../../constants/StripeApiKey'
+import { IP } from '../../constants/ApiKeys'
 import { auth } from '../../App'
-import { Alert } from 'react-native'
 
 const USER_URL = `http://${IP}:4020/auth/`
 
@@ -25,11 +24,9 @@ const createToken = async () => {
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()
-  console.log('headers', headers.headers)
   try {
-    console.log('Here is headers: ', headers)
     const response = await axios.get(USER_URL, headers)
-    console.log('Here is response data: ', response.data)
+   
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
     if (!err.response) {
@@ -48,7 +45,7 @@ export const createUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       })
-      console.log('Here is response: ', resp.data)
+     
 
       return resp.data
     } catch (err) {
@@ -76,10 +73,7 @@ export const userSession = createSlice({
     // case reducer functions
     // action is what values we want to assign the state to and receive it from payload
     setUser: (state, action) => {
-      console.log(action)
-      // when user logs in, update logged in state by assigning it a new value -> could do more actions such as push to an array, but it all depends on the data type and current state
-
-      // assign the null value of the user to the value we get from the setUser dispatch method
+      
       // state.user = action.payload
       state.loggedIn = true
     },
@@ -94,11 +88,11 @@ export const userSession = createSlice({
       state.users = state.users.filter(
         (getOneUser) => getOneUser.email === auth.currentUser.email,
       )
-      console.log('state users: ', state.users)
+      
     })
     builder.addCase(createUser.pending, (state, { payload }) => {
       console.log('pending')
-      console.log(payload)
+     
     })
     builder.addCase(createUser.rejected, (state, { payload }) => {
       console.log('Rejected')
@@ -116,7 +110,7 @@ export const { setUser, logOut } = userSession.actions
 // get the user loggedInSTate whether it is true or false and the value of the user -> USED MOSTLY FOR USEAPPSELECTOR methods
 // export state values through a function
 export const getIsLoggedIn = (state) => state.userSession.loggedIn
-export const getUser = (state) => state.userSession.user
+export const getUser = (state) => state.userSession.users
 
 // export the reducer of the slice
 export default userSession.reducer

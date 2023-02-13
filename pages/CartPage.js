@@ -3,7 +3,7 @@
  * note: Total number of selected items, price, etc will need to be added here
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   getBusinessName,
@@ -12,7 +12,7 @@ import {
   setBusinessName,
 } from '../store/slices/addToCart'
 import { useAppSelector } from '../store/hook'
-import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import {
@@ -23,19 +23,18 @@ import {
   Image,
   Pressable,
   FlatList,
-  Button,
 } from 'react-native'
 import { useAppDispatch } from '../store/hook'
 import { calculateTotals } from '../store/slices/addToCart'
 import useCart from '../hooks/useCart'
 /**
  *
- * Remove from items cart list
- * Add to order page
+ * After user finishes selecting an item and wants to proceed, they can remove from items cart list
+ * Add to order page after clicking on proceed button
  */
 
 const CartPage = () => {
-  const { updateCartItemData } = useCart()
+  const { updateCartItemData } = useCart() // be able to increment or decrement the amount in which ever cart item is updated from the user
   const dispatch = useAppDispatch()
   // navigation part of the screen
   const navigation = useNavigation()
@@ -46,14 +45,11 @@ const CartPage = () => {
   const goToPayment = () => {
     navigation.navigate('PaymentDetails')
 
-    dispatch(calculateTotals())
+    dispatch(calculateTotals()) // grab the total amount and the price of each item for our transaction in the PaymentDetails page
   }
 
   const isCartFull = useAppSelector(getCart)
   const businessName = useAppSelector(getBusinessName)
-  console.log('isCartFull', isCartFull)
-  //isCartFull.filter((item,
-  //index) => isCartFull.indexOf(item) === index);
 
   useEffect(() => {
     if (isCartFull.length === 0) {
@@ -71,15 +67,14 @@ const CartPage = () => {
   return (
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <Pressable style={styles.goBackButton} onPress={goHome}>
-        <Feather name="arrow-left-circle" size={40} color="black" />
+        <AntDesign name="arrowleft" size={30} color="black" />
       </Pressable>
 
       <FlatList
-        
         data={isCartFull}
         renderItem={({ item }) => {
           const grabCartItem = item.cartData
-          console.log(grabCartItem)
+          
           return (
             <>
               {/* Display cards added */}
@@ -110,22 +105,15 @@ const CartPage = () => {
                       size={24}
                       color="#78DBFF"
                       onPress={() => {
-                        // console.log('dispatch')
+
                         const updatedCartItem = {
                           ...grabCartItem,
                           amountInCart: (grabCartItem.amountInCart -= 1),
                         }
-                        console.log('Item id: ', item.id)
-                        //console.log(updatedCartItem)
                         updateCartItemData({
                           updatedCartItem: updatedCartItem,
                           id: item.id,
                         })
-                        // dispatch(
-                        //   updateCartItem({
-
-                        //   }),
-                        // )
                       }}
                     />
                     <Text>{grabCartItem.amountInCart}</Text>
@@ -139,8 +127,6 @@ const CartPage = () => {
                           ...grabCartItem,
                           amountInCart: (grabCartItem.amountInCart += 1),
                         }
-                        console.log('Item id: ', item.id)
-                        //console.log(updatedCartItem)
                         updateCartItemData({
                           updatedCartItem: updatedCartItem,
                           id: item.id,
@@ -157,8 +143,7 @@ const CartPage = () => {
 
       <View>
         <View style={styles.bottomButtons}>
-
-            <Text style={styles.businessText}>Ordered from: {businessName}</Text>
+          <Text style={styles.businessText}>Ordered from: {businessName}</Text>
           {/* Payment button */}
           <View style={styles.proceedToPaymentContainer}>
             <TouchableOpacity
@@ -186,6 +171,7 @@ const styles = StyleSheet.create({
   bottomButtons: {
     paddingHorizontal: 20,
     paddingTop: 10,
+    paddingBottom: '10%',
   },
   addItemsButtonContainer: {
     flexDirection: 'column',
@@ -199,20 +185,23 @@ const styles = StyleSheet.create({
   },
   proceedToPaymentText: {
     color: 'white',
-    textAlign: 'center',
+    fontWeight: 'bold',
     fontSize: 14,
   },
   proceedToPaymentButton: {
     backgroundColor: '#78DBFF',
-    padding: '5%',
     borderRadius: 20,
-    paddingHorizontal: '30%',
-  },
-  proceedToPaymentContainer: {
+    padding: '4%',
+    paddingHorizontal: '20%',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '10%',
-    marginBottom: '6%',
+    borderColor: '#e3e3e3',
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: 'row',
+    marginVertical: '5%',
   },
+  proceedToPaymentContainer: {},
   amountContainer: {
     flex: 1,
     marginTop: 0,
@@ -226,6 +215,7 @@ const styles = StyleSheet.create({
   },
   goBackButton: {
     margin: '10%',
+    marginTop: '15%',
   },
   descriptionOfItem: {
     flex: 1,

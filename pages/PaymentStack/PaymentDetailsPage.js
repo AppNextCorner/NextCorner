@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
+  Button,
+  FlatList,
+  Image,
 } from 'react-native'
 import {
   Fontisto,
@@ -13,7 +16,7 @@ import {
   AntDesign,
   FontAwesome,
   Feather,
-  FontAwesome5,
+  MaterialIcons,
 } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
@@ -24,50 +27,66 @@ import {
   deleteItem,
   deleteItemReducer,
   deleteItemAfterOrder,
+  getBusinessName,
+  setBusinessName,
 } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
-import { IP } from '../../constants/StripeApiKey'
-import { auth } from '../../App'
+import { IP } from '../../constants/ApiKeys'
 import useCart from '../../hooks/useCart'
 import UseOrders from '../../hooks/useOrders'
+import { getUser } from '../../store/slices/userSession'
+import axios from 'axios'
+import { geonameAPIUser } from '../../constants/ApiKeys'
+
+/**
+ *
+ * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
+ */
 const PaymentDetailsPage = () => {
-  const { deleteCartData, getCurrentCartItems } = useCart()
-
-  const { addCartToOrder, getCurrentOrder } = UseOrders()
-  const stripe = useStripe()
-  const name = 'henrybenry'
-
-  const route = useRoute()
   const [proceed, setProceed] = useState(false)
+  const [clientSecret, setClientSecret] = useState('')
+  const [location, setLocation] = useState('')
 
+  // Hooks to transition from cart towards order page
+  // delete the current cart after grabbing and add to order instead
+  const { deleteCartData, getCurrentCartItems } = useCart()
+  const { addCartToOrder, getCurrentOrder } = UseOrders()
+
+  // grab user information from the current state of the user
+  const user = useAppSelector(getUser)
+  const mainUser = user[0] // grab the only user from the list
   const cart = useAppSelector(getCart)
   const totalCost = useAppSelector(getTotal)
-  const dispatch = useAppDispatch()
-  const [clientSecret, setClientSecret] = useState('')
+  const dispatch = useAppDispatch();
 
+  const stripe = useStripe()
   const navigation = useNavigation()
 
-  // const getClientSecret = async () => {
-  //   try {
-  //     const response = await fetch(`http://${IP}:4020/secret`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       //body: JSON.stringify({ amount: totalCost, name }),
-  //     })
-
-  //     const data = await response.json()
-  //     await setClientSecret(data.clientSecret)
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getClientSecret()
-  // }, [])
-
+  // grabbing all the cart item's data to display them on the receipt and the component cards
+  const getCartItems = cart.map((list) => list.cartData).flat()
+  const getLocationOfBusiness = cart.map((list) => list.location)
+  const getElementOfLocation = getLocationOfBusiness[0]
+  const calculateTotal = totalCost.toString().slice(0, 10);
+  const addTotal = parseFloat(calculateTotal);
+  const plus = addTotal + addTotal / 10;
+  useEffect(() => {
+    const geoname = async () => {
+      try {
+        const res = await axios.get(
+          `http://api.geonames.org/findNearestAddressJSON?lat=${getElementOfLocation[0]}&lng=${getElementOfLocation[1]}&username=${geonameAPIUser}`,
+        )
+        setLocation(res.data.address)
+        return res
+      } catch (err) {
+        console.log('geoname', err)
+      }
+    }
+    geoname()
+  }, [])
+  
+  /**
+   * The purpose of this method is to get the client's information on their credentials for card payments with Stripe API
+   */
   const navigateToAddPaymentMethod = async () => {
     try {
       const response = await fetch(`http://${IP}:4020/payment`, {
@@ -75,11 +94,13 @@ const PaymentDetailsPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: totalCost, name }),
+        body: JSON.stringify({
+          amount: totalCost,
+          name: mainUser.firstName + '' + mainUser.lastName,
+        }),
       })
       // getting the client secret after sending the request with client data
       const data = await response.json()
-      console.log('Data of Client', data.client_secret)
       if (!response.ok) {
         return Alert.alert(data.message)
       }
@@ -105,15 +126,13 @@ const PaymentDetailsPage = () => {
       // show the stripe API sheet -> update the clientSecret to the response data
       const presentSheet = await stripe.presentPaymentSheet({
         clientSecret: clientSecret,
-        
       })
-   
+
       console.log('Present Sheet', presentSheet)
       console.log('Client Secret', clientSecret)
 
       // if payment is cancelled
       if (presentSheet.error) {
-        //console.error(presentSheet.error)
         return Alert.alert(presentSheet.error.message)
       }
       Alert.alert('Order Placed Successfully')
@@ -123,36 +142,32 @@ const PaymentDetailsPage = () => {
       Alert.alert('Payment failed!')
     }
   }
-  console.log(cart.map((item) => item.cartData).map((cartItem) => cartItem.itemId))
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = async () => {
+    // fixing multi order bug with only making the button work once by disabling after this is called
     setProceed(true)
-    // grab the user id from the cart list
+    // grab the user id from the cart list that is going to be used for deleting from our backend
     const mapIdInCart = cart.map((item) => item.id)
-    console.log('user id: ' + mapIdInCart)
+   
     navigation.navigate('OrderPlaced')
-    
-    const mapItemIdInCart = cart.map((item) => item.cartData).map((cartItem) => cartItem.itemId)
-    console.log('item id: ' + mapIdInCart)
-    console.log('cart item id: ' + mapItemIdInCart)
+
+    // grab the item id from the cart list that is going to be used for deleting from our frontend through redux reducers
+    const mapItemIdInCart = cart
+      .map((item) => item.cartData)
+      .map((cartItem) => cartItem.itemId)
     try {
       await addCartToOrder(cart)
-      // for (let i = 0; i < mapItemIdInCart.length; i++) {
-      //   console.log('item id: ' + mapItemIdInCart[i])
-      //   deleteItemAfterOrder({ id: mapItemIdInCart[i] })
-          
-      //   }
+
+      // go through the cart items and delete them
       for (let i = 0; i < mapIdInCart.length; i++) {
         deleteCartData({ id: mapIdInCart[i], itemId: mapItemIdInCart[i] })
-        
       }
-      
-      // change the state of the order
-
-      console.log(' proceed: ', route.params.proceed)
-      getCurrentCartItems();
-      getCurrentOrder();
-      
+      dispatch(setBusinessName(cart[0].businessOrderedFrom))
+      cart.filter(
+        (item, index) => cart.indexOf(item) === index,
+      )
+      getCurrentCartItems()
+      getCurrentOrder()
     } catch (e) {
       console.log(e)
     }
@@ -161,43 +176,95 @@ const PaymentDetailsPage = () => {
   return (
     <View style={styles.paymentPageContainer}>
       <Pressable style={styles.goBackButton} onPress={goBack}>
-        <Feather name="arrow-left-circle" size={40} color="black" />
+        <AntDesign name="arrowleft" size={30} color="black" />
       </Pressable>
-      <Text style={styles.headerText}>Pick Up</Text>
+      <Text style={styles.headerText}>Payment Options</Text>
+      
+      {/* Flat list for multiple items */}
+      <FlatList
+        style={{ flex: 1 }}
+        data={getCartItems}
+        renderItem={({ item }) => {
+          return (
+            <>
+              <TouchableOpacity
+                disabled={true}
+                style={styles.foodCategoryStyle}
+              >
+                <View style={styles.card}>
+                  <View style={styles.imageBox}>
+                    <Image style={styles.foodImages} source={item.image} />
+                  </View>
+                  <View style={styles.foodTexts}>
+                    <Text style={styles.categoryText}>{item.name}</Text>
+                    <Text style={styles.descriptionOfItem}>{item.type}</Text>
+                    <Text style={styles.priceText}>
+                      Qty: {item.amountInCart}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </>
+          )
+        }}
+      />
 
-      <View style={styles.pickUpInformationContainer}>
-        <Text style={styles.pickUpInformationText}>
-          1111 S Fiqueroua St, Los Angeles, CA 90015
-        </Text>
-        <View style={styles.pickUpInformationButton}>
-          {/* <TouchableOpacity>
-            <Text style={styles.pickUpInformationButtonText}>Change</Text>
-          </TouchableOpacity> */}
+      {/* INfo on cost */}
+      <View style={styles.costInfoContainer}>
+        <View style={styles.locationContainer}>
+          <MaterialIcons name="location-on" size={24} color="#97989F" />
+          <Text style={styles.locationText}>
+            {location.streetNumber +
+              ' ' +
+              location.street +
+              ', ' +
+              location.adminName2 +
+              ', ' +
+              location.adminCode1 +
+              ' ' +
+              location.postalcode}
+          </Text>
+        </View>
+        <View style={styles.individualCostInfoContainer}>
+          <Text style={styles.costLabel}>Fees</Text>
+          <Text style={styles.costNumber}>${(calculateTotal / 10).toString().slice(0, 4)}</Text>
+        </View>
+        <View style={styles.individualCostInfoContainer}>
+          <Text style={styles.costLabel}>SubTotal</Text>
+          <Text style={styles.costNumber}>
+            ${calculateTotal}
+          </Text>
+        </View>
+        <View style={styles.individualCostInfoContainer}>
+          <Text style={styles.costLabel}>Total</Text>
+          <Text style={styles.costNumber}>${plus.toString().slice(0, 5)}</Text>
         </View>
       </View>
-      <View style={styles.pickUpInformationContainer}>
-        <Text style={styles.pickUpInformationText}>(213) 742-7100</Text>
-        <View style={styles.pickUpInformationButton}>
-          {/* <TouchableOpacity>
-            <Text style={styles.pickUpInformationButtonText}>Change</Text>
-          </TouchableOpacity> */}
-        </View>
-      </View>
+
       <View style={styles.paymentInformationContainer}>
-        <Text style={styles.headerTextPayment}>Payment method</Text>
-
         {/* ICONS FOR PAYMENTS */}
         <View style={styles.paymentOptionList}>
-          <TouchableOpacity style={styles.paymentCard} onPress={() => navigateToAddPaymentMethod()}>
-            <FontAwesome5
+          <TouchableOpacity
+            style={styles.paymentCard}
+            onPress={() => navigateToAddPaymentMethod()}
+          >
+            <AntDesign
               style={styles.paymentOption}
-              name="stripe-s"
-              size={50}
+              name="creditcard"
+              size={30}
               color="#78DBFF"
+            />
+            <Text style={styles.cardButtonText}>Pay With Card</Text>
+            <AntDesign
+              style={styles.paymentOption}
+              name="arrowright"
+              size={30}
+              color="black"
             />
           </TouchableOpacity>
         </View>
-        <View style={styles.payOnArrivalContainer}>
+
+        {/* <View style={styles.payOnArrivalContainer}>
           <TouchableOpacity style={styles.payOnArrivalButton}>
             <FontAwesome name="circle-o" size={24} color="black" />
             <Text style={styles.payOnArrivalText}>Pay on Arrival</Text>
@@ -205,22 +272,9 @@ const PaymentDetailsPage = () => {
           <Text style={styles.payOnArrivalDetailText}>
             Pay with cash/POS upon arrival{' '}
           </Text>
-        </View>
+        </View> */}
         {/* Cost container */}
-        <View style={styles.costInfoContainer}>
-          <View style={styles.individualCostInfoContainer}>
-            <Text style={styles.costLabel}>Fees</Text>
-            <Text style={styles.costNumber}>$5</Text>
-          </View>
-          <View style={styles.individualCostInfoContainer}>
-            <Text style={styles.costLabel}>SubTotal</Text>
-            <Text style={styles.costNumber}>${totalCost.toString().slice(0, 5)}</Text>
-          </View>
-          <View style={styles.individualCostInfoContainer}>
-            <Text style={styles.costTotalLabel}>Total</Text>
-            <Text style={styles.costTotalNumber}>$18</Text>
-          </View>
-        </View>
+
         {/* Place Order Button */}
         <View style={styles.placeOrderContainer}>
           <Pressable
@@ -237,7 +291,17 @@ const PaymentDetailsPage = () => {
 }
 
 const styles = StyleSheet.create({
+  locationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: '5%',
+  },
   // payment
+  locationText: {
+    color: '#97989F',
+    textAlign: 'center',
+  },
   paymentCard: {
     padding: '2%',
     margin: '2%',
@@ -246,23 +310,29 @@ const styles = StyleSheet.create({
     borderColor: '#e3e3e3',
     borderWidth: 2,
     borderRadius: 15,
-
+    flexDirection: 'row',
   },
   // order container
   placeOrderText: {
     color: '#fff',
+    fontWeight: 'bold',
+    
   },
   placeOrderContainer: {
     flex: 1,
+
   },
   placeOrderButton: {
     backgroundColor: '#78DBFF',
-    padding: '5%',
-    paddingHorizontal: '35%',
     borderRadius: 20,
-    margin: '3%',
-    marginBottom: '5%',
-    flex: 1,
+    padding: '4%',
+    margin: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: '#e3e3e3',
+    borderWidth: 2,
+    borderRadius: 15,
+    flexDirection: 'row',
   },
   goBackButton: {
     margin: 20,
@@ -272,40 +342,42 @@ const styles = StyleSheet.create({
     marginBottom: '-15%',
   },
   costLabel: {
-    fontSize: 18,
+    fontSize: 15,
     marginRight: '10%',
+    flex: 1,
+    fontWeight: 'bold',
   },
   costNumber: {
-    fontSize: 18,
+    fontSize: 15,
     textAlign: 'right',
+    flex: 1,
+    fontWeight: 'bold',
   },
   individualCostInfoContainer: {
     flexDirection: 'row',
-    flex: 1,
 
-    padding: '5%'
+    padding: '5%',
+    marginVertical: '-3%',
   },
   pickUpInformationButtonText: {
     color: '#78DBFF',
   },
   costInfoContainer: {
-    flex: 2,
-    marginHorizontal: '10%',
-
+    flex: 0.75,
+    marginHorizontal: '5%',
+    marginTop: '5%',
     borderRadius: 20,
-    borderWidth: 5,
-    borderColor: '#e3e3e3'
+    borderWidth: 2,
+    borderColor: '#e3e3e3',
   },
   payOnArrivalDetailText: {
     marginTop: '5%',
-
   },
   payOnArrivalText: {
-
     marginLeft: '10%',
   },
   payOnArrivalContainer: {
-    flex: 2,
+    flex: 1,
     marginHorizontal: '10%',
   },
   payOnArrivalButton: {
@@ -315,16 +387,24 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
   },
-  paymentOption: {
-    marginLeft: '5%',
-  },
-  paymentOptionList: {
-    flexDirection: 'row',
+
+  // Payment Option - button for card and in person
+  cardButtonText: {
     flex: 1,
     marginLeft: '10%',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  paymentOption: {
+    marginHorizontal: '2%',
+  },
+  paymentOptionList: {
+    //flexDirection: 'row',
+    flex: 1,
+    marginHorizontal: '3%',
   },
   paymentInformationContainer: {
-    flex: 5,
+    flex: 1,
   },
   pickUpInformationButton: {
     flex: 1,
@@ -339,20 +419,99 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   headerTextPayment: {
-    marginLeft: '10%',
-
     fontWeight: 'bold',
     fontSize: 25,
   },
   headerText: {
-    margin: '10%',
-    marginTop: '15%',
     fontWeight: 'bold',
     fontSize: 25,
+    margin: '4%',
   },
   paymentPageContainer: {
     backgroundColor: '#fff',
     flex: 1,
+  },
+
+  // Single Option styles
+  amountContainer: {
+    flex: 1,
+    marginTop: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    flexDirection: 'row',
+  },
+  icon: {
+    margin: 10,
+  },
+  goBackButton: {
+    margin: '10%',
+    marginTop: '15%',
+  },
+  descriptionOfItem: {
+    flex: 1,
+    fontSize: 15,
+    color: '#97989F',
+  },
+  imageBox: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  distanceText: {
+    marginLeft: 10,
+    fontSize: 11,
+    marginTop: 5,
+    flex: 1,
+  },
+  categoryText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    //fontFamily: 'monospace',
+    marginTop: 15,
+    flex: 1,
+  },
+  foodImages: {
+    width: '50%',
+    flex: 1,
+
+    // Increase the image size
+    padding: '30%',
+    marginLeft: 25,
+    marginTop: '15%',
+    marginBottom: '15%',
+    borderRadius: 10,
+  },
+  card: {
+    width: 250,
+    height: 115,
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 10,
+  },
+  priceText: {
+    flex: 1,
+    alignContent: 'flex-end',
+    color: '#97989F',
+    marginTop: 0,
+  },
+  foodTexts: {
+    flex: 2,
+    flexDirection: 'column',
+
+    marginTop: 5,
+  },
+  foodCategoryStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#d6d6d6',
+    borderStyle: 'solid',
+
+    borderBottomWidth: 1,
+    marginBottom: -0.1,
+    marginTop: 0,
   },
 })
 

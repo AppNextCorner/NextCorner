@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 
 export default function RestaurantCategoryCard(props) {
   // stores the property styles for the category card whether it has been clicked or not by matching the id with the id of the selected category

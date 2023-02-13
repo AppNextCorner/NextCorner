@@ -13,9 +13,9 @@ export default function VerticalPickUpList({ orderItemDetails, distance, duratio
   const mapThroughOrder = orderItemDetails.singleOrderList.map(
     (getItemData) => getItemData.cartData,
   )
-  console.log(mapThroughOrder)
+
   let text = 'Lorem ipsum dol'
-  console.log(orderItemDetails.singleOrderList)
+
 
   let limitTextAmount = text.slice(0, 75) + ''
   return (

@@ -15,38 +15,17 @@ import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/Go
 
 const InProgressOrderCard = ({
   orderTimeData,
-  orderItemId,
   orderStatusData,
 }) => {
-  const [timeLeft, setTimeLeft] = useState()
-  const [orderStatus, setOrderStatus] = useState('taking longer')
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-
-
-  const returnBack = () => {
-    console.log('returning back')
-    navigation.goBack()
-  }
-
-  // const { item } = route.params
-  console.log('orderTimeData: ',  orderTimeData)
+  const [timeLeft, setTimeLeft] = useState()
   const mapOrderItem =  orderTimeData.singleOrderList.map(location => location.location).flat()
   const mapOrderLogo =  orderTimeData.singleOrderList.map(logo => logo.logo)
-  console.log('map order item from route.params: ', mapOrderItem);
-  console.log('map order item from route.params: ', mapOrderLogo);
 
   const { updateOrder } = UseOrders()
   useEffect(() => {
     setTimeout(() => {
-      // make pretty
-      console.log('run')
-      console.log('New id: ', orderItemId)
-      // const orderTime = orderTimeData.filter((item) => item.id === orderItemId)
-
-      console.log('orderTime: ' + orderTimeData.timer)
-      // const orderTimeCreated = orderTimeData.map((val) => val.createdAt)
-      // const orderTimeToMake = orderTimeData.map((val) => val.timer + 1)
       const timer = orderTimeData.timer * 60;
       const returned_endate = moment(
         new Date(orderTimeData.createdAt),
@@ -59,21 +38,20 @@ const InProgressOrderCard = ({
 
       const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm')
 
-      console.log('retruend_endate: ', returned_endate)
-      console.log('now: ', now)
+    
       // returns a negative number because it is dividing the future date by the current date resulting into negative seconds
       const duration = moment().diff(returned_endate, 'seconds')
       // if the date returned from duration turns positive -> set the time to zero and status to taking longer than expected until the restaurant declares "ready for pick up" - then can otherwise change to "completed"
 
       if (duration < 0) {
-        console.log('duration: ', duration)
+        
         return setTimeLeft(duration)
       }
       return setTimeLeft(0)
     }, 1000)
   })
   useEffect(() => {
-    // this is the default message for
+    // update the order asynchronously
     const updatedStatus = {
       ...orderTimeData,
       orderStatus: 'Order taking longer than expected',
@@ -96,11 +74,7 @@ const InProgressOrderCard = ({
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
-        {/* <Image
-          source={require('../../assets/restaurantImages/redFoodCart.png')}
-          style={styles.googleMapImage}
-        /> */}
-        <GoogleMapsMenuSection scrollEnabled={false} pointerEvents={'none'} logo={mapOrderLogo} location={mapOrderItem} setDuration={setDuration} setDistance={setDistance} />
+        <GoogleMapsMenuSection scrollEnabled={false} pointerEvents={'none'} logo={mapOrderLogo} location={mapOrderItem}  setDuration={setDuration} setDistance={setDistance} />
       </View>
 
       <View style={styles.orderDetailTextContainer}>

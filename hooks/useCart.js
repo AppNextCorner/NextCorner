@@ -1,5 +1,3 @@
-import { IP } from '../constants/StripeApiKey'
-import { firebaseConfig } from '../firebase/firebase-config'
 import { useAppSelector, useAppDispatch } from '../store/hook'
 import {
   fetchCart,
@@ -11,34 +9,13 @@ import {
   deleteItemReducer,
   deleteItemAfterOrder,
 } from '../store/slices/addToCart'
-// import { initializeApp } from 'firebase/app'
-import { auth } from '../App'
-import { useDispatch } from 'react-redux'
-import { app } from '../App'
-import { getAuth } from 'firebase/auth'
+
+/**
+ * create a cart item and be able to increment/decrement amount of item, delete, and create a new item into our redux cart slice - handles sending the data to the slice
+ */
 export default UseCart = () => {
-  const auth = getAuth(app)
-
-  // Initialize Firebase
-
-  // Initialize Firebase Authentication and get a reference to the service
-  //
-  const dispatch = useDispatch()
-  const findAmount = useAppSelector(getCart)
-
-  const createToken = async () => {
-    let user = auth.currentUser
-    const token = user && (await user.getIdToken())
-
-    const payloadHeader = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    }
-    return payloadHeader
-  }
-  const url = `http://${IP}:4020/api`
+  const dispatch = useAppDispatch()
+  const findAmount = useAppSelector(getCart) // getting the amount of the item in the cart to change the visual part of the cart
 
   const getCurrentCartItems = async () => {
     try {
@@ -48,18 +25,26 @@ export default UseCart = () => {
     }
   }
 
-  const addToCart = async (item, userId, businessOrderedFrom, location, logo) => {
-    console.log("adding to cart", location)
+  const addToCart = async (
+    item,
+    userId,
+    businessOrderedFrom,
+    location,
+    logo,
+  ) => {
+    /**
+     * - Grabs location and logo for the google maps service
+     * - businessOrderedFrom - data used to check if the business has already been added
+     */
     const cartItem = {
       cartData: item,
       businessOrderedFrom,
       userId,
       location: location,
-      logo: logo
+      logo: logo,
     }
     try {
       await dispatch(addNewCartItem(cartItem))
-      
     } catch (e) {
       console.error(e)
     }
@@ -68,29 +53,22 @@ export default UseCart = () => {
     const idObject = {
       id: item.id,
     }
-    try{
-      
-      await dispatch(deleteItem(idObject));
-      dispatch(
-        deleteItemAfterOrder(idObject),
-      )
-    }
-    catch (e) {
-      console.log(e);
+    try {
+      await dispatch(deleteItem(idObject))
+      dispatch(deleteItemAfterOrder(idObject))
+    } catch (e) {
+      console.log(e)
     }
   }
-// takes in the updated object and the item id to be updated 
+  // takes in the updated object and the item id to be updated
   const updateCartItemData = async (updateItem) => {
-    console.log('run updateCartItemData')
+
     const cartItem = {
       updatedItem: updateItem.updatedCartItem,
       id: updateItem.id,
     }
-
-    console.log(cartItem.updatedItem)
     // find the item in the cart items list and look for the one that matches the updated item
     const cartItemMap = findAmount.find((item) => item.id === updateItem.id)
-
     if (
       updateItem.updatedCartItem.amountInCart - 1 ===
       cartItemMap.cartData.amountInCart
@@ -100,20 +78,14 @@ export default UseCart = () => {
     } else {
       // if less
       if (cartItemMap.cartData.amountInCart <= 1) {
-        
-        //removeObjectWithId(findAmount, updateItem.id)
         dispatch(
           deleteItemReducer({
             id: updateItem.id,
           }),
         )
         dispatch(deleteItem(cartItem))
-        // findAmount = findAmount.filter(
-        //   (cartItemId) => cartItemId.id !== updateItem.id,
-        // )
       } else if (cartItemMap.cartData.amountInCart >= 1) {
-        console.log('run')
-        console.log(cartItemMap)
+
         dispatch(updateRemoveCartItemAmount(cartItem))
       }
     }
@@ -122,6 +94,6 @@ export default UseCart = () => {
     addToCart,
     getCurrentCartItems,
     updateCartItemData,
-    deleteCartData 
+    deleteCartData,
   }
 }

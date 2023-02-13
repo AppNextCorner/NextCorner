@@ -15,7 +15,6 @@ export default function useCategoryList() {
   function onSelectCategory(id) {
     // want to check if the pressed category is the same as the selected category
     // if it is the same then the state of categoryWasSelected should be false because this is the initial state of the category list
-    console.log('id:', id)
     if (itemId === id) {
       setCategoryWasSelected(false);
       setItemId(0);

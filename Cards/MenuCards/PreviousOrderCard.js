@@ -12,17 +12,8 @@ const PreviousOrderCard = (props) => {
   const navigation = useNavigation()
   const { setOrder, order } = useOrderButton()
 
-  //   const orderList = previousOrders.singleOrderList
-  //   const filterPreviousOrderToStore = orderList.filter(
-  //     (val) => val.businessOrderedFrom === businessName,
-  //   )
   const getPreviousItemData = previousOrders.cartData
-  let text =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum placerat justo, nec consectetur diam pellentesque a.'
-  let limitTextAmount = text.slice(0, 75) + '...'
 
-  console.log('getPreviousItemData', getPreviousItemData)
-  console.log('getlastorder')
   const getTimeOrdered = moment(
     new Date(previousOrders.createdAt),
     'YYYY-M-D H:mm',
@@ -34,7 +25,6 @@ const PreviousOrderCard = (props) => {
   // create a copy of the previous order data as it is returned static and is immutable
   Object.assign({}, { ...getPreviousItemData })
   const parse = { cartData: JSON.parse(JSON.stringify(getPreviousItemData)) }
-  console.log('parse', parse)
   const goToFoodDetails = () => {
     setOrder(false)
     navigation.navigate('FoodDetails', {

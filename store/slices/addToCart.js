@@ -1,11 +1,11 @@
 /**
- * Purpose of file: Contains our slice to use for our state
+ * Purpose of file: used to send requests to our server and be able to receive and display the results throughout our application for the user's cart items only
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { IP } from '../../constants/StripeApiKey'
+import { IP } from '../../constants/ApiKeys'
 import { auth } from '../../App'
 
 const POSTS_URL = `http://${IP}:4020/api/`
@@ -26,14 +26,11 @@ const createToken = async () => {
 export const deleteItem = createAsyncThunk(
   'addToCart/deleteItem',
   async (cartItem) => {
-    const headers = await createToken()
-    console.log('headers', headers.headers)
     try {
       const response = await axios.delete(
         POSTS_URL + 'delete-item/' + cartItem.id,
         // headers,
       )
-      console.log('Here is response data: ', response.data)
       return response.data // Return a value synchronously using Async-await
     } catch (err) {
       if (!err.response) {
@@ -46,11 +43,8 @@ export const deleteItem = createAsyncThunk(
 
 export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
   const headers = await createToken()
-  console.log('headers', headers.headers)
   try {
-    console.log('Here is headers: ', headers)
     const response = await axios.get(POSTS_URL, headers)
-    console.log('Here is response data: ', response.data)
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
     if (!err.response) {
@@ -63,16 +57,11 @@ export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
 export const updateCartItemAmount = createAsyncThunk(
   'addToCart/updateCartItemAmount',
   async (cartItem) => {
-    console.log('updateCartItem', cartItem.updatedItem)
-    console.log('Payload: ' + POSTS_URL + 'item-amount/' + cartItem.id)
-    const headers = await createToken()
-    console.log(headers)
     try {
       const response = await axios.put(
         POSTS_URL + 'item-amount/' + cartItem.id,
         cartItem.updatedItem,
       )
-      console.log('response data: ', response.data)
       return response.data
     } catch (err) {
       if (!err.response) {
@@ -86,16 +75,12 @@ export const updateCartItemAmount = createAsyncThunk(
 export const updateRemoveCartItemAmount = createAsyncThunk(
   'addToCart/updateRemoveCartItemAmount',
   async (cartItem) => {
-    console.log('updateCartItem', cartItem.updatedItem)
-    console.log('Payload: ' + POSTS_URL + 'item-amount/' + cartItem.id)
-    const headers = await createToken()
-    console.log(headers)
     try {
       const response = await axios.put(
         POSTS_URL + 'item-amount/' + cartItem.id,
         cartItem.updatedItem,
       )
-      console.log('response data: ', response.data)
+
       return response.data
     } catch (err) {
       if (!err.response) {
@@ -110,15 +95,8 @@ export const addNewCartItem = createAsyncThunk(
   'addToCart/addNewCartItem',
   async (cartItem) => {
     const headers = await createToken()
-    console.log('payload item: ', cartItem)
-    // It isn't clear if you intended to use 'newUser' in this function or not.
-    // But it is sent from your 'signupBtn' event handler function when
-    // dispatch(registerNewUser(newUser)) is called.
-
     try {
-      console.log('payloadffff: ', cartItem)
       const resp = await axios.post(POSTS_URL, cartItem, headers)
-      console.log('Here is response: ', resp.data)
 
       return resp.data
     } catch (error) {
@@ -184,13 +162,12 @@ export const addToCart = createSlice({
         state.cart.push(action.payload)
       }
 
-      console.log('MAPCART:', mapCart)
       if (state.cart.length > 0) {
         state.cartButton = true
       } else {
         state.cartButton = false
       }
-      console.log('CURRENT STATE OF CART', state.cart)
+
     },
     orderPlaced: (state) => {
       // when user logs in, update logged in state
@@ -203,8 +180,7 @@ export const addToCart = createSlice({
 
     increaseInFoodDetails: (state, { payload }) => {
       payload.amountInCart += 1
-      console.log('ran increaseInFoodDetails')
-      console.log(payload.amountInCart)
+     
     },
 
     increase: (state, { payload }) => {
@@ -213,35 +189,9 @@ export const addToCart = createSlice({
       //
       const cartItem = mapCart.find((item) => item.itemId === payload.id)
       cartItem.amountInCart += 1
-      // function to remove the item from the state array with the find index method
-      //  function removeObjectWithId(arr, id) {
-      //    const mapAnotherCart = arr.map((item) => item.cartData)
-      //    // find the index of the item in the array that the item belongs to with the given id from the payload
-      //    const objWithIdIndex = mapAnotherCart.findIndex(
-      //      (obj) => obj.itemId === id,
-      //    )
-      //    // confirm if the item exists in the array
-      //    if (objWithIdIndex > -1) {
-      //      // if the item is already in the array, remove it from the array with the index found
-      //      arr.splice(objWithIdIndex, 1)
-      //    }
-      //    // mutated the array to avoid copying the original / modified array
-      //    return arr
-      //  }
-      //  // checks if the object property is belorw or over 1 to either eliminate it from the array with the removeObjectWithId function
-      //  if (cartItem.amountInCart - 1 < 1) {
-      //    // pass the global state to the removeObjectWithId function to mutate the array and the payload if to remove the item from the array
-      //    removeObjectWithId(state.cart, payload.id)
-      //  } else if (cartItem.amountInCart >= 1) {
-      //    // remove the item from the cart item counter
-      //    cartItem.amountInCart += 1
-      //  }
     },
     // status: completed
     deleteItemReducer: (state, { payload }) => {
-      console.log('here is payload for deleteItemReducer: ', payload)
-      //const mapCart = state.cart.map((itemList) => itemList.cartData)
-      //
       const cartItem = state.cart.find((item) => item.id === payload.id)
       // function to remove the item from the state array with the find index method
       function removeObjectWithId(arr, id) {
@@ -263,10 +213,6 @@ export const addToCart = createSlice({
       }
     },
     deleteItemAfterOrder: (state, { payload }) => {
-      console.log('here is payload for deleteItemAfterOrderReducer: ', payload.id)
-      //const mapCart = state.cart.map((itemList) => itemList.cartData)
-      //
-     
       // function to remove the item from the state array with the find index method
       function removeObjectWithId(arr, id) {
         //const mapAnotherCart = arr.map((item) => item.cartData)
@@ -321,7 +267,7 @@ export const addToCart = createSlice({
         //convert the items to an integer -> multiply the amount of one item price with the total amount in one particular item of the cart
         total += Number(mapCart[i].price * mapCart[i].amountInCart)
       }
-      console.log(total)
+      
       state.total = total
     },
   },
@@ -336,24 +282,13 @@ export const addToCart = createSlice({
     })
     builder.addCase(fetchCart.fulfilled, (state, { payload }) => {
       state.cartButton = true
-      console.log('payload from backend', payload)
+      
       // due to using authentication, we need to filter out the payload with each object's User id
       state.cart = payload.filter(
         (uidItem) => uidItem.userId === auth.currentUser.uid,
       )
       state.cart.filter((item, index) => state.cart.indexOf(item) === index)
-      // if (state.cart !== null) {
-      //   console.log("no items")
-      //   //state.businessName = payload[0].businessOrderedFrom
-      // } else if (state.cart === null) {
-      //   console.log("no items")
-      //   state.businessName = ''
-
-      // console.log(
-      //   'business name from backend',
-      //   payload[state.cart.length - 1].businessOrderedFrom,
-      // )
-      //}
+     
     })
     builder.addCase(addNewCartItem.pending, (state, { payload }) => {
       console.log('pending')
@@ -363,7 +298,7 @@ export const addToCart = createSlice({
     })
     builder.addCase(addNewCartItem.fulfilled, (state, { payload }) => {
       state.cartButton = true
-      console.log('payload from backend', payload)
+     
       state.cart.push(payload)
       state.cart.filter((item, index) => state.cart.indexOf(item) === index)
     })
@@ -375,14 +310,14 @@ export const addToCart = createSlice({
     })
     // depending if the amount is decremented one time or incrememented on the object on its data, change the visual state of the cart object accordingly
     builder.addCase(updateCartItemAmount.fulfilled, (state, { payload }) => {
-      console.log('payload from backend', payload)
+     
       const cartItem = state.cart.find((item) => item.id === payload.id)
       cartItem.cartData.amountInCart += 1
     })
     builder.addCase(
       updateRemoveCartItemAmount.fulfilled,
       (state, { payload }) => {
-        console.log('payload from backend', payload)
+        
 
         const cartItem = state.cart.find((item) => item.id === payload.id)
         //const findMapAmount = payload.cartData
@@ -391,7 +326,7 @@ export const addToCart = createSlice({
       },
     )
     builder.addCase(deleteItem.fulfilled, (state, { payload }) => {
-      console.log('payload id from backend', payload.id)
+     
       state.cart = state.cart.filter(
         (cartItemId) => cartItemId.id !== payload.id,
       )

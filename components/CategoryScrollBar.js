@@ -2,7 +2,7 @@
  * Purpose of the component: It is used to display the list of categories that will filter the list of restaurants that match the category selected by the user
  */
 
-import { StyleSheet, Text, View, ScrollView, FlatList } from "react-native";
+import { StyleSheet, View, ScrollView, FlatList } from "react-native";
 import React from "react";
 import RestaurantCategoryCard from "../Cards/RestaurantCategoryCard";
 

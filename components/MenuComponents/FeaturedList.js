@@ -4,10 +4,8 @@ import FeaturedTypeCard from '../../Cards/MenuCards/FeaturedTypeCard'
 
 const FeaturedList = (props) => {
   const { menuData, businessName, location, logo } = props
-  console.log('menuData', menuData)
   const findFeaturedList = menuData.filter((item) => item.featured === true)
-  console.log('featuredList', findFeaturedList)
-  console.log('featured businessName', businessName)
+ 
   return (
     <>
       {findFeaturedList.length > 0 ? (
