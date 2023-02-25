@@ -5,15 +5,17 @@ import useOrderButton from '../../hooks/useOrderButton'
 import { AntDesign } from '@expo/vector-icons'
 
 const FeaturedTypeCard = (props) => {
+  // Button hook to prevent multiple presses
   const { setOrder, order } = useOrderButton()
+  // Data coming from the business to be sent towards the food details page
   const { menuItem, businessName, location, logo } = props
 
   const navigation = useNavigation()
 
-
   const goToFoodDetails = () => {
     setOrder(false)
     navigation.navigate('FoodDetails', {
+      //  Props data sent to food details to be able to display the details 
       business: businessName,
       foodItem: menuItem,
       location: location,

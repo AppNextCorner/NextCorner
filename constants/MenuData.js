@@ -1051,6 +1051,10 @@ const trendingTitle = () => {
     category: faker.commerce.department(),
   }
 }
+/**
+ * 
+ * @returns {array} - Array of restaurants that have a category defined 
+ */
 export const trendingRestaurants = () => {
   // category list - iterate over all categories and return a list of all items that match the category
   let restaurantsWithCategories = []

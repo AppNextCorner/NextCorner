@@ -4,9 +4,10 @@ import MenuItemCard from '../MenuItemCard'
 import { useRoute } from '@react-navigation/native'
 
 const MenuTypeList = (props) => {
-
+  // data sent towards the food details page
   const { menuItem, type, businessName, location, logo } = props
 
+  // type is a string that represents the type of food that the menu item represents: ex: Burger, Pizza, etc.
   const getItemsThatMatchType = menuItem.filter((item) => item.type === type)
 
   return (

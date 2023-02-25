@@ -39,7 +39,7 @@ const useAddUser = () => {
     try {
 
 
-      await dispatch(createUser(userData))
+      await dispatch(createUser(userData)) // wait for user to be created in the backend
       
     } catch (err) {
       console.log('user was not created', err)

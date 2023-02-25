@@ -13,18 +13,19 @@ const PreviousOrderCard = (props) => {
   const { setOrder, order } = useOrderButton()
 
   const getPreviousItemData = previousOrders.cartData
-
+  // creating a new order date object with moment to show when the order was created
   const getTimeOrdered = moment(
-    new Date(previousOrders.createdAt),
+    new Date(previousOrders.createdAt), // comes from mongodb document timestamps
     'YYYY-M-D H:mm',
   )
-    .tz('America/Los_Angeles')
+    .tz('America/Los_Angeles') // timezone for the time
 
     .format('dddd, MMM D')
 
-  // create a copy of the previous order data as it is returned static and is immutable
+  // create a deep copy of the previous order data as it is returned static and is immutable
   Object.assign({}, { ...getPreviousItemData })
   const parse = { cartData: JSON.parse(JSON.stringify(getPreviousItemData)) }
+  
   const goToFoodDetails = () => {
     setOrder(false)
     navigation.navigate('FoodDetails', {

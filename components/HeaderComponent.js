@@ -19,7 +19,9 @@ export default function HeaderComponent() {
     if (getCartOption.length > 0) {
       //;
       navigation.navigate('Cart')
+      // Change the state of the business in the cart page to match the business from the cart data
       dispatch(setBusinessName(getCartOption[0].businessOrderedFrom))
+      // Remove any existing duplicate cart items
       getCartOption.filter(
         (item, index) => getCartOption.indexOf(item) === index,
       )

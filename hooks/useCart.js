@@ -60,9 +60,13 @@ export default UseCart = () => {
       console.log(e)
     }
   }
-  // takes in the updated object and the item id to be updated
-  const updateCartItemData = async (updateItem) => {
 
+  /**
+   * Be able to increment the cart item count 
+   * @param {Object} updateItem - The updated item that was incremented in their amountIncart
+   */
+  const updateCartItemData = async (updateItem) => {
+    
     const cartItem = {
       updatedItem: updateItem.updatedCartItem,
       id: updateItem.id,

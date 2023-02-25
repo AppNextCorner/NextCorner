@@ -15,15 +15,16 @@ const CompletedOrderCard = ({ completedOrder }) => {
     .tz('America/Los_Angeles')
 
     .format('dddd, MMM D')
+  // Get the prices of the each completed order and calculate the total amount of price for one item
   const calculateOrderPrice = completedOrder.singleOrderList
     .map((cart) => cart.cartData)
     .map((price) => price.price * price.amountInCart)
 
+  // add the prices of all completed orders after it has been added to their respective amounts
   let addOrderPrice = calculateOrderPrice.reduce(function (a, b) {
     return a + b
   })
-
-  // grab the item amount from the order
+  // Grab the business name of the order and the amount of items for that specific item
   const getBusinessName = completedOrder.singleOrderList[0].businessOrderedFrom
   const getItemAmount = completedOrder.singleOrderList
   return (

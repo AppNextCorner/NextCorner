@@ -5,21 +5,24 @@ import useOrderButton from '../hooks/useOrderButton'
 import { useEffect } from 'react'
 
 /**
- * The default business card
+ * The default business card item
  * @param {*} props - be able to pass additional properties through the cart after coming from the restaurant property prior to this page
  * 
  */
 export default function MenuItemCard({ foodItem, businessName, location, logo }) {
   const navigation = useNavigation()
-  const { setOrder} = useOrderButton()
+  const { setOrder} = useOrderButton() 
+  // Match the location to the current location
   useEffect(() => {
     location
   })
+
   let limitTextAmount = foodItem.description.slice(0, 75) + '...'
   const goToOrderPage = () => {
     setOrder(false)
    
     navigation.navigate('FoodDetails', {
+      // Send the item data to the menu item page
       business: businessName,
       foodItem: foodItem,
       location: location,

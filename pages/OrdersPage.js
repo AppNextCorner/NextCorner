@@ -44,7 +44,9 @@ export default function OrdersPage() {
   )
 
   // removes duplicated order cards - shows key warning still
-  const unique = [...new Map(filterCompletedData.map((m) => [m.createdAt, m])).values()];
+  const unique = [
+    ...new Map(filterCompletedData.map((m) => [m.createdAt, m])).values(),
+  ] // grab the creation time of the order
   const filterInProgressData = orderData.filter(
     (item) => item.orderStatus === 'In Progress',
   )
@@ -120,7 +122,6 @@ export default function OrdersPage() {
                   <Text style={styles.completedPageHeader}>Completed</Text>
                 </>
               }
-             
               showsVerticalScrollIndicator={false}
               data={unique}
               style={styles.completedPageList}

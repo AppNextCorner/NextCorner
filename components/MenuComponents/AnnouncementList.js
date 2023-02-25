@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import AnnouncementCard from '../../Cards/MenuCards/AnnouncementCard'
 
 const AnnouncementList = (props) => {
+  // Grabbing the data and the direction of the announcement list
   const { announcementData, horizontal } = props
   const [announcement, setAnnouncement] = useState(announcementData)
-
   return (
     <>
       {announcement.length > 0 ? (

@@ -1,13 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  Image,
-  Dimensions,
 } from 'react-native'
 import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
@@ -22,7 +18,6 @@ export default function GoogleMapsMenuSection(props) {
   // used for differentiating the in progress orders through our maps on InProgress page and the InProgress cards
   const {
     location,
-    logo,
     setDuration,
     setDistance,
     scrollEnabled,
@@ -36,10 +31,13 @@ export default function GoogleMapsMenuSection(props) {
     longitudeData: 0.0421,
   })
   const [viewLocation, setViewLocation] = useState(false)
+  // Helps to instantly create a new location
   const mapRef = useRef()
+  // takes in result which has duration and distance properties 
   const traceRouteOnReady = (result) => {
     setDistance(result.distance)
     setDuration(result.duration)
+    // For the current render, we want to create coordinates for the map trace and the page padding for the trace
     mapRef.current?.fitToCoordinates(result.coordinates, {
       edgePadding: {
         right: 70,
@@ -51,7 +49,6 @@ export default function GoogleMapsMenuSection(props) {
   }
 
   // use an async function to immediately get the user's approval to use maps rather than having to wait for other functions
-
   const userLocation = async () => {
     // ask the user for permission from Expo location library -> get status from the permissions
     let { status } = await Location.requestForegroundPermissionsAsync()
@@ -66,7 +63,7 @@ export default function GoogleMapsMenuSection(props) {
       enableHighAccuracy: true,
     })
 
-
+    // setting the location with the current position of the device
     setMapRegion({
       // Get location from the object data we received from the position async and set the previous latitude and longitude of the previous state mapRegion, to the current location
       latitude: location.coords.latitude,
@@ -75,17 +72,22 @@ export default function GoogleMapsMenuSection(props) {
       latitudeDelta: 0.0106,
       longitudeDelta: 0.0121,
     })
+    // After getting the necessary information, we can show the map 
     setViewLocation(true)
   }
 
+  // The location of the business coming from the database and turning it to a float
   const destination = {
     latitude: parseFloat(location[0]),
     longitude: parseFloat(location[1]),
   }
-  // after the page is loaded, call the async function to update the location of the user
+  // after the page is loaded, call the async function to update the location of the user 
+  // The function runs asynchronously, meaning that the location will be updated and need to render again after the location is updated
   useEffect(() => {
     userLocation()
   }, [])
+
+  // Create the component for the business icon for the map
   function CustomMarker() {
     return (
       <View style={styles.marker}>
@@ -98,6 +100,7 @@ export default function GoogleMapsMenuSection(props) {
       </View>
     )
   }
+  // Create the component for the user icon for the map
   const CustomUserMarker = () => {
     return (
       <View style={styles.marker}>
@@ -111,7 +114,7 @@ export default function GoogleMapsMenuSection(props) {
         <MapView
           pointerEvents={pointerEvents}
           scrollEnabled={scrollEnabled}
-          ref={mapRef}
+          ref={mapRef} // reference to the map view for the markers and tracker
           minZoomLevel={12} // default => 0
           maxZoomLevel={18} // default => 20
           // passing the json map styles to the customMapStyle property to update the style of the map according to the json map styles

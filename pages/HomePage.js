@@ -2,7 +2,6 @@
  * Purpose of the file: It is used to be the first page the user has access to after opening the app / login in through the app
  * - Displays restaurants based on location or depending on the section from either the category or default sections
  */
-
 import { StyleSheet, View, FlatList, Text } from 'react-native'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
@@ -12,7 +11,7 @@ import RestaurantListComponent from '../components/RestaurantListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
 import OrderButton from '../components/OrderButton'
 import { useAppSelector } from '../store/hook'
-import { getButton, getCart } from '../store/slices/addToCart'
+import { getButton} from '../store/slices/addToCart'
 import useCategoryList from '../hooks/useCategoryList'
 import useRestaurants from '../hooks/useRestaurants'
 
@@ -35,6 +34,7 @@ export default function HomePage() {
     .flat()
 
   const isClicked = useAppSelector(getButton)
+  // Copy of the restaurants 
   let list = []
 
   // filter out restaraunts from every category - get restrautns from every category

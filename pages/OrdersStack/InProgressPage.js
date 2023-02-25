@@ -38,7 +38,7 @@ const InProgressPage = () => {
   // items displayed on the Google Maps component after being passed in
   const mapOrderItem = item.singleOrderList.map(location => location.location).flat()
   const mapOrderLogo = item.singleOrderList.map(logo => logo.logo)
-  const bottomSheetRef = useRef(null)
+  const bottomSheetRef = useRef(null) // set the initial bottom sheet to have nothing instantly until it is changed
 
   // first value -> initial value / point to start with on the bottom
   // second value -> final point where the modal is supposed to stop in with snapping to it when near it
