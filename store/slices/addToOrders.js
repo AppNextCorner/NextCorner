@@ -54,7 +54,7 @@ export const getOrderList = createAsyncThunk(
 )
 
 export const updateOrderStatus = createAsyncThunk(
-  'addToCart/updateOrderStatus',
+  'addToOrders/updateOrderStatus',
   async (itemStatus) => {
     try {
       const response = await axios.patch(

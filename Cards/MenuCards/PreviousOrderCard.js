@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import useOrderButton from '../../hooks/useOrderButton'
 
 const PreviousOrderCard = (props) => {
-  const { previousOrders, businessName, location, logo } = props
+  const { previousOrders, businessName, location } = props
 
   const navigation = useNavigation()
   const { setOrder, order } = useOrderButton()
@@ -32,7 +32,6 @@ const PreviousOrderCard = (props) => {
       business: businessName,
       foodItem: parse.cartData,
       location: location,
-      logo: logo,
     })
   }
 

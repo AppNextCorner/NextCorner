@@ -21,7 +21,9 @@ export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false)
   const dispatch = useAppDispatch()
 
-  const orderData = useAppSelector(getOrders)
+
+  const getOrderFromSlice =  useAppSelector(getOrders);
+  const  orderData = JSON.parse(JSON.stringify(getOrderFromSlice))
   const navigation = useNavigation()
 
   const orderList = orderData
@@ -35,7 +37,6 @@ export default function OrdersPage() {
 
   useEffect(() => {
     dispatch(getOrderList())
-    console.log(orderData)
     orderData.filter((item, index) => orderData.indexOf(item) === index)
   }, [dispatch])
 

@@ -3,13 +3,14 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import useOrderButton from '../hooks/useOrderButton'
 import { useEffect } from 'react'
+import { IP } from '../constants/ApiKeys'
 
 /**
  * The default business card item
- * @param {*} props - be able to pass additional properties through the cart after coming from the restaurant property prior to this page
+ * @param {*} props - be able to pass additional properties through the cart after coming from the business property prior to this page
  * 
  */
-export default function MenuItemCard({ foodItem, businessName, location, logo }) {
+export default function MenuItemCard({ foodItem, businessName, location  }) {
   const navigation = useNavigation()
   const { setOrder} = useOrderButton() 
   // Match the location to the current location
@@ -26,7 +27,6 @@ export default function MenuItemCard({ foodItem, businessName, location, logo })
       business: businessName,
       foodItem: foodItem,
       location: location,
-      logo: logo
     })
   }
 
@@ -39,7 +39,7 @@ export default function MenuItemCard({ foodItem, businessName, location, logo })
     >
       <View style={styles.card}>
         <View style={styles.imageBox}>
-          <Image style={styles.foodImages} source={foodItem.image} />
+          <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${foodItem.image.toString()}`}} />
         </View>
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{foodItem.name}</Text>

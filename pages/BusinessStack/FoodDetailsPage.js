@@ -26,6 +26,7 @@ import useCart from '../../hooks/useCart'
 import { auth } from '../../App'
 import useOrderButton from '../../hooks/useOrderButton'
 import { useState } from 'react'
+import { IP } from '../../constants/ApiKeys'
 
 export default function FoodDetailsPage() {
   const { addToCart } = useCart()
@@ -37,7 +38,7 @@ export default function FoodDetailsPage() {
   const dispatch = useAppDispatch()
   const route = useRoute()
   const navigation = useNavigation()
-  const { business, foodItem, location, logo } = route.params
+  const { business, foodItem, location} = route.params
   const businessName = useAppSelector(getBusinessName)
   // "JSON"
   useEffect(() => {
@@ -48,8 +49,8 @@ export default function FoodDetailsPage() {
   const name = (parse || {}).cartData
 
   // grabbing the selection status for the customization of the menu item from the business
-  const resetOptions = name.options
-    .map((c) => c.customizations)
+  const resetOptions = name.customizations
+    
     .flat()
     .map((c) => c.selected)
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
@@ -77,10 +78,9 @@ export default function FoodDetailsPage() {
     if (businessName === '' || business === businessName) {
       try {
         // add the items to the cart - don't need to call another getCart items due to it showing the new data with useEffect
-        await addToCart(addItem, userId, business, location, logo)
+        await addToCart(addItem, userId, business, location)
         // change the business name of the cart page to the business name of this current item
         dispatch(setBusinessName(business))
-        
         // reset the options selected to its default value when going back to the previous screen
         for (let i = 0; i < resetOptions.length; i++) {
           resetOptions[i] = false
@@ -105,7 +105,7 @@ export default function FoodDetailsPage() {
           <AntDesign name="arrowleft" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={foodItem.image} />
+        <Image style={styles.image} source={{uri:`http://${IP}:4020/${foodItem.image.toString()}`}} />
 
         {/* Header */}
         <View style={styles.headerContainer}>
@@ -148,9 +148,7 @@ export default function FoodDetailsPage() {
         <View style={{ flex: 1 }}>
           <OptionSelectionComponent
             header={Header}
-            optionData={foodItem.name}
-            data={foodItem.options}
-            onChange={onSizeChange}
+            data={foodItem.customizations}
             render={setRender}
             stateRender={render}
           />
@@ -164,7 +162,7 @@ export default function FoodDetailsPage() {
             onPress={goToCartButton}
           >
             <Text style={styles.orderButtonText}>
-              Add to Cart {foodItem.price}
+              Add to Cart ${foodItem.price}
             </Text>
           </TouchableOpacity>
         </View>

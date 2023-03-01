@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { IP } from '../../constants/ApiKeys'
 
 /**
  * 
- * @param {*} props - Data from the restaurant main component 
+ * @param {*} props - Data from the business main component 
  * @returns 
  */
 const AnnouncementCard = (props) => {
@@ -13,20 +14,9 @@ const AnnouncementCard = (props) => {
    * Preset data for the announcement images due as it looks better than the faker data
    */
   const [announcement, setAnnouncement] = useState(announcementData)
-  const imageList = [
-    {
-      image: require('../../assets/CategoryIcons/burrito.png'),
-    },
-    {
-      image: require('../../assets/CategoryIcons/pizza.png'),
-    },
-    {
-      image: require('../../assets/CategoryIcons/bread.png'),
-    },
-  ]
   // Experimental styles that previously used faker.js colors, but restored to preset default styles
   const backgroundTextStyle = {
-    backgroundColor: '#78DBFF',
+    backgroundColor: announcement.color,
     width: 210,
     height: 125,
     margin: 10,
@@ -35,7 +25,7 @@ const AnnouncementCard = (props) => {
     justifyContent: 'center',
   }
   const buttonStyle = {
-    backgroundColor: '#78DBFF',
+    backgroundColor: announcement.color,
     flexDirection: 'row',
     marginVertical: 20,
     margin: 10,
@@ -50,11 +40,12 @@ const AnnouncementCard = (props) => {
     <TouchableOpacity style={buttonStyle} disabled={true}>
       <View style={backgroundTextStyle}>
         <Text style={styles.header}>{announcement.header.slice(0, 16) + '...'}</Text>
-        <Text style={styles.text}>{announcement.text.slice(0, 75)}</Text>
+        <Text style={styles.text}>{announcement.description
+.slice(0, 75)}</Text>
       </View>
       <Image
         style={styles.announcementImageContainer}
-        source={imageList[Math.floor(Math.random() * imageList.length)].image}
+        source={{uri:`http://${IP}:4020/${announcement.image.toString()}`}}
       />
     </TouchableOpacity>
   )

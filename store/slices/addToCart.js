@@ -127,12 +127,8 @@ export const addToCart = createSlice({
       state.businessName = payload
     },
     setOrder: (state, { payload }) => {
-      console.log('here is order')
-      console.log(payload.order)
-      console.log('HERE is order cart right now')
       let removeCart = state.cart.splice(0, state.cart.length)
       let order = state.order.push(payload.order)
-      console.log(state.order)
       state.cartButton = false
     },
     addItem: (state, { payload }) => {
@@ -141,7 +137,6 @@ export const addToCart = createSlice({
     // case reducer functions
     // action is what values we want to assign the state to and receive it from payload
     setCart: (state, action) => {
-      console.log('DATA SENT', action.payload)
 
       // when user logs in, update logged in state by assigning it a new value -> could do more actions such as push to an array, but it all depends on the data type and current state
 

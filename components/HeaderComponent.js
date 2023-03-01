@@ -11,7 +11,11 @@ import { getCart, setBusinessName } from '../store/slices/addToCart'
 
 export default function HeaderComponent() {
   const navigation = useNavigation()
-  const getCartOption = useAppSelector(getCart)
+  //JSON.parse(JSON.stringify(getCartFromSlice)) 
+  const getCartFromSlice =  useAppSelector(getCart);
+  const getCartOption = JSON.parse(JSON.stringify(getCartFromSlice))
+ 
+ 
   const dispatch = useAppDispatch()
 
   // setting up the businessname to that of our first cart item then check if the business is already there, and if it is, then we can proceed to that page, and if not then give an alert to the user

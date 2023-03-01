@@ -15,7 +15,9 @@ import {
  */
 export default UseCart = () => {
   const dispatch = useAppDispatch()
-  const findAmount = useAppSelector(getCart) // getting the amount of the item in the cart to change the visual part of the cart
+  const getCartFromSlice =  useAppSelector(getCart);
+  const findAmount = JSON.parse(JSON.stringify(getCartFromSlice))
+ // getting the amount of the item in the cart to change the visual part of the cart
 
   const getCurrentCartItems = async () => {
     try {
@@ -30,7 +32,6 @@ export default UseCart = () => {
     userId,
     businessOrderedFrom,
     location,
-    logo,
   ) => {
     /**
      * - Grabs location and logo for the google maps service
@@ -41,7 +42,6 @@ export default UseCart = () => {
       businessOrderedFrom,
       userId,
       location: location,
-      logo: logo,
     }
     try {
       await dispatch(addNewCartItem(cartItem))

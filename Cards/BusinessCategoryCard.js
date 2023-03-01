@@ -1,23 +1,23 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 
-export default function RestaurantCategoryCard(props) {
+export default function BusinessCategoryCard(props) {
   // stores the property styles for the category card whether it has been clicked or not by matching the id with the id of the selected category
   let touchButton = {
     style:
-      props.restaurantItem.key !== props.foodId
+      props.businesItem.key !== props.foodId
         ? styles.foodCategoryStyle
         : styles.btnPress,
   }
   let imageBackground = {
     style:
-      props.restaurantItem.key !== props.foodId
+      props.businesItem.key !== props.foodId
         ? styles.defaultImageContainer
         : styles.activeImageContainer,
   }
   let categoryTextStyle = {
     style:
-      props.restaurantItem.key !== props.foodId
+      props.businesItem.key !== props.foodId
         ? styles.defaultCategoryText
         : styles.activeCategoryText,
   }
@@ -25,20 +25,20 @@ export default function RestaurantCategoryCard(props) {
   return (
     // note: this card is to filter the categories displayed on the screen
     <TouchableOpacity
-      id={props.restaurantItem.key}
+      id={props.businesItem.key}
       // grabbing the styles from the object touchButton
       {...touchButton}
       // grab the function to call when the touchable is clicked and pass the key to the function located in the categoryscroll bar
       onPress={() => {
-        props.handlePress(props.restaurantItem.key)
+        props.handlePress(props.businesItem.key)
       }}
     >
       <View style={styles.cardContainer}>
         <View {...imageBackground}>
-          <Image style={styles.icon} source={props.restaurantItem.foodType} />
+          <Image style={styles.icon} source={props.businesItem.foodType} />
         </View>
         <View style={styles.defaultCategoryTextContainer}>
-          <Text {...categoryTextStyle}>{props.restaurantItem.text}</Text>
+          <Text {...categoryTextStyle}>{props.businesItem.text}</Text>
         </View>
       </View>
     </TouchableOpacity>

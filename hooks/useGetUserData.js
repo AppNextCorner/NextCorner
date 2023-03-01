@@ -6,6 +6,7 @@ import { useAppDispatch } from '../store/hook'
 import { fetchCart } from '../store/slices/addToCart'
 import { getAuth } from 'firebase/auth'
 import { getOrderList } from '../store/slices/addToOrders'
+import { getAllBusinesses } from '../store/slices/BusinessSlice/businessSlice'
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -23,6 +24,7 @@ const useGetUserData = () => {
   const getLoggedInUserData = async () => {
     try {
       await dispatch(getUsers())
+     
     } catch (err) {
       console.log('no users found with this email address', err)
     }
@@ -39,6 +41,7 @@ const useGetUserData = () => {
         dispatch(setUser(userData)) // set the user data to the slice 
         dispatch(fetchCart())
         dispatch(getOrderList())
+        dispatch(getAllBusinesses())
       } catch (e) {
         console.log(e)
       }

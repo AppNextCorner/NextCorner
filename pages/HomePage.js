@@ -1,19 +1,19 @@
 /**
  * Purpose of the file: It is used to be the first page the user has access to after opening the app / login in through the app
- * - Displays restaurants based on location or depending on the section from either the category or default sections
+ * - Displays business based on location or depending on the section from either the category or default sections
  */
 import { StyleSheet, View, FlatList, Text } from 'react-native'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
 import SearchComponent from '../components/SearchComponent'
-import RestaurantCard from '../Cards/RestaurantCard'
-import RestaurantListComponent from '../components/RestaurantListComponent'
+import BusinessCard from '../Cards/BusinessCard'
+import BusinessListComponent from '../components/BusinessListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
 import OrderButton from '../components/OrderButton'
 import { useAppSelector } from '../store/hook'
 import { getButton} from '../store/slices/addToCart'
 import useCategoryList from '../hooks/useCategoryList'
-import useRestaurants from '../hooks/useRestaurants'
+import useBusiness from '../hooks/useBusiness'
 
 export default function HomePage() {
   /**
@@ -27,24 +27,23 @@ export default function HomePage() {
     onSelectCategory,
   } = useCategoryList()
 
-  const { trendingRestaurants, restaurants } = useRestaurants()
-  // access the restaurant data
-  const getRestaurants = trendingRestaurants
-    .map((val) => val.restaurantsWithCategories)
+  const { trendingBusiness, business } = useBusiness()
+  // access the business data
+  const getBusinesss = trendingBusiness
+    .map((val) => val.businessWithCategories)
     .flat()
 
   const isClicked = useAppSelector(getButton)
-  // Copy of the restaurants 
+  // Copy of the business 
   let list = []
 
   // filter out restaraunts from every category - get restrautns from every category
-  const getRestaurant = restaurants.forEach((r) => {
+  const getBusiness = business.forEach((r) => {
     // list join up with the restaurnt list
     list = list.concat(r)
   })
-
-  // filter out restaurants that have matching category id
-  const filterRestaurantCards = restaurants.filter((i) => {
+  // filter out business that have matching category id
+  const filterBusinessCards = business.filter((i) => {
     return i.categoryId === categoryId
   })
   return (
@@ -54,7 +53,7 @@ export default function HomePage() {
         {/* Top header for the user to be able to display address and access items in their order */}
 
         <HeaderComponent />
-        {/* If the category has not been selected, show the default restaurants page */}
+        {/* If the category has not been selected, show the default business page */}
         {!categoryWasSelected ? (
           <>
             <FlatList
@@ -71,7 +70,7 @@ export default function HomePage() {
                   />
                 </>
               }
-              data={getRestaurants}
+              data={getBusinesss}
               ListFooterComponent={
                 <FlatList
                   ListHeaderComponent={
@@ -84,12 +83,12 @@ export default function HomePage() {
                     </>
                   }
                   showsVerticalScrollIndicator={false}
-                  data={restaurants}
+                  data={business}
                   keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
                   renderItem={({ item }) => (
-                    // RestaurantCard is each individual restaurant card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
-                    <RestaurantCard
-                      restaurantItem={item}
+                    // BusinessCard is each individual business card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
+                    <BusinessCard
+                      businesItem={item}
                       checkForStyleChange={!checkForStyleChange}
                     />
                   )}
@@ -98,16 +97,16 @@ export default function HomePage() {
               renderItem={({ item }) => (
                 // renders the nested data three times -> due to having three objects in the dataToRender array
                 // if no category selected, render the default treding
-                <RestaurantListComponent
+                <BusinessListComponent
                   title={item.name}
                   style={styles.list}
-                  restaurants={item.categorizedRestaurants}
+                  business={item.categorizedBusinesss}
                 />
               )}
             />
           </>
         ) : (
-          // screen for displaying the list of category restaurants after changing the state of the categoryWasSelected
+          // screen for displaying the list of category business after changing the state of the categoryWasSelected
           <>
             <FlatList
               showsVerticalScrollIndicator={false}
@@ -120,14 +119,14 @@ export default function HomePage() {
                   showItem={onSelectCategory}
                 />
               }
-              data={filterRestaurantCards}
+              data={filterBusinessCards}
               keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
               renderItem={({ item }) => (
-                // RestaurantCard is each individual restaurant card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
+                // BusinessCard is each individual business card that pass restarauntItem being the data that was filtered for the category, but similar to the trendingFood data
 
-                <RestaurantCard
+                <BusinessCard
                   checkForStyleChange={checkForStyleChange}
-                  restaurantItem={item}
+                  businesItem={item}
                 />
               )}
             />

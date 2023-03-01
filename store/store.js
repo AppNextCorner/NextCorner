@@ -5,6 +5,7 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import addToCart from "./slices/addToCart";
 import addToOrders from "./slices/addToOrders";
+import businessSlice from "./slices/BusinessSlice/businessSlice";
 import userSession from "./slices/userSession";
 
 export const store = configureStore({
@@ -14,7 +15,8 @@ export const store = configureStore({
         // copy the original state and assign changes to the copied values we chooose
         userSession: userSession,
         addToCart: addToCart,
-        addToOrders: addToOrders
+        addToOrders: addToOrders,
+        businessSlice: businessSlice,
     },
     devTools: true,
 })
