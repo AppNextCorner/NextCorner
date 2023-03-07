@@ -45,7 +45,7 @@ const CompletedOrderCard = ({ completedOrder }) => {
           <View style={styles.dateAndPrice}>
             <Text style={styles.timeOrdered}>{getTimeOrdered}</Text>
             <Text style={styles.priceOfOrder}>
-              / ${addOrderPrice} - {getItemAmount.length} items
+              / ${addOrderPrice.toString().slice(0, 5)} - {getItemAmount.length} items
             </Text>
           </View>
           {/* Item list */}

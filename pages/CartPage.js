@@ -35,7 +35,6 @@ import useCart from '../hooks/useCart'
  */
 
 const CartPage = () => {
-  
   const { updateCartItemData } = useCart()
   const dispatch = useAppDispatch()
   // navigation part of the screen
@@ -76,9 +75,7 @@ const CartPage = () => {
       </Pressable>
 
       <FlatList
-        ListHeaderComponent={() => {
-          return <Text>Ordered from: {businessName}</Text>
-        }}
+        
         data={isCartFull}
         renderItem={({ item }) => {
           const grabCartItem = item.cartData
@@ -160,11 +157,8 @@ const CartPage = () => {
 
       <View>
         <View style={styles.bottomButtons}>
-          <View style={styles.addItemsButtonContainer}>
-            <TouchableOpacity style={styles.addItemsButton}>
-              <Text>Add More Items</Text>
-            </TouchableOpacity>
-          </View>
+
+            <Text style={styles.businessText}>Ordered from: {businessName}</Text>
           {/* Payment button */}
           <View style={styles.proceedToPaymentContainer}>
             <TouchableOpacity
@@ -184,6 +178,11 @@ const CartPage = () => {
 export default CartPage
 
 const styles = StyleSheet.create({
+  businessText: {
+    textAlign: 'center',
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
   bottomButtons: {
     paddingHorizontal: 20,
     paddingTop: 10,
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
   },
   proceedToPaymentContainer: {
     alignItems: 'center',
-    marginTop: '40%',
+    marginTop: '10%',
     marginBottom: '6%',
   },
   amountContainer: {

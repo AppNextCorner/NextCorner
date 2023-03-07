@@ -93,7 +93,8 @@ const PaymentDetailsPage = () => {
 
         // creates a payment flow - one time payments with saving a customer's card without an initial payment
         customFlow: true,
-
+        customerId: data.customer,
+        customerEphemeralKeySecret: data.ephemeralKey,
         returnURL: 'stripe-example://stripe-redirect',
       })
       // check for errors -> show / alert the user on the error message
@@ -104,7 +105,9 @@ const PaymentDetailsPage = () => {
       // show the stripe API sheet -> update the clientSecret to the response data
       const presentSheet = await stripe.presentPaymentSheet({
         clientSecret: clientSecret,
+        
       })
+   
       console.log('Present Sheet', presentSheet)
       console.log('Client Secret', clientSecret)
 
@@ -167,17 +170,17 @@ const PaymentDetailsPage = () => {
           1111 S Fiqueroua St, Los Angeles, CA 90015
         </Text>
         <View style={styles.pickUpInformationButton}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Text style={styles.pickUpInformationButtonText}>Change</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.pickUpInformationContainer}>
         <Text style={styles.pickUpInformationText}>(213) 742-7100</Text>
         <View style={styles.pickUpInformationButton}>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Text style={styles.pickUpInformationButtonText}>Change</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.paymentInformationContainer}>
@@ -211,7 +214,7 @@ const PaymentDetailsPage = () => {
           </View>
           <View style={styles.individualCostInfoContainer}>
             <Text style={styles.costLabel}>SubTotal</Text>
-            <Text style={styles.costNumber}>${totalCost}</Text>
+            <Text style={styles.costNumber}>${totalCost.toString().slice(0, 5)}</Text>
           </View>
           <View style={styles.individualCostInfoContainer}>
             <Text style={styles.costTotalLabel}>Total</Text>
@@ -279,19 +282,26 @@ const styles = StyleSheet.create({
   individualCostInfoContainer: {
     flexDirection: 'row',
     flex: 1,
+
+    padding: '5%'
   },
   pickUpInformationButtonText: {
     color: '#78DBFF',
   },
   costInfoContainer: {
     flex: 2,
-    marginLeft: '10%',
+    marginHorizontal: '10%',
+
+    borderRadius: 20,
+    borderWidth: 5,
+    borderColor: '#e3e3e3'
   },
   payOnArrivalDetailText: {
     marginTop: '5%',
+
   },
   payOnArrivalText: {
-    textAlignVertical: 'center',
+
     marginLeft: '10%',
   },
   payOnArrivalContainer: {
