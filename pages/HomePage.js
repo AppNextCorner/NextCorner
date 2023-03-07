@@ -89,6 +89,11 @@ export default function HomePage() {
               data={getRestaurants}
               ListFooterComponent={
                 <FlatList
+                  ListHeaderComponent={<>
+                    <View style={styles.businessHeaderContainer}>
+                      <Text style={styles.businessHeader}>All Businesses</Text>
+                    </View>
+                  </>}
                   showsVerticalScrollIndicator={false}
                   data={restaurants}
                   keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
@@ -149,6 +154,14 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
+  businessHeaderContainer: {
+    margin: 10,
+   
+  },
+  businessHeader: {
+    fontSize: 20,
+    fonWeight: 'bold',
+  },
   selectedCategory: {
     backgroundColor: 'blue',
   },

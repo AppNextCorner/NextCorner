@@ -107,7 +107,7 @@ const InProgressOrderCard = ({
         <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
         <Text style={styles.orderStatusText}>{orderStatusData}</Text>
         <Text style={styles.timeText}>
-          Ready In: {Math.floor(Math.abs(timeLeft) / 60)} min
+          Ready In: {timeLeft <= -60 ? Math.floor(Math.abs(timeLeft) / 60) : '< 1'} min
         </Text>
       </View>
     </View>

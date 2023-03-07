@@ -51,6 +51,8 @@ export default function OrdersPage() {
   const filterCompletedData = orderData.filter(
     (item) => item.orderStatus === 'Order taking longer than expected',
   )
+  const unique = [...new Map(filterCompletedData.map((m) => [m.createdAt, m])).values()];
+  console.log('unique: ', unique);
   console.log(filterCompletedData)
   const filterInProgressData = orderData.filter(
     (item) => item.orderStatus === 'In Progress',
@@ -135,7 +137,7 @@ export default function OrdersPage() {
               }
               inverted={true}
               showsVerticalScrollIndicator={false}
-              data={filterCompletedData}
+              data={unique}
               style={styles.completedPageList}
               renderItem={({ item }) => {
                 console.log('Item: ', item)

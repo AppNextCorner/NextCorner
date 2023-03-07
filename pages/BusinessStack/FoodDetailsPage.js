@@ -51,9 +51,9 @@ export default function FoodDetailsPage() {
 
   //const grabCartData = getCartItems.map((item) => item.cartData)
 
- // console.log(grabCartData)
+  // console.log(grabCartData)
   // "Object.assign"
-  
+
   // "JSON"
   useEffect(() => {
     Object.assign({}, { ...foodItem })
@@ -70,12 +70,25 @@ export default function FoodDetailsPage() {
       .flat()
       .map((c) => c.selected),
   )
-  console.log("name", name)
-
+  console.log('name', name)
+  const resetOptions = name.options
+    .map((c) => c.customizations)
+    .flat()
+    .map((c) => c.selected)
   //.map(options => options.options).map(v => v.customizations).map(l => l.selected))
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
-  const goHome = () => {
-    navigation.goBack()
+  const goHome = async () => {
+    setOrder(true)
+    try {
+      navigation.goBack()
+      if (order === true) {
+        for (let i = 0; i < resetOptions.length; i++) {
+          resetOptions[i] = false
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
   /**
    * WIll run after the options are selected - such as if one or however much options is required to make an order
@@ -91,6 +104,10 @@ export default function FoodDetailsPage() {
         // add the items to the cart - don't need to call another getCart items due to it showing the new data with useEffect
         await addToCart(addItem, userId, business, location, logo)
         dispatch(setBusinessName(business))
+
+        for (let i = 0; i < resetOptions.length; i++) {
+          resetOptions[i] = false
+        }
         navigation.goBack()
         // getCurrentCartItems()
       } catch (e) {

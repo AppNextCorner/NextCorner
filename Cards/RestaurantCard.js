@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   restaurantText: {
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: 'bold',
     // fontFamily: 'monospace',
     flex: 1,
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
   },
   foodTexts: {
     flexDirection: 'row',
-    marginLeft: 10,
-    marginTop: '5%',
+    marginLeft: 0,
+    marginTop: '3%',
   },
   foodCategoryStyle: {
     flex: 1,
