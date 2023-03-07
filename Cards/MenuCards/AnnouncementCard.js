@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 
 /**
  * 
- * 
  * @param {*} props - Data from the restaurant main component 
  * @returns 
  */

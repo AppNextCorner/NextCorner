@@ -8,7 +8,6 @@
 // if the button is clicked -> add the option label to an array
 // if the button is clicked again, then remove the option label from the array
 // if another option is clicked, then, remove the option label from the array
-
 import {
   Text,
   FlatList,
@@ -29,9 +28,12 @@ export default function OptionSelectionComponent(props) {
   const [customStyle, setCustomStyle] = useState(null)
   const { data, header, render, stateRender } = props
 
+  // Checking for the click event for the single option and change the state of the option
   const handlePress = (stack, idFromParent, item) => {
     // setting the default values for the stack item options to false
     render(!stateRender)
+
+    // set all the options to false rather than setting them to true when the option is a single selection
     const selectMap = item.customizations.map((val) => (val.selected = false))
     selectMap
     setCustomStyle(null)
@@ -53,8 +55,8 @@ export default function OptionSelectionComponent(props) {
     }
   }
 
-  // For multiple options selected
-  const handleMultiplePress = (stack, idFromParent, item) => {
+  // For multiple options selected 
+  const handleMultiplePress = (stack, idFromParent) => {
     // setting the default values for the stack item options to false
     // const selectMap = item.customizations.map((val) => (val.selected = false))
     // selectMap
@@ -102,6 +104,7 @@ export default function OptionSelectionComponent(props) {
               >
                 <View style={styles.buttonOptionContainer}>
                   {item.customizations.map((stack, index) => {
+                    // check if the card is either a single selection or a multiple selection
                     if (item.type === 'single') {
                       return (
                         <TouchableOpacity
@@ -160,7 +163,7 @@ export default function OptionSelectionComponent(props) {
                                 : styles.optionStyle
                             }
                             onPress={() => {
-                              handleMultiplePress(stack, item.itemId, item)
+                              handleMultiplePress(stack, item.itemId)
                             }}
                           >
                             <MaterialCommunityIcons

@@ -43,9 +43,11 @@ export default function FoodDetailsPage() {
   useEffect(() => {
     Object.assign({}, { ...foodItem })
   }, [render])
+    // Make a deep copy to make sure that we update the local properties and not the properties of the main business
   const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) }
   const name = (parse || {}).cartData
 
+  // grabbing the selection status for the customization of the menu item from the business
   const resetOptions = name.options
     .map((c) => c.customizations)
     .flat()
@@ -57,7 +59,7 @@ export default function FoodDetailsPage() {
       navigation.goBack()
       if (order === true) {
         for (let i = 0; i < resetOptions.length; i++) {
-          resetOptions[i] = false
+          resetOptions[i] = false // set the status to false
         }
       }
     } catch (e) {

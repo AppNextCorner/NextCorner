@@ -1,3 +1,4 @@
+// Purpose: Used to display the order that was previously ordered from the same business order and filtered from the Menu Page
 import {
   FlatList,
   StyleSheet,

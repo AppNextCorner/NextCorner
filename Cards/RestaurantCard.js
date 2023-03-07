@@ -4,7 +4,8 @@ import { useNavigation } from '@react-navigation/native'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 
 export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
-  const changeStyle = (checkForStyleChange) => {
+  // The style is changed when a category is selected on the home page 
+  const changeStyle = (checkForStyleChange) => { 
     let change =
       checkForStyleChange === true
         ? {
@@ -19,7 +20,6 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
           }
     return change
   }
-
   const navigation = useNavigation()
 
   return (

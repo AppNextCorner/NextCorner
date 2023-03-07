@@ -8,13 +8,14 @@ const OrderButton = () => {
   const navigation = useNavigation()
   const getCartOption = useAppSelector(getCart)
   const dispatch = useAppDispatch()
-
   // setting up the businessname to that of our first cart item then check if the business is already there, and if it is, then we can proceed to that page, and if not then give an alert to the user
   const navigateCart = () => {
     if (getCartOption.length > 0) {
       //;
       navigation.navigate('Cart')
+      // Change the state of the business in the cart page to match the business from the cart data
       dispatch(setBusinessName(getCartOption[0].businessOrderedFrom))
+      // Remove any existing duplicate cart items
       getCartOption.filter(
         (item, index) => getCartOption.indexOf(item) === index,
       )

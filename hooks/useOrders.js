@@ -65,9 +65,9 @@ const UseOrders = () => {
         id: updatedStatus.id,
       }
       try{
-        // change the state
+        // change the state of the order status through the global state to display the order status
         dispatch(updateOrderStatusReducer(itemStatus))
-        // send in axios put request
+        // send in axios put request to change the status whether the order is completed or no in our backend
         dispatch(updateOrderStatus(itemStatus))
     } catch (e) {
       console.log(e)

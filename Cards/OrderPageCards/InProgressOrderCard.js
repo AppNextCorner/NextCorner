@@ -4,9 +4,6 @@ import {
   View,
   StyleSheet,
   Text,
-  FlatList,
-  TouchableOpacity,
-  Image,
 } from 'react-native'
 import moment from 'moment'
 import 'moment-timezone'
@@ -17,41 +14,49 @@ const InProgressOrderCard = ({
   orderTimeData,
   orderStatusData,
 }) => {
+  // 
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const [timeLeft, setTimeLeft] = useState()
   const mapOrderItem =  orderTimeData.singleOrderList.map(location => location.location).flat()
   const mapOrderLogo =  orderTimeData.singleOrderList.map(logo => logo.logo)
 
+
   const { updateOrder } = UseOrders()
   useEffect(() => {
+    // ever second, we want to update the order time by the order time
     setTimeout(() => {
+      // convert the order time to seconds to increment seconds to match the timeout
       const timer = orderTimeData.timer * 60;
+      // create a new date for the order that was created at the timestamp
       const returned_endate = moment(
         new Date(orderTimeData.createdAt),
         'YYYY-M-D H:mm:ss',
       )
-        .tz('America/Los_Angeles')
+        .tz('America/Los_Angeles') // get the timezone for the order
         // only adds minutes from the date and does not consider seconds
         .add(timer, 'seconds')
-        .format('YYYY-MM-DD HH:mm:ss')
+        .format('YYYY-MM-DD HH:mm:ss') // be able to format the date 
 
+        // match the current date to the order date by the format and timezone
       const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm')
 
     
       // returns a negative number because it is dividing the future date by the current date resulting into negative seconds
       const duration = moment().diff(returned_endate, 'seconds')
       // if the date returned from duration turns positive -> set the time to zero and status to taking longer than expected until the restaurant declares "ready for pick up" - then can otherwise change to "completed"
-
       if (duration < 0) {
         
         return setTimeLeft(duration)
       }
+      // the time left is zero, so we need to adjust the duration to 0 and do another function when this happens
       return setTimeLeft(0)
     }, 1000)
   })
+
+   // update the order asynchronously
   useEffect(() => {
-    // update the order asynchronously
+    // changing the order status with the finished message
     const updatedStatus = {
       ...orderTimeData,
       orderStatus: 'Order taking longer than expected',
@@ -59,9 +64,10 @@ const InProgressOrderCard = ({
 
     if (timeLeft === 0) {
       console.log('Ordertook longer than expected')
-      // updates the order status after the state of time left changes so that the order status is updated correctly
+      // send a request to update the order status after the state of time left changes so that the order status is updated correctly
       updateOrder(updatedStatus, timeLeft)
     } else {
+      // data was not updated
       null
     }
   })
@@ -74,6 +80,7 @@ const InProgressOrderCard = ({
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
+        {/* Small map preview and send specific modigications to match the card format and not the whole map */}
         <GoogleMapsMenuSection scrollEnabled={false} pointerEvents={'none'} logo={mapOrderLogo} location={mapOrderItem}  setDuration={setDuration} setDistance={setDistance} />
       </View>
 

@@ -39,18 +39,16 @@ export default function SignInPage() {
 */
   const handleSignIn = () => {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password) // firebase auth that requires password, email, and the auth status of the user
       // takes in the credentials from email and password
       .then((userCredential) => {
-        console.log('Signed In')
-        // set the user as a variable
+        // set the user as a variable containing the information of the user
         const user = userCredential.user
         dispatch(
           setUser({
             name: user.displayName
           }),
         )
-
       })
       .catch((err) => {
         console.log(err)

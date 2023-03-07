@@ -27,6 +27,7 @@ export default function SearchComponent() {
 
   // goes through all the businesses and checks if the user that typed the store is filtered and if so, add to the list
   for (let i = 0; i < mapStores.length; i++) {
+    // grabs the business from an index from the whole businesses list and takes a slice and compares them with the user input to determine which business to show
     if (mapStores[i].slice(0, showStores.length) === showStores) {
       filteredStores.push(restaurants[i])
     }
@@ -46,6 +47,7 @@ export default function SearchComponent() {
           placeholder="Search For Local Businesses"
           value={showStores}
           onChangeText={(text) => {
+            // Capitalize the first character of the search term to be able to distinguish the many restaurants 
             setShowStores(
               text
                 .toLowerCase()

@@ -18,8 +18,9 @@ export default function ProfilePage() {
   const mainUser = user[0]
   const handleSignOutUser = async () => {
     try {
-      dispatch(logOut())
-      const result = await signOut(auth)
+      // change the state of the user screen to false to change the routes we want the user to access
+      dispatch(logOut()) 
+      const result = await signOut(auth) // Sign out the user from firebase authentication
       return result
     } catch (err) {
       console.log(err.message)

@@ -44,13 +44,13 @@ const CartPage = () => {
   }
   const goToPayment = () => {
     navigation.navigate('PaymentDetails')
-
     dispatch(calculateTotals()) // grab the total amount and the price of each item for our transaction in the PaymentDetails page
   }
 
   const isCartFull = useAppSelector(getCart)
   const businessName = useAppSelector(getBusinessName)
 
+  // Checking if the cart is full or empty based on the amount of cart items there are and be able to filter any duplicates and set the business name to be empty is the cart is empty
   useEffect(() => {
     if (isCartFull.length === 0) {
       console.log('empty cart')

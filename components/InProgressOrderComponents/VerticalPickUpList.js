@@ -1,7 +1,6 @@
 /**
  * Purpose of the file: It is used to display the restaurants and its content by rendering multiple restaurants and multiple horizontal list for each restaurant
  */
-
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
 import React from 'react'
 import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
@@ -9,7 +8,7 @@ import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
 export default function VerticalPickUpList({ orderItemDetails, distance, duration }) {
   // grabbing the data of the trendingFood from the data folder
 
-  // mapping through the data
+  // mapping through the data and retrieving the data from one order
   const mapThroughOrder = orderItemDetails.singleOrderList.map(
     (getItemData) => getItemData.cartData,
   )
