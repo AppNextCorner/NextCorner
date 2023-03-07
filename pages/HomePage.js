@@ -3,8 +3,7 @@
  * - Displays restaurants based on location or depending on the section from either the category or default sections
  */
 
-import { StyleSheet, View, FlatList, Text, Button } from 'react-native'
-import { useState } from 'react'
+import { StyleSheet, View, FlatList, Text } from 'react-native'
 import HeaderComponent from '../components/HeaderComponent'
 import { StatusBar } from 'expo-status-bar'
 import SearchComponent from '../components/SearchComponent'
@@ -12,21 +11,15 @@ import RestaurantCard from '../Cards/RestaurantCard'
 import RestaurantListComponent from '../components/RestaurantListComponent'
 import CategoryScrollBar from '../components/CategoryScrollBar'
 import OrderButton from '../components/OrderButton'
-import { useAppDispatch, useAppSelector } from '../store/hook'
+import { useAppSelector } from '../store/hook'
 import { getButton, getCart } from '../store/slices/addToCart'
-import { logOut } from '../store/slices/userSession'
 import useCategoryList from '../hooks/useCategoryList'
 import useRestaurants from '../hooks/useRestaurants'
-import useGetUserData from '../hooks/useGetUserData'
-
-import { auth } from '../App'
-
-// firebase authentication -> grabbing the user data from firebase to use here after user is logged in
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 
 export default function HomePage() {
-  const dispatch = useAppDispatch()
-
+  /**
+   * Hook for our category cards to filter through businesses that have a matching id to that category card
+   */
   const {
     categoryWasSelected,
     categoryId,
@@ -41,15 +34,7 @@ export default function HomePage() {
     .map((val) => val.restaurantsWithCategories)
     .flat()
 
-  // auth.currentUser.getIdToken().then((token) => console.log(token))
-
-  // // the data we want to render is stored in the state variable, so we need to map through the data to pinpoint the category array containing the data of each card
-
-  // // after we have the category selected, we need to set the selected value equal to the value of the selected item with the selected item ID and compare it with the category selected id value
-
   const isClicked = useAppSelector(getButton)
-  const isCartFull = useAppSelector(getCart)
-  console.log(isCartFull)
   let list = []
 
   // filter out restaraunts from every category - get restrautns from every category
@@ -69,7 +54,6 @@ export default function HomePage() {
         {/* Top header for the user to be able to display address and access items in their order */}
 
         <HeaderComponent />
-        {/* <Text>{user.email}</Text> */}
         {/* If the category has not been selected, show the default restaurants page */}
         {!categoryWasSelected ? (
           <>
@@ -78,6 +62,7 @@ export default function HomePage() {
               ListHeaderComponent={
                 <>
                   <SearchComponent />
+
                   <CategoryScrollBar
                     categoryList={categoryList}
                     itemId={categoryId}
@@ -89,11 +74,15 @@ export default function HomePage() {
               data={getRestaurants}
               ListFooterComponent={
                 <FlatList
-                  ListHeaderComponent={<>
-                    <View style={styles.businessHeaderContainer}>
-                      <Text style={styles.businessHeader}>All Businesses</Text>
-                    </View>
-                  </>}
+                  ListHeaderComponent={
+                    <>
+                      <View style={styles.businessHeaderContainer}>
+                        <Text style={styles.businessHeader}>
+                          All Businesses
+                        </Text>
+                      </View>
+                    </>
+                  }
                   showsVerticalScrollIndicator={false}
                   data={restaurants}
                   keyExtractor={(item, index) => item.id} // hey tell flatlist what the unique property is - by edefault it looks for item.key
@@ -146,8 +135,6 @@ export default function HomePage() {
         )}
 
         {isClicked === true ? <OrderButton /> : null}
-        {/* <Button onPress={handleSignOut} title="Sign Out"/>
-        <Button onPress={test} title="exit"/> */}
       </View>
     </>
   )
@@ -156,7 +143,6 @@ export default function HomePage() {
 const styles = StyleSheet.create({
   businessHeaderContainer: {
     margin: 10,
-   
   },
   businessHeader: {
     fontSize: 20,

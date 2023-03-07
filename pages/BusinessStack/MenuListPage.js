@@ -11,9 +11,9 @@ import {
   Pressable,
   FlatList,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRoute } from '@react-navigation/native'
-import { Feather } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import OrderButton from '../../components/OrderButton'
@@ -27,72 +27,75 @@ import AnnouncementList from '../../components/MenuComponents/AnnouncementList'
 
 export default function MenuListPage() {
   const route = useRoute()
-  const { restaurant } = route.params
+  const { restaurant } = route.params 
   const [menuTypeData, setMenuTypeData] = useState(restaurant)
+  // menu of the business through params
   const [menu, setMenu] = useState(restaurant.menu)
-  const isClicked = useAppSelector(getButton)
-  // using routes for getting the data and navigation to navigate through a different screen
+  const isClicked = useAppSelector(getButton) // helps prevent infinite orders being made
 
   const navigation = useNavigation()
 
-  // filter through all items in the cart and see if they match
+  /**
+   * This code section is used to get the orders that have been previously ordered if they match with the current store
+   */
   const previousOrders = useAppSelector(getOrders)
+   // filter through all items in the cart and see if they match
   const getSingleOrders = previousOrders
     .map((item) => item.singleOrderList)
     .flat()
-  const filterOrder = getSingleOrders.filter(val => val.businessOrderedFrom === restaurant.name)
- 
+  const filterOrder = getSingleOrders.filter(
+    (val) => val.businessOrderedFrom === restaurant.name,
+  )
+
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate('Home')
   }
 
-
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        {/* Google Maps tap to view section */}
-        {/* <GoogleMapsMenuSection /> */}
         {/* Menu list containing food items */}
         <FlatList
           ListHeaderComponent={
             <>
               {/* Pressable for the purpose of using an icon to go back home  */}
               <Pressable style={styles.goBackButton} onPress={goHome}>
-                <Feather name="arrow-left-circle" size={40} color="white" />
+                <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
 
               <Image style={styles.image} source={restaurant.image} />
 
-              {/* Business Logo */}
-              <Image style={styles.logoImage} source={restaurant.logo} />
-
-              <Text style={styles.title}>{restaurant.name}</Text>
-              <View style={styles.description}>
-                <Text style={styles.textDescription}>
-                  {restaurant.description}
-                </Text>
-                
-              </View>
-
+              {/* Business Logo - not needed as many small businesses don't have one*/}
+              {/* <Image style={styles.logoImage} source={restaurant.logo} /> */}
               {/* Section for small google maps preview */}
-              <AnnouncementList horizontal={true} announcementData={restaurant.announcementCards} />
-              <View style={styles.margin}></View>
-              {/* Section for Featured Items*/}
-
-              <FeaturedList
-                menuData={menu}
-                businessName={restaurant.name}
-                location={restaurant.location}
-                logo={restaurant.logo}
-              />
+              <View style={{ marginTop: -60 }}>
+                <View style={styles.timeContainer}>
+                <Text style={styles.timeOfMenu}>
+                  Open: {restaurant.open} - {restaurant.close}
+                </Text>
+                </View>
+                
+                <AnnouncementList
+                  horizontal={true}
+                  announcementData={restaurant.announcementCards}
+                  open={restaurant.open}
+                  close={restaurant.close}
+                />
+                <FeaturedList
+                  menuData={menu}
+                  businessName={restaurant.name}
+                  location={restaurant.location}
+                  logo={restaurant.logo}
+                />
+                {/* Section for Featured Items*/}
+              </View>
 
               <PreviousOrdersComponent
                 menuData={menu}
                 location={restaurant.location}
                 logo={restaurant.logo}
-                
                 listData={filterOrder}
                 businessName={restaurant.name}
               />
@@ -100,9 +103,6 @@ export default function MenuListPage() {
               {/* ALL menu items located here */}
               <View style={styles.marginSet}>
                 <Text style={styles.titleOfMenu}>Full Menu</Text>
-                <Text style={styles.timeOfMenu}>
-                  {restaurant.open} - {restaurant.close}
-                </Text>
               </View>
             </>
           }
@@ -111,7 +111,7 @@ export default function MenuListPage() {
           // pass in the menu list coming from the route.params of the restaurants items which we can access through params
           data={menuTypeData.menuTypes}
           renderItem={({ item }) => {
-            console.log('INformation on one menu item', item)
+            
             return (
               <>
                 <Text style={styles.typeText}>{item.type}</Text>
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   typeText: {
     margin: '3%',
     marginTop: '5%',
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   // menu header styles for business time
@@ -165,20 +165,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     // fontFamily: 'monospace',
     marginLeft: '3%',
-    marginTop: 10,
+    marginVertical: 10,
   },
   timeOfMenu: {
-    fontSize: 15,
-
-    marginLeft: '3%',
-    borderBottomColor: '#d6d6d6',
-    borderBottomWidth: 1,
-    paddingBottom: 25,
+    
+    color: '#fff',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  timeContainer: {
+    marginLeft: '5%',
+    marginBottom: '-2%',
+    backgroundColor: '#60b6f7',
+    width: 200,
+    padding: '1%',
+    borderRadius: 20,
+    borderColor: 'black',
   },
   marginSet: {
     marginVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#d6d6d6',
+
   },
   restaurantCard: {
     flex: 1,
@@ -196,7 +204,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 250,
     overflow: 'hidden',
     resizeMode: 'cover',
     marginTop: -105,

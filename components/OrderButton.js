@@ -9,6 +9,7 @@ const OrderButton = () => {
   const getCartOption = useAppSelector(getCart)
   const dispatch = useAppDispatch()
 
+  // setting up the businessname to that of our first cart item then check if the business is already there, and if it is, then we can proceed to that page, and if not then give an alert to the user
   const navigateCart = () => {
     if (getCartOption.length > 0) {
       //;
@@ -19,13 +20,12 @@ const OrderButton = () => {
       )
     } else {
       Alert.alert('Buy some items to proceed...')
-      //console.log('Buy some items to proceed...')
     }
   }
 
+  // check if there are any items in the cart 
   if (getCartOption.length > 0) {
     return (
-      // <Text>Hello</Text>
 
       <TouchableOpacity
         style={styles.orderButton}
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: '5%',
     marginTop: '-20%',
-    flex: 1,
+
   },
   orderButtonText: {
     flex: 7,

@@ -1,7 +1,6 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image, Pressable } from 'react-native'
+import { StyleSheet, View, Text, Image, Pressable } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
-import { useRoute } from '@react-navigation/native'
 
 export default function MenuItemCard({ foodItem }) {
   const navigation = useNavigation()

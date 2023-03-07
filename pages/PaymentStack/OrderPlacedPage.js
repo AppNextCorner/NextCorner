@@ -2,14 +2,15 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
   TouchableOpacity,
   Image,
 } from 'react-native'
 import React from 'react'
-import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-
+/**
+ * 
+ * Displays the screen with the message shown to the user when the item went through successfully with the order 
+ */
 const OrderPlacedPage = () => {
   const navigation = useNavigation()
   const goToOrders = () => {
@@ -18,7 +19,7 @@ const OrderPlacedPage = () => {
   return (
     <View style={styles.orderPlacedContainer}>
       <View style={styles.alertContainer}>
-        <Image source={require('../../assets/completedIcon.png')} style={styles.iconImage}/>
+        <Image source={require('../../assets/logo.png')} style={styles.iconImage}/>
         <Text style={styles.header}>Your order has been successfully placed</Text>
         <Text style={styles.text}>
           Your orders is being worked on. It'll take a couple of minutes to complete!

@@ -1,6 +1,5 @@
 /**
  * Purpose of the file: It is used to display the current food items the user has selected after exiting from the foodDetails page and selecting their preference
- * - Work in Progess -> needs to completed in terms of passing data from the FoodDetails page and need to display both components of current and completed order
  */
 
 import {
@@ -8,18 +7,13 @@ import {
   View,
   Text,
   FlatList,
-  Button,
-  ScrollView,
   TouchableOpacity,
-  Image,
+  Pressable,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '../store/hook'
-
-import { getOrderList, getOrders, getTime } from '../store/slices/addToOrders'
-
+import { getOrderList, getOrders } from '../store/slices/addToOrders'
 import InProgressOrderCard from '../Cards/OrderPageCards/InProgressOrderCard'
-import InProgressPage from './OrdersStack/InProgressPage'
 import { useNavigation } from '@react-navigation/native'
 import CompletedOrderCard from '../Cards/OrderPageCards/CompletedOrderCard'
 
@@ -29,14 +23,11 @@ export default function OrdersPage() {
 
   const orderData = useAppSelector(getOrders)
   const navigation = useNavigation()
-  ///const getTimeLeft = useAppSelector(getTime);
+
   const orderList = orderData
     .map((val) => val.singleOrderList)
     .flat()
     .map((item) => item.cartData)
-  console.log(' order list')
-  console.log(orderList)
-  console.log(orderData.map((val) => val.id))
 
   const goToProgressPage = (item) => {
     navigation.navigate('InProgressOrder', { item: item })
@@ -51,9 +42,9 @@ export default function OrdersPage() {
   const filterCompletedData = orderData.filter(
     (item) => item.orderStatus === 'Order taking longer than expected',
   )
+
+  // removes duplicated order cards - shows key warning still
   const unique = [...new Map(filterCompletedData.map((m) => [m.createdAt, m])).values()];
-  console.log('unique: ', unique);
-  console.log(filterCompletedData)
   const filterInProgressData = orderData.filter(
     (item) => item.orderStatus === 'In Progress',
   )
@@ -62,17 +53,12 @@ export default function OrdersPage() {
     filterCompletedData
   }, [orderData])
 
-  let text = 'Lorem ipsum dol'
-
   const inProgress = () => {
     setOrderSelection(false)
   }
   const completedOrders = () => {
     setOrderSelection(true)
   }
-
-  let limitTextAmount = text.slice(0, 75) + ''
-  let randomId = Math.floor(Math.random() * 10) + 1
   return (
     <View style={styles.orderPageContainer}>
       <Text style={styles.headerText}>Your Orders</Text>
@@ -98,7 +84,6 @@ export default function OrdersPage() {
               data={filterInProgressData}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => {
-                console.log('Item: ', item)
                 return (
                   <>
                     <TouchableOpacity onPress={() => goToProgressPage(item)}>
@@ -130,22 +115,21 @@ export default function OrdersPage() {
               </TouchableOpacity>
             </View>
             <FlatList
-              ListFooterComponent={
+              ListHeaderComponent={
                 <>
                   <Text style={styles.completedPageHeader}>Completed</Text>
                 </>
               }
-              inverted={true}
+             
               showsVerticalScrollIndicator={false}
               data={unique}
               style={styles.completedPageList}
               renderItem={({ item }) => {
-                console.log('Item: ', item)
                 return (
                   <>
-                    <TouchableOpacity onPress={() => goToProgressPage(item)}>
+                    <Pressable>
                       <CompletedOrderCard completedOrder={item} />
-                    </TouchableOpacity>
+                    </Pressable>
                     <View style={styles.margin}></View>
                   </>
                 )
@@ -156,182 +140,6 @@ export default function OrdersPage() {
       </View>
     </View>
   )
-  // return (
-  //   // <View>
-  //   //   <Text>OrdersPage</Text>
-
-  //   //   <Button
-  //   //     onPress={() => {
-  //   //       setOrderType((orderType) => {
-  //   //         return {
-  //   //           ...orderType,
-  //   //           name: 'InProgress',
-  //   //         }
-  //   //       })
-  //   //       console.log(orderType.name)
-  //   //     }}
-  //   //     title="Lol"
-  //   //   />
-  //   //   <Button
-  //   //     onPress={() => {
-  //   //       setOrderType((orderType) => {
-  //   //         return {
-  //   //           ...orderType,
-  //   //           name: 'Done',
-  //   //         }
-  //   //       })
-  //   //       console.log(orderType.name)
-  //   //     }}
-  //   //     title="Done"
-  //   //   />
-  //   //   <FlatList
-  //   //     data={orderType}
-  //   //     renderItem={({ item }) => {
-  //   //       console.log('Among Us ' + item.name)
-  //   //       if (item.name == 'Done') {
-  //   //         return <Text style={styles.text}>Hello World</Text>
-  //   //       } else {
-  //   //         return <Text>Descpi</Text>
-  //   //       }
-  //   //     }}
-  //   //     keyExtractor={(item) => item.id}
-  //   //   />
-
-  //   //   {/* 2 column list to navigate easily between in progress and completed orders */}
-  //   //   <View></View>
-  //   // </View>
-  //   <View>
-  //     <ScrollView>
-  //       <View
-  //         style={{
-  //           padding: 10,
-  //           width: '100%',
-  //           backgroundColor: '#000',
-  //           height: 150,
-  //         }}
-  //       >
-  //         <TouchableOpacity>
-  //           <Image
-  //             source={require('../assets/restaurantImages/redFoodCart.png')}
-  //             style={{ width: 30, height: 30 }}
-  //           ></Image>
-  //           <View></View>
-  //           <View></View>
-  //         </TouchableOpacity>
-  //       </View>
-  //       <View style={{ alignItems: 'left' }}>
-  //         <Image
-  //           source={require('../assets/restaurantImages/redFoodCart.png')}
-  //           style={{
-  //             width: 140,
-  //             height: 140,
-  //             borderRadius: 100,
-  //             marginTop: -70,
-  //           }}
-  //         ></Image>
-  //         <Text style={{ fontSize: 25, fontWeight: 'bold', padding: 10 }}>
-  //           {' '}
-  //           Ralph Lopez{' '}
-  //         </Text>
-  //         <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'grey' }}>
-  //           {' '}
-  //           Ralph90062@gmail.com{' '}
-  //         </Text>
-  //       </View>
-  //       <TouchableOpacity
-  //         style={{
-  //           alignItems: 'center',
-  //           justifyContent: 'center',
-  //           flexDirection: 'row',
-  //           backgroundColor: 'white',
-  //           width: '90%',
-  //           padding: 20,
-  //           borderRadius: 10,
-  //           marginTop: 20,
-  //           shadowOpacity: 80,
-  //           elevation: 15,
-  //         }}
-  //       >
-  //         <Image
-  //           source={require('../assets/restaurantImages/redFoodCart.png')}
-  //           style={{ width: 30, height: 30 }}
-  //         ></Image>
-  //         <Text
-  //           style={{
-  //             fontSize: 15,
-  //             color: '#818181',
-  //             fontWeight: 'bold',
-  //             marginLeft: 10,
-  //           }}
-  //         >
-  //           {' '}
-  //           Profile{' '}
-  //         </Text>
-  //       </TouchableOpacity>
-
-  //       <TouchableOpacity
-  //         style={{
-  //           alignItems: 'center',
-  //           justifyContent: 'center',
-  //           flexDirection: 'row',
-  //           backgroundColor: 'white',
-  //           width: '90%',
-  //           padding: 20,
-  //           borderRadius: 10,
-  //           marginTop: 20,
-  //           shadowOpacity: 80,
-  //           elevation: 15,
-  //           marginBottom: 40,
-  //         }}
-  //       >
-  //         <Image
-  //           source={require('../assets/restaurantImages/redFoodCart.png')}
-  //           style={{ width: 30, height: 30 }}
-  //         ></Image>
-  //         <Text
-  //           style={{
-  //             fontSize: 15,
-  //             color: '#818181',
-  //             fontWeight: 'bold',
-  //             marginLeft: 10,
-  //           }}
-  //         >
-  //           {' '}
-  //           Profile{' '}
-  //         </Text>
-  //       </TouchableOpacity>
-
-  //       <TouchableOpacity
-  //         style={{
-  //           alignItems: 'center',
-  //           justifyContent: 'center',
-  //           flexDirection: 'row',
-  //           backgroundColor: 'white',
-  //           width: '90%',
-  //           padding: 20,
-  //           borderRadius: 10,
-  //           marginTop: 20,
-  //           shadowOpacity: 80,
-  //           elevation: 15,
-  //           marginBottom: 40,
-  //           backgroundColor: 'blue',
-  //         }}
-  //       >
-  //         <Text
-  //           style={{
-  //             fontSize: 15,
-  //             color: '#fff',
-  //             fontWeight: 'bold',
-  //             marginLeft: 10,
-  //           }}
-  //         >
-  //           {' '}
-  //           Logout{' '}
-  //         </Text>
-  //       </TouchableOpacity>
-  //     </ScrollView>
-  //   </View>
-  // )
 }
 
 const styles = StyleSheet.create({

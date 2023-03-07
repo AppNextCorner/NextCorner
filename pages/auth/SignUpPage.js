@@ -15,19 +15,21 @@ import {
 import useAddUser from '../../hooks/useAddUser'
 import { useAppDispatch } from '../../store/hook'
 import {
-  createUser,
-  getUser,
   getUsers,
   setUser,
 } from '../../store/slices/userSession'
 import { auth } from '../../App'
 
+/**
+ * Creating a new user through a request to our redux slice and login the user after an account has been created
+ */
 export default function SignUpPage() {
   // form data
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   /**
+   * Backend structure:
    * firstName: {type: String, required: true},
     firstLast: {type: String, required: true},
     phoneNumber: {type: Number, required: true},
@@ -50,21 +52,6 @@ export default function SignUpPage() {
     password,
     phoneNumber,
   ) => {
-    // creating a new account
-    // createUserWithEmailAndPassword(auth, email, password)
-    //   .then((userCredential) => {
-    //     console.log('Created user')
-    //     // set a new user and access with it from the credentials from firebase
-    //     const user = userCredential.user
-    //     console.log(user)
-
-    //     setIsLoading(false)
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //     Alert.alert(err.message)
-    //   })
-
     // create a user with async thunk and through our backend, firebase admin will return a user
     const user = await makeUser({
       firstName,
@@ -114,7 +101,7 @@ export default function SignUpPage() {
       <View style={styles.headerTag}>
         <Text style={styles.mainHeader}>Create an account</Text>
         <Text>
-          Welcome friend, entr your details so lets get started in ordering food
+          Welcome friend, enter your details to get started in ordering food
         </Text>
       </View>
       {/* Email and Password input - still needs to add confirm password feature */}
@@ -124,7 +111,6 @@ export default function SignUpPage() {
           style={styles.textInput}
           readOnly={false}
           onChangeText={(text) => {
-            console.log(email)
             setEmail(text)
           }}
           placeholder="email@gmail.com"

@@ -39,8 +39,9 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
           <Text style={styles.restaurantText}>{restaurantItem.name}</Text>
         </View>
         <View style={styles.ratingContainer}>
+        <AntDesign name="star" size={12} color="#ffc247" />
           <Text style={styles.ratingText}>{restaurantItem.rating}</Text>
-          <AntDesign name="star" size={12} color="#9a9c9a" />
+          
         </View>
       </View>
     </TouchableOpacity>
@@ -48,6 +49,7 @@ export default function FoodsCard({ restaurantItem, checkForStyleChange }) {
 }
 
 const styles = StyleSheet.create({
+  
   ratingContainer: {
     flexDirection: 'row',
     flex: 1,

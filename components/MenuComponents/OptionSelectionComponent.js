@@ -14,26 +14,20 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   View,
   ScrollView,
 } from 'react-native'
 import React, { useState } from 'react'
-import RadioButtonRN from 'radio-buttons-react-native'
-import { FontAwesome, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
+import {
+  FontAwesome,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons'
 
 export default function OptionSelectionComponent(props) {
   const [itemId, setItemId] = useState(0)
-  
+
   const [customStyle, setCustomStyle] = useState(null)
-  const {
-    updateCustomizations,
-    data,
-    header,
-    optionData,
-    render,
-    stateRender,
-  } = props
+  const { data, header, render, stateRender } = props
 
   const handlePress = (stack, idFromParent, item) => {
     // setting the default values for the stack item options to false
@@ -67,7 +61,6 @@ export default function OptionSelectionComponent(props) {
     setCustomStyle(null)
     render(!stateRender)
 
-    
     // making the itemId equal to that of the selected stack item id
     idFromParent = stack.id
 
@@ -86,19 +79,22 @@ export default function OptionSelectionComponent(props) {
   }
 
   return (
-    <>
+    <View>
       {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
       <FlatList
         ListHeaderComponent={header}
         data={data}
         renderItem={({ item }) => {
           return (
-            <>
-              <Text style={styles.optionTitle}>{item.name}</Text>
-              <Text style={styles.selctionLimitText}>
-                Select up to{' '}
-                {item.type === 'single' ? 1 : item.customizations.length}
-              </Text>
+            <View style={styles.optionCard}>
+              <View style={styles.selectionCard}>
+                <Text style={styles.optionTitle}>{item.name}</Text>
+                <Text style={styles.selctionLimitText}>
+                  Select up to{' '}
+                  {item.type === 'single' ? 1 : item.customizations.length}
+                </Text>
+              </View>
+
               <ScrollView
                 style={styles.optionCardContainer}
                 horizontal={true}
@@ -107,7 +103,6 @@ export default function OptionSelectionComponent(props) {
                 <View style={styles.buttonOptionContainer}>
                   {item.customizations.map((stack, index) => {
                     if (item.type === 'single') {
-                      
                       return (
                         <TouchableOpacity
                           key={index}
@@ -117,23 +112,36 @@ export default function OptionSelectionComponent(props) {
                               : styles.optionStyle
                           }
                           onPress={() => {
-                  
                             handlePress(stack, item.itemId, item)
-                            
                           }}
                         >
                           <FontAwesome
                             style={styles.selectIcon}
-                            name={stack.selected === false ? 'circle-o' : 'circle'}
+                            name={
+                              stack.selected === false ? 'circle-o' : 'circle'
+                            }
                             size={24}
-                            color="black"
+                            color={
+                              stack.selected === false ? '#78DBFF' : '#fff'
+                            }
                           />
                           <Text
-                            style={{
-                              fontWeight: '500',
-                              textAlign: 'center',
-                              flex: 1,
-                            }}
+                            style={
+                              stack.selected === false
+                                ? {
+                                    fontWeight: '600',
+                                    fontSize: 10,
+                                    textAlign: 'center',
+                                    flex: 2,
+                                  }
+                                : {
+                                    fontWeight: '600',
+                                    textAlign: 'center',
+                                    flex: 2,
+                                    fontSize: 10,
+                                    color: '#fff',
+                                  }
+                            }
                           >
                             {stack.label}
                           </Text>
@@ -141,11 +149,9 @@ export default function OptionSelectionComponent(props) {
                       )
                     }
                     if (item.type === 'multiple') {
-                    
                       //console.log('selection', item.customizations)
                       return (
                         <>
-                         
                           <TouchableOpacity
                             key={index}
                             style={
@@ -159,16 +165,33 @@ export default function OptionSelectionComponent(props) {
                           >
                             <MaterialCommunityIcons
                               style={styles.selectIcon}
-                              name={stack.selected === false ? 'square-rounded-outline' : 'square-rounded'}
+                              name={
+                                stack.selected === false
+                                  ? 'square-rounded-outline'
+                                  : 'square-rounded'
+                              }
                               size={24}
-                              color="black"
+                              color={
+                                stack.selected === false ? '#78DBFF' : '#fff'
+                              }
                             />
                             <Text
-                              style={{
-                                fontWeight: '500',
-                                textAlign: 'center',
-                                flex: 3,
-                              }}
+                              style={
+                                stack.selected === false
+                                  ? {
+                                      fontWeight: '600',
+                                      fontSize: 10,
+                                      textAlign: 'center',
+                                      flex: 2,
+                                    }
+                                  : {
+                                      fontWeight: '600',
+                                      textAlign: 'center',
+                                      flex: 2,
+                                      fontSize: 10,
+                                      color: '#fff',
+                                    }
+                              }
                             >
                               {stack.label}
                             </Text>
@@ -180,11 +203,11 @@ export default function OptionSelectionComponent(props) {
                 </View>
               </ScrollView>
               <View style={styles.margin}></View>
-            </>
+            </View>
           )
         }}
       />
-    </>
+    </View>
   )
 }
 
@@ -203,38 +226,51 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   optionCardContainer: {
-    marginBottom: '5%',
+    marginVertical: '5%',
+    flex: 1,
   },
   buttonOptionContainer: {
     flexDirection: 'row',
   },
   nullButtonStyle: {
-    padding: 20,
-    borderRadius: 20,
-    width: 175,
-    backgroundColor: '#f7fafa',
+    padding: 5,
+    borderRadius: 15,
+    width: 100,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#f7fafa',
+    borderColor: '#78DBFF',
     marginLeft: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
   optionStyle: {
-    padding: 20,
+    padding: 5,
     borderWidth: 1,
-    backgroundColor: '#f7fafa',
+    backgroundColor: '#78DBFF',
     borderStyle: 'solid',
-    borderColor: '#6BD8FF',
-    borderRadius: 20,
-    width: 175,
+    borderColor: '#78DBFF',
+    borderRadius: 15,
+    width: 100,
     marginLeft: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
+  selectionCard: {
+    flex: 0.45,
+    marginHorizontal: 10,
+  },
   optionTitle: {
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: '5%',
     marginBottom: '1%',
     marginTop: '10%',
+  },
+  optionCard: {
+    flexDirection: 'row',
+    marginHorizontal: '5%',
+    backgroundColor: '#fff',
+    borderColor: '#f2f0f0',
+    borderRightWidth: 3,
+    borderLeftWidth: 3,
   },
 })

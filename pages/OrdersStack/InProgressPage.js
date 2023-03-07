@@ -14,28 +14,30 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { StatusBar } from 'expo-status-bar'
 import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
-import { durationFromStore, distanceFromStore } from '../../constants/GoogleMapsInfo'
+import { durationFromStore, distanceFromStore } from '../../constants/ApiKeys'
 import VerticalPickUpList from '../../components/InProgressOrderComponents/VerticalPickUpList'
 import BottomSheetView from '@gorhom/bottom-sheet'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
+/**
+ * Used to display the status, map, and the items that are currently in the progress of being made 
+ */
 const InProgressPage = () => {
+  // used to get the current location and duration from the user's home to the business
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const navigation = useNavigation()
   const route = useRoute()
 
   const returnBack = () => {
-    console.log('returning back')
     navigation.goBack()
   }
 
   const { item } = route.params
-  console.log('item from route.params: ', item)
+ 
+  // items displayed on the Google Maps component after being passed in
   const mapOrderItem = item.singleOrderList.map(location => location.location).flat()
   const mapOrderLogo = item.singleOrderList.map(logo => logo.logo)
-  console.log('map order item from route.params: ', mapOrderItem);
-  console.log('map order item from route.params: ', mapOrderLogo);
   const bottomSheetRef = useRef(null)
 
   // first value -> initial value / point to start with on the bottom
@@ -54,7 +56,7 @@ const InProgressPage = () => {
             onPress={() => returnBack()}
             style={styles.goBackButton}
           >
-             <Feather name="arrow-left-circle" size={40} color="black" />
+             <AntDesign name="arrowleft" size={30} color="black" />
           </TouchableOpacity>
           <View style={styles.headerContainer}>
             <Text style={styles.pageHeader}>Your Order</Text>

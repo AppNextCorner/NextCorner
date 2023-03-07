@@ -2,11 +2,26 @@ import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Alert } from 'react-native'
 import { useAppDispatch } from '../store/hook'
-import { createUser, getUsers } from '../store/slices/userSession'
+import { createUser, getUsers } from '../store/slices/userSession';
+
+/**
+ * This hook shall help developers add a user to the firebase account
+ *
+ */
 const useAddUser = () => {
+  // User sessions using dispacth hook
   const dispatch = useAppDispatch()
   const navigation = useNavigation();
 
+  /**
+   * make user will ensure that user submits all fields that include the following:
+   * 
+   * @param firstName - the user that signs up for the first time
+   * @param lastName 
+   * @param email 
+   * @param password 
+   * @param phoneNumber 
+   */
   const makeUser = async (
     firstName,
     lastName,
@@ -22,8 +37,7 @@ const useAddUser = () => {
       phoneNumber,
     }
     try {
-      console.log('ran useAddUser')
-      console.log(firstName, lastName, email, password, phoneNumber)
+
 
       await dispatch(createUser(userData))
       

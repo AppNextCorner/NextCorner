@@ -7,6 +7,7 @@ import moment from 'moment'
 import 'moment-timezone'
 
 const CompletedOrderCard = ({ completedOrder }) => {
+  // grab the time it was ordered last from and be able to display the date through a specific format with moment js
   const getTimeOrdered = moment(
     new Date(completedOrder.createdAt),
     'YYYY-M-D H:mm',
@@ -21,16 +22,10 @@ const CompletedOrderCard = ({ completedOrder }) => {
   let addOrderPrice = calculateOrderPrice.reduce(function (a, b) {
     return a + b
   })
-  console.log('total price: ', addOrderPrice)
 
+  // grab the item amount from the order
   const getBusinessName = completedOrder.singleOrderList[0].businessOrderedFrom
-  console.log('business: ', getBusinessName)
   const getItemAmount = completedOrder.singleOrderList
-  const getItemNames = completedOrder.singleOrderList
-    .map((order) => order.cartData)
-    .map((name) => name.name)
-  console.log('getItemAmount', getItemNames)
-  console.log('item amount: ', getItemAmount.length)
   return (
     <>
       <View style={styles.completedContainer}>

@@ -10,7 +10,9 @@ import {
   TextInput,
   Alert,
   StyleSheet,
+  Image,
 } from 'react-native'
+import logo from '../../assets/logo.png'
 import { useAppDispatch } from '../../store/hook'
 import { setUser } from '../../store/slices/userSession'
 import { useState } from 'react'
@@ -22,9 +24,10 @@ import {
 import { auth } from '../../App'
 import { useNavigation } from '@react-navigation/native'
 
+/**
+ * Used to authenticate an existing user with firebase authentication methods
+ */
 export default function SignInPage() {
-  
-
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -36,7 +39,6 @@ export default function SignInPage() {
 */
   const handleSignIn = () => {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
-    
     signInWithEmailAndPassword(auth, email, password)
       // takes in the credentials from email and password
       .then((userCredential) => {
@@ -48,7 +50,7 @@ export default function SignInPage() {
             name: user.displayName
           }),
         )
-        console.log(user)
+
       })
       .catch((err) => {
         console.log(err)
@@ -63,8 +65,12 @@ export default function SignInPage() {
   // loading the sign in page
   return (
     <View style={styles.signInContainer}>
+      <View style={styles.logoContainer}>
+      <Image style={styles.logo} source={logo} />
+      </View>
+     
       <View style={styles.headerTag}>
-        <Text style={styles.mainHeader}>Login</Text>
+        <Text style={styles.mainHeader}>Login to your account</Text>
         
       </View>
       {/* Email and Password input - still needs to add confirm password feature */}
@@ -74,7 +80,6 @@ export default function SignInPage() {
           style={styles.textInput}
           readOnly={false}
           onChangeText={(text) => {
-            console.log(email)
             setEmail(text)
           }}
           placeholder="email@gmail.com"
@@ -95,22 +100,19 @@ export default function SignInPage() {
       <TouchableOpacity style={styles.createAccountButton} onPress={goToSignUp}>
         <Text style={styles.createAccountText}>Create an Account</Text>
       </TouchableOpacity>
-
-     
-
-      {/* <View>
-        <TouchableOpacity
-          style={styles.signInButton}
-          onPress={handleCreateAccount}
-        >
-          <Text style={styles.signInText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  logoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 112,
+    height: 112,
+  },
   createAccountText: {
     color: '#78DBFF'
   },
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   inputContainer: {
-    marginTop: '15%',
+    marginTop: '10%',
   },
   textInput: {
     borderWidth: 1,
@@ -138,11 +140,12 @@ const styles = StyleSheet.create({
   signInText: {
     color: '#fff',
     textAlign: 'center',
-    fontSize: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   signInButton: {
     backgroundColor: '#78DBFF',
-    padding: '5%',
+    padding: '4%',
     borderRadius: 20,
     marginTop: '5%',
   },
@@ -154,11 +157,12 @@ const styles = StyleSheet.create({
     paddingTop: '20%',
     flex: 1,
 
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
+    // #454747
   },
   mainHeader: {
     fontWeight: 'bold',
-    marginBottom: '5%',
+    textAlign: 'center',
     fontSize: 25,
   },
 })

@@ -11,11 +11,16 @@ import {
   updateOrderStatusReducer
 } from '../store/slices/addToOrders'
 
+/**
+ * After the user has entered the order, they should update the order list through the request to our backend. 
+ * - Be able to grab the order list from the backend when the function is called asynchronously
+ * - The order is added
+ *  
+ */
 const UseOrders = () => {
   const dispatch = useAppDispatch()
 
-  const orders = useAppSelector(getOrders)
-
+// going to run asynchronously when the order is fetched from the home page and/or the user has been logged in/ order page is fetched
   const getCurrentOrder = async () => {
     try {
       await dispatch(getOrderList())
@@ -23,23 +28,23 @@ const UseOrders = () => {
       console.error('Failed to save the post', err)
     }
   }
-
+/**
+ * addCartToOrder - after user has confirmed the order, we can grab the order and send a request to the server
+ * @param {*} singleOrderList - Contains 
+ */
   const addCartToOrder = async (singleOrderList) => {
-    console.log('list: ', singleOrderList)
+    // multiply a single order item with the time it takes to complete and the amount it has
     const orderItemTimes = singleOrderList
       .map((order) => order.cartData)
       .map((time) => time.timeToMake * time.amountInCart)
-
-    let sum = orderItemTimes.reduce(function (a, b) {
+    // add up all the previous cart items times together to make one single order time
+    let sumOfTimes = orderItemTimes.reduce(function (a, b) {
       return a + b
     })
-
-    console.log("sum", sum)
-    console.log('orderItemTimes: ', orderItemTimes)
     const orderList = {
       singleOrderList: singleOrderList,
-      timer: sum,
-      orderStatus: 'In Progress',
+      timer: sumOfTimes,
+      orderStatus: 'In Progress', // initial order status when first made
       userId: auth.currentUser.uid,
     }
     try {
@@ -48,26 +53,22 @@ const UseOrders = () => {
       console.log(e)
     }
   }
-
-  const updateOrder = async (updatedStatus, timeLeft) => {
-    
-      console.log('run updateOrderStatus')
+/**
+ * The function runs when the timer has reached zero causing the order status to be changed and put into a new state with the completed orders.
+ * @param {*} updatedStatus - the updated value of the order status in our order
+ * 
+ */
+  const updateOrder = async (updatedStatus) => {
 
       const itemStatus = {
         status: updatedStatus.orderStatus,
         id: updatedStatus.id,
       }
-      console.log('item status: ' + itemStatus.status)
-
-    //   if (timeLeft === 0) {
-        // dispatch the update staatus and pas in item id
       try{
         // change the state
         dispatch(updateOrderStatusReducer(itemStatus))
         // send in axios put request
         dispatch(updateOrderStatus(itemStatus))
-        console.log('dispatch update order status')
-      //}
     } catch (e) {
       console.log(e)
     }

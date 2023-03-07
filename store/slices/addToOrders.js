@@ -1,7 +1,11 @@
+/**
+ * Purpose of the file: Used after the user is ready to move to the order page where they could add an order and be able to send requests through our frontend
+ */
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { IP } from '../../constants/StripeApiKey'
+import { IP } from '../../constants/ApiKeys'
 import { auth } from '../../App'
 
 const ORDERS_URL = `http://${IP}:4020/orders/`
@@ -23,11 +27,8 @@ export const addOrder = createAsyncThunk(
   'addToOrders/addOrder',
   async (order) => {
     const headers = await createToken()
-    console.log('payload item: ', order)
     try {
       const resp = await axios.post(ORDERS_URL, order, headers)
-      console.log('Here is response: ', resp.data)
-
       return resp.data
     } catch (error) {
       console.log('error')
@@ -40,11 +41,8 @@ export const getOrderList = createAsyncThunk(
   'addToOrders/getOrderList',
   async () => {
     const headers = await createToken()
-    console.log('headers', headers.headers)
     try {
-      console.log('Here is headers: ', headers)
       const response = await axios.get(ORDERS_URL, headers)
-      console.log('Here is response data: ', response.data)
       return response.data // Return a value synchronously using Async-await
     } catch (err) {
       if (!err.response) {
@@ -58,18 +56,12 @@ export const getOrderList = createAsyncThunk(
 export const updateOrderStatus = createAsyncThunk(
   'addToCart/updateOrderStatus',
   async (itemStatus) => {
-    console.log('update itemStatus', itemStatus)
-    console.log('update item id', itemStatus.id)
-    console.log('Payload: ' + ORDERS_URL + 'order-status/' + itemStatus.id)
-    const headers = await createToken()
-    console.log(headers)
     try {
       const response = await axios.patch(
         ORDERS_URL + 'order-status/' + itemStatus.id,
         itemStatus,
       )
-      console.log("finishede request")
-      console.log('response data: ', response.data)
+
       return response.data
     } catch (err) {
       if (!err.response) {
@@ -92,9 +84,9 @@ export const addToOrders = createSlice({
   initialState,
 
   reducers: {
-    updateOrderStatusReducer: (state, {payload}) => {
-        const orderItem = state.order.find((item) => item.id === payload.id)
-        orderItem.orderStatus = payload.status
+    updateOrderStatusReducer: (state, { payload }) => {
+      const orderItem = state.order.find((item) => item.id === payload.id)
+      orderItem.orderStatus = payload.status
     },
   },
 
@@ -107,11 +99,11 @@ export const addToOrders = createSlice({
       console.log('Rejected')
     })
     builder.addCase(addOrder.fulfilled, (state, { payload }) => {
-      console.log('payload from backend', payload)
+ 
       state.order.push(payload)
       state.order.filter((item, index) => state.order.indexOf(item) === index)
 
-      console.log('order from backend', state.order)
+     
     })
 
     builder.addCase(getOrderList.pending, (state, { payload }) => {
@@ -121,7 +113,6 @@ export const addToOrders = createSlice({
       console.log('Rejected')
     })
     builder.addCase(getOrderList.fulfilled, (state, { payload }) => {
-      console.log('payload from backend in orders get: ', payload)
       // due to using authentication, we need to filter out the payload with each object's User id
       state.order = payload.filter(
         (uidItem) => uidItem.userId === auth.currentUser.uid,
@@ -136,16 +127,12 @@ export const addToOrders = createSlice({
     })
     // depending if the amount is decremented one time or incrememented on the object on its data, change the visual state of the cart object accordingly
     builder.addCase(updateOrderStatus.fulfilled, (state, { payload }) => {
-      console.log('payload from backend', payload)
-
       
     })
   },
 })
-// export the reducers 
-export const {
-    updateOrderStatusReducer
-} = addToOrders.actions
+// export the reducers
+export const { updateOrderStatusReducer } = addToOrders.actions
 
 export const getOrders = (state) => state.addToOrders.order
 export const getTotal = (state) => state.addToOrders.total

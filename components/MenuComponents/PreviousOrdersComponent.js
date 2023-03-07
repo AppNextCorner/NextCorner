@@ -2,24 +2,13 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native'
 import React from 'react'
-import { useAppSelector } from '../../store/hook'
-import { getOrders } from '../../store/slices/addToOrders'
 import PreviousOrderCard from '../../Cards/MenuCards/PreviousOrderCard'
-import { useNavigation } from '@react-navigation/native'
-import useOrderButton from '../../hooks/useOrderButton'
 
 const PreviousOrdersComponent = (props) => {
   const { businessName, listData,  location, logo } = props
-  // const previousOrders = useAppSelector(getOrders)
-
-  // accessing the list containing the cardData and restaurant information
-
-  console.log('listdata', listData)
-
   return (
     <View>
       {listData.length > 0 ? (
