@@ -55,7 +55,9 @@ const PaymentDetailsPage = () => {
   // grab user information from the current state of the user
   const user = useAppSelector(getUser)
   const mainUser = user[0] // grab the only user from the list
-  const cart = useAppSelector(getCart)
+  
+  const getCartFromSlice =  useAppSelector(getCart);
+  const cart = JSON.parse(JSON.stringify(getCartFromSlice))
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch();
 
@@ -64,8 +66,12 @@ const PaymentDetailsPage = () => {
 
   // grabbing all the cart item's data to display them on the receipt and the component cards
   const getCartItems = cart.map((list) => list.cartData).flat()
-  const getLocationOfBusiness = cart.map((list) => list.location)
-  const getElementOfLocation = getLocationOfBusiness[0]
+  const getLocationOfBusiness = cart[0].location;
+  console.log(cart);
+  const getLat = 
+  +getLocationOfBusiness.latitude
+  const getLong = 
+  +getLocationOfBusiness.longitude
   const calculateTotal = totalCost.toString().slice(0, 10);
   const addTotal = parseFloat(calculateTotal);
   const plus = addTotal + addTotal / 10;
@@ -73,8 +79,9 @@ const PaymentDetailsPage = () => {
     const geoname = async () => {
       try {
         const res = await axios.get(
-          `http://api.geonames.org/findNearestAddressJSON?lat=${getElementOfLocation[0]}&lng=${getElementOfLocation[1]}&username=${geonameAPIUser}`,
+          `http://api.geonames.org/addressJSON?lat=${getLat}&lng=${getLong}&username=${geonameAPIUser}`,
         )
+        console.log('result:', JSON.stringify(res))
         setLocation(res.data.address)
         return res
       } catch (err) {
@@ -82,7 +89,7 @@ const PaymentDetailsPage = () => {
       }
     }
     geoname()
-  }, [])
+  }, [location])
   
   /**
    * The purpose of this method is to get the client's information on their credentials for card payments with Stripe API
@@ -193,7 +200,7 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={item.image} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>
@@ -214,15 +221,14 @@ const PaymentDetailsPage = () => {
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={24} color="#97989F" />
           <Text style={styles.locationText}>
-            {location.streetNumber +
+            { location.houseNumber +
               ' ' +
               location.street +
               ', ' +
-              location.adminName2 +
+              location.adminName1 +
               ', ' +
-              location.adminCode1 +
-              ' ' +
-              location.postalcode}
+              location.adminName2 +
+              ' ' + location.postalcode }
           </Text>
         </View>
         <View style={styles.individualCostInfoContainer}>

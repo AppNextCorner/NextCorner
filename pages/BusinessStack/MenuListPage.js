@@ -1,6 +1,6 @@
 /**
- * Purpose of File: Displays the contents of the restaurant on what it offers
- * - For example: it displays the food of the restaurant, image of it, opening text, etc
+ * Purpose of File: Displays the contents of the business on what it offers
+ * - For example: it displays the food of the business, image of it, opening text, etc
  */
 
 import {
@@ -24,13 +24,14 @@ import FeaturedList from '../../components/MenuComponents/FeaturedList'
 import PreviousOrdersComponent from '../../components/MenuComponents/PreviousOrdersComponent'
 import { getOrders } from '../../store/slices/addToOrders'
 import AnnouncementList from '../../components/MenuComponents/AnnouncementList'
+import { IP } from '../../constants/ApiKeys'
 
 export default function MenuListPage() {
   const route = useRoute()
-  const { restaurant } = route.params 
-  const [menuTypeData, setMenuTypeData] = useState(restaurant)
+  const { business } = route.params 
+  const [menuTypeData, setMenuTypeData] = useState(business)
   // menu of the business through params
-  const [menu, setMenu] = useState(restaurant.menu)
+  const [menu, setMenu] = useState(business.menu)
   const isClicked = useAppSelector(getButton) // helps prevent infinite orders being made
 
   const navigation = useNavigation()
@@ -38,20 +39,22 @@ export default function MenuListPage() {
   /**
    * This code section is used to get the orders that have been previously ordered if they match with the current store
    */
-  const previousOrders = useAppSelector(getOrders)
+
+  const getOrderFromSlice =  useAppSelector(getOrders);
+  const previousOrders = JSON.parse(JSON.stringify(getOrderFromSlice))
+  
    // filter through all items in the cart and see if they match
   const getSingleOrders = previousOrders
     .map((item) => item.singleOrderList)
     .flat()
   const filterOrder = getSingleOrders.filter(
-    (val) => val.businessOrderedFrom === restaurant.name,
+    (val) => val.businessOrderedFrom === business.name,
   )
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate('Home')
   }
-
   return (
     <>
       <StatusBar style="light" />
@@ -64,40 +67,40 @@ export default function MenuListPage() {
               <Pressable style={styles.goBackButton} onPress={goHome}>
                 <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
+             
 
-              <Image style={styles.image} source={restaurant.image} />
+              <Image style={styles.image} source={{uri:`http://${IP}:4020/${business.image.toString()}`}} />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
-              {/* <Image style={styles.logoImage} source={restaurant.logo} /> */}
+              {/* <Image style={styles.logoImage} source={business.logo} /> */}
               {/* Section for small google maps preview */}
               <View style={{ marginTop: -60 }}>
                 <View style={styles.timeContainer}>
                 <Text style={styles.timeOfMenu}>
-                  Open: {restaurant.open} - {restaurant.close}
+                  Open: {business.open} - {business.close}
                 </Text>
                 </View>
                 
                 <AnnouncementList
                   horizontal={true}
-                  announcementData={restaurant.announcementCards}
-                  open={restaurant.open}
-                  close={restaurant.close}
+                  announcementData={business}
+                  open={business.open}
+                  close={business.close}
                 />
+                 <Text>{business.name}</Text>
                 <FeaturedList
                   menuData={menu}
-                  businessName={restaurant.name}
-                  location={restaurant.location}
-                  logo={restaurant.logo}
+                  businessName={business.name}
+                  location={business.location}
                 />
                 {/* Section for Featured Items*/}
               </View>
 
               <PreviousOrdersComponent
                 menuData={menu}
-                location={restaurant.location}
-                logo={restaurant.logo}
+                location={business.location}
                 listData={filterOrder}
-                businessName={restaurant.name}
+                businessName={business.name}
               />
 
               {/* ALL menu items located here */}
@@ -108,8 +111,8 @@ export default function MenuListPage() {
           }
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          // pass in the menu list coming from the route.params of the restaurants items which we can access through params
-          data={menuTypeData.menuTypes}
+          // pass in the menu list coming from the route.params of the business items which we can access through params
+          data={menuTypeData.categoriesForMenu}
           renderItem={({ item }) => {
             
             return (
@@ -118,9 +121,8 @@ export default function MenuListPage() {
                 <MenuTypeList
                   type={item.type}
                   menuItem={menu}
-                  businessName={restaurant.name}
-                  location={restaurant.location}
-                  logo={restaurant.logo}
+                  businessName={business.name}
+                  location={business.location}
                 />
                 <View style={styles.margin}></View>
               </>
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d6d6d6',
 
   },
-  restaurantCard: {
+  businesCard: {
     flex: 1,
   },
   goBackButton: {

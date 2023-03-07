@@ -15,14 +15,16 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  ActivityIndicator
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   FontAwesome,
   MaterialCommunityIcons,
 } from '@expo/vector-icons'
 
 export default function OptionSelectionComponent(props) {
+  const [isLoading, setLoading] = useState(true);
   const [itemId, setItemId] = useState(0)
 
   const [customStyle, setCustomStyle] = useState(null)
@@ -34,7 +36,7 @@ export default function OptionSelectionComponent(props) {
     render(!stateRender)
 
     // set all the options to false rather than setting them to true when the option is a single selection
-    const selectMap = item.customizations.map((val) => (val.selected = false))
+    const selectMap = item.optionCustomizations.map((val) => (val.selected = false))
     selectMap
     setCustomStyle(null)
     stack.selected = false
@@ -77,84 +79,38 @@ export default function OptionSelectionComponent(props) {
           stack.id === itemId ? styles.nullButtonStyle : styles.optionStyle,
       })
     }
-    console.log(stack.selected)
   }
+  
 
   return (
-    <View>
-      {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
-      <FlatList
-        ListHeaderComponent={header}
-        data={data}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.optionCard}>
-              <View style={styles.selectionCard}>
-                <Text style={styles.optionTitle}>{item.name}</Text>
-                <Text style={styles.selctionLimitText}>
-                  Select up to{' '}
-                  {item.type === 'single' ? 1 : item.customizations.length}
-                </Text>
-              </View>
-
-              <ScrollView
-                style={styles.optionCardContainer}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                <View style={styles.buttonOptionContainer}>
-                  {item.customizations.map((stack, index) => {
-                    // check if the card is either a single selection or a multiple selection
-                    if (item.type === 'single') {
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          style={
-                            stack.selected === false
-                              ? styles.nullButtonStyle
-                              : styles.optionStyle
-                          }
-                          onPress={() => {
-                            handlePress(stack, item.itemId, item)
-                          }}
-                        >
-                          <FontAwesome
-                            style={styles.selectIcon}
-                            name={
-                              stack.selected === false ? 'circle-o' : 'circle'
-                            }
-                            size={24}
-                            color={
-                              stack.selected === false ? '#78DBFF' : '#fff'
-                            }
-                          />
-                          <Text
-                            style={
-                              stack.selected === false
-                                ? {
-                                    fontWeight: '600',
-                                    fontSize: 10,
-                                    textAlign: 'center',
-                                    flex: 2,
-                                  }
-                                : {
-                                    fontWeight: '600',
-                                    textAlign: 'center',
-                                    flex: 2,
-                                    fontSize: 10,
-                                    color: '#fff',
-                                  }
-                            }
-                          >
-                            {stack.label}
-                          </Text>
-                        </TouchableOpacity>
-                      )
-                    }
-                    if (item.type === 'multiple') {
-                      //console.log('selection', item.customizations)
-                      return (
-                        <>
+   
+        <View>
+        {/* The onPress handler tells React to change the value of the radioButtons Hook*/}
+        <FlatList
+          ListHeaderComponent={header}
+          data={data}
+        
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.optionCard}>
+                <View style={styles.selectionCard}>
+                  <Text style={styles.optionTitle}>{item.name}</Text>
+                  <Text style={styles.selctionLimitText}>
+                    Select up to{' '}
+                    {item.type === 'single' ? 1 : item.optionCustomizations.length}
+                  </Text>
+                </View>
+  
+                <ScrollView
+                  style={styles.optionCardContainer}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  <View style={styles.buttonOptionContainer}>
+                    {item.optionCustomizations.map((stack, index) => {
+                      // check if the card is either a single selection or a multiple selection
+                      if (item.type === 'single') {
+                        return (
                           <TouchableOpacity
                             key={index}
                             style={
@@ -163,15 +119,13 @@ export default function OptionSelectionComponent(props) {
                                 : styles.optionStyle
                             }
                             onPress={() => {
-                              handleMultiplePress(stack, item.itemId)
+                              handlePress(stack, item.itemId, item)
                             }}
                           >
-                            <MaterialCommunityIcons
+                            <FontAwesome
                               style={styles.selectIcon}
                               name={
-                                stack.selected === false
-                                  ? 'square-rounded-outline'
-                                  : 'square-rounded'
+                                stack.selected === false ? 'circle-o' : 'circle'
                               }
                               size={24}
                               color={
@@ -199,19 +153,72 @@ export default function OptionSelectionComponent(props) {
                               {stack.label}
                             </Text>
                           </TouchableOpacity>
-                        </>
-                      )
-                    }
-                  })}
-                </View>
-              </ScrollView>
-              <View style={styles.margin}></View>
-            </View>
-          )
-        }}
-      />
-    </View>
-  )
+                        )
+                      }
+                      if (item.type === 'multiple') {
+                       
+                        return (
+                          <>
+                            <TouchableOpacity
+                              key={index}
+                              style={
+                                stack.selected === false
+                                  ? styles.nullButtonStyle
+                                  : styles.optionStyle
+                              }
+                              onPress={() => {
+                                handleMultiplePress(stack, item.itemId)
+                              }}
+                            >
+                              <MaterialCommunityIcons
+                                style={styles.selectIcon}
+                                name={
+                                  stack.selected === false
+                                    ? 'square-rounded-outline'
+                                    : 'square-rounded'
+                                }
+                                size={24}
+                                color={
+                                  stack.selected === false ? '#78DBFF' : '#fff'
+                                }
+                              />
+                              <Text
+                                style={
+                                  stack.selected === false
+                                    ? {
+                                        fontWeight: '600',
+                                        fontSize: 10,
+                                        textAlign: 'center',
+                                        flex: 2,
+                                      }
+                                    : {
+                                        fontWeight: '600',
+                                        textAlign: 'center',
+                                        flex: 2,
+                                        fontSize: 10,
+                                        color: '#fff',
+                                      }
+                                }
+                              >
+                                {stack.label}
+                              </Text>
+                            </TouchableOpacity>
+                          </>
+                        )
+                      }
+                    })}
+                  </View>
+                </ScrollView>
+                <View style={styles.margin}></View>
+              </View>
+            )
+          }}
+        />
+      </View>
+      )
+  
+   
+  
 }
 
 const styles = StyleSheet.create({

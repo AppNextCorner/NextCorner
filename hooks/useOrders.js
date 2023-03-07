@@ -36,7 +36,7 @@ const UseOrders = () => {
     // multiply a single order item with the time it takes to complete and the amount it has
     const orderItemTimes = singleOrderList
       .map((order) => order.cartData)
-      .map((time) => time.timeToMake * time.amountInCart)
+      .map((time) => time.time * time.amountInCart)
     // add up all the previous cart items times together to make one single order time
     let sumOfTimes = orderItemTimes.reduce(function (a, b) {
       return a + b

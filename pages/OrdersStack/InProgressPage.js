@@ -15,7 +15,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { StatusBar } from 'expo-status-bar'
 import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
 import { durationFromStore, distanceFromStore } from '../../constants/ApiKeys'
-import VerticalPickUpList from '../../components/InProgressOrderComponents/VerticalPickUpList'
+import InProgressList from '../../components/InProgressOrderComponents/InProgressList'
 import BottomSheetView from '@gorhom/bottom-sheet'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
@@ -37,7 +37,7 @@ const InProgressPage = () => {
  
   // items displayed on the Google Maps component after being passed in
   const mapOrderItem = item.singleOrderList.map(location => location.location).flat()
-  const mapOrderLogo = item.singleOrderList.map(logo => logo.logo)
+
   const bottomSheetRef = useRef(null) // set the initial bottom sheet to have nothing instantly until it is changed
 
   // first value -> initial value / point to start with on the bottom
@@ -71,10 +71,10 @@ const InProgressPage = () => {
               overflow: 'hidden',
             }}
           >
-            <GoogleMapsMenuSection logo={mapOrderLogo} location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
+            <GoogleMapsMenuSection  location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
           </View>
 
-          {/* Our bottom modal containing the restaurants and each individual menu */}
+          {/* Our bottom modal containing the business and each individual menu */}
           <BottomSheet
             ref={bottomSheetRef}
             // where the modal should be located based on the HandleSheetChanges event
@@ -84,11 +84,8 @@ const InProgressPage = () => {
             style={styles.bottomSheetContainer}
             backgroundStyle={styles.bottomSheetContainer}
           >
-            {/* <BottomSheetView>
-              <Text>d</Text>
-            </BottomSheetView> */}
             {/* The vertical list to encompass all of the content we want to display in the bottom modal */}
-            <VerticalPickUpList  duration={duration} distance={distance} orderItemDetails={item} />
+            <InProgressList  duration={duration} distance={distance} orderItemDetails={item} />
           </BottomSheet>
         </GestureHandlerRootView>
       </View>

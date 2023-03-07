@@ -9,7 +9,7 @@ import React from 'react'
 import PreviousOrderCard from '../../Cards/MenuCards/PreviousOrderCard'
 
 const PreviousOrdersComponent = (props) => {
-  const { businessName, listData,  location, logo } = props
+  const { businessName, listData,  location } = props
   return (
     <View>
       {listData.length > 0 ? (
@@ -30,7 +30,6 @@ const PreviousOrdersComponent = (props) => {
                 businessName={businessName}
           
                 location={location}
-                logo={logo}
               />
             )}
           />

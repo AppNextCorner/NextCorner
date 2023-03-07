@@ -5,11 +5,10 @@ import { useRoute } from '@react-navigation/native'
 
 const MenuTypeList = (props) => {
   // data sent towards the food details page
-  const { menuItem, type, businessName, location, logo } = props
+  const { menuItem, type, businessName, location} = props
 
   // type is a string that represents the type of food that the menu item represents: ex: Burger, Pizza, etc.
-  const getItemsThatMatchType = menuItem.filter((item) => item.type === type)
-
+  const getItemsThatMatchType = menuItem.filter((item) => item.category === type)
   return (
     <>
       <FlatList
@@ -17,7 +16,7 @@ const MenuTypeList = (props) => {
         renderItem={({ item }) => {
           return (
             <>
-              <MenuItemCard foodItem={item} businessName={businessName} location={location} logo={logo}/>
+              <MenuItemCard foodItem={item} businessName={businessName} location={location}/>
             </>
           )
         }}

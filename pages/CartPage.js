@@ -27,6 +27,7 @@ import {
 import { useAppDispatch } from '../store/hook'
 import { calculateTotals } from '../store/slices/addToCart'
 import useCart from '../hooks/useCart'
+import { IP } from '../constants/ApiKeys'
 /**
  *
  * After user finishes selecting an item and wants to proceed, they can remove from items cart list
@@ -47,7 +48,8 @@ const CartPage = () => {
     dispatch(calculateTotals()) // grab the total amount and the price of each item for our transaction in the PaymentDetails page
   }
 
-  const isCartFull = useAppSelector(getCart)
+  const getCartFromSlice =  useAppSelector(getCart);
+  const isCartFull = JSON.parse(JSON.stringify(getCartFromSlice))
   const businessName = useAppSelector(getBusinessName)
 
   // Checking if the cart is full or empty based on the amount of cart items there are and be able to filter any duplicates and set the business name to be empty is the cart is empty
@@ -86,7 +88,7 @@ const CartPage = () => {
                   <View style={styles.imageBox}>
                     <Image
                       style={styles.foodImages}
-                      source={grabCartItem.image}
+                      source={{uri:`http://${IP}:4020/${grabCartItem.image.toString()}`}}
                     />
                   </View>
                   <View style={styles.foodTexts}>

@@ -1,13 +1,13 @@
 /**
- * Purpose of the component: The component is responsible for rendering the restaurants for the Home Page and is filtered by the category in HomePage.js
+ * Purpose of the component: The component is responsible for rendering the business for the Home Page and is filtered by the category in HomePage.js
  * 
  */
 
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
-import RestaurantCard from "../Cards/RestaurantCard";
+import BusinessCard from "../Cards/BusinessCard";
 
-export default function RestaurantListComponent(props) {
+export default function BusinessListComponent(props) {
 
   return (
     <View>
@@ -20,9 +20,9 @@ export default function RestaurantListComponent(props) {
           horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          data={props.restaurants}
-          // Our list of restaurants that we want to show coming from the trendingFood data from props
-          renderItem={({ item }) => <RestaurantCard restaurantItem={item} />}
+          data={props.business}
+          // Our list of business that we want to show coming from the trendingFood data from props
+          renderItem={({ item }) => <BusinessCard businesItem={item} />}
         />
       </View>
       
