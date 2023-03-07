@@ -1,4 +1,9 @@
-import { StyleSheet, TextInput, View} from 'react-native'
+/**
+ * Purpose of the component: It contains right now only the UI, but it woulc be used to search for businesses the user may now and look for without having to look through the whole app to find a business that they know
+ * - Going to implement a filter for this to work or another expo npm library
+ */
+
+import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import { Foundation } from '@expo/vector-icons'
 
@@ -19,25 +24,25 @@ export default function SearchComponent() {
 }
 
 const styles = StyleSheet.create({
-    textInputBox: {
-        borderRadius: 20,
-        borderWidth: 1,
-        borderColor: '#F0F0F0',
-        backgroundColor: '#F0F0F0',
-        flexDirection: 'row',
-      },
-      magnifyIcon: {
-        flex: 1,
-        justifyContent: 'center',
-      },
-      textInput: {
-        flex: 5,
-        padding: 10,
-        alignContent: 'flex-start',
-      },
-      menu: {
-        paddingHorizontal: 50,
-        paddingTop: 50,
-       
-      },
+  textInputBox: {
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#F0F0F0',
+    backgroundColor: '#F0F0F0',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  magnifyIcon: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  textInput: {
+    flex: 5,
+    padding: 10,
+    alignContent: 'flex-start',
+  },
+  menu: {
+    paddingHorizontal: 50,
+    paddingTop: 50,
+  },
 })

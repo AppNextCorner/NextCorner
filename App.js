@@ -1,21 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import HomePage from './pages/HomePage';
+import Route from './routing/Route'
+
+
+// install complementary packages to use this package
+import { Provider } from 'react-redux'
+import { store } from './store/store'
+import { STRIPE_API_KEY } from './constants/StripeApiKey';
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { firebaseConfig } from './util/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
+// firebase configuration / initialize
+
+
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+
+
 
 export default function App() {
   return (
-    <>
-      <StatusBar style="auto" />
-      <View style={styles.container}>
-        <HomePage />
-      </View>
-    
-    </>
-  );
+    <StripeProvider publishableKey={STRIPE_API_KEY}>
+      <Provider store={store}>
+        <Route />
+      </Provider>
+    </StripeProvider>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
-});
