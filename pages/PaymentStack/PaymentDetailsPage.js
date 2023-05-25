@@ -54,7 +54,7 @@ const PaymentDetailsPage = () => {
 
   // grab user information from the current state of the user
   const user = useAppSelector(getUser)
-  const mainUser = user[0] // grab the only user from the list
+  const mainUser = user // grab the only user from the list
   
   const getCartFromSlice =  useAppSelector(getCart);
   const cart = JSON.parse(JSON.stringify(getCartFromSlice))
@@ -66,30 +66,37 @@ const PaymentDetailsPage = () => {
 
   // grabbing all the cart item's data to display them on the receipt and the component cards
   const getCartItems = cart.map((list) => list.cartData).flat()
-  const getLocationOfBusiness = cart[0].location;
-  console.log(cart);
-  const getLat = 
-  +getLocationOfBusiness.latitude
-  const getLong = 
-  +getLocationOfBusiness.longitude
+  // async function getLocation() {
+  //   return await cart[0].location
+  // }
+  // let getLocationOfBusiness = getLocation;
+  // if(cart[0].location == null){
+  //   getLocationOfBusiness == null
+  // }
+  
+  // console.log(cart);
+  // const getLat = 
+  // +getLocationOfBusiness.latitude
+  // const getLong = 
+  // +getLocationOfBusiness.longitude
   const calculateTotal = totalCost.toString().slice(0, 10);
   const addTotal = parseFloat(calculateTotal);
   const plus = addTotal + addTotal / 10;
   useEffect(() => {
-    const geoname = async () => {
-      try {
-        const res = await axios.get(
-          `http://api.geonames.org/addressJSON?lat=${getLat}&lng=${getLong}&username=${geonameAPIUser}`,
-        )
-        console.log('result:', JSON.stringify(res))
-        setLocation(res.data.address)
-        return res
-      } catch (err) {
-        console.log('geoname', err)
-      }
-    }
-    geoname()
-  }, [location])
+    // const geoname = async () => {
+    //   try {
+    //     const res = await axios.get(
+    //       `http://api.geonames.org/addressJSON?lat=${getLat}&lng=${getLong}&username=${geonameAPIUser}`,
+    //     )
+    //     console.log('result:', JSON.stringify(res))
+    //     setLocation(res.data.address)
+    //     return res
+    //   } catch (err) {
+    //     console.log('geoname', err)
+    //   }
+    // }
+    // geoname()
+  }, [])
   
   /**
    * The purpose of this method is to get the client's information on their credentials for card payments with Stripe API
@@ -221,14 +228,14 @@ const PaymentDetailsPage = () => {
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={24} color="#97989F" />
           <Text style={styles.locationText}>
-            { location.houseNumber +
+            {/* { location.houseNumber +
               ' ' +
               location.street +
               ', ' +
               location.adminName1 +
               ', ' +
               location.adminName2 +
-              ' ' + location.postalcode }
+              ' ' + location.postalcode } */}
           </Text>
         </View>
         <View style={styles.individualCostInfoContainer}>

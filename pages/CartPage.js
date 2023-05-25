@@ -94,7 +94,7 @@ const CartPage = () => {
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{grabCartItem.name}</Text>
                     <Text style={styles.descriptionOfItem}>
-                      {limitTextAmount}
+                      {grabCartItem.description}
                     </Text>
                     <Text style={styles.priceText}>{grabCartItem.price}</Text>
                   </View>

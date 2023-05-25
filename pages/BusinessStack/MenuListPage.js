@@ -87,7 +87,6 @@ export default function MenuListPage() {
                   open={business.open}
                   close={business.close}
                 />
-                 <Text>{business.name}</Text>
                 <FeaturedList
                   menuData={menu}
                   businessName={business.name}

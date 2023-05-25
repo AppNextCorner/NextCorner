@@ -29,75 +29,67 @@ import { useState } from 'react'
 import { IP } from '../../constants/ApiKeys'
 
 export default function FoodDetailsPage() {
-  const { addToCart } = useCart()
-  const { setOrder, order } = useOrderButton()
+  const { addToCart } = useCart();
+  const { setOrder, order } = useOrderButton();
 
-  const [render, setRender] = useState(false)
-  //create our options
+  const [render, setRender] = useState(false);
 
-  const dispatch = useAppDispatch()
-  const route = useRoute()
-  const navigation = useNavigation()
-  const { business, foodItem, location} = route.params
-  const businessName = useAppSelector(getBusinessName)
-  // "JSON"
+  const dispatch = useAppDispatch();
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { business, foodItem, location } = route.params;
+  const businessName = useAppSelector(getBusinessName);
+
   useEffect(() => {
-    Object.assign({}, { ...foodItem })
-  }, [render])
-    // Make a deep copy to make sure that we update the local properties and not the properties of the main business
-  const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) }
-  const name = (parse || {}).cartData
+    // Create a deep copy of foodItem when render state changes
+    Object.assign({}, { ...foodItem });
+  }, [render]);
 
-  // grabbing the selection status for the customization of the menu item from the business
+  const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) };
+  const name = (parse || {}).cartData;
+
   const resetOptions = name.customizations
-    
     .flat()
-    .map((c) => c.selected)
-  //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
+    .map((c) => c.selected);
+
   const goHome = async () => {
-    setOrder(true)
+    setOrder(true);
     try {
-      navigation.goBack()
+      navigation.goBack();
       if (order === true) {
         for (let i = 0; i < resetOptions.length; i++) {
-          resetOptions[i] = false // set the status to false
+          resetOptions[i] = false;
         }
       }
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
-  /**
-   * WIll run after the options are selected - such as if one or however much options is required to make an order
-   */
+  };
+
   const goToCartButton = async () => {
-    const userId = auth.currentUser.uid
-    const addItem = name
-    setOrder(true)
-    // check to see if the cart already exists with a business
+    const userId = auth.currentUser.uid;
+    const addItem = name;
+    setOrder(true);
     if (businessName === '' || business === businessName) {
       try {
-        // add the items to the cart - don't need to call another getCart items due to it showing the new data with useEffect
-        await addToCart(addItem, userId, business, location)
-        // change the business name of the cart page to the business name of this current item
-        dispatch(setBusinessName(business))
-        // reset the options selected to its default value when going back to the previous screen
+        await addToCart(addItem, userId, business, location);
+        dispatch(setBusinessName(business));
         for (let i = 0; i < resetOptions.length; i++) {
-          resetOptions[i] = false
+          resetOptions[i] = false;
         }
-        navigation.goBack()
+        navigation.goBack();
       } catch (e) {
-        console.log('error')
+        console.log('error');
       }
     } else {
-      Alert.alert('added item from a business already')
+      Alert.alert('Added item from a different business');
     }
-  }
+  };
 
   const onSizeChange = (sizeVal) => {
-    console.log(sizeVal)
-  }
-  // list component for the options page
+    console.log(sizeVal);
+  };
+
   const Header = () => {
     return (
       <>
@@ -105,16 +97,17 @@ export default function FoodDetailsPage() {
           <AntDesign name="arrowleft" size={40} color="white" />
         </Pressable>
 
-        <Image style={styles.image} source={{uri:`http://${IP}:4020/${foodItem.image.toString()}`}} />
+        <Image
+          style={styles.image}
+          source={{ uri: `http://${IP}:4020/${foodItem.image.toString()}` }}
+        />
 
-        {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.headerText}>
             <Text style={styles.title}>{foodItem.name}</Text>
             <Text style={styles.price}>${foodItem.price}</Text>
           </View>
           <Text style={styles.description}>{foodItem.description}</Text>
-          {/* Reviews of item */}
           <View style={styles.ratingContainer}>
             <AntDesign
               style={styles.star}
@@ -136,15 +129,14 @@ export default function FoodDetailsPage() {
           <Text style={styles.custom}>Customize</Text>
         </View>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <>
       <StatusBar style="light" />
 
       <View style={styles.container}>
-        {/* Showing off the list options for the user - passing data from route.params to our component list */}
         <View style={{ flex: 1 }}>
           <OptionSelectionComponent
             header={Header}
@@ -154,7 +146,6 @@ export default function FoodDetailsPage() {
           />
         </View>
 
-        {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
         <View style={[styles.shadowOffSet, styles.buttonContainer]}>
           <TouchableOpacity
             disabled={order}
@@ -168,8 +159,9 @@ export default function FoodDetailsPage() {
         </View>
       </View>
     </>
-  )
+  );
 }
+
 
 const styles = StyleSheet.create({
   // Header styles

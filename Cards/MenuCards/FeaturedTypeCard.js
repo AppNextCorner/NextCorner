@@ -46,7 +46,7 @@ const FeaturedTypeCard = (props) => {
             
           </View>
           <View style={styles.priceContainer}>
-          <Text style={styles.menuItemPrice}>${menuItem.price}</Text>
+          <Text style={styles.menuItemPrice}>${Math.fround(menuItem.price)}</Text>
             </View>
         </View>
       </TouchableOpacity>

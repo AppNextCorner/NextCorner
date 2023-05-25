@@ -16,11 +16,14 @@ import React, { useState } from 'react'
 import { Foundation } from '@expo/vector-icons'
 import useBusiness from '../hooks/useBusiness'
 import { useNavigation } from '@react-navigation/native'
+import { useAppSelector } from '../store/hook'
+import { getBusiness } from '../store/slices/BusinessSlice/businessSlice'
 
 export default function SearchComponent() {
   const [showStores, setShowStores] = useState('')
 
-  const { business } = useBusiness()
+  const getBusinesses = useAppSelector(getBusiness);
+  const { loading, trendingBusiness, business } = useBusiness(getBusinesses);
   const navigation = useNavigation()
   const filteredStores = []
   const mapStores = business.map((il) => il.name)

@@ -13,11 +13,6 @@ export default function InProgressList({ orderItemDetails, distance, duration })
   const mapThroughOrder = orderItemDetails.singleOrderList.map(
     (getItemData) => getItemData.cartData,
   )
-
-  let text = 'Lorem ipsum dol'
-
-
-  let limitTextAmount = text.slice(0, 75) + ''
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
     <>
@@ -55,7 +50,7 @@ export default function InProgressList({ orderItemDetails, distance, duration })
                     <Text style={styles.categoryText}>{item.name}</Text>
                     
                     <Text style={styles.descriptionOfItem}>
-                      {limitTextAmount}
+                      {item.description}
                     </Text>
                     <Text style={styles.priceText}>${item.price * item.amountInCart}</Text>
                   </View>

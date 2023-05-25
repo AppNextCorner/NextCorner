@@ -11,6 +11,9 @@ import { getAuth } from 'firebase/auth';
 import { firebaseConfig } from './util/firebase';
 import { LogBox } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
 // firebase configuration / initialize
 export const app = initializeApp(firebaseConfig);
