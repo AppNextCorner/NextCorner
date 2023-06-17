@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { IP } from '../../constants/ApiKeys';
+import { IP } from '@env'
 
 /**
  * AnnouncementCard component displays an announcement with its data.

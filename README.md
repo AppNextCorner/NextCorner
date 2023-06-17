@@ -20,72 +20,22 @@ npm install --save
 Make sure to get the required files to run in your machine
 
 ```javascript
-// ./app.json
-{
-  "expo": {
-    "name": "nextcorner-app",
-    "slug": "nextcorner-app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#78DBFF"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.example.NextCorner",
-      "config": {
-        "googleMapsApiKey": "(ADD GOOGLE MAPS CLOUD API KEY HERE)"
-      }
-      
-}
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
+// .env
+STRIPE_API_KEY = 
+IP = 
+googleDirectionsAPIKey = 
+genomeAPIUser = 
+GOOGLE_CLOUD_API_KEY =
+
+apiKey =
+authDomain = 
+projectId =
+storageBucket =
+messagingSenderId =
+appId =
+measurementId =
 ```
 
-```javascript
-// ./utils/firebase.js
-export const firebaseConfig = {
-    apiKey: "",
-    authDomain: "",
-    projectId: "",
-    storageBucket: "",
-    messagingSenderId: "",
-    appId: "",
-    measurementId: ""
-  };
-```
-
-```javascript
-// ./constants/ApiKeys.js
-
-export const STRIPE_API_KEY = ""
-export const IP = ''
-
-export const googleDirectionsAPIKey = '';
-
-export const googleMapsAPIKey = ""
-
-export const geonameAPIUser = ""
-```
 ## Usage
 
 ```javascript

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Alert } from 'react-native'
 import { useAppDispatch } from '../store/hook'
-import { createUser, getUsers } from '../store/slices/userSession';
+import { createUser } from '../store/slices/userSession';
 
 /**
  * This hook shall help developers add a user to the firebase account

@@ -1,5 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { getUsers, setUser, logOut } from '../store/slices/userSession'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useAppDispatch } from '../store/hook'
@@ -17,14 +16,15 @@ const useGetUserData = () => {
   const [isDone, setIsDone] = useState(false) // runs when the authentication has been initialized whether a user is authenticated or not
 
   const dispatch = useAppDispatch()
-
+  let users = []
   /**
    * Call the redux slice to send a request to grab the authenticated information from the mongodb server
    */
   const getLoggedInUserData = async () => {
     try {
-      await dispatch(getUsers())
-     
+      const {payload} = await dispatch(getUsers())
+      return payload
+      console.log("ALL USERS: ", payload)
     } catch (err) {
       console.log('no users found with this email address', err)
     }
@@ -37,13 +37,15 @@ const useGetUserData = () => {
     async function fetchUserAsync() {
       // after user is confirmed, grab their data 
       try {
-        const userData = await getLoggedInUserData()
-        dispatch(setUser(userData)) // set the user data to the slice 
+        const data = await getLoggedInUserData()
+        console.log("user data:", data)
+        dispatch(setUser(data)) // set the user data to the slice 
         dispatch(fetchCart())
         dispatch(getOrderList())
         dispatch(getAllBusinesses())
       } catch (e) {
-        console.log(e)
+        console.log("error: ", e)
+        
       }
     }
 

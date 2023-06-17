@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "../hooks/useOrderButton";
 import { useEffect } from "react";
-import { IP } from "../constants/ApiKeys";
+import { IP } from '@env'
 
 /**
  * The default business card item

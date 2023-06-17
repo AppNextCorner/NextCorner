@@ -24,7 +24,7 @@ import FeaturedList from '../../components/MenuComponents/FeaturedList'
 import PreviousOrdersComponent from '../../components/MenuComponents/PreviousOrdersComponent'
 import { getOrders } from '../../store/slices/addToOrders'
 import AnnouncementList from '../../components/MenuComponents/AnnouncementList'
-import { IP } from '../../constants/ApiKeys'
+import {IP} from '@env'
 
 export default function MenuListPage() {
   const route = useRoute()

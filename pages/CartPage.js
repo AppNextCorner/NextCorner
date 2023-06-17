@@ -27,7 +27,7 @@ import {
 import { useAppDispatch } from '../store/hook'
 import { calculateTotals } from '../store/slices/addToCart'
 import useCart from '../hooks/useCart'
-import { IP } from '../constants/ApiKeys'
+import {IP } from '@env'
 /**
  *
  * After user finishes selecting an item and wants to proceed, they can remove from items cart list

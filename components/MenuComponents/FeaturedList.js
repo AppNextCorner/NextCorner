@@ -20,9 +20,9 @@ const FeaturedList = (props) => {
             showsHorizontalScrollIndicator={false}
             data={findFeaturedList}
             style={styles.featuredList}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
               return (
-                <View style={styles.featuredCard}>
+                <View style={styles.featuredCard} key={index}>
                   <FeaturedTypeCard
                     menuItem={item}
                     businessName={businessName}

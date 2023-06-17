@@ -14,6 +14,7 @@ export default function ProfilePage() {
 	const user = useAppSelector(getUser);
 	const dispatch = useAppDispatch();
 	// grabs the only user from the array as it has been already filtered out to include the current user
+	console.log('user: ', user)
 	const mainUser = user[0] || {
 		firstName: user.firstName,
 		lastName: user.lastName,

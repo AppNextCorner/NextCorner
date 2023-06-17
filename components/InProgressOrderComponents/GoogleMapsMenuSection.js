@@ -8,7 +8,7 @@ import {
 import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
-import { googleDirectionsAPIKey } from '../../constants/ApiKeys'
+import { googleDirectionsAPIKey } from '@env'
 
 // icons
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'

@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
-import { IP } from '../constants/ApiKeys'
+import {IP} from '@env'
 
 export default function FoodsCard({ businesItem, checkForStyleChange }) {
   // The style is changed when a category is selected on the home page 

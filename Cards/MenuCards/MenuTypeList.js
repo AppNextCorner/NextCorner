@@ -1,30 +1,35 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import MenuItemCard from '../MenuItemCard'
-import { useRoute } from '@react-navigation/native'
+import { FlatList, StyleSheet, View } from 'react-native';
+import React from 'react';
+import MenuItemCard from '../MenuItemCard';
+import { useRoute } from '@react-navigation/native';
 
-const MenuTypeList = (props) => {
-  // data sent towards the food details page
-  const { menuItem, type, businessName, location} = props
-
+const MenuTypeList = React.memo(({ menuItem, type, businessName, location }) => {
   // type is a string that represents the type of food that the menu item represents: ex: Burger, Pizza, etc.
-  const getItemsThatMatchType = menuItem.filter((item) => item.category === type)
+  
+  // Optimized: Memoize the filtered array using React.useMemo
+  const getItemsThatMatchType = React.useMemo(() => menuItem.filter(item => item.category === type), [
+    menuItem,
+    type,
+  ]);
+
+  // Optimized: Memoize the renderItem function using React.useCallback
+  const renderItem = React.useCallback(({ item }) => (
+    <View>
+      <MenuItemCard foodItem={item} businessName={businessName} location={location} />
+    </View>
+  ), [businessName, location]);
+
+  // Optimized: Memoize the keyExtractor function using React.useCallback
+
   return (
-    <>
-      <FlatList
-        data={getItemsThatMatchType}
-        renderItem={({ item }) => {
-          return (
-            <>
-              <MenuItemCard foodItem={item} businessName={businessName} location={location}/>
-            </>
-          )
-        }}
-      />
-    </>
-  )
-}
+    <FlatList
+      data={getItemsThatMatchType}
+      renderItem={renderItem}
 
-export default MenuTypeList
+    />
+  );
+});
 
-const styles = StyleSheet.create({})
+export default MenuTypeList;
+
+const styles = StyleSheet.create({});

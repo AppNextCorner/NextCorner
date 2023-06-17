@@ -4,7 +4,7 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
 import React from 'react'
 import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
-import { IP } from '../../constants/ApiKeys'
+import { IP } from '@env'
 
 export default function InProgressList({ orderItemDetails, distance, duration }) {
   // grabbing the data of the trendingFood from the data folder

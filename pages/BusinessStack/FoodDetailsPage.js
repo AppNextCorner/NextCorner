@@ -10,23 +10,20 @@ import {
   Pressable,
   TouchableOpacity,
   Alert,
-} from 'react-native'
-import React, { useEffect } from 'react'
-import { useRoute } from '@react-navigation/native'
-import { AntDesign } from '@expo/vector-icons'
-import { StatusBar } from 'expo-status-bar'
-import { useNavigation } from '@react-navigation/native'
-import OptionSelectionComponent from '../../components/MenuComponents/OptionSelectionComponent'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
-import {
-  getBusinessName,
-  setBusinessName,
-} from '../../store/slices/addToCart'
-import useCart from '../../hooks/useCart'
-import { auth } from '../../App'
-import useOrderButton from '../../hooks/useOrderButton'
-import { useState } from 'react'
-import { IP } from '../../constants/ApiKeys'
+} from "react-native";
+import React, { useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
+import OptionSelectionComponent from "../../components/MenuComponents/OptionSelectionComponent";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
+import useCart from "../../hooks/useCart";
+import { auth } from "../../App";
+import useOrderButton from "../../hooks/useOrderButton";
+import { useState } from "react";
+import {IP} from '@env'
 
 export default function FoodDetailsPage() {
   const { addToCart } = useCart();
@@ -48,9 +45,7 @@ export default function FoodDetailsPage() {
   const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) };
   const name = (parse || {}).cartData;
 
-  const resetOptions = name.customizations
-    .flat()
-    .map((c) => c.selected);
+  const resetOptions = name.customizations.flat().map((c) => c.selected);
 
   const goHome = async () => {
     setOrder(true);
@@ -70,24 +65,33 @@ export default function FoodDetailsPage() {
     const userId = auth.currentUser.uid;
     const addItem = name;
     setOrder(true);
-    if (businessName === '' || business === businessName) {
+    if (businessName === "" || business === businessName) {
       try {
         await addToCart(addItem, userId, business, location);
+        console.log(addItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
         for (let i = 0; i < resetOptions.length; i++) {
           resetOptions[i] = false;
         }
         navigation.goBack();
       } catch (e) {
-        console.log('error');
+        console.log("error");
       }
     } else {
-      Alert.alert('Added item from a different business');
+      Alert.alert("Added item from a different business");
     }
   };
-
-  const onSizeChange = (sizeVal) => {
-    console.log(sizeVal);
+  const handleOptionSelect = (selectedOptions, customization) => {
+    // Perform the necessary logic with the selected options
+    // Update the selected options in the foodItem object
+    name.customizations.forEach((option, index) => {
+      for (let i = 0; i < customization.length; i++) {
+        if (option.name == customization[i].name) {
+          option.optionCustomizations = selectedOptions;
+        }
+      }
+    });
+    // You can update the state or perform any other actions based on the selected options
   };
 
   const Header = () => {
@@ -142,6 +146,9 @@ export default function FoodDetailsPage() {
             header={Header}
             data={foodItem.customizations}
             render={setRender}
+            onSelect={(selectedOptions) =>
+              handleOptionSelect(selectedOptions, name.customizations)
+            }
             stateRender={render}
           />
         </View>
@@ -162,7 +169,6 @@ export default function FoodDetailsPage() {
   );
 }
 
-
 const styles = StyleSheet.create({
   // Header styles
   info: {
@@ -176,19 +182,19 @@ const styles = StyleSheet.create({
   ratingText: {
     paddingHorizontal: 10,
     flex: 1,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   ratingContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
-    alignItems: 'center',
-    marginLeft: '3%',
+    alignItems: "center",
+    marginLeft: "3%",
     margin: 5,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   title: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     flex: 4,
   },
   price: {
@@ -196,38 +202,38 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   headerText: {
-    flexDirection: 'row',
-    display: 'flex',
-    alignItems: 'center',
+    flexDirection: "row",
+    display: "flex",
+    alignItems: "center",
     margin: 10,
   },
   custom: {
-    margin: '5%',
+    margin: "5%",
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   customizeText: {
-    marginHorizontal: '5%',
-    marginTop: '5%',
-    borderColor: '#f2f0f0',
+    marginHorizontal: "5%",
+    marginTop: "5%",
+    borderColor: "#f2f0f0",
     borderWidth: 3,
     borderBottomWidth: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
   headerContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginHorizontal: 20,
     borderRadius: 10,
     marginTop: -40,
 
-    borderColor: '#f2f0f0',
-    borderStyle: 'solid',
+    borderColor: "#f2f0f0",
+    borderStyle: "solid",
     borderWidth: 3,
   },
   orderButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
     fontSize: 15,
   },
   goBackButton: {
@@ -241,34 +247,34 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 10,
     width: 250,
-    color: '#808080',
-    fontWeight: '500',
+    color: "#808080",
+    fontWeight: "500",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 350,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginTop: -105,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 
   shadowOffSet: {
     shadowOffset: { width: -2, height: 3 },
-    shadowColor: '#171717',
+    shadowColor: "#171717",
     shadowOpacity: 0.3,
     shadowRadius: 10,
   },
   buttonContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   orderButton: {
-    backgroundColor: '#78DBFF',
+    backgroundColor: "#78DBFF",
     margin: 15,
     padding: 15,
     borderRadius: 20,
-    marginBottom: '10%',
+    marginBottom: "10%",
   },
-})
+});

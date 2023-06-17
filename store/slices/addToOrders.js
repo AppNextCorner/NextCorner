@@ -5,7 +5,7 @@
  import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  import axios from 'axios';
  
- import { IP } from '../../constants/ApiKeys';
+ import { IP } from '@env'
  import { auth } from '../../App';
  
  const ORDERS_URL = `http://${IP}:4020/orders/`;

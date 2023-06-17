@@ -23,12 +23,13 @@ const PreviousOrdersComponent = (props) => {
             snapToAlignment={'start'}
             data={listData}
             horizontal={true}
+            keyExtractor={(item, index) => index}
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <PreviousOrderCard
                 previousOrders={item}
                 businessName={businessName}
-          
+                key={index}
                 location={location}
               />
             )}
