@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import useOrderButton from '../../hooks/useOrderButton'
 
 const PreviousOrderCard = (props) => {
-  const { previousOrders, businessName, location, logo } = props
+  const { previousOrders, businessName, location } = props
 
   const navigation = useNavigation()
   const { setOrder, order } = useOrderButton()
@@ -32,7 +32,6 @@ const PreviousOrderCard = (props) => {
       business: businessName,
       foodItem: parse.cartData,
       location: location,
-      logo: logo,
     })
   }
 
@@ -50,7 +49,7 @@ const PreviousOrderCard = (props) => {
             />
           </View> */}
           <View style={styles.foodTexts}>
-            <Text style={styles.categoryText}>{getPreviousItemData.name}</Text>
+            <Text style={styles.categoryText}>{getPreviousItemData.name} x{getPreviousItemData.amountInCart}</Text>
             {/* get previous order details */}
 
             {/* time last ordered */}
@@ -58,7 +57,7 @@ const PreviousOrderCard = (props) => {
               Last Ordered: {getTimeOrdered}
             </Text>
             <Text style={styles.priceText}>
-              ${getPreviousItemData.price / getPreviousItemData.amountInCart}
+              ${getPreviousItemData.price * getPreviousItemData.amountInCart}
             </Text>
           </View>
           {/* Store image with button  */}

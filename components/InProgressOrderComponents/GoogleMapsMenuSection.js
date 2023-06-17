@@ -8,7 +8,7 @@ import {
 import MapStyle from '../../constants/MapStyle.json'
 import * as Location from 'expo-location'
 import MapViewDirections from 'react-native-maps-directions'
-import { googleDirectionsAPIKey } from '../../constants/ApiKeys'
+import { googleDirectionsAPIKey } from '@env'
 
 // icons
 import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -25,8 +25,8 @@ export default function GoogleMapsMenuSection(props) {
   } = props
   // if the google maps api fails or the user does not have permission, then display this location
   const [mapRegion, setMapRegion] = useState({
-    latitude: parseFloat(location[0]),
-    longitude: parseFloat(location[1]),
+    latitude: parseFloat(location[0].latitude),
+    longitude: parseFloat(location[0].longitude),
     latitudeData: 0.0922,
     longitudeData: 0.0421,
   })
@@ -78,8 +78,8 @@ export default function GoogleMapsMenuSection(props) {
 
   // The location of the business coming from the database and turning it to a float
   const destination = {
-    latitude: parseFloat(location[0]),
-    longitude: parseFloat(location[1]),
+    latitude: parseFloat(location[0].latitude),
+    longitude: parseFloat(location[0].longitude),
   }
   // after the page is loaded, call the async function to update the location of the user 
   // The function runs asynchronously, meaning that the location will be updated and need to render again after the location is updated

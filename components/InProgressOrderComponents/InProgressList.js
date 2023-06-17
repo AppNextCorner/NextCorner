@@ -1,22 +1,18 @@
 /**
- * Purpose of the file: It is used to display the restaurants and its content by rendering multiple restaurants and multiple horizontal list for each restaurant
+ * Purpose of the file: It is used to display the business and its content by rendering multiple business and multiple horizontal list for each business
  */
 import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
 import React from 'react'
 import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
+import { IP } from '@env'
 
-export default function VerticalPickUpList({ orderItemDetails, distance, duration }) {
+export default function InProgressList({ orderItemDetails, distance, duration }) {
   // grabbing the data of the trendingFood from the data folder
 
   // mapping through the data and retrieving the data from one order
   const mapThroughOrder = orderItemDetails.singleOrderList.map(
     (getItemData) => getItemData.cartData,
   )
-
-  let text = 'Lorem ipsum dol'
-
-
-  let limitTextAmount = text.slice(0, 75) + ''
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
     <>
@@ -39,7 +35,7 @@ export default function VerticalPickUpList({ orderItemDetails, distance, duratio
         renderItem={({ item }) => {
           return (
             <>
-              {/* Containing the name of the restaurant  */}
+              {/* Containing the name of the business  */}
 
               {/* Pass in the order item detail through props  */}
               <TouchableOpacity
@@ -48,13 +44,13 @@ export default function VerticalPickUpList({ orderItemDetails, distance, duratio
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={item.image} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>
                     
                     <Text style={styles.descriptionOfItem}>
-                      {limitTextAmount}
+                      {item.description}
                     </Text>
                     <Text style={styles.priceText}>${item.price * item.amountInCart}</Text>
                   </View>

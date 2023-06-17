@@ -1,15 +1,15 @@
 /**
- * Purpose of the component: It is used to display the list of categories that will filter the list of restaurants that match the category selected by the user
+ * Purpose of the component: It is used to display the list of categories that will filter the list of business that match the category selected by the user
  */
 
 import { StyleSheet, View, ScrollView, FlatList } from "react-native";
 import React from "react";
-import RestaurantCategoryCard from "../Cards/RestaurantCategoryCard";
+import BusinessCategoryCard from "../Cards/BusinessCategoryCard";
 
 export default function CategoryScrollBar(props) {
   /**
    * Category List: List of categories 
-   * showItem: boolean to show the list of restaurants where it is the default list or the filtered list
+   * showItem: boolean to show the list of business where it is the default list or the filtered list
    * itemId: the id of the category properties
    */
   const { categoryList, showItem, itemId } = props;
@@ -27,10 +27,10 @@ export default function CategoryScrollBar(props) {
             numColumns={categoryList.length}
             data={categoryList}
             renderItem={({ item }) => (
-              <RestaurantCategoryCard
+              <BusinessCategoryCard
               // padd in the state of showItem to the category card 
                 handlePress={showItem}
-                restaurantItem={item}
+                businesItem={item}
                 foodId={itemId}
               />
             )}

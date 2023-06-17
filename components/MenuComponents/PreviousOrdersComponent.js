@@ -9,7 +9,7 @@ import React from 'react'
 import PreviousOrderCard from '../../Cards/MenuCards/PreviousOrderCard'
 
 const PreviousOrdersComponent = (props) => {
-  const { businessName, listData,  location, logo } = props
+  const { businessName, listData,  location } = props
   return (
     <View>
       {listData.length > 0 ? (
@@ -23,14 +23,14 @@ const PreviousOrdersComponent = (props) => {
             snapToAlignment={'start'}
             data={listData}
             horizontal={true}
+            keyExtractor={(item, index) => index}
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <PreviousOrderCard
                 previousOrders={item}
                 businessName={businessName}
-          
+                key={index}
                 location={location}
-                logo={logo}
               />
             )}
           />

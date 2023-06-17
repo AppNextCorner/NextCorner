@@ -21,7 +21,9 @@ export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false)
   const dispatch = useAppDispatch()
 
-  const orderData = useAppSelector(getOrders)
+
+  const getOrderFromSlice =  useAppSelector(getOrders);
+  const  orderData = JSON.parse(JSON.stringify(getOrderFromSlice))
   const navigation = useNavigation()
 
   const orderList = orderData
@@ -35,7 +37,6 @@ export default function OrdersPage() {
 
   useEffect(() => {
     dispatch(getOrderList())
-    console.log(orderData)
     orderData.filter((item, index) => orderData.indexOf(item) === index)
   }, [dispatch])
 
@@ -64,19 +65,18 @@ export default function OrdersPage() {
   return (
     <View style={styles.orderPageContainer}>
       <Text style={styles.headerText}>Your Orders</Text>
-      {/* Store two components aligned center and switch betweeen the two */}
       <View style={styles.orderTypeContainer}>
-        {orderSelection !== true ? (
+        {!orderSelection ? (
           <View>
             <View style={styles.headerOfOrder}>
               <TouchableOpacity
-                onPress={() => inProgress()}
+                onPress={inProgress}
                 style={styles.sectionButton}
               >
                 <Text style={styles.sectionHeader}>In progress</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => completedOrders()}
+                onPress={completedOrders}
                 style={styles.sectionButton}
               >
                 <Text style={styles.sectionHeader}>Complete</Text>
@@ -84,33 +84,30 @@ export default function OrdersPage() {
             </View>
             <FlatList
               data={filterInProgressData}
+              keyExtractor={(item, index) => index.toString()} // Use index as the key
               showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => {
-                return (
-                  <>
-                    <TouchableOpacity onPress={() => goToProgressPage(item)}>
-                      <InProgressOrderCard
-                        orderTimeData={item}
-                        orderItemId={item.id}
-                        orderStatusData={item.orderStatus}
-                      />
-                    </TouchableOpacity>
-                  </>
-                )
-              }}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => goToProgressPage(item)}>
+                  <InProgressOrderCard
+                    orderTimeData={item}
+                    orderItemId={item.id}
+                    orderStatusData={item.orderStatus}
+                  />
+                </TouchableOpacity>
+              )}
             />
           </View>
         ) : (
           <View>
             <View style={styles.headerOfOrder}>
               <TouchableOpacity
-                onPress={() => inProgress()}
+                onPress={inProgress}
                 style={styles.sectionButton}
               >
                 <Text style={styles.sectionHeader}>In progress</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => completedOrders()}
+                onPress={completedOrders}
                 style={styles.sectionButton}
               >
                 <Text style={styles.sectionHeader}>Complete</Text>
@@ -118,29 +115,25 @@ export default function OrdersPage() {
             </View>
             <FlatList
               ListHeaderComponent={
-                <>
-                  <Text style={styles.completedPageHeader}>Completed</Text>
-                </>
+                <Text style={styles.completedPageHeader}>Completed</Text>
               }
-              showsVerticalScrollIndicator={false}
               data={unique}
+              keyExtractor={(item, index) => index.toString()} // Use index as the key
+              showsVerticalScrollIndicator={false}
               style={styles.completedPageList}
-              renderItem={({ item }) => {
-                return (
-                  <>
-                    <Pressable>
-                      <CompletedOrderCard completedOrder={item} />
-                    </Pressable>
-                    <View style={styles.margin}></View>
-                  </>
-                )
-              }}
+              renderItem={({ item }) => (
+                <Pressable>
+                  <CompletedOrderCard completedOrder={item} />
+                </Pressable>
+              )}
             />
           </View>
         )}
       </View>
     </View>
-  )
+  );
+  
+  
 }
 
 const styles = StyleSheet.create({

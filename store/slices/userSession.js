@@ -4,15 +4,16 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { IP } from '../../constants/ApiKeys'
+import { IP } from '@env'
 import { auth } from '../../App'
 
 const USER_URL = `http://${IP}:4020/auth/`
 
 const createToken = async () => {
   let user = auth.currentUser
+  console.log(user)
   const token = user && (await user.getIdToken())
-
+  console.log("token: ",token)
   const payloadHeader = {
     headers: {
       'Content-Type': 'application/json',
@@ -24,9 +25,10 @@ const createToken = async () => {
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()
+  console.log("headers: ", headers)
   try {
     const response = await axios.get(USER_URL, headers)
-   
+    console.log("RESPONSE DATA", response.data )
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
     if (!err.response) {
@@ -73,7 +75,11 @@ export const userSession = createSlice({
     // case reducer functions
     // action is what values we want to assign the state to and receive it from payload
     setUser: (state, action) => {
-      
+      console.log('action payload: ', action.payload, " + EMAIL: " + auth.currentUser.email)
+      state.users = action.payload.filter(
+        (getOneUser) => getOneUser.email === auth.currentUser.email,
+      )
+      console.log("state user: ", state.users)
       // state.user = action.payload
       state.loggedIn = true
     },
@@ -84,10 +90,8 @@ export const userSession = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getUsers.fulfilled, (state, { payload }) => {
-      state.users = payload
-      state.users = state.users.filter(
-        (getOneUser) => getOneUser.email === auth.currentUser.email,
-      )
+
+      
       
     })
     builder.addCase(createUser.pending, (state, { payload }) => {

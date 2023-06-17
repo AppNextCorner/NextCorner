@@ -1,33 +1,26 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import {
-  View,
-  StyleSheet,
-  Text,
-} from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import moment from 'moment'
 import 'moment-timezone'
 import UseOrders from '../../hooks/useOrders'
 import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
 
-const InProgressOrderCard = ({
-  orderTimeData,
-  orderStatusData,
-}) => {
-  // 
-  const [duration, setDuration] = useState(0);
-  const [distance, setDistance] = useState(0);
+const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
+  //
+  const [duration, setDuration] = useState(0)
+  const [distance, setDistance] = useState(0)
   const [timeLeft, setTimeLeft] = useState()
-  const mapOrderItem =  orderTimeData.singleOrderList.map(location => location.location).flat()
-  const mapOrderLogo =  orderTimeData.singleOrderList.map(logo => logo.logo)
-
+  const mapOrderItem = orderTimeData.singleOrderList
+    .map((location) => location.location)
+    .flat()
 
   const { updateOrder } = UseOrders()
   useEffect(() => {
     // ever second, we want to update the order time by the order time
     setTimeout(() => {
       // convert the order time to seconds to increment seconds to match the timeout
-      const timer = orderTimeData.timer * 60;
+      const timer = orderTimeData.timer * 60
       // create a new date for the order that was created at the timestamp
       const returned_endate = moment(
         new Date(orderTimeData.createdAt),
@@ -36,17 +29,15 @@ const InProgressOrderCard = ({
         .tz('America/Los_Angeles') // get the timezone for the order
         // only adds minutes from the date and does not consider seconds
         .add(timer, 'seconds')
-        .format('YYYY-MM-DD HH:mm:ss') // be able to format the date 
+        .format('YYYY-MM-DD HH:mm:ss') // be able to format the date
 
-        // match the current date to the order date by the format and timezone
+      // match the current date to the order date by the format and timezone
       const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm')
 
-    
       // returns a negative number because it is dividing the future date by the current date resulting into negative seconds
       const duration = moment().diff(returned_endate, 'seconds')
-      // if the date returned from duration turns positive -> set the time to zero and status to taking longer than expected until the restaurant declares "ready for pick up" - then can otherwise change to "completed"
+      // if the date returned from duration turns positive -> set the time to zero and status to taking longer than expected until the business declares "ready for pick up" - then can otherwise change to "completed"
       if (duration < 0) {
-        
         return setTimeLeft(duration)
       }
       // the time left is zero, so we need to adjust the duration to 0 and do another function when this happens
@@ -54,7 +45,7 @@ const InProgressOrderCard = ({
     }, 1000)
   })
 
-   // update the order asynchronously
+  // update the order asynchronously
   useEffect(() => {
     // changing the order status with the finished message
     const updatedStatus = {
@@ -81,14 +72,21 @@ const InProgressOrderCard = ({
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
         {/* Small map preview and send specific modigications to match the card format and not the whole map */}
-        <GoogleMapsMenuSection scrollEnabled={false} pointerEvents={'none'} logo={mapOrderLogo} location={mapOrderItem}  setDuration={setDuration} setDistance={setDistance} />
+        <GoogleMapsMenuSection
+          scrollEnabled={false}
+          pointerEvents={'none'}
+          location={mapOrderItem}
+          setDuration={setDuration}
+          setDistance={setDistance}
+        />
       </View>
 
       <View style={styles.orderDetailTextContainer}>
         <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
         <Text style={styles.orderStatusText}>{orderStatusData}</Text>
         <Text style={styles.timeText}>
-          Ready In: {timeLeft <= -60 ? Math.floor(Math.abs(timeLeft) / 60) : '< 1'} min
+          Ready In:{' '}
+          {timeLeft <= -60 ? Math.floor(Math.abs(timeLeft) / 60) : '< 1'} min
         </Text>
       </View>
     </View>
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
   googleMapImageContainer: {
     margin: '3%',
     height: 175,
-    marginBottom: '-10%'
+    marginBottom: '-10%',
   },
   googleMapImage: {
     width: '100%',

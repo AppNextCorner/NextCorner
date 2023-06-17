@@ -14,28 +14,31 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { Foundation } from '@expo/vector-icons'
-import useRestaurants from '../hooks/useRestaurants'
+import useBusiness from '../hooks/useBusiness'
 import { useNavigation } from '@react-navigation/native'
+import { useAppSelector } from '../store/hook'
+import { getBusiness } from '../store/slices/BusinessSlice/businessSlice'
 
 export default function SearchComponent() {
   const [showStores, setShowStores] = useState('')
 
-  const { restaurants } = useRestaurants()
+  const getBusinesses = useAppSelector(getBusiness);
+  const { loading, trendingBusiness, business } = useBusiness(getBusinesses);
   const navigation = useNavigation()
   const filteredStores = []
-  const mapStores = restaurants.map((il) => il.name)
+  const mapStores = business.map((il) => il.name)
 
   // goes through all the businesses and checks if the user that typed the store is filtered and if so, add to the list
   for (let i = 0; i < mapStores.length; i++) {
     // grabs the business from an index from the whole businesses list and takes a slice and compares them with the user input to determine which business to show
     if (mapStores[i].slice(0, showStores.length) === showStores) {
-      filteredStores.push(restaurants[i])
+      filteredStores.push(business[i])
     }
   }
 
-  // pass the restaurant data which includes the menu
+  // pass the business data which includes the menu
   const goToMenuPage = (item) => {
-    navigation.navigate('MenuList', { restaurant: item })
+    navigation.navigate('MenuList', { business: item })
   }
 
   return (
@@ -47,7 +50,7 @@ export default function SearchComponent() {
           placeholder="Search For Local Businesses"
           value={showStores}
           onChangeText={(text) => {
-            // Capitalize the first character of the search term to be able to distinguish the many restaurants 
+            // Capitalize the first character of the search term to be able to distinguish the many business 
             setShowStores(
               text
                 .toLowerCase()
@@ -70,8 +73,8 @@ export default function SearchComponent() {
                 key={store.id}
                 onPress={() => goToMenuPage(store)}
               >
-                <View style={styles.restaurantContainer}>
-                  <Text style={styles.restaurantText}>{store.name}</Text>
+                <View style={styles.businesContainer}>
+                  <Text style={styles.businesText}>{store.name}</Text>
                 </View>
               </TouchableOpacity>
             )
@@ -87,11 +90,11 @@ const styles = StyleSheet.create({
   scroll: {
     height: 125, 
   },
-  restaurantText: {
+  businesText: {
     color: '#6a6b6a',
   },
 
-  restaurantContainer: {
+  businesContainer: {
     padding: '5%',
     borderColor: '#adadad',
     borderBottomWidth: 1,

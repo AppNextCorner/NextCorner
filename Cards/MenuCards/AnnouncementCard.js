@@ -1,64 +1,59 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { IP } from '@env'
 
 /**
- * 
- * @param {*} props - Data from the restaurant main component 
- * @returns 
+ * AnnouncementCard component displays an announcement with its data.
+ * @param {*} props - Data from the business main component.
+ * @returns {React.ReactNode} - Rendered component.
  */
 const AnnouncementCard = (props) => {
-  const { announcementData } = props
- 
-  /**
-   * Preset data for the announcement images due as it looks better than the faker data
-   */
-  const [announcement, setAnnouncement] = useState(announcementData)
-  const imageList = [
-    {
-      image: require('../../assets/CategoryIcons/burrito.png'),
+  const { announcementData } = props;
+
+  // Use state to store the announcement data
+  const [announcement, setAnnouncement] = useState(announcementData);
+
+  // Styles for the announcement card
+  const backgroundTextStyle = StyleSheet.create({
+    background: {
+      backgroundColor: announcement.color,
+      width: 210,
+      height: 125,
+      margin: 10,
+      flex: 2,
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
-    {
-      image: require('../../assets/CategoryIcons/pizza.png'),
+  });
+
+  const buttonStyle = StyleSheet.create({
+    button: {
+      backgroundColor: announcement.color,
+      flexDirection: 'row',
+      marginVertical: 20,
+      margin: 10,
+      borderRadius: 10,
+      flex: 1,
+      zIndex: 3,
+      marginHorizontal: 20,
+      alignItems: 'center',
     },
-    {
-      image: require('../../assets/CategoryIcons/bread.png'),
-    },
-  ]
-  // Experimental styles that previously used faker.js colors, but restored to preset default styles
-  const backgroundTextStyle = {
-    backgroundColor: '#78DBFF',
-    width: 210,
-    height: 125,
-    margin: 10,
-    flex: 2,
-    flexDirection: 'column',
-    justifyContent: 'center',
-  }
-  const buttonStyle = {
-    backgroundColor: '#78DBFF',
-    flexDirection: 'row',
-    marginVertical: 20,
-    margin: 10,
-    borderRadius: 10,
-    flex: 1,
-    zIndex: 3,
-    marginHorizontal: 20,
-    alignItems: 'center',
-    
-  }
+  });
+
+  // Render the AnnouncementCard component
   return (
-    <TouchableOpacity style={buttonStyle} disabled={true}>
-      <View style={backgroundTextStyle}>
+    <TouchableOpacity style={buttonStyle.button} disabled={true}>
+      <View style={backgroundTextStyle.background}>
         <Text style={styles.header}>{announcement.header.slice(0, 16) + '...'}</Text>
-        <Text style={styles.text}>{announcement.text.slice(0, 75)}</Text>
+        <Text style={styles.text}>{announcement.description.slice(0, 75)}</Text>
       </View>
       <Image
         style={styles.announcementImageContainer}
-        source={imageList[Math.floor(Math.random() * imageList.length)].image}
+        source={{ uri: `http://${IP}:4020/${announcement.image.toString()}` }}
       />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 export default AnnouncementCard
 

@@ -1,7 +1,3 @@
-/**
- * Purpose: Serves as storiing our stacks for our application such as auth stack, home stack, profile stack, pickup stack
- */
-
 import { StyleSheet, Text } from 'react-native'
 import * as React from 'react'
 import HomePage from '../pages/HomePage'
@@ -11,16 +7,11 @@ import MenuListPage from '../pages/BusinessStack/MenuListPage'
 import PickUpPage from '../pages/ProfilePage'
 import SignInPage from '../pages/auth/SignInPage'
 import CartPage from '../pages/CartPage'
-
-// importing the libraries needed for the navigation for every page
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
-// Icon list for the menu bar in the navigation container
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Octicons, Ionicons } from '@expo/vector-icons'
-
 import { useAppSelector } from '../store/hook'
 import { getIsLoggedIn } from '../store/slices/userSession'
 import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
@@ -29,7 +20,6 @@ import useGetUserData from '../hooks/useGetUserData'
 import InProgressPage from '../pages/OrdersStack/InProgressPage'
 import SignUpPage from '../pages/auth/SignUpPage'
 
-//Screen names to easily find in the route
 const homeName = 'HomePage'
 const ordersName = 'Orders'
 const profileName = 'Profile'
@@ -38,25 +28,15 @@ const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 
 export default function Route() {
-  const { isDone } = useGetUserData();
- 
-  // assign the variable a value of the state of the getIsLoggedIn according to the state of the userSession
+  const { isDone } = useGetUserData()
   const isLoggedin = useAppSelector(getIsLoggedIn)
 
-  // this is ran before checking if the user is logged in because we want to have already checked if the authentication request was ran successfully
-  if(isDone === true){
-    // using the state of the login which we got from the hook useAppSelector will help use the component / method value
+  if (isDone === true) {
     if (isLoggedin) {
       return (
         <>
           <NavigationContainer independent={true}>
-            <Stack.Navigator
-              // Removes the header from the navigation stack to replace it with a custom header button
-              screenOptions={{
-                headerShown: false,
-              }}
-            >
-              {/* Home -> main tab / default where it contains only orders and home  */}
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="Cart" component={CartPage} />
               <Stack.Screen name="FoodDetails" component={FoodDetailsPage} />
@@ -70,33 +50,20 @@ export default function Route() {
       )
     } else {
       return (
-        // Authentication stack which a user without an account is allowed to access
         <NavigationContainer>
           <Stack.Navigator>
-            <Stack.Screen
-              name="Login"
-              component={SignInPage}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Register"
-              component={SignUpPage}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name="Login" component={SignInPage} options={{ headerShown: false }} />
+            <Stack.Screen name="Register" component={SignUpPage} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       )
     }
   } else if (isDone === false) {
-    <Text>fetching user...</Text>
+    return <Text>fetching user...</Text>
   }
-  
 }
 
-// tab navigation stack
 function Home() {
-  
-  // set up bottom bar navigation style settings and icons
   return (
     <Tab.Navigator
       initialRouteName={homeName}
@@ -108,11 +75,7 @@ function Home() {
           if (rn === homeName) {
             iconName = focused ? 'home' : 'home-outline'
             return (
-              <MaterialCommunityIcons
-                name={iconName}
-                size={size}
-                color={color}
-              />
+              <MaterialCommunityIcons name={iconName} size={size} color={color} />
             )
           } else if (rn === ordersName) {
             iconName = focused ? 'checklist' : 'checklist'
@@ -123,23 +86,18 @@ function Home() {
           }
         },
         headerShown: false,
-        // using tabBar instead of screenOptions because this is not deprecated like screenOptions is
         tabBarActiveTintColor: '#78DBFF',
         tabBarInactiveTintColor: 'grey',
-
         tabBarShowLabel: true,
-        tabBarStyle: { padding: 10, height: '10%'},
+        tabBarStyle: { padding: 10, height: '10%' },
       })}
     >
-      {/* Tabs we want to use  */}
       <Tab.Screen name={homeName} component={HomePage} />
       <Tab.Screen name={ordersName} component={OrdersPage} />
       <Tab.Screen name={profileName} component={PickUpPage} />
     </Tab.Navigator>
   )
 }
-
-
 
 const styles = StyleSheet.create({
   container: {

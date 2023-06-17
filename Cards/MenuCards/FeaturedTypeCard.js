@@ -8,7 +8,7 @@ const FeaturedTypeCard = (props) => {
   // Button hook to prevent multiple presses
   const { setOrder, order } = useOrderButton()
   // Data coming from the business to be sent towards the food details page
-  const { menuItem, businessName, location, logo } = props
+  const { menuItem, businessName, location } = props
 
   const navigation = useNavigation()
 
@@ -19,7 +19,6 @@ const FeaturedTypeCard = (props) => {
       business: businessName,
       foodItem: menuItem,
       location: location,
-      logo: logo,
     })
   }
   return (
@@ -47,7 +46,7 @@ const FeaturedTypeCard = (props) => {
             
           </View>
           <View style={styles.priceContainer}>
-          <Text style={styles.menuItemPrice}>${menuItem.price}</Text>
+          <Text style={styles.menuItemPrice}>${Math.fround(menuItem.price)}</Text>
             </View>
         </View>
       </TouchableOpacity>

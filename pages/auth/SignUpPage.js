@@ -73,9 +73,7 @@ export default function SignUpPage() {
           // set the user as a variable
           const user = userCredential.user
           dispatch(
-            setUser({
-              name: user.displayName,
-            }),
+            getUsers()
           )
           console.log(user)
         })

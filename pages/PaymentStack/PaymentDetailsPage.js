@@ -18,26 +18,18 @@ import {
   Feather,
   MaterialIcons,
 } from '@expo/vector-icons'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../store/hook'
 import {
   getCart,
-  setOrder,
   getTotal,
-  deleteItem,
-  deleteItemReducer,
-  deleteItemAfterOrder,
-  getBusinessName,
   setBusinessName,
 } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
-import { IP } from '../../constants/ApiKeys'
+import { IP } from '@env'
 import useCart from '../../hooks/useCart'
 import UseOrders from '../../hooks/useOrders'
 import { getUser } from '../../store/slices/userSession'
-import axios from 'axios'
-import { geonameAPIUser } from '../../constants/ApiKeys'
-
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
@@ -54,8 +46,10 @@ const PaymentDetailsPage = () => {
 
   // grab user information from the current state of the user
   const user = useAppSelector(getUser)
-  const mainUser = user[0] // grab the only user from the list
-  const cart = useAppSelector(getCart)
+  const mainUser = user // grab the only user from the list
+  
+  const getCartFromSlice =  useAppSelector(getCart);
+  const cart = JSON.parse(JSON.stringify(getCartFromSlice))
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch();
 
@@ -64,24 +58,36 @@ const PaymentDetailsPage = () => {
 
   // grabbing all the cart item's data to display them on the receipt and the component cards
   const getCartItems = cart.map((list) => list.cartData).flat()
-  const getLocationOfBusiness = cart.map((list) => list.location)
-  const getElementOfLocation = getLocationOfBusiness[0]
+  // async function getLocation() {
+  //   return await cart[0].location
+  // }
+  // let getLocationOfBusiness = getLocation;
+  // if(cart[0].location == null){
+  //   getLocationOfBusiness == null
+  // }
+  
+  // console.log(cart);
+  // const getLat = 
+  // +getLocationOfBusiness.latitude
+  // const getLong = 
+  // +getLocationOfBusiness.longitude
   const calculateTotal = totalCost.toString().slice(0, 10);
   const addTotal = parseFloat(calculateTotal);
   const plus = addTotal + addTotal / 10;
   useEffect(() => {
-    const geoname = async () => {
-      try {
-        const res = await axios.get(
-          `http://api.geonames.org/findNearestAddressJSON?lat=${getElementOfLocation[0]}&lng=${getElementOfLocation[1]}&username=${geonameAPIUser}`,
-        )
-        setLocation(res.data.address)
-        return res
-      } catch (err) {
-        console.log('geoname', err)
-      }
-    }
-    geoname()
+    // const geoname = async () => {
+    //   try {
+    //     const res = await axios.get(
+    //       `http://api.geonames.org/addressJSON?lat=${getLat}&lng=${getLong}&username=${geonameAPIUser}`,
+    //     )
+    //     console.log('result:', JSON.stringify(res))
+    //     setLocation(res.data.address)
+    //     return res
+    //   } catch (err) {
+    //     console.log('geoname', err)
+    //   }
+    // }
+    // geoname()
   }, [])
   
   /**
@@ -193,7 +199,7 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={item.image} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>
@@ -214,15 +220,14 @@ const PaymentDetailsPage = () => {
         <View style={styles.locationContainer}>
           <MaterialIcons name="location-on" size={24} color="#97989F" />
           <Text style={styles.locationText}>
-            {location.streetNumber +
+            {/* { location.houseNumber +
               ' ' +
               location.street +
               ', ' +
-              location.adminName2 +
+              location.adminName1 +
               ', ' +
-              location.adminCode1 +
-              ' ' +
-              location.postalcode}
+              location.adminName2 +
+              ' ' + location.postalcode } */}
           </Text>
         </View>
         <View style={styles.individualCostInfoContainer}>

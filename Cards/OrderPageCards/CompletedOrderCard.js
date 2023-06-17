@@ -1,71 +1,55 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
-
 import { AntDesign } from '@expo/vector-icons'
-
 import moment from 'moment'
 import 'moment-timezone'
 
 const CompletedOrderCard = ({ completedOrder }) => {
-  // grab the time it was ordered last from and be able to display the date through a specific format with moment js
-  const getTimeOrdered = moment(
-    new Date(completedOrder.createdAt),
-    'YYYY-M-D H:mm',
-  )
+  // Get the time the order was placed and format it using moment.js
+  const getTimeOrdered = moment(new Date(completedOrder.createdAt), 'YYYY-M-D H:mm')
     .tz('America/Los_Angeles')
-
     .format('dddd, MMM D')
-  // Get the prices of the each completed order and calculate the total amount of price for one item
-  const calculateOrderPrice = completedOrder.singleOrderList
-    .map((cart) => cart.cartData)
-    .map((price) => price.price * price.amountInCart)
 
-  // add the prices of all completed orders after it has been added to their respective amounts
-  let addOrderPrice = calculateOrderPrice.reduce(function (a, b) {
-    return a + b
-  })
-  // Grab the business name of the order and the amount of items for that specific item
+  // Calculate the total price of the order
+  const calculateOrderPrice = completedOrder.singleOrderList.map((cart) => cart.cartData.price * cart.cartData.amountInCart)
+  const addOrderPrice = Math.round(calculateOrderPrice.reduce((a, b) => a + b));
+
+  // Get the business name and the number of items in the order
   const getBusinessName = completedOrder.singleOrderList[0].businessOrderedFrom
   const getItemAmount = completedOrder.singleOrderList
+
   return (
-    <>
-      <View style={styles.completedContainer}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.businessName}>{getBusinessName}</Text>
-          <AntDesign style={styles.orderInformationIcon} name="right" size={15} color="black" />
+    <View style={styles.completedContainer}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.businessName}>{getBusinessName}</Text>
+        <AntDesign style={styles.orderInformationIcon} name="right" size={15} color="black" />
+      </View>
+
+      <View style={styles.shortOrderDescriptionContainer}>
+        <View style={styles.dateAndPrice}>
+          <Text style={styles.timeOrdered}>{getTimeOrdered}</Text>
+          <Text style={styles.priceOfOrder}>
+            / ${addOrderPrice.toFixed(2).toString()} - {getItemAmount.length} items
+          </Text>
         </View>
 
-        {/* Description header of card */}
+        <View style={styles.itemData}>
+          {/* Render each item's name */}
+          {getItemAmount.map((order, index) => (
+            <Text key={index}> {order.cartData.name} /</Text>
+          ))}
+        </View>
 
-        <View style={styles.shortOrderDescriptionContainer}>
-          <View style={styles.dateAndPrice}>
-            <Text style={styles.timeOrdered}>{getTimeOrdered}</Text>
-            <Text style={styles.priceOfOrder}>
-              / ${addOrderPrice.toString().slice(0, 5)} - {getItemAmount.length} items
-            </Text>
-          </View>
-          {/* Item list */}
-          <View style={styles.itemData}>
-            {getItemAmount
-              .map((order) => order.cartData)
-              .map((name) => (
-                <Text key={name.itemId}> {name.name} /</Text>
-              ))}
-          </View>
-          {/* Two buttons for viewing receipt and reordering the same order items sent to cart*/}
-          <View style={styles.cardButtons}>
-            <TouchableOpacity style={styles.reorderButton}>
-              <Text style={styles.selectionButtonText}>Reorder</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.receiptButton}>
-              <Text style={styles.selectionButtonText}>View Receipt</Text>
-            </TouchableOpacity>
-          </View>
-          {/* Margin for every card */}
+        <View style={styles.cardButtons}>
+          <TouchableOpacity style={styles.reorderButton}>
+            <Text style={styles.selectionButtonText}>Reorder</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.receiptButton}>
+            <Text style={styles.selectionButtonText}>View Receipt</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      
-    </>
+    </View>
   )
 }
 

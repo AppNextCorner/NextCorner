@@ -3,7 +3,7 @@ import React from 'react'
 import FeaturedTypeCard from '../../Cards/MenuCards/FeaturedTypeCard'
 
 const FeaturedList = (props) => {
-  const { menuData, businessName, location, logo } = props
+  const { menuData, businessName, location } = props
   // grab all items from the business menu to get the menu items that are featured
   const findFeaturedList = menuData.filter((item) => item.featured === true)
  
@@ -20,14 +20,13 @@ const FeaturedList = (props) => {
             showsHorizontalScrollIndicator={false}
             data={findFeaturedList}
             style={styles.featuredList}
-            renderItem={({ item }) => {
+            renderItem={({ item, index }) => {
               return (
-                <View style={styles.featuredCard}>
+                <View style={styles.featuredCard} key={index}>
                   <FeaturedTypeCard
                     menuItem={item}
                     businessName={businessName}
                     location={location}
-                    logo={logo}
                   />
                 </View>
               )
