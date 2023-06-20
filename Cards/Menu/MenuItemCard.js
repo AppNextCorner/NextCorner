@@ -43,7 +43,7 @@ export default function MenuItemCard({ foodItem, businessName, location }) {
 					<Image
 						style={styles.foodImages}
 						source={{
-							uri: `http://${IP}:4020/${foodItem.image.toString()}`,
+							uri: `http://${IP}:5005/${foodItem.image.toString()}`,
 						}}
 					/>
 				</View>

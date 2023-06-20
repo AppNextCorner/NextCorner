@@ -10,11 +10,11 @@ import BusinessCard from "@cards/Home/BusinessCard";
 import BusinessListComponent from "@components/home/BusinessListComponent";
 import CategoryScrollBar from "@components/home/CategoryScrollBar";
 import OrderButton from "@components/global/OrderButton";
-import { useAppSelector } from "@store/hook";
-import { getButton } from "@store/slices/addToCart";
+import { useAppSelector } from "../store/hook";
+import { getButton } from "../store/slices/addToCart";
 import useCategoryList from "@hooks/handlePages/useCategoryList";
 import useBusiness from "@hooks/handleVendors/useBusiness";
-import { getBusiness } from "@store/slices/BusinessSlice/businessSlice";
+import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
 
 export default function HomePage() {
 	const {

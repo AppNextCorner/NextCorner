@@ -32,7 +32,7 @@ export default function FoodsCard({ businesItem, checkForStyleChange }) {
       style={styles.foodCategoryStyle}
     >
       <View style={changeStyle(checkForStyleChange)}>
-        <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${businesItem.image.toString()}`}} />
+        <Image style={styles.foodImages} source={{uri:`http://${IP}:5005/${businesItem.image.toString()}`}} />
 
         <View style={styles.foodTexts}>
           <MaterialIcons name="store" size={24} color="#606160" />

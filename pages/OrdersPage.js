@@ -11,8 +11,8 @@ import {
   Pressable,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { useAppSelector, useAppDispatch } from '@store/hook'
-import { getOrderList, getOrders } from '@store/slices/addToOrders'
+import { useAppSelector, useAppDispatch } from '../store/hook'
+import { getOrderList, getOrders } from '../store/slices/addToOrders'
 import InProgressOrderCard from '../Cards/Order/InProgressOrderCard'
 import { useNavigation } from '@react-navigation/native'
 import CompletedOrderCard from '../Cards/Order/CompletedOrderCard'

@@ -6,11 +6,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 import { IP } from '@env'
-import { auth } from '@global'
+import { app } from '@global/App'
+import { getAuth } from 'firebase/auth'
 
-const POSTS_URL = `http://${IP}:4020/api/`
+const POSTS_URL = `http://${IP}:5005/api/`
 
 const createToken = async () => {
+  const auth = getAuth(app)
   let user = auth.currentUser
   const token = user && (await user.getIdToken())
 

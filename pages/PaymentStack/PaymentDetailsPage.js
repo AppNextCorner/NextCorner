@@ -14,17 +14,17 @@ import {
   MaterialIcons,
 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch, useAppSelector } from '@store/hook'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
 import {
   getCart,
   getTotal,
   setBusinessName,
-} from '@store/slices/addToCart'
+} from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '@env'
 import useCart from '@hooks/handleVendors/useCart'
 import UseOrders from '@hooks/handleVendors/useOrders'
-import { getUser } from '@store/slices/userSession'
+import { getUser } from '../../store/slices/userSession'
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
@@ -90,7 +90,7 @@ const PaymentDetailsPage = () => {
    */
   const navigateToAddPaymentMethod = async () => {
     try {
-      const response = await fetch(`http://${IP}:4020/payment`, {
+      const response = await fetch(`http://${IP}:5005/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:5005/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>

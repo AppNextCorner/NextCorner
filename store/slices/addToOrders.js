@@ -6,9 +6,9 @@
  import axios from 'axios';
  
  import { IP } from '@env'
- import { auth } from '@global';
+ import { auth } from '@global/App';
  
- const ORDERS_URL = `http://${IP}:4020/orders/`;
+ const ORDERS_URL = `http://${IP}:5005/orders/`;
  
  // Function to create the authorization token header
  const createToken = async () => {

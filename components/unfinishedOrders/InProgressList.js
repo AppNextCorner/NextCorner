@@ -44,7 +44,7 @@ export default function InProgressList({ orderItemDetails, distance, duration })
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:5005/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>

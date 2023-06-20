@@ -17,3 +17,14 @@ export const firebaseConfig = {
     appId: appId,
     measurementId: measurementId
 };
+console.log("firebase: ",
+apiKey,
+authDomain,
+projectId,
+storageBucket,
+messagingSenderId,
+appId,
+measurementId
+  )
+
+console.log('firebase config: '. firebaseConfig)

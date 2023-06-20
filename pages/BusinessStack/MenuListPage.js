@@ -17,12 +17,12 @@ import { AntDesign } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import OrderButton from '@components/global/OrderButton'
-import { useAppSelector } from '@store/hook'
-import { getButton } from '@store/slices/addToCart'
+import { useAppSelector } from '../../store/hook'
+import { getButton } from '../../store/slices/addToCart'
 import MenuTypeList from '@cards/Menu/MenuTypeList'
 import FeaturedList from '@components/menu/FeaturedList'
 import PreviousOrdersComponent from '@components/menu/PreviousOrdersComponent'
-import { getOrders } from '@store/slices/addToOrders'
+import { getOrders } from '../../store/slices/addToOrders'
 import AnnouncementList from '@components/menu/AnnouncementList'
 import {IP} from '@env'
 
@@ -69,7 +69,7 @@ export default function MenuListPage() {
               </Pressable>
              
 
-              <Image style={styles.image} source={{uri:`http://${IP}:4020/${business.image.toString()}`}} />
+              <Image style={styles.image} source={{uri:`http://${IP}:5005/${business.image.toString()}`}} />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}

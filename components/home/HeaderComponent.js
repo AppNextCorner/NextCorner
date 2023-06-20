@@ -3,12 +3,13 @@
  */
 
 import { StyleSheet, View, Text, Image, Alert, Pressable } from 'react-native'
-import HomeIcon from '@assets/logo.png'
+// import HomeIcon from '@assets/logo.png'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch, useAppSelector } from '@store/hook'
-import { getCart, setBusinessName } from '@store/slices/addToCart'
+import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { getCart, setBusinessName } from '../../store/slices/addToCart'
 
+const HomeIcon = require("@assets/logo.png")
 export default function HeaderComponent() {
   const navigation = useNavigation()
   //JSON.parse(JSON.stringify(getCartFromSlice)) 

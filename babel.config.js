@@ -27,7 +27,6 @@ module.exports = function (api) {
             "@hooks": "./hooks",
             "@pages": "./pages",
             "@routing": "./routing",
-            "@store": "./store",
             "@util": "./util",
             "@global": "./",
             "@assets": "./assets"
@@ -53,6 +52,7 @@ module.exports = function (api) {
               ".android.tsx",
               ".ios.js",
               ".ios.tsx",
+              ".png"
             ],
           },
         },

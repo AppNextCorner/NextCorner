@@ -10,8 +10,9 @@ import {
   getCart,
   orderPlaced,
   setBusinessName,
-} from '@store/slices/addToCart'
-import { useAppSelector } from '@store/hook'
+  calculateTotals
+} from '../store/slices/addToCart'
+import { useAppSelector, useAppDispatch } from '../store/hook'
 import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
@@ -24,8 +25,6 @@ import {
   Pressable,
   FlatList,
 } from 'react-native'
-import { useAppDispatch } from '@store/hook'
-import { calculateTotals } from '@store/slices/addToCart'
 import useCart from '@hooks/handleVendors/useCart'
 import {IP } from '@env'
 /**
@@ -88,7 +87,7 @@ const CartPage = () => {
                   <View style={styles.imageBox}>
                     <Image
                       style={styles.foodImages}
-                      source={{uri:`http://${IP}:4020/${grabCartItem.image.toString()}`}}
+                      source={{uri:`http://${IP}:5005/${grabCartItem.image.toString()}`}}
                     />
                   </View>
                   <View style={styles.foodTexts}>

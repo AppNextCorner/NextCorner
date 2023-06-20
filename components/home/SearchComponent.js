@@ -16,8 +16,8 @@ import React, { useState } from 'react'
 import { Foundation } from '@expo/vector-icons'
 import useBusiness from '@hooks/handleVendors/useBusiness'
 import { useNavigation } from '@react-navigation/native'
-import { useAppSelector } from '@store/hook'
-import { getBusiness } from '@store/slices/BusinessSlice/businessSlice'
+import { useAppSelector } from '../../store/hook'
+import { getBusiness } from '../../store/slices/BusinessSlice/businessSlice'
 
 export default function SearchComponent() {
   const [showStores, setShowStores] = useState('')

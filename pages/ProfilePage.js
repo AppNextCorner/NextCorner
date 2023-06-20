@@ -3,15 +3,16 @@
  */
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useAppDispatch, useAppSelector } from "@store/hook";
-
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import {auth} from '../App'
 // import firebase features
-import { signOut } from "firebase/auth";
-import { auth } from "../App";
-import { getUser, logOut } from "@store/slices/userSession";
+import {signOut } from "firebase/auth";
+
+import { getUser, logOut } from "../store/slices/userSession";
 
 export default function ProfilePage() {
 	const user = useAppSelector(getUser);
+	console.log(user)
 	const dispatch = useAppDispatch();
 	// grabs the only user from the array as it has been already filtered out to include the current user
 	console.log('user: ', user)
@@ -24,6 +25,7 @@ export default function ProfilePage() {
 			// change the state of the user screen to false to change the routes we want the user to access
 			dispatch(logOut());
 			const result = await signOut(auth); // Sign out the user from firebase authentication
+
 			return result;
 		} catch (err) {
 			console.log(err.message);

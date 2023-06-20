@@ -70,7 +70,7 @@ const InProgressPage = () => {
               overflow: 'hidden',
             }}
           >
-            <GoogleMapsMenuSection  location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
+            <GoogleMapsMenuSection time={item}  location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
           </View>
 
           {/* Our bottom modal containing the business and each individual menu */}

@@ -5,13 +5,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { IP } from '@env'
-import { auth } from '@global'
+import { app } from '../../App'
+import { getAuth } from 'firebase/auth'
 
-const USER_URL = `http://${IP}:4020/auth/`
+const USER_URL = `http://${IP}:5005/auth/`
 
-const createToken = async () => {
+export const createToken = async () => {
+  const auth = getAuth(app);
+  console.log('auth from global', auth)
   let user = auth.currentUser
-  console.log(user)
+  console.log("user current user:", user)
   const token = user && (await user.getIdToken())
   console.log("token: ",token)
   const payloadHeader = {
@@ -25,14 +28,15 @@ const createToken = async () => {
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()
+  console.log('get users')
   console.log("headers: ", headers)
   try {
     const response = await axios.get(USER_URL, headers)
-    console.log("RESPONSE DATA", response.data )
+    console.log("RESPONSE DATA", response.data)
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
     if (!err.response) {
-      console.log(err.response)
+      console.log("Error from user: ", err.response)
       throw err
     }
   }
@@ -51,7 +55,7 @@ export const createUser = createAsyncThunk(
 
       return resp.data
     } catch (err) {
-      console.log('error')
+      console.log('error from user')
       console.log(err.message)
       return err.message
     }

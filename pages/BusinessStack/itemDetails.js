@@ -17,10 +17,10 @@ import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OptionSelectionComponent from "@components/menu/OptionSelectionComponent";
-import { useAppDispatch, useAppSelector } from "@store/hook";
-import { getBusinessName, setBusinessName } from "@store/slices/addToCart";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
 import useCart from "@hooks/handleVendors/useCart";
-import { auth } from "@global/App";
+import { auth } from "../../App";
 import useOrderButton from "@hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import {IP} from '@env'
@@ -110,7 +110,7 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `http://${IP}:4020/${foodItem.image.toString()}` }}
+          source={{ uri: `http://${IP}:5005/${foodItem.image.toString()}` }}
         />
 
         <View style={styles.headerContainer}>

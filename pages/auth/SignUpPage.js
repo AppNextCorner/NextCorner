@@ -13,12 +13,12 @@ import {
   Alert,
 } from 'react-native'
 import useAddUser from '@hooks/handleUsers/useAddUser'
-import { useAppDispatch } from '@store/hook'
+import { useAppDispatch } from '../../store/hook'
 import {
   getUsers,
   setUser,
-} from '@store/slices/userSession'
-import { auth } from '@global'
+} from '../../store/slices/userSession'
+import { auth } from '../../App'
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
@@ -60,10 +60,6 @@ export default function SignUpPage() {
       password,
       phoneNumber,
     })
-
-    // update the user's auth
-    dispatch(getUsers())
-
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
       signInWithEmailAndPassword(auth, email, password)
@@ -72,10 +68,10 @@ export default function SignUpPage() {
           console.log('Signed In')
           // set the user as a variable
           const user = userCredential.user
-          dispatch(
-            getUsers()
-          )
-          console.log(user)
+          const {payload}= dispatch(getUsers());
+          dispatch(setUser(payload));
+          navigation.navigate('Home');
+          console.log("user from signing in:",user)
         })
         .catch((err) => {
           console.log(err)

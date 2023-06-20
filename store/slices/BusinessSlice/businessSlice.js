@@ -6,11 +6,13 @@
  import axios from 'axios'
  
  import {IP} from '@env'
- import { auth } from '@global/App'
+ import { app} from '../../../App'
+import { getAuth } from 'firebase/auth'
  
- const BUSINESS_URL = `http://${IP}:4020/business/`
+ const BUSINESS_URL = `http://${IP}:5005/business/`
  
  const createToken = async () => {
+  const auth = getAuth(app);
    let user = auth.currentUser
    const token = user && (await user.getIdToken())
  
@@ -26,9 +28,10 @@
  export const getAllBusinesses = createAsyncThunk(
    'businessSlice/getAllBusinesses',
    async () => {
-     const headers = await createToken()
+    const headers = await createToken()
      try {
        const response = await axios.get(BUSINESS_URL, headers)
+       console.log('response for businesswe8tw9j', response)
        return response.data // Return a value synchronously using Async-await
      } catch (err) {
        if (!err.response) {
