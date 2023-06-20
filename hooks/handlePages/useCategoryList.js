@@ -1,8 +1,4 @@
 import { useState } from "react";
-import { DEFAULT_CATEGORY_DATA } from "../constants/MenuData";
-
-const categoryList = DEFAULT_CATEGORY_DATA;
-
 export default function useCategoryList() {
   // did we select an item - category
   const [categoryWasSelected, setCategoryWasSelected] = useState(false);
@@ -32,7 +28,6 @@ export default function useCategoryList() {
 
   return {
     categoryId: itemId,
-    categoryList,
     categoryWasSelected,
     checkForStyleChange,
     onSelectCategory,

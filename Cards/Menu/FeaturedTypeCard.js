@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import useOrderButton from '../../hooks/useOrderButton'
+import useOrderButton from '@hooks/handlePages/useOrderButton'
 import { AntDesign } from '@expo/vector-icons'
 
 const FeaturedTypeCard = (props) => {
@@ -14,7 +14,7 @@ const FeaturedTypeCard = (props) => {
 
   const goToFoodDetails = () => {
     setOrder(false)
-    navigation.navigate('FoodDetails', {
+    navigation.navigate('Item', {
       //  Props data sent to food details to be able to display the details 
       business: businessName,
       foodItem: menuItem,

@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '../store/hook'
+import { useAppSelector, useAppDispatch } from '@store/hook'
 import {
   fetchCart,
   addNewCartItem,
@@ -8,7 +8,7 @@ import {
   deleteItem,
   deleteItemReducer,
   deleteItemAfterOrder,
-} from '../store/slices/addToCart'
+} from '@store/slices/addToCart'
 
 /**
  * create a cart item and be able to increment/decrement amount of item, delete, and create a new item into our redux cart slice - handles sending the data to the slice

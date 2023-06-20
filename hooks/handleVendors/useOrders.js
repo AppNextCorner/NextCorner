@@ -1,15 +1,11 @@
-import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import { auth } from '../App'
-import { useAppDispatch, useAppSelector } from '../store/hook'
+import { auth } from '@global'
+import { useAppDispatch} from '@store/hook'
 import {
   addOrder,
   getOrderList,
-  getTime,
-  getOrders,
   updateOrderStatus,
   updateOrderStatusReducer
-} from '../store/slices/addToOrders'
+} from '@store/slices/addToOrders'
 
 /**
  * After the user has entered the order, they should update the order list through the request to our backend. 

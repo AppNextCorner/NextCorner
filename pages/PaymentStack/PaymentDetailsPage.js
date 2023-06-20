@@ -6,30 +6,25 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
-  Button,
   FlatList,
   Image,
 } from 'react-native'
 import {
-  Fontisto,
-  Entypo,
   AntDesign,
-  FontAwesome,
-  Feather,
   MaterialIcons,
 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { useAppDispatch, useAppSelector } from '../../store/hook'
+import { useAppDispatch, useAppSelector } from '@store/hook'
 import {
   getCart,
   getTotal,
   setBusinessName,
-} from '../../store/slices/addToCart'
+} from '@store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '@env'
-import useCart from '../../hooks/useCart'
-import UseOrders from '../../hooks/useOrders'
-import { getUser } from '../../store/slices/userSession'
+import useCart from '@hooks/handleVendors/useCart'
+import UseOrders from '@hooks/handleVendors/useOrders'
+import { getUser } from '@store/slices/userSession'
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash

@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, View } from 'react-native';
 import React from 'react';
-import MenuItemCard from '../MenuItemCard';
+import MenuItemCard from './MenuItemCard';
 import { useRoute } from '@react-navigation/native';
 
 const MenuTypeList = React.memo(({ menuItem, type, businessName, location }) => {

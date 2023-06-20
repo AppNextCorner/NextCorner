@@ -15,6 +15,48 @@ module.exports = function (api) {
           allowUndefined: true,
         },
       ],
+      [
+        "module-resolver",
+        {
+          root: ["."],
+          alias: {
+            "@cards": "./Cards",
+            "@components": "./components",
+            "@constants": "./constants",
+            "@data": "./data",
+            "@hooks": "./hooks",
+            "@pages": "./pages",
+            "@routing": "./routing",
+            "@store": "./store",
+            "@util": "./util",
+            "@global": "./",
+            "@assets": "./assets"
+          },
+          extensions: [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx",
+            ".android.js",
+            ".android.tsx",
+            ".ios.js",
+            ".ios.tsx",
+          ],
+          //  Removes the need to add the extensions at the end of a file when importing
+          resolve: {
+            extensions: [
+              ".js",
+              ".jsx",
+              ".ts",
+              ".tsx",
+              ".android.js",
+              ".android.tsx",
+              ".ios.js",
+              ".ios.tsx",
+            ],
+          },
+        },
+      ],
     ],
   };
 };

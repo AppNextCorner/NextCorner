@@ -5,7 +5,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { IP } from '@env'
-import { auth } from '../../App'
+import { auth } from '@global'
 
 const USER_URL = `http://${IP}:4020/auth/`
 

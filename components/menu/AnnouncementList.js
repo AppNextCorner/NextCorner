@@ -1,6 +1,6 @@
 import { Dimensions, FlatList, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
-import AnnouncementCard from '../../Cards/MenuCards/AnnouncementCard'
+import AnnouncementCard from '@cards/Menu/AnnouncementCard'
 
 const AnnouncementList = (props) => {
   // Grabbing the data and the direction of the announcement list

@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import React from 'react'
-import PreviousOrderCard from '../../Cards/MenuCards/PreviousOrderCard'
+import PreviousOrderCard from '@cards/Menu/PreviousOrderCard'
 
 const PreviousOrdersComponent = (props) => {
   const { businessName, listData,  location } = props

@@ -1,24 +1,24 @@
 import { StyleSheet, Text } from 'react-native'
 import * as React from 'react'
-import HomePage from '../pages/HomePage'
-import FoodDetailsPage from '../pages/BusinessStack/FoodDetailsPage'
-import OrdersPage from '../pages/OrdersPage'
-import MenuListPage from '../pages/BusinessStack/MenuListPage'
-import PickUpPage from '../pages/ProfilePage'
-import SignInPage from '../pages/auth/SignInPage'
-import CartPage from '../pages/CartPage'
+import HomePage from '@pages/HomePage'
+import ItemPage from '@pages/BusinessStack/itemDetails'
+import OrdersPage from '@pages/OrdersPage'
+import MenuListPage from '@pages/BusinessStack/MenuListPage'
+import PickUpPage from '@pages/ProfilePage'
+import SignInPage from '@pages/auth/SignInPage'
+import CartPage from '@pages/CartPage'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Octicons, Ionicons } from '@expo/vector-icons'
-import { useAppSelector } from '../store/hook'
-import { getIsLoggedIn } from '../store/slices/userSession'
-import PaymentDetailsPage from '../pages/PaymentStack/PaymentDetailsPage'
-import OrderPlacedPage from '../pages/PaymentStack/OrderPlacedPage'
-import useGetUserData from '../hooks/useGetUserData'
-import InProgressPage from '../pages/OrdersStack/InProgressPage'
-import SignUpPage from '../pages/auth/SignUpPage'
+import { useAppSelector } from '@store/hook'
+import { getIsLoggedIn } from '@store/slices/userSession'
+import PaymentDetailsPage from '@pages/PaymentStack/PaymentDetailsPage'
+import OrderPlacedPage from '@pages/PaymentStack/OrderPlacedPage'
+import useGetUserData from '@hooks/handleUsers/useGetUserData'
+import InProgressPage from '@pages/OrdersStack/InProgressPage'
+import SignUpPage from '@pages/auth/SignUpPage'
 
 const homeName = 'HomePage'
 const ordersName = 'Orders'
@@ -39,7 +39,7 @@ export default function Route() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen name="Home" component={Home} />
               <Stack.Screen name="Cart" component={CartPage} />
-              <Stack.Screen name="FoodDetails" component={FoodDetailsPage} />
+              <Stack.Screen name="Item" component={ItemPage} />
               <Stack.Screen name="MenuList" component={MenuListPage} />
               <Stack.Screen name="PaymentDetails" component={PaymentDetailsPage} />
               <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />

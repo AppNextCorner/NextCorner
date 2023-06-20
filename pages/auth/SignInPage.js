@@ -12,16 +12,16 @@ import {
   StyleSheet,
   Image,
 } from 'react-native'
-import logo from '../../assets/logo.png'
-import { useAppDispatch } from '../../store/hook'
-import { getUsers, setUser } from '../../store/slices/userSession'
+import logo from '@assets/logo.png'
+import { useAppDispatch } from '@store/hook'
+import { getUsers, setUser } from '@store/slices/userSession'
 import { useState } from 'react'
 // importing firebase
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth'
-import { auth } from '../../App'
+import { auth } from '@global'
 import { useNavigation } from '@react-navigation/native'
 
 /**

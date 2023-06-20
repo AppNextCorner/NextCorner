@@ -3,24 +3,23 @@
  * - Displays business based on location or depending on the section from either the category or default sections
  */
 import { StyleSheet, View, FlatList, Text } from "react-native";
-import HeaderComponent from "../components/HeaderComponent";
+import HeaderComponent from "@components/home/HeaderComponent";
 import { StatusBar } from "expo-status-bar";
-import SearchComponent from "../components/SearchComponent";
-import BusinessCard from "../Cards/BusinessCard";
-import BusinessListComponent from "../components/BusinessListComponent";
-import CategoryScrollBar from "../components/CategoryScrollBar";
-import OrderButton from "../components/OrderButton";
-import { useAppSelector } from "../store/hook";
-import { getButton } from "../store/slices/addToCart";
-import useCategoryList from "../hooks/useCategoryList";
-import useBusiness from "../hooks/useBusiness";
-import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
+import SearchComponent from "@components/home/SearchComponent";
+import BusinessCard from "@cards/Home/BusinessCard";
+import BusinessListComponent from "@components/home/BusinessListComponent";
+import CategoryScrollBar from "@components/home/CategoryScrollBar";
+import OrderButton from "@components/global/OrderButton";
+import { useAppSelector } from "@store/hook";
+import { getButton } from "@store/slices/addToCart";
+import useCategoryList from "@hooks/handlePages/useCategoryList";
+import useBusiness from "@hooks/handleVendors/useBusiness";
+import { getBusiness } from "@store/slices/BusinessSlice/businessSlice";
 
 export default function HomePage() {
 	const {
 		categoryWasSelected,
 		categoryId,
-		categoryList,
 		checkForStyleChange,
 		onSelectCategory,
 	} = useCategoryList();
@@ -32,6 +31,43 @@ export default function HomePage() {
 		{ name: "Cheap", id: 2 },
 		{ name: "Best Reviews", id: 3 },
 	];
+	let foodCategories = [
+		{
+		  text: 'Grains',
+		  foodType: require('@assets/CategoryIcons/bread.png'),
+		  key: 1,
+		},
+		{
+		  text: 'Burger',
+		  foodType: require('@assets/CategoryIcons/burger.png'),
+		  key: 2,
+		},
+		{
+		  text: 'Burrito',
+		  foodType: require('@assets/CategoryIcons/burrito.png'),
+		  key: 3,
+		},
+		{
+		  text: 'Hot Dog',
+		  foodType: require('@assets/CategoryIcons/corndog.png'),
+		  key: 4,
+		},
+		{
+		  text: 'Wings',
+		  foodType: require('@assets/CategoryIcons/chicken-leg.png'),
+		  key: 5,
+		},
+		{
+		  text: 'Fries',
+		  foodType: require('@assets/CategoryIcons/fries.png'),
+		  key: 6,
+		},
+		{
+		  text: 'Pizza',
+		  foodType: require('@assets/CategoryIcons/pizza.png'),
+		  key: 7,
+		},
+	  ]
 
 	const isClicked = useAppSelector(getButton);
 
@@ -59,13 +95,14 @@ export default function HomePage() {
 								<>
 									<SearchComponent />
 									<CategoryScrollBar
-										categoryList={categoryList}
+										categoryList={foodCategories}
 										itemId={categoryId}
 										style={styles.margin}
 										showItem={onSelectCategory}
 									/>
 								</>
 							}
+							keyExtractor={(item) => item}
 							data={categories}
 							ListFooterComponent={
 								<FlatList
@@ -111,7 +148,7 @@ export default function HomePage() {
 							showsVerticalScrollIndicator={false}
 							ListHeaderComponent={
 								<CategoryScrollBar
-									categoryList={categoryList}
+									categoryList={foodCategories}
 									itemId={categoryId}
 									style={styles.margin}
 									showItem={onSelectCategory}

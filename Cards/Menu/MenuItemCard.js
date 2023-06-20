@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import useOrderButton from "../hooks/useOrderButton";
+import useOrderButton from "@hooks/handlePages/useOrderButton";
 import { useEffect } from "react";
 import { IP } from '@env'
 
@@ -25,7 +25,7 @@ export default function MenuItemCard({ foodItem, businessName, location }) {
 	let limitTextAmount = foodItem.description.slice(0, 75) + "...";
 	const goToFoodDetails = () => {
 		setOrder(false);
-		navigation.navigate("FoodDetails", {
+		navigation.navigate("Item", {
 			business: businessName,
 			foodItem: parse.cartData,
 			location: location,

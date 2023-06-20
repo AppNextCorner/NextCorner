@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
-import BusinessCard from "../Cards/BusinessCard";
+import BusinessCard from "@cards/Home/BusinessCard";
 
 const BusinessListComponent = React.memo((props) => {
 

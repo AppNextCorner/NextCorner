@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import moment from 'moment'
 import 'moment-timezone'
-import UseOrders from '../../hooks/useOrders'
-import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
+import UseOrders from '@hooks/handleVendors/useOrders'
+import GoogleMapsMenuSection from '@components/unfinishedOrders/GoogleMapsMenuSection'
 
 const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
   //

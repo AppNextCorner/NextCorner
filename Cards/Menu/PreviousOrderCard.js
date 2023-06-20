@@ -4,7 +4,7 @@ import React from 'react'
 import moment from 'moment'
 import 'moment-timezone'
 import { useNavigation } from '@react-navigation/native'
-import useOrderButton from '../../hooks/useOrderButton'
+import useOrderButton from '@hooks/handlePages/useOrderButton'
 
 const PreviousOrderCard = (props) => {
   const { previousOrders, businessName, location } = props
@@ -28,7 +28,7 @@ const PreviousOrderCard = (props) => {
   
   const goToFoodDetails = () => {
     setOrder(false)
-    navigation.navigate('FoodDetails', {
+    navigation.navigate('Item', {
       business: businessName,
       foodItem: parse.cartData,
       location: location,

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { CREATE_TRENDING_RESTAURANTS, CREATE_DEFAULT_RESTAURANTS } from "../constants/MenuData";
-import { getAllBusinesses } from "../store/slices/BusinessSlice/businessSlice";
+import { getAllBusinesses } from "@store/slices/BusinessSlice/businessSlice";
 
 /**
- * Returns the list of businesses and the filtered businesses that match the filter criteria.
+ * Custom hook that retrieves the list of businesses and filtered businesses based on the filter criteria.
  * 
- * @returns business and trending business
+ * @param {Function} getBusinesses - Function that returns the businesses to be filtered.
+ * @returns {Object} - Object containing loading state, trending businesses, and filtered businesses.
  */
 export default function useBusiness(getBusinesses) {
   const [loading, setLoading] = useState(true);
-  const [trendingBusiness, setTrendingBusiness] = useState(CREATE_TRENDING_RESTAURANTS);
+  const [trendingBusiness, setTrendingBusiness] = useState([]);
   const [business, setBusiness] = useState([]);
 
   useEffect(() => {

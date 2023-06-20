@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { getUsers, setUser, logOut } from '../store/slices/userSession'
+import { getUsers, setUser, logOut } from '@store/slices/userSession'
 import { onAuthStateChanged } from 'firebase/auth'
-import { useAppDispatch } from '../store/hook'
-import { fetchCart } from '../store/slices/addToCart'
+import { useAppDispatch } from '@store/hook'
+import { fetchCart } from '@store/slices/addToCart'
 import { getAuth } from 'firebase/auth'
-import { getOrderList } from '../store/slices/addToOrders'
-import { getAllBusinesses } from '../store/slices/BusinessSlice/businessSlice'
+import { getOrderList } from '@store/slices/addToOrders'
+import { getAllBusinesses } from '@store/slices/BusinessSlice/businessSlice'
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux

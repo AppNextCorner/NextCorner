@@ -16,16 +16,16 @@ import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
-import OptionSelectionComponent from "../../components/MenuComponents/OptionSelectionComponent";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
-import useCart from "../../hooks/useCart";
-import { auth } from "../../App";
-import useOrderButton from "../../hooks/useOrderButton";
+import OptionSelectionComponent from "@components/menu/OptionSelectionComponent";
+import { useAppDispatch, useAppSelector } from "@store/hook";
+import { getBusinessName, setBusinessName } from "@store/slices/addToCart";
+import useCart from "@hooks/handleVendors/useCart";
+import { auth } from "@global/App";
+import useOrderButton from "@hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import {IP} from '@env'
 
-export default function FoodDetailsPage() {
+export default function ItemPage() {
   const { addToCart } = useCart();
   const { setOrder, order } = useOrderButton();
 

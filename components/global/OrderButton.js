@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React from 'react'
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'
-import { getCart, setBusinessName } from '../store/slices/addToCart'
-import { useAppDispatch, useAppSelector } from '../store/hook'
+import { getCart, setBusinessName } from '@store/slices/addToCart'
+import { useAppDispatch, useAppSelector } from '@store/hook'
 
 const OrderButton = () => {
   const navigation = useNavigation()

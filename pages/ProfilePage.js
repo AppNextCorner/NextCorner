@@ -3,12 +3,12 @@
  */
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useAppDispatch, useAppSelector } from "../store/hook";
+import { useAppDispatch, useAppSelector } from "@store/hook";
 
 // import firebase features
 import { signOut } from "firebase/auth";
 import { auth } from "../App";
-import { getUser, logOut } from "../store/slices/userSession";
+import { getUser, logOut } from "@store/slices/userSession";
 
 export default function ProfilePage() {
 	const user = useAppSelector(getUser);

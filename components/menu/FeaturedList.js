@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native'
 import React from 'react'
-import FeaturedTypeCard from '../../Cards/MenuCards/FeaturedTypeCard'
+import FeaturedTypeCard from '@cards/Menu/FeaturedTypeCard'
 
 const FeaturedList = (props) => {
   const { menuData, businessName, location } = props

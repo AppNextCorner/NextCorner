@@ -12,13 +12,13 @@ import {
   Text,
   Alert,
 } from 'react-native'
-import useAddUser from '../../hooks/useAddUser'
-import { useAppDispatch } from '../../store/hook'
+import useAddUser from '@hooks/handleUsers/useAddUser'
+import { useAppDispatch } from '@store/hook'
 import {
   getUsers,
   setUser,
-} from '../../store/slices/userSession'
-import { auth } from '../../App'
+} from '@store/slices/userSession'
+import { auth } from '@global'
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
