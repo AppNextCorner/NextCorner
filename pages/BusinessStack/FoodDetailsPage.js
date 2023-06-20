@@ -81,12 +81,19 @@ export default function FoodDetailsPage() {
       Alert.alert("Added item from a different business");
     }
   };
+
+    // Bug Issue: When uploading an option, option customizations are all the same
+    // Potential Fix: Get only the selected options for that category option
   const handleOptionSelect = (selectedOptions, customization) => {
     // Perform the necessary logic with the selected options
     // Update the selected options in the foodItem object
     name.customizations.forEach((option, index) => {
       for (let i = 0; i < customization.length; i++) {
+        console.log("option name: ", option.name, " custom name: ", customization[i].name, "SELECTION: ",option.name == customization[i].name)
         if (option.name == customization[i].name) {
+          console.log("custom name: ", customization[i].name, 
+            "option.optionCustomizations: ", option.optionCustomizations
+          )
           option.optionCustomizations = selectedOptions;
         }
       }

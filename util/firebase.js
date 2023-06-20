@@ -8,14 +8,12 @@ import {
   measurementId
 } from '@env'
 
-console.log("api key: ", typeof apiKey)
-
 export const firebaseConfig = {
-    apiKey,
-    authDomain,
-    projectId,
-    storageBucket,
-    messagingSenderId,
-    appId,
-    measurementId
+    apiKey: apiKey,
+    authDomain: authDomain,
+    projectId:projectId,
+    storageBucket: storageBucket,
+    messagingSenderId: messagingSenderId,
+    appId: appId,
+    measurementId: measurementId
 };

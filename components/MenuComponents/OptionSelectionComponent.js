@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function OptionSelectionComponent(props) {
@@ -8,7 +14,7 @@ export default function OptionSelectionComponent(props) {
 
   const handlePress = (item, option) => {
     let updatedOptions = [];
-    console.log("type: ", item.type)
+    console.log("type: ", item.type);
     if (item.type === "single") {
       // Single selection, update the selected option
       if (selectedOptions.includes(option)) {
@@ -24,16 +30,14 @@ export default function OptionSelectionComponent(props) {
         updatedOptions = [...selectedOptions, option];
       }
     }
-    console.log(updatedOptions)
+    console.log(updatedOptions);
     setSelectedOptions(updatedOptions);
     onSelect(updatedOptions, data);
-
   };
 
   return (
-    <View >
+    <View>
       <FlatList
-      
         ListHeaderComponent={header}
         data={data}
         keyExtractor={(_, index) => index.toString()}
@@ -41,38 +45,41 @@ export default function OptionSelectionComponent(props) {
           <View style={styles.optionCard}>
             <Text style={styles.optionTitle}>{item.name}</Text>
             <View style={styles.optionsContainer}>
-              {item.optionCustomizations.map((option) => (
-                <TouchableOpacity
-                  key={option.label}
-                  style={[
-                    styles.optionButton,
-                    selectedOptions.includes(option) && styles.optionButtonSelected,
-                  ]}
-                  onPress={() => handlePress(item, option)}
-                >
-                  <FontAwesome
-                    style={styles.selectIcon}
-                    name={
-                      selectedOptions.includes(option)
-                        ? "check-square"
-                        : "square-o"
-                    }
-                    size={24}
-                    color={
-                      selectedOptions.includes(option) ? "#fff" : "#78DBFF"
-                    }
-                  />
-                  <Text
+              <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                {item.optionCustomizations.map((option) => (
+                  <TouchableOpacity
+                    key={option.label}
                     style={[
-                      styles.optionButtonText,
+                      styles.optionButton,
                       selectedOptions.includes(option) &&
-                        styles.optionButtonTextSelected,
+                        styles.optionButtonSelected,
                     ]}
+                    onPress={() => handlePress(item, option)}
                   >
-                    {option.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+                    <FontAwesome
+                      style={styles.selectIcon}
+                      name={
+                        selectedOptions.includes(option)
+                          ? "check-square"
+                          : "square-o"
+                      }
+                      size={24}
+                      color={
+                        selectedOptions.includes(option) ? "#fff" : "#78DBFF"
+                      }
+                    />
+                    <Text
+                      style={[
+                        styles.optionButtonText,
+                        selectedOptions.includes(option) &&
+                          styles.optionButtonTextSelected,
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
             </View>
           </View>
         )}
@@ -83,7 +90,7 @@ export default function OptionSelectionComponent(props) {
 
 const styles = {
   optionContainer: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   optionCard: {
     backgroundColor: "#fff",
@@ -92,7 +99,7 @@ const styles = {
     marginHorizontal: 20,
     borderRightWidth: 3,
     borderLeftWidth: 3,
-    borderColor: '#f2f0f0',
+    borderColor: "#f2f0f0",
   },
   optionTitle: {
     fontSize: 15,
