@@ -1,6 +1,6 @@
 # Next Corner App
 
-The app is made from the use of the Expo library, Node, Firebase, etc
+Application made for the frontend aspect of our company using technologies: Expo CLI, Firebase authentication
 
 ## Contributors
 Henry Martinez - henrymtz0390@gmail.com
@@ -39,7 +39,7 @@ measurementId =
 ## Usage
 
 ```javascript
-npm start
+npm run start
 ```
 
 ## Contributing
