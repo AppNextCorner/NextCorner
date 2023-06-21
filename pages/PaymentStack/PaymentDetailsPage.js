@@ -45,6 +45,7 @@ const PaymentDetailsPage = () => {
   
   const getCartFromSlice =  useAppSelector(getCart);
   const cart = JSON.parse(JSON.stringify(getCartFromSlice))
+  console.log('cart in payment page:', cart)
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch();
 
@@ -90,7 +91,7 @@ const PaymentDetailsPage = () => {
    */
   const navigateToAddPaymentMethod = async () => {
     try {
-      const response = await fetch(`http://${IP}:5005/payment`, {
+      const response = await fetch(`http://${IP}:4020/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -194,7 +195,7 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`http://${IP}:5005/${item.image.toString()}`}} />
+                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>

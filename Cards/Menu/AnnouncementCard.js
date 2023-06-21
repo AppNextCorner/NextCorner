@@ -49,7 +49,7 @@ const AnnouncementCard = (props) => {
       </View>
       <Image
         style={styles.announcementImageContainer}
-        source={{ uri: `http://${IP}:5005/${announcement.image.toString()}` }}
+        source={{ uri: `http://${IP}:4020/${announcement.image.toString()}` }}
       />
     </TouchableOpacity>
   );

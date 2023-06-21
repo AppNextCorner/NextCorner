@@ -69,7 +69,7 @@ export default function MenuListPage() {
               </Pressable>
              
 
-              <Image style={styles.image} source={{uri:`http://${IP}:5005/${business.image.toString()}`}} />
+              <Image style={styles.image} source={{uri:`http://${IP}:4020/${business.image.toString()}`}} />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}

@@ -110,7 +110,7 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `http://${IP}:5005/${foodItem.image.toString()}` }}
+          source={{ uri: `http://${IP}:4020/${foodItem.image.toString()}` }}
         />
 
         <View style={styles.headerContainer}>

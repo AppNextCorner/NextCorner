@@ -87,7 +87,7 @@ const CartPage = () => {
                   <View style={styles.imageBox}>
                     <Image
                       style={styles.foodImages}
-                      source={{uri:`http://${IP}:5005/${grabCartItem.image.toString()}`}}
+                      source={{uri:`http://${IP}:4020/${grabCartItem.image.toString()}`}}
                     />
                   </View>
                   <View style={styles.foodTexts}>

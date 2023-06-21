@@ -8,7 +8,7 @@ import { IP } from '@env'
 import { app } from '../../App'
 import { getAuth } from 'firebase/auth'
 
-const USER_URL = `http://${IP}:5005/auth/`
+const USER_URL = `http://${IP}:4020/auth/`
 
 export const createToken = async () => {
   const auth = getAuth(app);
@@ -35,7 +35,8 @@ export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
     console.log("RESPONSE DATA", response.data)
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
-    if (!err.response) {
+    console.log('error in user:', err)
+    if (err.response) {
       console.log("Error from user: ", err.response)
       throw err
     }

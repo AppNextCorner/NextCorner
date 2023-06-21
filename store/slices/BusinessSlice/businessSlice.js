@@ -9,7 +9,7 @@
  import { app} from '../../../App'
 import { getAuth } from 'firebase/auth'
  
- const BUSINESS_URL = `http://${IP}:5005/business/`
+ const BUSINESS_URL = `http://${IP}:4020/business/`
  
  const createToken = async () => {
   const auth = getAuth(app);
@@ -30,7 +30,7 @@ import { getAuth } from 'firebase/auth'
    async () => {
     const headers = await createToken()
      try {
-       const response = await axios.get(BUSINESS_URL, headers)
+       const response = await axios.get(BUSINESS_URL + 'get-vendors', headers)
        console.log('response for businesswe8tw9j', response)
        return response.data // Return a value synchronously using Async-await
      } catch (err) {

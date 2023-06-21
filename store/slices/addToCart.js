@@ -9,7 +9,7 @@ import { IP } from '@env'
 import { app } from '@global/App'
 import { getAuth } from 'firebase/auth'
 
-const POSTS_URL = `http://${IP}:5005/api/`
+const POSTS_URL = `http://${IP}:4020/api/`
 
 const createToken = async () => {
   const auth = getAuth(app)
@@ -47,6 +47,7 @@ export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
   const headers = await createToken()
   try {
     const response = await axios.get(POSTS_URL, headers)
+    console.log('fetch cart: ', response)
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
     if (!err.response) {

@@ -8,7 +8,7 @@
  import { IP } from '@env'
  import { auth } from '@global/App';
  
- const ORDERS_URL = `http://${IP}:5005/orders/`;
+ const ORDERS_URL = `http://${IP}:4020/orders/`;
  
  // Function to create the authorization token header
  const createToken = async () => {
@@ -46,6 +46,7 @@
      const headers = await createToken();
      try {
        const response = await axios.get(ORDERS_URL, headers);
+       console.log('response from order', response.data)
        return response.data;
      } catch (err) {
        if (!err.response) {

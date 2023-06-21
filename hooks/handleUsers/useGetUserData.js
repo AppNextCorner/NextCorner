@@ -5,7 +5,7 @@ import { useAppDispatch } from "../../store/hook";
 import { fetchCart } from "../../store/slices/addToCart";
 import { getOrderList } from "../../store/slices/addToOrders";
 import { getAllBusinesses } from "../../store/slices/BusinessSlice/businessSlice";
-import {auth} from '../../App'
+import {auth} from '@global/App'
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
  *
