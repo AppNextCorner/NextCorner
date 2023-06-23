@@ -4,6 +4,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import {createToken} from '@hooks/handleUsers/useCreateToken'
 import { IP } from '@env'
 
 const POSTS_URL = `http://${IP}:4020/api/`

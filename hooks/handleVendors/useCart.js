@@ -44,6 +44,9 @@ export default UseCart = () => {
       location: location,
     }
     try {
+      console.log(
+        'sending cart item: ', cartItem
+      )
       await dispatch(addNewCartItem(cartItem))
     } catch (e) {
       console.error(e)

@@ -133,9 +133,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   sectionButton: {
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: "#f2f5f5",
-    padding: '5%',
+    padding: '2.5%',
     paddingHorizontal: '10%',
     marginHorizontal: '5%'
   },
@@ -162,8 +162,6 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
-
-    //fontFamily: 'monospace',
   },
   imageBox: {
     flex: 1,
