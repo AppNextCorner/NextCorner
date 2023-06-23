@@ -36,7 +36,7 @@ const CompletedOrderCard = ({ completedOrder }) => {
         <View style={styles.itemData}>
           {/* Render each item's name */}
           {getItemAmount.map((order, index) => (
-            <Text key={index}> {order.cartData.name} /</Text>
+            <Text key={index.toString()}> {order.cartData.name} /</Text>
           ))}
         </View>
 

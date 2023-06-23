@@ -1,4 +1,3 @@
-import { auth } from '../../App'
 import { useAppDispatch} from '../../store/hook'
 import {
   addOrder,
@@ -6,7 +5,7 @@ import {
   updateOrderStatus,
   updateOrderStatusReducer
 } from '../../store/slices/addToOrders'
-
+import {auth} from '@hooks/handleUsers/useFirebase'
 /**
  * After the user has entered the order, they should update the order list through the request to our backend. 
  * - Be able to grab the order list from the backend when the function is called asynchronously

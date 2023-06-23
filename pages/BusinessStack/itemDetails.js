@@ -20,7 +20,7 @@ import OptionSelectionComponent from "@components/menu/OptionSelectionComponent"
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
 import useCart from "@hooks/handleVendors/useCart";
-import { auth } from "../../App";
+import {auth} from '@hooks/handleUsers/useFirebase'
 import useOrderButton from "@hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import {IP} from '@env'
@@ -67,7 +67,8 @@ export default function ItemPage() {
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
-        await addToCart(addItem, userId, business, location);
+        const {payload} = await addToCart(addItem, userId, business, location);
+        console.log('cart payload: ', payload)
         console.log(addItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
         for (let i = 0; i < resetOptions.length; i++) {

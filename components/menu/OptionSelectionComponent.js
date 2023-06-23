@@ -46,9 +46,9 @@ export default function OptionSelectionComponent(props) {
             <Text style={styles.optionTitle}>{item.name}</Text>
             <View style={styles.optionsContainer}>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                {item.optionCustomizations.map((option) => (
+                {item.optionCustomizations.map((option, index) => (
                   <TouchableOpacity
-                    key={option.label}
+                    key={index}
                     style={[
                       styles.optionButton,
                       selectedOptions.includes(option) &&

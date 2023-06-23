@@ -6,7 +6,7 @@ import {IP} from '@env'
 
 export default function FoodsCard({ businesItem, checkForStyleChange }) {
   // The style is changed when a category is selected on the home page 
-  console.log('image from card: ', `http://${IP}:4020/src/${businesItem.image.toString()}`)
+  console.log('image from card: ', `http://${IP}:4020/${businesItem.image.toString()}`)
   const changeStyle = (checkForStyleChange) => { 
     let change =
       checkForStyleChange === true

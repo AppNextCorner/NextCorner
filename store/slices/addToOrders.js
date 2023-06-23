@@ -6,7 +6,7 @@
  import axios from 'axios';
  
  import { IP } from '@env'
- import { auth } from '@global/App';
+ import {auth} from '@hooks/handleUsers/useFirebase'
  
  const ORDERS_URL = `http://${IP}:4020/orders/`;
  
@@ -49,7 +49,7 @@
        console.log('response from order', response.data)
        return response.data;
      } catch (err) {
-       if (!err.response) {
+       if (err.response) {
          console.log(err.response);
          throw err;
        }
@@ -69,7 +69,7 @@
  
        return response.data;
      } catch (err) {
-       if (!err.response) {
+       if (err.response) {
          console.log(err.response);
          throw err;
        }

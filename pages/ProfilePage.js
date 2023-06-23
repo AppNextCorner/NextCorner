@@ -4,7 +4,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useAppDispatch, useAppSelector } from "../store/hook";
-import {auth} from '../App'
+import {auth} from '@hooks/handleUsers/useFirebase'
 // import firebase features
 import {signOut } from "firebase/auth";
 
@@ -12,7 +12,6 @@ import { getUser, logOut } from "../store/slices/userSession";
 
 export default function ProfilePage() {
 	const user = useAppSelector(getUser);
-	console.log(user)
 	const dispatch = useAppDispatch();
 	// grabs the only user from the array as it has been already filtered out to include the current user
 	console.log('user: ', user)

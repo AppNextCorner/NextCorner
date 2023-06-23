@@ -22,7 +22,7 @@ const FeaturedList = (props) => {
             style={styles.featuredList}
             renderItem={({ item, index }) => {
               return (
-                <View style={styles.featuredCard} key={index}>
+                <View style={styles.featuredCard} key={index.toString()}>
                   <FeaturedTypeCard
                     menuItem={item}
                     businessName={businessName}

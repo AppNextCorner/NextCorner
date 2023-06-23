@@ -81,40 +81,42 @@ export default function GoogleMapsMenuSection(props) {
     latitude: parseFloat(location[0].latitude),
     longitude: parseFloat(location[0].longitude),
   };
-
   useEffect(() => {
-    let timer = null;
-    const timeLimit = time; // Set the time limit in seconds
-    const updateInterval = 1 * 1000; // Convert to milliseconds
+    userLocation()
+  }, [])
+  // useEffect(() => {
+  //   let timer = null;
+  //   const timeLimit = time; // Set the time limit in seconds
+  //   const updateInterval = 1 * 1000; // Convert to milliseconds
   
-    const updateUserLocation = () => {
-      // Add your logic to update the user location here
-      userLocation();
-    };
+  //   const updateUserLocation = () => {
+  //     // Add your logic to update the user location here
+  //     userLocation();
+  //   };
   
-    const stopUpdatingUserLocation = () => {
-      clearTimeout(timer);
-    };
+  //   const stopUpdatingUserLocation = () => {
+  //     clearTimeout(timer);
+  //   };
   
-    const startUpdatingUserLocation = () => {
-      updateUserLocation();
-      timer = setTimeout(() => {
-        stopUpdatingUserLocation();
-      }, timeLimit * 1000);
-    };
+  //   const startUpdatingUserLocation = () => {
+  //     updateUserLocation();
+  //     timer = setTimeout(() => {
+  //       stopUpdatingUserLocation();
+  //     }, timeLimit * 1000);
+  //   };
   
-    const intervalTimer = setInterval(() => {
-      updateUserLocation();
-    }, updateInterval);
+  //   const intervalTimer = setInterval(() => {
+  //     updateUserLocation();
+  //   }, updateInterval);
   
-    startUpdatingUserLocation();
+  //   startUpdatingUserLocation();
   
-    // Clean up the timers when the component unmounts
-    return () => {
-      clearInterval(intervalTimer);
-      stopUpdatingUserLocation();
-    };
-  }, []);
+  //   // Clean up the timers when the component unmounts
+  //   return () => {
+  //     clearInterval(intervalTimer);
+  //     stopUpdatingUserLocation();
+  //   };
+  // }, []);
   
   
   // after the page is loaded, call the async function to update the location of the user

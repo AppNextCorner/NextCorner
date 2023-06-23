@@ -56,7 +56,7 @@ const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
     if (timeLeft === 0) {
       console.log('Ordertook longer than expected')
       // send a request to update the order status after the state of time left changes so that the order status is updated correctly
-      updateOrder(updatedStatus, timeLeft)
+      // updateOrder(updatedStatus, timeLeft)
     } else {
       // data was not updated
       null

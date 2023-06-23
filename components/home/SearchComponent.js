@@ -4,7 +4,6 @@
  */
 
 import {
-  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,7 +13,6 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { Foundation } from '@expo/vector-icons'
-import useBusiness from '@hooks/handleVendors/useBusiness'
 import { useNavigation } from '@react-navigation/native'
 import { useAppSelector } from '../../store/hook'
 import { getBusiness } from '../../store/slices/BusinessSlice/businessSlice'
@@ -22,17 +20,16 @@ import { getBusiness } from '../../store/slices/BusinessSlice/businessSlice'
 export default function SearchComponent() {
   const [showStores, setShowStores] = useState('')
 
-  const getBusinesses = useAppSelector(getBusiness);
-  const { loading, trendingBusiness, business } = useBusiness(getBusinesses);
+  const vendors = useAppSelector(getBusiness);
   const navigation = useNavigation()
   const filteredStores = []
-  const mapStores = business.map((il) => il.name)
+  const mapStores = vendors.map((il) => il.name)
 
   // goes through all the businesses and checks if the user that typed the store is filtered and if so, add to the list
   for (let i = 0; i < mapStores.length; i++) {
     // grabs the business from an index from the whole businesses list and takes a slice and compares them with the user input to determine which business to show
     if (mapStores[i].slice(0, showStores.length) === showStores) {
-      filteredStores.push(business[i])
+      filteredStores.push(vendors[i])
     }
   }
 
@@ -67,10 +64,10 @@ export default function SearchComponent() {
       </View>
       {showStores !== '' ? (
         <ScrollView style={styles.scroll}  keyboardShouldPersistTaps='never'>
-          {filteredStores.map((store) => {
+          {filteredStores.map((store, index) => {
             return (
               <TouchableOpacity
-                key={store.id}
+                key={index.toString()}
                 onPress={() => goToMenuPage(store)}
               >
                 <View style={styles.businesContainer}>
@@ -80,7 +77,7 @@ export default function SearchComponent() {
             )
           })}
         </ScrollView>
-      ) : //</View>
+      ) :
       null}
     </View>
   )

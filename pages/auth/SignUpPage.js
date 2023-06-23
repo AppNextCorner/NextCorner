@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 import React, { useState } from 'react'
@@ -18,7 +17,7 @@ import {
   getUsers,
   setUser,
 } from '../../store/slices/userSession'
-import { auth } from '../../App'
+import {auth} from '@hooks/handleUsers/useFirebase'
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
@@ -65,7 +64,6 @@ export default function SignUpPage() {
       signInWithEmailAndPassword(auth, email, password)
         // takes in the credentials from email and password
         .then((userCredential) => {
-          console.log('Signed In')
           // set the user as a variable
           const user = userCredential.user
           const {payload}= dispatch(getUsers());

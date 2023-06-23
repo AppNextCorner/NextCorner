@@ -5,30 +5,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { IP } from '@env'
-import { app } from '../../App'
-import { getAuth } from 'firebase/auth'
-
+import {auth} from '@hooks/handleUsers/useFirebase'
+import { createToken } from '../../hooks/handleUsers/useCreateToken'
 const USER_URL = `http://${IP}:4020/auth/`
-
-export const createToken = async () => {
-  const auth = getAuth(app);
-  console.log('auth from global', auth)
-  let user = auth.currentUser
-  console.log("user current user:", user)
-  const token = user && (await user.getIdToken())
-  console.log("token: ",token)
-  const payloadHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }
-  return payloadHeader
-}
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()
-  console.log('get users')
+  console.log('get users', "IP: ", IP)
   console.log("headers: ", headers)
   try {
     const response = await axios.get(USER_URL, headers)

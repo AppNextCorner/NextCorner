@@ -42,10 +42,6 @@ const InProgressPage = () => {
   // first value -> initial value / point to start with on the bottom
   // second value -> final point where the modal is supposed to stop in with snapping to it when near it
   const snapPoints = useMemo(() => ['20%', '100%'], [])
-  // callbacks to show the snap points and when the snappoints occur represented by 1 and 0
-  const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index)
-  }, [])
   return (
     <>
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -79,7 +75,6 @@ const InProgressPage = () => {
             // where the modal should be located based on the HandleSheetChanges event
             index={0}
             snapPoints={snapPoints}
-            onChange={handleSheetChanges}
             style={styles.bottomSheetContainer}
             backgroundStyle={styles.bottomSheetContainer}
           >

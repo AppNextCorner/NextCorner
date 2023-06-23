@@ -101,6 +101,7 @@ const PaymentDetailsPage = () => {
           name: mainUser.firstName + '' + mainUser.lastName,
         }),
       })
+      console.log('here is payment data: ', response)
       // getting the client secret after sending the request with client data
       const data = await response.json()
       if (!response.ok) {

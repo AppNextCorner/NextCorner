@@ -16,7 +16,7 @@ import logo from "@assets/logo.png";
 import { useAppDispatch } from "../../store/hook";
 import { getUsers, setUser } from "../../store/slices/userSession";
 import { useState } from "react";
-import { auth } from "../../App";
+import {auth} from '@hooks/handleUsers/useFirebase'
 // importing firebase
 import { signInWithEmailAndPassword } from "firebase/auth";
 
