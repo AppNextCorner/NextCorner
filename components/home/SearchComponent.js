@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     paddingHorizontal: 50,
-    paddingTop: 50,
+    paddingTop: 5,
     overflow: "hidden",
   },
 });

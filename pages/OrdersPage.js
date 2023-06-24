@@ -1,7 +1,3 @@
-/**
- * Purpose of the file: It is used to display the current food items the user has selected after exiting from the foodDetails page and selecting their preference
- */
-
 import {
   StyleSheet,
   View,
@@ -10,88 +6,86 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hook";
 import { getOrderList, getOrders } from "../store/slices/addToOrders";
 import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
+
 export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false);
   const dispatch = useAppDispatch();
-
   const getOrderFromSlice = useAppSelector(getOrders);
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
   const navigation = useNavigation();
+
   const goToProgressPage = (item) => {
     navigation.navigate("InProgressOrder", { item: item });
   };
 
   useEffect(() => {
     dispatch(getOrderList());
-    orderData.filter((item, index) => orderData.indexOf(item) === index);
   }, [dispatch]);
 
   const filterCompletedData = orderData.filter(
     (item) => item.orderStatus === "Order taking longer than expected"
   );
 
-  // removes duplicated order cards - shows key warning still
   const unique = [
     ...new Map(
       filterCompletedData.reverse().map((m) => [m.createdAt, m])
     ).values(),
-  ]; // grab the creation time of the order
+  ];
+
   const filterInProgressData = orderData.filter(
     (item) => item.orderStatus === "In Progress"
   );
-  useEffect(() => {
-    filterInProgressData;
-    filterCompletedData;
-  }, [orderData]);
 
   const inProgress = () => {
     setOrderSelection(false);
   };
+
   const completedOrders = () => {
     setOrderSelection(true);
   };
+
   return (
     <View style={styles.orderPageContainer}>
       <Text style={styles.headerText}>Your Orders</Text>
       <View style={styles.orderTypeContainer}>
-          <View style={styles.headerOfOrder}>
-            <TouchableOpacity onPress={inProgress} style={styles.sectionButton}>
-              <Text style={styles.sectionHeader}>In progress</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={completedOrders}
-              style={styles.sectionButton}
-            >
-              <Text style={styles.sectionHeader}>Complete</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={!orderSelection? filterInProgressData : unique}
-            keyExtractor={(item, index) => index.toString()} // Use index as the key
-            style={styles.cardContainer}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) =>
-              !orderSelection ? (
-                <TouchableOpacity onPress={() => goToProgressPage(item)}>
-                  <InProgressOrderCard
-                    orderTimeData={item}
-                    orderItemId={item.id}
-                    orderStatusData={item.orderStatus}
-                  />
-                </TouchableOpacity>
-              ) : (
-                <Pressable>
-                  <CompletedOrderCard completedOrder={item} />
-                </Pressable>
-              )
-            }
-          />
+        <View style={styles.headerOfOrder}>
+          <TouchableOpacity onPress={inProgress} style={styles.sectionButton}>
+            <Text style={styles.sectionHeader}>In progress</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={completedOrders}
+            style={styles.sectionButton}
+          >
+            <Text style={styles.sectionHeader}>Complete</Text>
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={!orderSelection ? filterInProgressData : unique}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.cardContainer}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) =>
+            !orderSelection ? (
+              <TouchableOpacity onPress={() => goToProgressPage(item)}>
+                <InProgressOrderCard
+                  orderTimeData={item}
+                  orderItemId={item.id}
+                  orderStatusData={item.orderStatus}
+                />
+              </TouchableOpacity>
+            ) : (
+              <Pressable>
+                <CompletedOrderCard completedOrder={item} />
+              </Pressable>
+            )
+          }
+        />
       </View>
     </View>
   );
@@ -117,7 +111,8 @@ const styles = StyleSheet.create({
     padding: "5%",
   },
   cardContainer: {
-    width: '100%'
+    width: '100%',
+    marginBottom: '25%'
   },
   // header
   amountContainer: {

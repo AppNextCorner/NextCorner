@@ -86,11 +86,10 @@ export default function HomePage() {
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
               <>
-                {!categoryWasSelected ? <SearchComponent /> : null}
+                
                 <CategoryScrollBar
                   categoryList={foodCategories}
                   itemId={categoryId}
-                  style={styles.margin}
                   showItem={onSelectCategory}
                 />
               </>
@@ -103,7 +102,7 @@ export default function HomePage() {
                 ListHeaderComponent={
                   <View style={styles.businessHeaderContainer}></View>
                 }
-				style={styles.remainingCards}
+				        style={styles.remainingCards}
                 showsVerticalScrollIndicator={false}
                 data={!categoryWasSelected ? vendors : filterBusinessCards}
                 keyExtractor={(item) => item.id.toString()}
@@ -154,11 +153,6 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 10,
     marginTop: 10,
-  },
-  margin: {
-    backgroundColor: "#f7fafa",
-    flex: 1,
-    margin: 0,
   },
   container: {
     flex: 1,

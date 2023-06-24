@@ -1,77 +1,72 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
-import moment from 'moment'
-import 'moment-timezone'
-import UseOrders from '@hooks/handleVendors/useOrders'
-import GoogleMapsMenuSection from '@components/unfinishedOrders/GoogleMapsMenuSection'
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import moment from 'moment';
+import 'moment-timezone';
+import UseOrders from '@hooks/handleVendors/useOrders';
+import GoogleMapsMenuSection from '@components/unfinishedOrders/GoogleMapsMenuSection';
 
 const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
-  //
-  const [duration, setDuration] = useState(0)
-  const [distance, setDistance] = useState(0)
-  const [timeLeft, setTimeLeft] = useState()
+  const [duration, setDuration] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [timeLeft, setTimeLeft] = useState();
+
   const mapOrderItem = orderTimeData.singleOrderList
     .map((location) => location.location)
-    .flat()
+    .flat();
 
-  const { updateOrder } = UseOrders()
+  const { updateOrder } = UseOrders();
+
   useEffect(() => {
-    // ever second, we want to update the order time by the order time
-    setTimeout(() => {
-      // convert the order time to seconds to increment seconds to match the timeout
-      const timer = orderTimeData.timer * 60
-      // create a new date for the order that was created at the timestamp
-      const returned_endate = moment(
-        new Date(orderTimeData.createdAt),
-        'YYYY-M-D H:mm:ss',
-      )
-        .tz('America/Los_Angeles') // get the timezone for the order
-        // only adds minutes from the date and does not consider seconds
-        .add(timer, 'seconds')
-        .format('YYYY-MM-DD HH:mm:ss') // be able to format the date
+    const timer = orderTimeData.timer * 60;
+    const returned_endate = moment(
+      new Date(orderTimeData.createdAt),
+      'YYYY-M-D H:mm:ss',
+    )
+      .tz('America/Los_Angeles')
+      .add(timer, 'seconds')
+      .format('YYYY-MM-DD HH:mm:ss');
 
-      // match the current date to the order date by the format and timezone
-      const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm')
+    const now = moment().tz('America/Los_Angeles').format('YYYY-MM-DD HH:mm');
 
-      // returns a negative number because it is dividing the future date by the current date resulting into negative seconds
-      const duration = moment().diff(returned_endate, 'seconds')
-      // if the date returned from duration turns positive -> set the time to zero and status to taking longer than expected until the business declares "ready for pick up" - then can otherwise change to "completed"
+    const calculateDuration = () => {
+      const duration = moment().diff(returned_endate, 'seconds');
       if (duration < 0) {
-        return setTimeLeft(duration)
+        setTimeLeft(duration);
+      } else {
+        setTimeLeft(0);
       }
-      // the time left is zero, so we need to adjust the duration to 0 and do another function when this happens
-      return setTimeLeft(0)
-    }, 1000)
-  })
+    };
 
-  // update the order asynchronously
+    const intervalId = setInterval(calculateDuration, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [orderTimeData.timer]);
+
   useEffect(() => {
-    // changing the order status with the finished message
     const updatedStatus = {
       ...orderTimeData,
       orderStatus: 'Order taking longer than expected',
-    }
+    };
 
     if (timeLeft === 0) {
-      console.log('Ordertook longer than expected')
-      // send a request to update the order status after the state of time left changes so that the order status is updated correctly
-      // updateOrder(updatedStatus, timeLeft)
-    } else {
-      // data was not updated
-      null
+      console.log('Order took longer than expected');
+      //updateOrder(updatedStatus, timeLeft);
     }
-  })
 
-  // getting the item passed from props business name
+    return () => {
+      // Cleanup code (if any)
+    };
+  }, [timeLeft]);
+
   const businessOrderedText = orderTimeData.singleOrderList.map(
     (cart) => cart.businessOrderedFrom,
-  )
+  );
 
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
-        {/* Small map preview and send specific modigications to match the card format and not the whole map */}
         <GoogleMapsMenuSection
           scrollEnabled={false}
           pointerEvents={'none'}
@@ -90,10 +85,10 @@ const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
         </Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default InProgressOrderCard
+export default InProgressOrderCard;
 
 const styles = StyleSheet.create({
   orderStatusText: {

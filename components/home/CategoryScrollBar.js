@@ -8,7 +8,6 @@ import BusinessCategoryCard from "@cards/Home/BusinessCategoryCard";
 import styled from "@emotion/native";
 
 const Header = styled.View`
-  padding-vertical: 25px;
 `;
 
 export default function CategoryScrollBar(props) {

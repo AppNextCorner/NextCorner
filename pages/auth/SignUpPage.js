@@ -68,7 +68,7 @@ export default function SignUpPage() {
           const user = userCredential.user
           const {payload}= dispatch(getUsers());
           dispatch(setUser(payload));
-          navigation.navigate('Home');
+          navigation.navigate('HomeStack');
           console.log("user from signing in:",user)
         })
         .catch((err) => {

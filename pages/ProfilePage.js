@@ -9,10 +9,12 @@ import {auth} from '@hooks/handleUsers/useFirebase'
 import {signOut } from "firebase/auth";
 
 import { getUser, logOut } from "../store/slices/userSession";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfilePage() {
 	const user = useAppSelector(getUser);
 	const dispatch = useAppDispatch();
+	const navigation = useNavigation();
 	// grabs the only user from the array as it has been already filtered out to include the current user
 	console.log('user: ', user)
 	const mainUser = user[0] || {
@@ -30,6 +32,7 @@ export default function ProfilePage() {
 			console.log(err.message);
 		}
 	};
+
 
 	return (
 		<View style={styles.profileContainer}>
@@ -58,12 +61,12 @@ export default function ProfilePage() {
 				{/* Button containers for the page to be in a column */}
 				<View style={styles.buttonContainer}>
 					<Pressable style={styles.profileButton}>
-						<Text style={styles.logOutText}>Profile</Text>
+						<Text style={styles.logOutText}>Settings</Text>
 					</Pressable>
 				</View>
 				<View style={styles.buttonContainer}>
-					<Pressable style={styles.profileButton}>
-						<Text style={styles.logOutText}>Payment Method</Text>
+					<Pressable style={styles.profileButton} onPress={() => navigation.navigate('Vendor')}>
+						<Text style={styles.logOutText}>Vendor Portal</Text>
 					</Pressable>
 				</View>
 				<View style={styles.buttonContainer}>
@@ -74,11 +77,6 @@ export default function ProfilePage() {
 				<View style={styles.buttonContainer}>
 					<Pressable style={styles.profileButton}>
 						<Text style={styles.logOutText}>Privacy Policy</Text>
-					</Pressable>
-				</View>
-				<View style={styles.buttonContainer}>
-					<Pressable style={styles.profileButton}>
-						<Text style={styles.logOutText}>Settings</Text>
 					</Pressable>
 				</View>
 				<View style={styles.logOutContainer}>

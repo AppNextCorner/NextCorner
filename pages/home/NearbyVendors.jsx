@@ -16,7 +16,9 @@ import MapStyle from "../../constants/MapStyle.json";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
 import { IP } from "@env";
-const RADIUS = 0.5 * 1609.344; // Convert miles to meters
+import { useNavigation } from "@react-navigation/native";
+import { Pressable } from "react-native";
+const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
 export const NearbyVendors = () => {
   const [mapRegion, setMapRegion] = useState({
@@ -28,6 +30,7 @@ export const NearbyVendors = () => {
   const [viewLocation, setViewLocation] = useState(false);
   const mapRef = useRef();
   const vendors = useAppSelector(getBusiness);
+  const navigate = useNavigation();
 
   // Function to filter vendors based on the radius
   const filterVendorsByRadius = () => {
@@ -86,6 +89,7 @@ export const NearbyVendors = () => {
   }, [mapRegion]);
 
   const flatListRef = useRef(null);
+
   useEffect(() => {
     updateUserLocation();
     setViewLocation(true);
@@ -112,7 +116,7 @@ export const NearbyVendors = () => {
           <MapView
             scrollEnabled={true}
             ref={mapRef}
-            minZoomLevel={14}
+            minZoomLevel={12}
             maxZoomLevel={18}
             customMapStyle={MapStyle}
             provider={PROVIDER_GOOGLE}
@@ -164,7 +168,7 @@ export const NearbyVendors = () => {
             style={styles.cardList}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({ item, index }) => (
-              <TouchableOpacity key={index} style={styles.card}>
+              <Pressable onPress={() => navigate.navigate('MenuList', {business: item})} key={index} style={styles.card}>
                 <Text style={styles.amountHeader}>
                   {index + 1} of {filterVendorsByRadius().length}
                 </Text>
@@ -183,7 +187,7 @@ export const NearbyVendors = () => {
                     <Text style={styles.description}>{item.open}</Text>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </Pressable>
             )}
           />
         </>

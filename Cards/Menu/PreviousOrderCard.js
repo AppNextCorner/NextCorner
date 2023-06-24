@@ -109,11 +109,10 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 250,
-    height: 115,
     flex: 1,
     flexDirection: 'row',
     borderRadius: 10,
-    padding: '5%',
+    padding: '3%',
 
     borderColor: '#f2f0f0',
     borderStyle: 'solid',

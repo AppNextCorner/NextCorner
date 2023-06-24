@@ -44,7 +44,7 @@ export default function SignInPage() {
 
         const { payload } = dispatch(getUsers());
         dispatch(setUser(payload));
-        navigation.navigate("Home");
+        navigation.navigate("HomeStack");
       })
       .catch((err) => {
         console.log(err);
