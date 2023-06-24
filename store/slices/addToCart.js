@@ -4,24 +4,10 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
-
+import {createToken} from '@hooks/handleUsers/useCreateToken'
 import { IP } from '@env'
-import { auth } from '../../App'
 
 const POSTS_URL = `http://${IP}:4020/api/`
-
-const createToken = async () => {
-  let user = auth.currentUser
-  const token = user && (await user.getIdToken())
-
-  const payloadHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }
-  return payloadHeader
-}
 
 export const deleteItem = createAsyncThunk(
   'addToCart/deleteItem',
@@ -29,11 +15,10 @@ export const deleteItem = createAsyncThunk(
     try {
       const response = await axios.delete(
         POSTS_URL + 'delete-item/' + cartItem.id,
-        // headers,
       )
       return response.data // Return a value synchronously using Async-await
     } catch (err) {
-      if (!err.response) {
+      if (err.response) {
         console.log(err.response)
         throw err
       }
@@ -45,9 +30,10 @@ export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
   const headers = await createToken()
   try {
     const response = await axios.get(POSTS_URL, headers)
+    console.log('fetch cart: ', response)
     return response.data // Return a value synchronously using Async-await
   } catch (err) {
-    if (!err.response) {
+    if (err.response) {
       console.log(err.response)
       throw err
     }
@@ -64,7 +50,7 @@ export const updateCartItemAmount = createAsyncThunk(
       )
       return response.data
     } catch (err) {
-      if (!err.response) {
+      if (err.response) {
         console.log(err.response)
         throw err
       }
@@ -83,7 +69,7 @@ export const updateRemoveCartItemAmount = createAsyncThunk(
 
       return response.data
     } catch (err) {
-      if (!err.response) {
+      if (err.response) {
         console.log(err.response)
         throw err
       }
@@ -95,13 +81,18 @@ export const addNewCartItem = createAsyncThunk(
   'addToCart/addNewCartItem',
   async (cartItem) => {
     const headers = await createToken()
+    console.log('headers in cart: ', headers)
     try {
       const resp = await axios.post(POSTS_URL, cartItem, headers)
 
       return resp.data
     } catch (error) {
-      console.log('error')
-      console.log(error)
+      if(error.response){
+        console.log('error')
+        console.log(error)
+        return error
+      }
+      return error
     }
   },
 )

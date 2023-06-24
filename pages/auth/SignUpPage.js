@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 import React, { useState } from 'react'
@@ -12,13 +11,13 @@ import {
   Text,
   Alert,
 } from 'react-native'
-import useAddUser from '../../hooks/useAddUser'
+import useAddUser from '@hooks/handleUsers/useAddUser'
 import { useAppDispatch } from '../../store/hook'
 import {
   getUsers,
   setUser,
 } from '../../store/slices/userSession'
-import { auth } from '../../App'
+import {auth} from '@hooks/handleUsers/useFirebase'
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
@@ -60,22 +59,17 @@ export default function SignUpPage() {
       password,
       phoneNumber,
     })
-
-    // update the user's auth
-    dispatch(getUsers())
-
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
       signInWithEmailAndPassword(auth, email, password)
         // takes in the credentials from email and password
         .then((userCredential) => {
-          console.log('Signed In')
           // set the user as a variable
           const user = userCredential.user
-          dispatch(
-            getUsers()
-          )
-          console.log(user)
+          const {payload}= dispatch(getUsers());
+          dispatch(setUser(payload));
+          navigation.navigate('HomeStack');
+          console.log("user from signing in:",user)
         })
         .catch((err) => {
           console.log(err)

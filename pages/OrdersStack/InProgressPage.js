@@ -13,8 +13,8 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { StatusBar } from 'expo-status-bar'
-import GoogleMapsMenuSection from '../../components/InProgressOrderComponents/GoogleMapsMenuSection'
-import InProgressList from '../../components/InProgressOrderComponents/InProgressList'
+import GoogleMapsMenuSection from '@components/unfinishedOrders/GoogleMapsMenuSection'
+import InProgressList from '@components/unfinishedOrders/InProgressList'
 import BottomSheetView from '@gorhom/bottom-sheet'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
@@ -42,10 +42,6 @@ const InProgressPage = () => {
   // first value -> initial value / point to start with on the bottom
   // second value -> final point where the modal is supposed to stop in with snapping to it when near it
   const snapPoints = useMemo(() => ['20%', '100%'], [])
-  // callbacks to show the snap points and when the snappoints occur represented by 1 and 0
-  const handleSheetChanges = useCallback((index) => {
-    console.log('handleSheetChanges', index)
-  }, [])
   return (
     <>
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -70,7 +66,7 @@ const InProgressPage = () => {
               overflow: 'hidden',
             }}
           >
-            <GoogleMapsMenuSection  location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
+            <GoogleMapsMenuSection time={item}  location={mapOrderItem} setDuration={setDuration} setDistance={setDistance}/>
           </View>
 
           {/* Our bottom modal containing the business and each individual menu */}
@@ -79,7 +75,6 @@ const InProgressPage = () => {
             // where the modal should be located based on the HandleSheetChanges event
             index={0}
             snapPoints={snapPoints}
-            onChange={handleSheetChanges}
             style={styles.bottomSheetContainer}
             backgroundStyle={styles.bottomSheetContainer}
           >

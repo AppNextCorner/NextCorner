@@ -6,34 +6,22 @@
  import axios from 'axios'
  
  import {IP} from '@env'
- import { auth } from '../../../App'
- 
+import { createToken } from '@hooks/handleUsers/useCreateToken'
  const BUSINESS_URL = `http://${IP}:4020/business/`
- 
- const createToken = async () => {
-   let user = auth.currentUser
-   const token = user && (await user.getIdToken())
- 
-   const payloadHeader = {
-     headers: {
-       'Content-Type': 'application/json',
-       Authorization: `Bearer ${token}`,
-     },
-   }
-   return payloadHeader
- }
-
  export const getAllBusinesses = createAsyncThunk(
    'businessSlice/getAllBusinesses',
    async () => {
-     const headers = await createToken()
+    const headers = await createToken();
+    console.log('here is business: ', headers)
      try {
-       const response = await axios.get(BUSINESS_URL, headers)
+       const response = await axios.get(BUSINESS_URL + 'get-vendors', headers)
+       console.log('response for businesswe8tw9j', response.data)
        return response.data // Return a value synchronously using Async-await
      } catch (err) {
-       if (!err.response) {
-         console.log(err.response)
-         throw err
+       if (err.response) {
+         console.log("Error in getallbusinesses: ",err.response)
+         
+         return err
        }
      }
    },
@@ -50,7 +38,7 @@
  
        return response.data
      } catch (err) {
-       if (!err.response) {
+       if (err.response) {
          console.log(err.response)
          throw err
        }
@@ -83,8 +71,7 @@
      builder.addCase(getAllBusinesses.fulfilled, (state, { payload }) => {
        // due to using authentication, we need to filter out the payload with each object's User id
        state.business = payload;
-       state.business.filter((item, index) => state.business.indexOf(item) === index)
-
+       console.log("business in slice: ",state.business)
      })
      builder.addCase(sendReview.pending, (state, { payload }) => {
        console.log('pending')
