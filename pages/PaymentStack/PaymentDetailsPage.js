@@ -6,16 +6,11 @@ import {
   TouchableOpacity,
   Pressable,
   Alert,
-  Button,
   FlatList,
   Image,
 } from 'react-native'
 import {
-  Fontisto,
-  Entypo,
   AntDesign,
-  FontAwesome,
-  Feather,
   MaterialIcons,
 } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
@@ -27,8 +22,8 @@ import {
 } from '../../store/slices/addToCart'
 import { useStripe } from '@stripe/stripe-react-native'
 import { IP } from '@env'
-import useCart from '../../hooks/useCart'
-import UseOrders from '../../hooks/useOrders'
+import useCart from '@hooks/handleVendors/useCart'
+import UseOrders from '@hooks/handleVendors/useOrders'
 import { getUser } from '../../store/slices/userSession'
 /**
  *
@@ -50,6 +45,7 @@ const PaymentDetailsPage = () => {
   
   const getCartFromSlice =  useAppSelector(getCart);
   const cart = JSON.parse(JSON.stringify(getCartFromSlice))
+  console.log('cart in payment page:', cart)
   const totalCost = useAppSelector(getTotal)
   const dispatch = useAppDispatch();
 
@@ -105,6 +101,7 @@ const PaymentDetailsPage = () => {
           name: mainUser.firstName + '' + mainUser.lastName,
         }),
       })
+      console.log('here is payment data: ', response)
       // getting the client secret after sending the request with client data
       const data = await response.json()
       if (!response.ok) {

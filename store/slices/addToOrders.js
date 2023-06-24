@@ -4,25 +4,11 @@
 
  import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  import axios from 'axios';
- 
+ import {createToken} from '@hooks/handleUsers/useCreateToken'
  import { IP } from '@env'
- import { auth } from '../../App';
+ import {auth} from '../../hooks/handleUsers/useFirebase'
  
  const ORDERS_URL = `http://${IP}:4020/orders/`;
- 
- // Function to create the authorization token header
- const createToken = async () => {
-   let user = auth.currentUser;
-   const token = user && (await user.getIdToken());
- 
-   const payloadHeader = {
-     headers: {
-       'Content-Type': 'application/json',
-       Authorization: `Bearer ${token}`,
-     },
-   };
-   return payloadHeader;
- };
  
  // Asynchronous action to add an order
  export const addOrder = createAsyncThunk(
@@ -46,9 +32,10 @@
      const headers = await createToken();
      try {
        const response = await axios.get(ORDERS_URL, headers);
+       console.log('response from order', response.data)
        return response.data;
      } catch (err) {
-       if (!err.response) {
+       if (err.response) {
          console.log(err.response);
          throw err;
        }
@@ -68,7 +55,7 @@
  
        return response.data;
      } catch (err) {
-       if (!err.response) {
+       if (err.response) {
          console.log(err.response);
          throw err;
        }
