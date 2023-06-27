@@ -89,62 +89,81 @@ const PaymentDetailsPage = () => {
   /**
    * The purpose of this method is to get the client's information on their credentials for card payments with Stripe API
    */
+  // const handlePaymentMethodCreation = async () => {
+  //   try {
+  //     const result = await stripe.createPaymentMethod({
+  //       type: 'card',
+  //       card: cardElement, // Replace with your card input element
+  //     })
+      
+  //     // Handle the result
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   const navigateToAddPaymentMethod = async () => {
     try {
+      //await handlePaymentMethodCreation();
+      console.log('vendor name: ',cart[0].businessOrderedFrom);
       const response = await fetch(`http://${IP}:4020/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'merchantDisplayName': cart[0].businessOrderedFrom,
         },
         body: JSON.stringify({
           amount: totalCost,
-          name: mainUser.firstName + '' + mainUser.lastName,
+          name: mainUser.firstName + ' ' + mainUser.lastName,
         }),
-      })
-      console.log('here is payment data: ', response)
+      });
+      console.log('here is payment data: ', response);
       // getting the client secret after sending the request with client data
-      const data = await response.json()
+      const data = await response.json();
       if (!response.ok) {
-        return Alert.alert(data.message)
+        return Alert.alert(data.message);
       }
-      // Initiate the pop up on payment through stripe's built in methods
+  
+      // Initiate the pop up on payment through stripe's built-in methods
       const initSheet = await stripe.initPaymentSheet({
         // setting the client secret for the initPaymentSheet without storing it in - key for an individual payment
         paymentIntentClientSecret: data.client_secret,
         // applePay: {
         //   merchantCountryCode: 'US',
         // },
-
+  
         // creates a payment flow - one time payments with saving a customer's card without an initial payment
         customFlow: true,
         customerId: data.customer,
         customerEphemeralKeySecret: data.ephemeralKey,
+        merchantDisplayName: cart[0].businessOrderedFrom,
         returnURL: 'stripe-example://stripe-redirect',
-      })
+      });
       // check for errors -> show / alert the user on the error message
       if (initSheet.error) {
-        console.error(initSheet.error)
-        return Alert.alert(initSheet.error.message)
+        console.error(initSheet.error);
+        return Alert.alert(initSheet.error.message);
       }
       // show the stripe API sheet -> update the clientSecret to the response data
       const presentSheet = await stripe.presentPaymentSheet({
-        clientSecret: clientSecret,
-      })
-
-      console.log('Present Sheet', presentSheet)
-      console.log('Client Secret', clientSecret)
-
+        clientSecret: data.client_secret,
+      });
+  
+      console.log('Present Sheet', presentSheet);
+      console.log('Client Secret', data.client_secret);
+  
       // if payment is cancelled
       if (presentSheet.error) {
-        return Alert.alert(presentSheet.error.message)
+        return Alert.alert(presentSheet.error.message);
       }
-      Alert.alert('Order Placed Successfully')
-      navigateToOrderComplete()
+      Alert.alert('Order Placed Successfully');
+      navigateToOrderComplete();
     } catch (err) {
-      console.error(err)
-      Alert.alert('Payment failed!')
+      console.error(err);
+      Alert.alert('Payment failed!');
     }
-  }
+  };
+  
   // Passing in the cart to the order to be delete it from the cart list and add it to the order list
   const navigateToOrderComplete = async () => {
     // fixing multi order bug with only making the button work once by disabling after this is called

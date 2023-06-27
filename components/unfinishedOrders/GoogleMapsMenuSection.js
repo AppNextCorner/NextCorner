@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { StyleSheet, View, Text } from "react-native";
 import MapStyle from "../../constants/MapStyle.json";
-import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleDirectionsAPIKey } from "@env";
 import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
@@ -26,28 +25,22 @@ export default function GoogleMapsMenuSection(props) {
     latitudeDelta: 0.0106,
     longitudeDelta: 0.0121,
   });
-  const [viewLocation, setViewLocation] = useState(false);
   const mapRef = useRef();
-
-  
-
-  const delay = 2;
 
   const updateUserLocation = useCallback(async () => {
     const updatedMapCoordinates = await userLocation(
-      setViewLocation,
+      setMapFitted,
       setMapCoordinates,
       mapCoordinates
     );
     if (updatedMapCoordinates) {
       setMapCoordinates(updatedMapCoordinates);
-      console.log('updated map coordinates: ', updatedMapCoordinates)
     }
-    console.log('update region')
+    console.log('new coords: ', mapCoordinates)
   }, [mapCoordinates]);
 
   useEffect(() => {
-    const intervalId = setInterval(updateUserLocation, 2000);
+    const intervalId = setInterval(updateUserLocation, 5000);
     return () => {
       clearInterval(intervalId);
     };
@@ -56,6 +49,17 @@ export default function GoogleMapsMenuSection(props) {
   useEffect(() => {
     updateUserLocation();
   }, []);
+
+
+  useEffect(() => {
+    const callback = (newRegion) => {
+      console.log("new region:", newRegion);
+    };
+
+    if (mapCoordinates && typeof callback === "function") {
+      callback(mapCoordinates);
+    }
+  }, [mapCoordinates]);
 
   const traceRouteOnReady = useCallback((result) => {
     setDistance(result.distance);
@@ -79,48 +83,33 @@ export default function GoogleMapsMenuSection(props) {
     longitude: parseFloat(location[0].longitude),
   };
 
-  function CustomMarker() {
+  function CustomMarker({ icon }) {
     return (
       <View style={styles.marker}>
-        <MaterialCommunityIcons
-          style={{ zIndex: 5 }}
-          name="store"
-          size={24}
-          color="white"
-        />
+        {icon}
       </View>
     );
   }
 
-  const CustomUserMarker = () => {
-    return (
-      <View style={styles.marker}>
-        <Entypo name="home" size={24} color="white" />
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
-      {viewLocation === true ? (
+      {mapCoordinates ? (
         <MapView
           scrollEnabled={scrollEnabled}
           ref={mapRef}
           minZoomLevel={14}
           maxZoomLevel={18}
           customMapStyle={MapStyle}
-          region={mapCoordinates}
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1, position: "relative" }}
           initialRegion={mapCoordinates}
+          //onRegionChangeComplete={setMapCoordinates}
         >
           <Marker coordinate={destination}>
-            {/* CustomMarker has to be a child of Marker*/}
-            <CustomMarker />
+            <CustomMarker icon={<MaterialCommunityIcons name="store" size={24} color="white" />} />
           </Marker>
-          <Marker coordinate={mapCoordinates}>
-            {/* CustomMarker has to be a child of Marker*/}
-            <CustomUserMarker />
+          <Marker coordinate={mapCoordinates} anchor={{ x: 0.5, y: 0.5 }}>
+            <CustomMarker icon={<Entypo name="home" size={24} color="white" />} />
           </Marker>
           <MapViewDirections
             origin={mapCoordinates}
@@ -128,9 +117,7 @@ export default function GoogleMapsMenuSection(props) {
             apikey={googleDirectionsAPIKey}
             strokeColor="#78DBFF"
             strokeWidth={4}
-            onReady={(result) => {
-              traceRouteOnReady(result);
-            }}
+            onReady={traceRouteOnReady}
           />
         </MapView>
       ) : (
@@ -139,7 +126,6 @@ export default function GoogleMapsMenuSection(props) {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   marker: {

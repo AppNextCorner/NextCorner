@@ -60,6 +60,7 @@ const useGetUserData = () => {
      */
     const handleAuthStateChanged = async (user) => {
       console.log("auth", auth);
+      console.log('user: ', user)
       if (user.email) {
         fetchUserAsync();
         fetchBusinesses();

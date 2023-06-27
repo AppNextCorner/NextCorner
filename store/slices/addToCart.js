@@ -12,6 +12,7 @@ const POSTS_URL = `http://${IP}:4020/api/`
 export const deleteItem = createAsyncThunk(
   'addToCart/deleteItem',
   async (cartItem) => {
+    console.log('reset')
     try {
       const response = await axios.delete(
         POSTS_URL + 'delete-item/' + cartItem.id,
