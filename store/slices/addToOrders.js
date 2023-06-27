@@ -52,6 +52,7 @@
          ORDERS_URL + 'order-status/' + itemStatus.id,
          itemStatus,
        );
+       console.log('response from orders: ', response.data)
  
        return response.data;
      } catch (err) {

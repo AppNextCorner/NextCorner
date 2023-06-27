@@ -11,7 +11,7 @@ const USER_URL = `http://${IP}:4020/auth/`
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()
-  console.log('get users', "IP: ", IP)
+  console.log('get users by this IP', "IP: ", IP)
   console.log("headers: ", headers)
   try {
     const response = await axios.get(USER_URL, headers)

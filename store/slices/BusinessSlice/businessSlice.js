@@ -15,7 +15,7 @@ import { createToken } from '@hooks/handleUsers/useCreateToken'
     console.log('here is business: ', headers)
      try {
        const response = await axios.get(BUSINESS_URL + 'get-vendors', headers)
-       console.log('response for businesswe8tw9j', response.data)
+       console.log('response by business', response.data)
        return response.data // Return a value synchronously using Async-await
      } catch (err) {
        if (err.response) {

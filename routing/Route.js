@@ -71,9 +71,8 @@ export default function Route() {
         </NavigationContainer>
       </>
     );
+  
   } else if (isDone === false) {
-    return <Text>fetching user...</Text>;
-  } else {
     return (
       <NavigationContainer>
         <Stack.Navigator>
@@ -90,6 +89,9 @@ export default function Route() {
         </Stack.Navigator>
       </NavigationContainer>
     );
+  }
+  else  {
+    return <Text>fetching user...</Text>;
   }
 }
 

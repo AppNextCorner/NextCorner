@@ -5,7 +5,8 @@ import { store } from './store/store'
 import { STRIPE_API_KEY } from '@env';
 import { StripeProvider } from "@stripe/stripe-react-native";
 export default function App() {
- 
+
+ console.log(STRIPE_API_KEY)
   return (
    
     <StripeProvider publishableKey={STRIPE_API_KEY}>
