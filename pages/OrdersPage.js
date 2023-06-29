@@ -18,7 +18,7 @@ export default function OrdersPage() {
   const dispatch = useAppDispatch();
   const getOrderFromSlice = useAppSelector(getOrders);
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToProgressPage = (item) => {
     navigation.navigate("InProgressOrder", { item: item });

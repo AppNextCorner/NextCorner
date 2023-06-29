@@ -1,8 +1,6 @@
-import { useNavigation } from '@react-navigation/native'
-import {
-  signInWithEmailAndPassword,
-} from 'firebase/auth'
-import React, { useState } from 'react'
+import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,22 +8,19 @@ import {
   TouchableOpacity,
   Text,
   Alert,
-} from 'react-native'
-import useAddUser from '@hooks/handleUsers/useAddUser'
-import { useAppDispatch } from '../../store/hook'
-import {
-  getUsers,
-  setUser,
-} from '../../store/slices/userSession'
-import {auth} from '@hooks/handleUsers/useFirebase'
+} from "react-native";
+import useAddUser from "hooks/handleUsers/useAddUser";
+import { useAppDispatch } from "../../store/hook";
+import { getUsers, setUser } from "../../store/slices/userSession";
+import { auth } from "hooks/handleUsers/useFirebase";
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
  */
 export default function SignUpPage() {
   // form data
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   /**
    * Backend structure:
@@ -35,13 +30,13 @@ export default function SignUpPage() {
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
    */
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  const { makeUser } = useAddUser()
+  const { makeUser } = useAddUser();
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   // after gaining the input value - check if the form is complete and move them onto a user slice
   const registerUser = async (
@@ -49,7 +44,7 @@ export default function SignUpPage() {
     lastName,
     email,
     password,
-    phoneNumber,
+    phoneNumber
   ) => {
     // create a user with async thunk and through our backend, firebase admin will return a user
     const user = await makeUser({
@@ -58,35 +53,35 @@ export default function SignUpPage() {
       email,
       password,
       phoneNumber,
-    })
+    });
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
       signInWithEmailAndPassword(auth, email, password)
         // takes in the credentials from email and password
         .then((userCredential) => {
           // set the user as a variable
-          const user = userCredential.user
-          const {payload}= dispatch(getUsers());
+          const user = userCredential.user;
+          const { payload } = dispatch(getUsers());
           dispatch(setUser(payload));
-          navigation.navigate('HomeStack');
-          console.log("user from signing in:",user)
+          navigation.navigate("HomeStack");
+          console.log("user from signing in:", user);
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
           // error message for lack of password characters, email existing, etc...
-          Alert.alert(err.message)
-        })
+          Alert.alert(err.message);
+        });
     }
 
     //dispatch(setUser(user));
-    return user
-  }
+    return user;
+  };
 
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToLoginPage = () => {
-    navigation.navigate('Login')
-  }
+    navigation.navigate("Login");
+  };
 
   return (
     <View style={styles.signInContainer}>
@@ -103,7 +98,7 @@ export default function SignUpPage() {
           style={styles.textInput}
           readOnly={false}
           onChangeText={(text) => {
-            setEmail(text)
+            setEmail(text);
           }}
           placeholder="email@gmail.com"
         />
@@ -175,77 +170,77 @@ export default function SignUpPage() {
             </TouchableOpacity>
           </View> */}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   nameInput: {
     width: 150,
-    padding: '5%',
+    padding: "5%",
 
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 15,
-    borderColor: '#F0F0F0',
+    borderColor: "#F0F0F0",
   },
   nameContainer: {
-    flexDirection: 'column',
-    margin: '2%',
+    flexDirection: "column",
+    margin: "2%",
   },
   userNameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   // login button
   loginAccountText: {
-    color: '#78DBFF',
+    color: "#78DBFF",
   },
   loginAccountButton: {
-    margin: '5%',
+    margin: "5%",
   },
   inputText: {
     marginLeft: 10,
   },
   inputContainer: {
-    marginTop: '15%',
+    marginTop: "15%",
   },
   textInput: {
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     borderRadius: 15,
-    borderColor: '#F0F0F0',
-    padding: '5%',
-    marginVertical: '3%',
+    borderColor: "#F0F0F0",
+    padding: "5%",
+    marginVertical: "3%",
   },
   bottom: {
     flex: 1,
     marginBottom: 36,
   },
   signInText: {
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     fontSize: 15,
   },
   signInButton: {
-    backgroundColor: '#78DBFF',
-    padding: '5%',
+    backgroundColor: "#78DBFF",
+    padding: "5%",
     borderRadius: 20,
-    marginTop: '5%',
+    marginTop: "5%",
   },
   headerTag: {
-    margin: '5%',
+    margin: "5%",
   },
   signInContainer: {
-    padding: '10%',
-    paddingTop: '20%',
+    padding: "10%",
+    paddingTop: "20%",
     flex: 1,
 
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   mainHeader: {
-    fontWeight: 'bold',
-    marginBottom: '5%',
+    fontWeight: "bold",
+    marginBottom: "5%",
     fontSize: 25,
   },
-})
+});

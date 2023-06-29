@@ -12,11 +12,11 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import logo from "@assets/logo.png";
+import logo from "assets/logo.png";
 import { useAppDispatch } from "../../store/hook";
 import { getUsers, setUser } from "../../store/slices/userSession";
 import { useState } from "react";
-import {auth} from '@hooks/handleUsers/useFirebase'
+import { auth } from "hooks/handleUsers/useFirebase";
 // importing firebase
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -30,7 +30,7 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   /* 
   Function that handles an existing account 
 */

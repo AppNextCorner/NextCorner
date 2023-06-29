@@ -1,12 +1,12 @@
 import { Text } from "react-native";
 import * as React from "react";
-import HomePage from "@pages/HomePage";
-import ItemPage from "@pages/BusinessStack/itemDetails";
-import OrdersPage from "@pages/OrdersPage";
-import MenuListPage from "@pages/BusinessStack/MenuListPage";
-import PickUpPage from "@pages/ProfilePage";
-import SignInPage from "@pages/auth/SignInPage";
-import CartPage from "@pages/CartPage";
+import HomePage from "pages/HomePage";
+import ItemPage from "pages/BusinessStack/itemDetails";
+import OrdersPage from "pages/OrdersPage";
+import MenuListPage from "pages/BusinessStack/MenuListPage";
+import PickUpPage from "pages/ProfilePage";
+import SignInPage from "pages/auth/SignInPage";
+import CartPage from "pages/CartPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -18,19 +18,18 @@ import {
 } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hook";
 import { getIsLoggedIn } from "../store/slices/userSession";
-import PaymentDetailsPage from "@pages/PaymentStack/PaymentDetailsPage";
-import OrderPlacedPage from "@pages/PaymentStack/OrderPlacedPage";
-import useGetUserData from "@hooks/handleUsers/useGetUserData";
-import InProgressPage from "@pages/OrdersStack/InProgressPage";
-import SignUpPage from "@pages/auth/SignUpPage";
-import { NearbyVendors } from "../pages/home/NearbyVendors";
-import Vendor from "../pages/BusinessStack/Vendor";
-import VendorMore from "../pages/BusinessStack/VendorMore";
-
+import PaymentDetailsPage from "pages/PaymentStack/PaymentDetailsPage";
+import OrderPlacedPage from "pages/PaymentStack/OrderPlacedPage";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
+import InProgressPage from "pages/OrdersStack/InProgressPage";
+import SignUpPage from "pages/auth/SignUpPage";
+import { NearbyVendors } from "pages/home/NearbyVendors";
+import Vendor from "pages/BusinessStack/Vendor";
+import VendorMore from "pages/BusinessStack/VendorMore";
 
 // Vendor pages
 const vendorName = "Vendors";
-const vendorOptions = 'More';
+const vendorOptions = "More";
 
 //  User pages
 const homeName = "Home";
@@ -51,7 +50,6 @@ export default function Route() {
       <>
         <NavigationContainer independent={true}>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-
             {/* User pages */}
             <Stack.Screen name="HomeStack" component={Home} />
             <Stack.Screen name="Cart" component={CartPage} />
@@ -66,12 +64,11 @@ export default function Route() {
             <Stack.Screen name="Browse" component={NearbyVendors} />
 
             {/* Vendor Pages */}
-             <Stack.Screen name="Vendor" component={VendorStack} />
+            <Stack.Screen name="Vendor" component={VendorStack} />
           </Stack.Navigator>
         </NavigationContainer>
       </>
     );
-  
   } else if (isDone === false) {
     return (
       <NavigationContainer>
@@ -89,67 +86,72 @@ export default function Route() {
         </Stack.Navigator>
       </NavigationContainer>
     );
-  }
-  else  {
+  } else {
     return <Text>fetching user...</Text>;
   }
 }
 
-function VendorStack(){
-  return( 
+function VendorStack() {
+  return (
     <Tab.Navigator
-    initialRouteName={vendorName}
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        let rn = route.name;
+      initialRouteName={vendorName}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let rn = route.name;
 
-        if (rn === vendorName) {
-          iconName = focused ? "store" : "store-outline";
-          return (
-            <MaterialCommunityIcons
-              name={iconName}
-              size={size}
-              color={color}
-            />
-          );
-        } 
-        else if (rn === vendorOptions) {
-          iconName = focused ? "dots-horizontal-circle" : "dots-horizontal-circle-outline";
-          return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-        }
-        // else if (rn === profileName) {
-        //   iconName = focused ? "person" : "person";
-        //   return <Ionicons name={iconName} size={size} color={color} />;
-        // } else if (rn === vendorsName) {
-        //   iconName = focused ? "running" : "running";
-        //   return <FontAwesome5 name={iconName} size={size} color={color} />;
-        // }
-      },
-      headerShown: false,
-      tabBarActiveTintColor: "#78DBFF",
-      tabBarInactiveTintColor: "grey",
-      tabBarShowLabel: true,
-      tabBarStyle: {
-        paddingHorizontal: 10,
-        paddingBottom: 10,
-        height: "8%",
-        margin: 15,
-        marginBottom: "7.5%",
-        position: "absolute",
-        borderRadius: 30,
-        backgroundColor: "#fff",
-        shadowColor: "#c2c3c4",
-        shadowOffset: { width: 0, height: 1.5 },
-        shadowOpacity: 0.5,
-        shadowRadius: 3,
-      },
-    })}
-  >
-    <Tab.Screen name={vendorName} component={Vendor} />
-    <Tab.Screen name={vendorOptions} component={VendorMore} />
-  </Tab.Navigator>
-  )
+          if (rn === vendorName) {
+            return (
+              <MaterialCommunityIcons
+                name={focused ? "store" : "store-outline"}
+                size={size}
+                color={color}
+              />
+            );
+          } else if (rn === vendorOptions) {
+            return (
+              <MaterialCommunityIcons
+                name={
+                  focused
+                    ? "dots-horizontal-circle"
+                    : "dots-horizontal-circle-outline"
+                }
+                size={size}
+                color={color}
+              />
+            );
+          }
+          // else if (rn === profileName) {
+          //   iconName = focused ? "person" : "person";
+          //   return <Ionicons name={iconName} size={size} color={color} />;
+          // } else if (rn === vendorsName) {
+          //   iconName = focused ? "running" : "running";
+          //   return <FontAwesome5 name={iconName} size={size} color={color} />;
+          // }
+        },
+        headerShown: false,
+        tabBarActiveTintColor: "#78DBFF",
+        tabBarInactiveTintColor: "grey",
+        tabBarShowLabel: true,
+        tabBarStyle: {
+          paddingHorizontal: 10,
+          paddingBottom: 10,
+          height: "8%",
+          margin: 15,
+          marginBottom: "7.5%",
+          position: "absolute",
+          borderRadius: 30,
+          backgroundColor: "#fff",
+          shadowColor: "#c2c3c4",
+          shadowOffset: { width: 0, height: 1.5 },
+          shadowOpacity: 0.5,
+          shadowRadius: 3,
+        },
+      })}
+    >
+      <Tab.Screen name={vendorName} component={Vendor} />
+      <Tab.Screen name={vendorOptions} component={VendorMore} />
+    </Tab.Navigator>
+  );
 }
 
 function Home() {
@@ -158,27 +160,21 @@ function Home() {
       initialRouteName={homeName}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
           let rn = route.name;
-
           if (rn === homeName) {
-            iconName = focused ? "home" : "home-outline";
             return (
               <MaterialCommunityIcons
-                name={iconName}
+                name={focused ? "home" : "home-outline"}
                 size={size}
                 color={color}
               />
             );
           } else if (rn === ordersName) {
-            iconName = focused ? "checklist" : "checklist";
-            return <Octicons name={iconName} size={size} color={color} />;
+            return <Octicons name={"checklist"} size={size} color={color} />;
           } else if (rn === profileName) {
-            iconName = focused ? "person" : "person";
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Ionicons name={"person"} size={size} color={color} />;
           } else if (rn === vendorsName) {
-            iconName = focused ? "running" : "running";
-            return <FontAwesome5 name={iconName} size={size} color={color} />;
+            return <FontAwesome5 name={"running"} size={size} color={color} />;
           }
         },
         headerShown: false,

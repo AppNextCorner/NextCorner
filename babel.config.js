@@ -20,16 +20,16 @@ module.exports = function (api) {
         {
           root: ["."],
           alias: {
-            "@cards": "./Cards",
-            "@components": "./components",
-            "@constants": "./constants",
-            "@data": "./data",
-            "@hooks": "./hooks",
-            "@pages": "./pages",
-            "@routing": "./routing",
-            "@util": "./util",
-            "@global": "./",
-            "@assets": "./assets"
+            cards: "./Cards",
+            components: "./components",
+            constants: "./constants",
+            data: "./data",
+            hooks: "./hooks",
+            pages: "./pages",
+            routing: "./routing",
+            util: "./util",
+            global: "./",
+            assets: "./assets",
           },
           extensions: [
             ".js",
@@ -52,7 +52,7 @@ module.exports = function (api) {
               ".android.tsx",
               ".ios.js",
               ".ios.tsx",
-              ".png"
+              ".png",
             ],
           },
         },

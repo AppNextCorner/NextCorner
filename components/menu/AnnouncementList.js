@@ -1,23 +1,24 @@
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
-import AnnouncementCard from '@cards/Menu/AnnouncementCard'
+import { Dimensions, FlatList, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import AnnouncementCard from "cards/Menu/AnnouncementCard";
 
 const AnnouncementList = (props) => {
   // Grabbing the data and the direction of the announcement list
-  const { announcementData, horizontal } = props
-  
-  const [announcement, setAnnouncement] = useState(announcementData.announcementCards)
+  const { announcementData, horizontal } = props;
+
+  const [announcement, setAnnouncement] = useState(
+    announcementData.announcementCards
+  );
   return (
     <>
       {announcement.length > 0 ? (
         <>
-          
           <FlatList
             style={styles.cardContainer}
             horizontal={horizontal}
             snapToAlignment="start"
-            decelerationRate={'fast'}
-            snapToInterval={Dimensions.get('window').width}
+            decelerationRate={"fast"}
+            snapToInterval={Dimensions.get("window").width}
             showsHorizontalScrollIndicator={false}
             data={announcement}
             renderItem={({ item }) => (
@@ -31,10 +32,10 @@ const AnnouncementList = (props) => {
         <View style={styles.cardNullContainer}></View>
       )}
     </>
-  )
-}
+  );
+};
 
-export default AnnouncementList
+export default AnnouncementList;
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -47,9 +48,9 @@ const styles = StyleSheet.create({
     //flexDirection: 'row',
   },
   timeOfMenu: {
-    marginLeft: '10%',
-    marginBottom: '-5%',
-    color: '#fff',
-    fontWeight: '600'
+    marginLeft: "10%",
+    marginBottom: "-5%",
+    color: "#fff",
+    fontWeight: "600",
   },
-})
+});

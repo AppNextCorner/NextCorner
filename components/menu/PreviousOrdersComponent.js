@@ -1,15 +1,10 @@
 // Purpose: Used to display the order that was previously ordered from the same business order and filtered from the Menu Page
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
-import React from 'react'
-import PreviousOrderCard from '@cards/Menu/PreviousOrderCard'
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import PreviousOrderCard from "cards/Menu/PreviousOrderCard";
 
 const PreviousOrdersComponent = (props) => {
-  const { businessName, listData,  location } = props
+  const { businessName, listData, location } = props;
   return (
     <View>
       {listData.length > 0 ? (
@@ -20,7 +15,7 @@ const PreviousOrdersComponent = (props) => {
           <FlatList
             decelerationRate={0}
             snapToInterval={200} //your element width
-            snapToAlignment={'start'}
+            snapToAlignment={"start"}
             data={listData}
             horizontal={true}
             keyExtractor={(item, index) => index.toString()}
@@ -38,20 +33,20 @@ const PreviousOrdersComponent = (props) => {
         </>
       ) : null}
     </View>
-  )
-}
+  );
+};
 
-export default PreviousOrdersComponent
+export default PreviousOrdersComponent;
 
 const styles = StyleSheet.create({
   margin: {
-    backgroundColor: '#f2f3f5',
+    backgroundColor: "#f2f3f5",
     //flex: 1,
     paddingVertical: 5,
   },
   featuredText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    margin: '3%',
+    fontWeight: "bold",
+    margin: "3%",
   },
-})
+});

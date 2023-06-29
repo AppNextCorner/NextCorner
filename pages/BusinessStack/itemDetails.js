@@ -16,14 +16,14 @@ import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
-import OptionSelectionComponent from "@components/menu/OptionSelectionComponent";
+import OptionSelectionComponent from "components/menu/OptionSelectionComponent";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
-import useCart from "@hooks/handleVendors/useCart";
-import {auth} from '@hooks/handleUsers/useFirebase'
-import useOrderButton from "@hooks/handlePages/useOrderButton";
+import useCart from "hooks/handleVendors/useCart";
+import { auth } from "hooks/handleUsers/useFirebase";
+import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
-import {IP} from '@env'
+import { IP } from "@env";
 
 export default function ItemPage() {
   const { addToCart } = useCart();
@@ -33,7 +33,7 @@ export default function ItemPage() {
 
   const dispatch = useAppDispatch();
   const route = useRoute();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, foodItem, location } = route.params;
   const businessName = useAppSelector(getBusinessName);
 
@@ -67,8 +67,13 @@ export default function ItemPage() {
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
-        const {payload} = await addToCart(addItem, userId, business, location);
-        console.log('cart payload: ', payload)
+        const { payload } = await addToCart(
+          addItem,
+          userId,
+          business,
+          location
+        );
+        console.log("cart payload: ", payload);
         console.log(addItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
         for (let i = 0; i < resetOptions.length; i++) {
@@ -83,18 +88,28 @@ export default function ItemPage() {
     }
   };
 
-    // Bug Issue: When uploading an option, option customizations are all the same
-    // Potential Fix: Get only the selected options for that category option
+  // Bug Issue: When uploading an option, option customizations are all the same
+  // Potential Fix: Get only the selected options for that category option
   const handleOptionSelect = (selectedOptions, customization) => {
     // Perform the necessary logic with the selected options
     // Update the selected options in the foodItem object
     name.customizations.forEach((option, index) => {
       for (let i = 0; i < customization.length; i++) {
-        console.log("option name: ", option.name, " custom name: ", customization[i].name, "SELECTION: ",option.name == customization[i].name)
+        console.log(
+          "option name: ",
+          option.name,
+          " custom name: ",
+          customization[i].name,
+          "SELECTION: ",
+          option.name == customization[i].name
+        );
         if (option.name == customization[i].name) {
-          console.log("custom name: ", customization[i].name, 
-            "option.optionCustomizations: ", option.optionCustomizations
-          )
+          console.log(
+            "custom name: ",
+            customization[i].name,
+            "option.optionCustomizations: ",
+            option.optionCustomizations
+          );
           option.optionCustomizations = selectedOptions;
         }
       }
@@ -111,7 +126,9 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `http://${IP}:4020/${foodItem.image.toString()}` }}
+          source={{
+            uri: `https://nextcornerdevelopment.onrender.com/${foodItem.image.toString()}`,
+          }}
         />
 
         <View style={styles.headerContainer}>

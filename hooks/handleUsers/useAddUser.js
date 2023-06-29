@@ -11,7 +11,7 @@ import { createUser } from '../../store/slices/userSession';
 const useAddUser = () => {
   // User sessions using dispacth hook
   const dispatch = useAppDispatch()
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   /**
    * make user will ensure that user submits all fields that include the following:

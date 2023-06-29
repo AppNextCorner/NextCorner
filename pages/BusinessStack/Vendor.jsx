@@ -1,11 +1,11 @@
-import React from 'react';
-const HomeIcon = require("@assets/logo.png");
-import styled from '@emotion/native';
-import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
+import React from "react";
+const HomeIcon = require("assets/logo.png");
+import styled from "@emotion/native";
+import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Container = styled.View`
-  flex: 1; 
+  flex: 1;
   background-color: #fff;
 `;
 
@@ -13,8 +13,8 @@ const Title = styled.Text`
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 20px;
-  color: #827C7C;
-  marginVertical: 10%;
+  color: #827c7c;
+  marginvertical: 10%;
 `;
 
 const Button = styled.Pressable`
@@ -38,7 +38,7 @@ const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 10%;
-  marginTop: 10%;
+  margintop: 10%;
 `;
 
 const HeaderLogoImage = styled.Image`
@@ -52,18 +52,18 @@ const HeaderTitle = styled.Text`
   font-weight: bold;
 `;
 const CreateVendorContainer = styled.View`
-  paddingHorizontal: 15%;
-  paddingVertical: 5%;
+  paddinghorizontal: 15%;
+  paddingvertical: 5%;
   border: 3px #f2f0f0 solid;
   margin: 5%;
-  borderRadius: 10px;
-`
+  borderradius: 10px;
+`;
 
 const Vendor = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToUser = () => {
-    navigation.navigate('Profile');
+    navigation.navigate("Profile");
   };
 
   return (
@@ -73,7 +73,12 @@ const Vendor = () => {
         <HeaderTitle>Next Corner Vendors</HeaderTitle>
       </HeaderContainer>
       <CreateVendorContainer>
-        <FontAwesome style={{alignSelf: 'center'}} name="plus-circle" size={125} color="#f2f0f0" />
+        <FontAwesome
+          style={{ alignSelf: "center" }}
+          name="plus-circle"
+          size={125}
+          color="#f2f0f0"
+        />
         <Title>Create a store</Title>
       </CreateVendorContainer>
       <Button onPress={goToUser}>

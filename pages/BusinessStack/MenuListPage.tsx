@@ -10,51 +10,52 @@ import {
   Image,
   Pressable,
   FlatList,
-} from 'react-native'
-import React, { useState } from 'react'
-import { useRoute } from '@react-navigation/native'
-import { AntDesign } from '@expo/vector-icons'
-import { StatusBar } from 'expo-status-bar'
-import { useNavigation } from '@react-navigation/native'
-import OrderButton from '@components/global/OrderButton'
-import { useAppSelector } from '../../store/hook'
-import { getButton } from '../../store/slices/addToCart'
-import MenuTypeList from '@cards/Menu/MenuTypeList'
-import FeaturedList from '@components/menu/FeaturedList'
-import PreviousOrdersComponent from '@components/menu/PreviousOrdersComponent'
-import { getOrders } from '../../store/slices/addToOrders'
-import AnnouncementList from '@components/menu/AnnouncementList'
-import {IP} from '@env'
+} from "react-native";
+import React, { useState } from "react";
+import { useRoute } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+import { useNavigation } from "@react-navigation/native";
+import OrderButton from "components/global/OrderButton";
+import { useAppSelector } from "../../store/hook";
+import { getButton } from "../../store/slices/addToCart";
+import MenuTypeList from "cards/Menu/MenuTypeList";
+import FeaturedList from "components/menu/FeaturedList";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
+import { getOrders } from "../../store/slices/addToOrders";
+import AnnouncementList from "components/menu/AnnouncementList";
+import { IP } from "@env";
 
 export default function MenuListPage() {
-  const route = useRoute()
-  const { business } = route.params 
-  const [menuTypeData, setMenuTypeData] = useState(business)
+  const route = useRoute();
+  const { business } = route.params;
+  const [menuTypeData, setMenuTypeData] = useState(business);
   // menu of the business through params
-  const [menu, setMenu] = useState(business.menu)
-  const isClicked = useAppSelector(getButton) // helps prevent infinite orders being made
+  const [menu, setMenu] = useState(business.menu);
+  const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   /**
    * This code section is used to get the orders that have been previously ordered if they match with the current store
    */
 
-  const getOrderFromSlice =  useAppSelector(getOrders);
-  const previousOrders = JSON.parse(JSON.stringify(getOrderFromSlice))
-  
-   // filter through all items in the cart and see if they match
+  const getOrderFromSlice = useAppSelector(getOrders);
+  const previousOrders = JSON.parse(JSON.stringify(getOrderFromSlice));
+
+  // filter through all items in the cart and see if they match
   const getSingleOrders = previousOrders
     .map((item) => item.singleOrderList)
-    .flat()
+    .flat();
   const filterOrder = getSingleOrders.filter(
-    (val) => val.businessOrderedFrom === business.name,
-  )
+    (val) => val.businessOrderedFrom === business.name
+  );
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
-    navigation.navigate('Home')
-  }
+    navigation.navigate("Home");
+  };
   return (
     <>
       <StatusBar style="light" />
@@ -67,20 +68,24 @@ export default function MenuListPage() {
               <Pressable style={styles.goBackButton} onPress={goHome}>
                 <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
-             
 
-              <Image style={styles.image} source={{uri:`http://${IP}:4020/${business.image.toString()}`}} />
+              <Image
+                style={styles.image}
+                source={{
+                  uri: `https://nextcornerdevelopment.onrender.com/${business.image.toString()}`,
+                }}
+              />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}
               {/* Section for small google maps preview */}
               <View style={{ marginTop: -60 }}>
                 <View style={styles.timeContainer}>
-                <Text style={styles.timeOfMenu}>
-                  Open: {business.open} - {business.close}
-                </Text>
+                  <Text style={styles.timeOfMenu}>
+                    Open: {business.open} - {business.close}
+                  </Text>
                 </View>
-                
+
                 <AnnouncementList
                   horizontal={true}
                   announcementData={business}
@@ -113,7 +118,6 @@ export default function MenuListPage() {
           // pass in the menu list coming from the route.params of the business items which we can access through params
           data={menuTypeData.categoriesForMenu}
           renderItem={({ item }) => {
-            
             return (
               <>
                 <Text style={styles.typeText}>{item.type}</Text>
@@ -125,7 +129,7 @@ export default function MenuListPage() {
                 />
                 <View style={styles.margin}></View>
               </>
-            )
+            );
           }}
         />
         <View style={styles.cartButton}>
@@ -133,61 +137,59 @@ export default function MenuListPage() {
         </View>
       </View>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   logoImage: {
     // similar to the go back button, we can put negative margins to this child element as the parent image element has overflow as hidden
-    marginTop: '-10%',
-    marginLeft: '5%',
+    marginTop: "-10%",
+    marginLeft: "5%",
     borderRadius: 50,
     width: 75,
     height: 75,
   },
   cartButton: {
-    marginBottom: '10%',
+    marginBottom: "10%",
   },
   margin: {
-    backgroundColor: '#f2f3f5',
+    backgroundColor: "#f2f3f5",
     //flex: 1,
     paddingVertical: 5,
   },
   // text for type styles
   typeText: {
-    margin: '3%',
-    marginTop: '5%',
+    margin: "3%",
+    marginTop: "5%",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   // menu header styles for business time
   titleOfMenu: {
     fontSize: 25,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // fontFamily: 'monospace',
-    marginLeft: '3%',
+    marginLeft: "3%",
     marginVertical: 10,
   },
   timeOfMenu: {
-    
-    color: '#fff',
-    fontWeight: '600',
-    textAlign: 'center',
+    color: "#fff",
+    fontWeight: "600",
+    textAlign: "center",
   },
   timeContainer: {
-    marginLeft: '5%',
-    marginBottom: '-2%',
-    backgroundColor: '#60b6f7',
+    marginLeft: "5%",
+    marginBottom: "-2%",
+    backgroundColor: "#60b6f7",
     width: 200,
-    padding: '1%',
+    padding: "1%",
     borderRadius: 20,
-    borderColor: 'black',
+    borderColor: "black",
   },
   marginSet: {
     marginVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#d6d6d6',
-
+    borderBottomColor: "#d6d6d6",
   },
   businesCard: {
     flex: 1,
@@ -204,24 +206,24 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 250,
-    overflow: 'hidden',
-    resizeMode: 'cover',
+    overflow: "hidden",
+    resizeMode: "cover",
     marginTop: -105,
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   title: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // fontFamily: 'monospace',
     fontSize: 25,
-    fontWeight: 'bold',
-    textAlign: 'left',
-    marginTop: '2%',
+    fontWeight: "bold",
+    textAlign: "left",
+    marginTop: "2%",
     marginLeft: 10,
     flex: 0,
   },
-})
+});

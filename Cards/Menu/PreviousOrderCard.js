@@ -1,39 +1,39 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import React from "react";
 
-import moment from 'moment'
-import 'moment-timezone'
-import { useNavigation } from '@react-navigation/native'
-import useOrderButton from '@hooks/handlePages/useOrderButton'
+import moment from "moment";
+import "moment-timezone";
+import { useNavigation } from "@react-navigation/native";
+import useOrderButton from "hooks/handlePages/useOrderButton";
 
 const PreviousOrderCard = (props) => {
-  const { previousOrders, businessName, location } = props
+  const { previousOrders, businessName, location } = props;
 
-  const navigation = useNavigation()
-  const { setOrder, order } = useOrderButton()
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { setOrder, order } = useOrderButton();
 
-  const getPreviousItemData = previousOrders.cartData
+  const getPreviousItemData = previousOrders.cartData;
   // creating a new order date object with moment to show when the order was created
   const getTimeOrdered = moment(
     new Date(previousOrders.createdAt), // comes from mongodb document timestamps
-    'YYYY-M-D H:mm',
+    "YYYY-M-D H:mm"
   )
-    .tz('America/Los_Angeles') // timezone for the time
+    .tz("America/Los_Angeles") // timezone for the time
 
-    .format('dddd, MMM D')
+    .format("dddd, MMM D");
 
   // create a deep copy of the previous order data as it is returned static and is immutable
-  Object.assign({}, { ...getPreviousItemData })
-  const parse = { cartData: JSON.parse(JSON.stringify(getPreviousItemData)) }
-  
+  Object.assign({}, { ...getPreviousItemData });
+  const parse = { cartData: JSON.parse(JSON.stringify(getPreviousItemData)) };
+
   const goToFoodDetails = () => {
-    setOrder(false)
-    navigation.navigate('Item', {
+    setOrder(false);
+    navigation.navigate("Item", {
       business: businessName,
       foodItem: parse.cartData,
       location: location,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -49,7 +49,9 @@ const PreviousOrderCard = (props) => {
             />
           </View> */}
           <View style={styles.foodTexts}>
-            <Text style={styles.categoryText}>{getPreviousItemData.name} x{getPreviousItemData.amountInCart}</Text>
+            <Text style={styles.categoryText}>
+              {getPreviousItemData.name} x{getPreviousItemData.amountInCart}
+            </Text>
             {/* get previous order details */}
 
             {/* time last ordered */}
@@ -64,10 +66,10 @@ const PreviousOrderCard = (props) => {
         </View>
       </TouchableOpacity>
     </>
-  )
-}
+  );
+};
 
-export default PreviousOrderCard
+export default PreviousOrderCard;
 
 const styles = StyleSheet.create({
   previousOrderButton: {
@@ -76,14 +78,14 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
-    color: '#97989F',
+    color: "#97989F",
 
     //fontFamily: 'monospace',
   },
   imageBox: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   distanceText: {
     marginLeft: 10,
@@ -93,55 +95,55 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     // fontFamily: 'monospace',
     marginTop: 15,
     flex: 1,
   },
   foodImages: {
-    width: '25%',
+    width: "25%",
     flex: 1,
 
     // Increase the image size
-    padding: '50%',
+    padding: "50%",
 
     borderRadius: 5,
   },
   card: {
     width: 250,
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     borderRadius: 10,
-    padding: '3%',
+    padding: "3%",
 
-    borderColor: '#f2f0f0',
-    borderStyle: 'solid',
+    borderColor: "#f2f0f0",
+    borderStyle: "solid",
     borderWidth: 2,
     borderRadius: 10,
   },
   priceText: {
     flex: 1,
-    alignContent: 'flex-end',
-    color: 'grey',
+    alignContent: "flex-end",
+    color: "grey",
     marginTop: 0,
   },
   foodTexts: {
     flex: 2,
-    flexDirection: 'column',
+    flexDirection: "column",
     marginLeft: 10,
     marginTop: 5,
   },
   foodCategoryStyle: {
     flex: 1,
-    flexDirection: 'row',
-    alignContent: 'center',
-    backgroundColor: '#fff',
-    borderColor: '#d6d6d6',
-    borderStyle: 'solid',
+    flexDirection: "row",
+    alignContent: "center",
+    backgroundColor: "#fff",
+    borderColor: "#d6d6d6",
+    borderStyle: "solid",
 
     borderBottomWidth: 1,
 
     marginBottom: -0.1,
     marginTop: 0,
   },
-})
+});

@@ -32,7 +32,7 @@ export const NearbyVendors = () => {
   const mapRef = useRef();
   const flatListRef = useRef();
   const vendors = useAppSelector(getBusiness);
-  const navigate = useNavigation();
+  const navigate = useNavigation<NativeStackNavigationProp<any>>();
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
@@ -204,7 +204,7 @@ export const NearbyVendors = () => {
                     <Image
                       style={styles.cardImage}
                       source={{
-                        uri: `http://${IP}:4020/${item.image.toString()}`,
+                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
                       }}
                     />
                   </View>

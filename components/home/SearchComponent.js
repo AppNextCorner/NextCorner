@@ -21,7 +21,7 @@ export default function SearchComponent() {
   const [showStores, setShowStores] = useState("");
 
   const vendors = useAppSelector(getBusiness);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const filteredStores = [];
   const mapStores = vendors.map((il) => il.name);
 
