@@ -1,8 +1,14 @@
+import { option } from "./option.interface";
+
 export interface itemType {
   name: string;
   time: number;
-  image: string[];
+  image: string;
   price: number;
-  descrpition: string;
+  description: string;
+  customizations: option;
+  category: string;
+  featured: boolean;
+  amountInCart: number;
   rating: number;
 }

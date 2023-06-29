@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { AntDesign } from "@expo/vector-icons";
 
-const FeaturedTypeCard = (props) => {
+const FeaturedTypeCard = (props: any) => {
   // Button hook to prevent multiple presses
-  const { setOrder, order } = useOrderButton();
+  const { setOrder } = useOrderButton();
   // Data coming from the business to be sent towards the food details page
   const { menuItem, businessName, location } = props;
 

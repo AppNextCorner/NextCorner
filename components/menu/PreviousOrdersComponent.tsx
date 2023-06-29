@@ -2,8 +2,15 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import PreviousOrderCard from "cards/Menu/PreviousOrderCard";
+import { itemType } from "../../types/interfaces/item.interface";
 
-const PreviousOrdersComponent = (props) => {
+interface Props {
+  businessName: string;
+  listData: any;
+  location: any;
+  menuData?: itemType;
+}
+const PreviousOrdersComponent = (props: Props) => {
   const { businessName, listData, location } = props;
   return (
     <View>
@@ -18,7 +25,7 @@ const PreviousOrdersComponent = (props) => {
             snapToAlignment={"start"}
             data={listData}
             horizontal={true}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(_item, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item, index }) => (
               <PreviousOrderCard

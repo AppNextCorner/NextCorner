@@ -21,7 +21,7 @@ export default function SearchComponent() {
   const [showStores, setShowStores] = useState("");
 
   const vendors = useAppSelector(getBusiness);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   const filteredStores = [];
   const mapStores = vendors.map((il) => il.name);
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   magnifyIcon: {
     flex: 0.75,
     justifyContent: "center",
-    marginLeft: '5%'
+    marginLeft: "5%",
   },
   textInput: {
     flex: 6,

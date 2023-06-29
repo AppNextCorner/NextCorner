@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
  * Displays the screen with the message shown to the user when the item went through successfully with the order
  */
 const OrderPlacedPage = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   const goToOrders = () => {
     navigation.navigate("Orders");
   };

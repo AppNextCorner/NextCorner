@@ -3,14 +3,31 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useEffect } from "react";
-import { IP } from "@env";
+// import { IP } from "@env";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { itemType } from "../../types/interfaces/item.interface";
 
 /**
  * The default business card item
  * @param {*} props - be able to pass additional properties through the cart after coming from the business property prior to this page
  *
  */
-export default function MenuItemCard({ foodItem, businessName, location }) {
+
+/**
+ *  TO DOO
+ *
+ *  location is what?
+ */
+interface Props {
+  foodItem: itemType;
+  businessName: string;
+  location: any;
+}
+export default function MenuItemCard({
+  foodItem,
+  businessName,
+  location,
+}: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
   // Match the location to the current location

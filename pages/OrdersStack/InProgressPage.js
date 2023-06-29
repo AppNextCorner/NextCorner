@@ -25,7 +25,7 @@ const InProgressPage = () => {
   // used to get the current location and duration from the user's home to the business
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   const route = useRoute();
 
   const returnBack = () => {

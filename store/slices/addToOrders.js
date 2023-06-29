@@ -25,6 +25,9 @@ export const addOrder = createAsyncThunk(
   }
 );
 
+/**
+ * Originally was createAsyncThunk
+ */
 // Asynchronous action to fetch the order list
 export const getOrderList = createAsyncThunk(
   "addToOrders/getOrderList",

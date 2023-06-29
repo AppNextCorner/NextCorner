@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function ProfilePage() {
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   // grabs the only user from the array as it has been already filtered out to include the current user
   console.log("user: ", user);
   const mainUser = user[0] || {

@@ -77,7 +77,7 @@ export default function SignUpPage() {
     return user;
   };
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
 
   const goToLoginPage = () => {
     navigation.navigate("Login");

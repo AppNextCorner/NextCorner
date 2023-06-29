@@ -25,14 +25,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
-import { IP } from "@env";
+// import { IP } from "@env";
 
 export default function MenuListPage() {
   const route = useRoute();
-  const { business } = route.params;
-  const [menuTypeData, setMenuTypeData] = useState(business);
+  const { business }: any = route.params;
+  const [menuTypeData] = useState(business);
   // menu of the business through params
-  const [menu, setMenu] = useState(business.menu);
+  const [menu] = useState(business.menu);
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -46,10 +46,10 @@ export default function MenuListPage() {
 
   // filter through all items in the cart and see if they match
   const getSingleOrders = previousOrders
-    .map((item) => item.singleOrderList)
+    .map((item: any) => item.singleOrderList)
     .flat();
   const filterOrder = getSingleOrders.filter(
-    (val) => val.businessOrderedFrom === business.name
+    (val: any) => val.businessOrderedFrom === business.name
   );
 
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     // fontFamily: 'monospace',
     fontSize: 25,
-    fontWeight: "bold",
     textAlign: "left",
     marginTop: "2%",
     marginLeft: 10,

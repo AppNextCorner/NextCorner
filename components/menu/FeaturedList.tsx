@@ -1,8 +1,17 @@
 import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
 import React from "react";
 import FeaturedTypeCard from "cards/Menu/FeaturedTypeCard";
+import { itemType } from "../../types/interfaces/item.interface";
 
-const FeaturedList = (props) => {
+/**
+//  * What is location?
+ */
+interface Props {
+  menuData: itemType[];
+  businessName: string;
+  location: any;
+}
+const FeaturedList = (props: Props) => {
   const { menuData, businessName, location } = props;
   // grab all items from the business menu to get the menu items that are featured
   const findFeaturedList = menuData.filter((item) => item.featured === true);

@@ -2,7 +2,18 @@ import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import AnnouncementCard from "cards/Menu/AnnouncementCard";
 
-const AnnouncementList = (props) => {
+/**
+ * What is open?
+ * What is close?
+ * What is announcementData?
+ */
+interface Props {
+  announcementData: any;
+  horizontal: boolean;
+  open?: any;
+  close?: any;
+}
+const AnnouncementList = (props: Props) => {
   // Grabbing the data and the direction of the announcement list
   const { announcementData, horizontal } = props;
 

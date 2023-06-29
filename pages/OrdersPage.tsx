@@ -12,6 +12,7 @@ import { getOrderList, getOrders } from "../store/slices/addToOrders";
 import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false);
@@ -20,7 +21,13 @@ export default function OrdersPage() {
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  const goToProgressPage = (item) => {
+  /**
+   *
+   * what is item?
+   *
+   * what is m?
+   */
+  const goToProgressPage = (item: any) => {
     navigation.navigate("InProgressOrder", { item: item });
   };
 
@@ -29,17 +36,17 @@ export default function OrdersPage() {
   }, [dispatch]);
 
   const filterCompletedData = orderData.filter(
-    (item) => item.orderStatus === "Order taking longer than expected"
+    (item: any) => item.orderStatus === "Order taking longer than expected"
   );
 
   const unique = [
     ...new Map(
-      filterCompletedData.reverse().map((m) => [m.createdAt, m])
+      filterCompletedData.reverse().map((m: any) => [m.createdAt, m])
     ).values(),
   ];
 
   const filterInProgressData = orderData.filter(
-    (item) => item.orderStatus === "In Progress"
+    (item: any) => item.orderStatus === "In Progress"
   );
 
   const inProgress = () => {
@@ -67,7 +74,7 @@ export default function OrdersPage() {
         </View>
         <FlatList
           data={!orderSelection ? filterInProgressData : unique}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_item, index) => index.toString()}
           style={styles.cardContainer}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) =>
@@ -111,8 +118,8 @@ const styles = StyleSheet.create({
     padding: "5%",
   },
   cardContainer: {
-    width: '100%',
-    marginBottom: '25%'
+    width: "100%",
+    marginBottom: "25%",
   },
   // header
   amountContainer: {
@@ -130,18 +137,18 @@ const styles = StyleSheet.create({
   sectionButton: {
     borderRadius: 10,
     backgroundColor: "#f2f5f5",
-    padding: '2.5%',
-    paddingHorizontal: '10%',
-    marginHorizontal: '5%'
+    padding: "2.5%",
+    paddingHorizontal: "10%",
+    marginHorizontal: "5%",
   },
   headerOfOrder: {
     flexDirection: "row",
-    paddingBottom: '2%'
+    paddingBottom: "2%",
   },
   orderTypeContainer: {
     flex: 1,
     alignItems: "center",
-    width: '100%'
+    width: "100%",
   },
   orderPageContainer: {
     flex: 1,

@@ -23,7 +23,7 @@ import useCart from "hooks/handleVendors/useCart";
 import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
-import { IP } from "@env";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function ItemPage() {
   const { addToCart } = useCart();
@@ -34,8 +34,15 @@ export default function ItemPage() {
   const dispatch = useAppDispatch();
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { business, foodItem, location } = route.params;
+  const { business, foodItem, location }: any = route.params;
   const businessName = useAppSelector(getBusinessName);
+
+  /**
+   * What is selectedOptions?
+   * What is customization?
+   * what is option?
+   * what is payload?
+   */
 
   useEffect(() => {
     // Create a deep copy of foodItem when render state changes
@@ -45,7 +52,7 @@ export default function ItemPage() {
   const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) };
   const name = (parse || {}).cartData;
 
-  const resetOptions = name.customizations.flat().map((c) => c.selected);
+  const resetOptions = name.customizations.flat().map((c: any) => c.selected);
 
   const goHome = async () => {
     setOrder(true);
@@ -62,12 +69,12 @@ export default function ItemPage() {
   };
 
   const goToCartButton = async () => {
-    const userId = auth.currentUser.uid;
+    const userId = auth?.currentUser?.uid;
     const addItem = name;
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
-        const { payload } = await addToCart(
+        const { payload }: any = await addToCart(
           addItem,
           userId,
           business,
@@ -90,10 +97,10 @@ export default function ItemPage() {
 
   // Bug Issue: When uploading an option, option customizations are all the same
   // Potential Fix: Get only the selected options for that category option
-  const handleOptionSelect = (selectedOptions, customization) => {
+  const handleOptionSelect = (selectedOptions: any, customization: any) => {
     // Perform the necessary logic with the selected options
     // Update the selected options in the foodItem object
-    name.customizations.forEach((option, index) => {
+    name.customizations.forEach((option: any, index: number) => {
       for (let i = 0; i < customization.length; i++) {
         console.log(
           "option name: ",
@@ -171,7 +178,7 @@ export default function ItemPage() {
             header={Header}
             data={foodItem.customizations}
             render={setRender}
-            onSelect={(selectedOptions) =>
+            onSelect={(selectedOptions: any) =>
               handleOptionSelect(selectedOptions, name.customizations)
             }
             stateRender={render}

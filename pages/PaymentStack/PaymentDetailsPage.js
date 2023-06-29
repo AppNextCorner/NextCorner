@@ -47,7 +47,7 @@ const PaymentDetailsPage = () => {
   const dispatch = useAppDispatch();
 
   const stripe = useStripe();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
 
   // grabbing all the cart item's data to display them on the receipt and the component cards
   const getCartItems = cart.map((list) => list.cartData).flat();

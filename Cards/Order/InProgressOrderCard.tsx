@@ -5,13 +5,28 @@ import "moment-timezone";
 import UseOrders from "hooks/handleVendors/useOrders";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
 
-const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
+/**
+ * What is orderTimeData?
+ * What is orderStatusData?
+ * what is location?
+ * what is cart?
+ */
+interface Props {
+  orderTimeData: any;
+  orderStatusData: any;
+  orderItemId?: any;
+}
+const InProgressOrderCard = ({
+  orderTimeData,
+  orderStatusData,
+  orderItemId,
+}: Props) => {
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const [timeLeft, setTimeLeft] = useState();
+  const [timeLeft, setTimeLeft] = useState<number | undefined>();
 
   const mapOrderItem = orderTimeData.singleOrderList
-    .map((location) => location.location)
+    .map((location: any) => location.location)
     .flat();
 
   const { updateOrder } = UseOrders();
@@ -61,7 +76,7 @@ const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
   }, [timeLeft]);
 
   const businessOrderedText = orderTimeData.singleOrderList.map(
-    (cart) => cart.businessOrderedFrom
+    (cart: any) => cart.businessOrderedFrom
   );
 
   return (
@@ -81,7 +96,12 @@ const InProgressOrderCard = ({ orderTimeData, orderStatusData }) => {
         <Text style={styles.orderStatusText}>{orderStatusData}</Text>
         <Text style={styles.timeText}>
           Ready In:{" "}
-          {timeLeft <= -60 ? Math.floor(Math.abs(timeLeft) / 60) : "< 1"} min
+          {timeLeft
+            ? timeLeft <= -60
+              ? Math.floor(Math.abs(timeLeft) / 60)
+              : "< 1"
+            : null}
+          min
         </Text>
       </View>
     </View>

@@ -37,7 +37,7 @@ const CartPage = () => {
   const { updateCartItemData } = useCart(); // be able to increment or decrement the amount in which ever cart item is updated from the user
   const dispatch = useAppDispatch();
   // navigation part of the screen
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   const goHome = () => {
     navigation.goBack();
     dispatch(orderPlaced());

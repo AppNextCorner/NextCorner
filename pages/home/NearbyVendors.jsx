@@ -32,7 +32,7 @@ export const NearbyVendors = () => {
   const mapRef = useRef();
   const flatListRef = useRef();
   const vendors = useAppSelector(getBusiness);
-  const navigate = useNavigation<NativeStackNavigationProp<any>>();
+  const navigate = useNavigation();
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {

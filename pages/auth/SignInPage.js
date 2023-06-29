@@ -12,7 +12,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import logo from "assets/logo.png";
+import logo from "../../assets/logo.png";
 import { useAppDispatch } from "../../store/hook";
 import { getUsers, setUser } from "../../store/slices/userSession";
 import { useState } from "react";
@@ -30,7 +30,7 @@ export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   /* 
   Function that handles an existing account 
 */
@@ -71,7 +71,6 @@ export default function SignInPage() {
         <Text style={styles.inputText}>Email Address</Text>
         <TextInput
           style={styles.textInput}
-          readOnly={false}
           onChangeText={(text) => {
             setEmail(text);
           }}
@@ -80,7 +79,6 @@ export default function SignInPage() {
         <Text style={styles.inputText}>Password</Text>
         <TextInput
           style={styles.textInput}
-          readOnly={false}
           onChangeText={setPassword}
           value={password}
           placeholder="password"

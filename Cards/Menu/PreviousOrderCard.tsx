@@ -1,16 +1,29 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 
 import moment from "moment";
 import "moment-timezone";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-const PreviousOrderCard = (props) => {
+/**
+ * To DOOO
+ *  what is previousOrders?
+ *
+ *  what is location?
+ */
+interface Props {
+  previousOrders: any;
+  businessName: string;
+  location: any;
+}
+
+const PreviousOrderCard = (props: Props) => {
   const { previousOrders, businessName, location } = props;
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { setOrder, order } = useOrderButton();
+  const { setOrder } = useOrderButton();
 
   const getPreviousItemData = previousOrders.cartData;
   // creating a new order date object with moment to show when the order was created
@@ -55,9 +68,9 @@ const PreviousOrderCard = (props) => {
             {/* get previous order details */}
 
             {/* time last ordered */}
-            <Text style={styles.timeOrdered}>
-              Last Ordered: {getTimeOrdered}
-            </Text>
+
+            {/* timeOrdered not defined? */}
+            <Text>Last Ordered: {getTimeOrdered}</Text>
             <Text style={styles.priceText}>
               ${getPreviousItemData.price * getPreviousItemData.amountInCart}
             </Text>
@@ -119,7 +132,6 @@ const styles = StyleSheet.create({
     borderColor: "#f2f0f0",
     borderStyle: "solid",
     borderWidth: 2,
-    borderRadius: 10,
   },
   priceText: {
     flex: 1,

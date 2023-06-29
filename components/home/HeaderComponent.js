@@ -15,7 +15,7 @@ import { useState } from "react";
 const HomeIcon = require("assets/logo.png");
 export default function HeaderComponent() {
   const [magnifyClicked, setMagnifyClicked] = useState(false);
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
   //JSON.parse(JSON.stringify(getCartFromSlice))
   const getCartFromSlice = useAppSelector(getCart);
   const getCartOption = JSON.parse(JSON.stringify(getCartFromSlice));
