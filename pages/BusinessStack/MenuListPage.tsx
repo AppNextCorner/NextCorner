@@ -69,12 +69,7 @@ export default function MenuListPage() {
                 <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
 
-              <Image
-                style={styles.image}
-                source={{
-                  uri: `https://nextcornerdevelopment.onrender.com/${business.image.toString()}`,
-                }}
-              />
+              <Image style={styles.image} source={{uri:`https://nextcornerdevelopment.onrender.com/${business.image.toString()}`}} />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}
@@ -87,10 +82,7 @@ export default function MenuListPage() {
                 </View>
 
                 <AnnouncementList
-                  horizontal={true}
-                  announcementData={business}
-                  open={business.open}
-                  close={business.close}
+                  vendor={business}
                 />
                 <FeaturedList
                   menuData={menu}
@@ -123,7 +115,7 @@ export default function MenuListPage() {
                 <Text style={styles.typeText}>{item.type}</Text>
                 <MenuTypeList
                   type={item.type}
-                  menuItem={menu}
+                  menu={menu}
                   businessName={business.name}
                   location={business.location}
                 />
@@ -198,6 +190,10 @@ const styles = StyleSheet.create({
     zIndex: 2,
     margin: 20,
     marginTop: 40,
+    borderRadius: 20,
+    padding: '2%',
+    width: '15%',
+    backgroundColor: '#78DBFF'
   },
   description: {
     flex: 0,

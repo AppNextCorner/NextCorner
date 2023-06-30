@@ -1,17 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useEffect, useState } from "react";
-import { IP } from "@env";
+import React from "react";
 
 /**
- * AnnouncementCard component displays an announcement with its data.
+ * announcementCard component displays an announcement with its data.
  * @param {*} props - Data from the business main component.
  * @returns {React.ReactNode} - Rendered component.
  */
-const AnnouncementCard = (props) => {
-  const { announcementData } = props;
-
-  // Use state to store the announcement data
-  const [announcement, setAnnouncement] = useState(announcementData);
+const AnnouncementCard = (props: any) => {
+  const { announcement } = props;
 
   // Styles for the announcement card
   const backgroundTextStyle = StyleSheet.create({
@@ -40,7 +36,7 @@ const AnnouncementCard = (props) => {
     },
   });
 
-  // Render the AnnouncementCard component
+  // Render the announcementCard component
   return (
     <TouchableOpacity style={buttonStyle.button} disabled={true}>
       <View style={backgroundTextStyle.background}>

@@ -32,10 +32,10 @@ const InProgressPage = () => {
     navigation.goBack();
   };
 
-  const { item } = route.params;
+  const { order } = route.params;
 
   // items displayed on the Google Maps component after being passed in
-  const mapOrderItem = item.singleOrderList
+  const mapOrderItem = order.singleOrderList
     .map((location) => location.location)
     .flat();
 
@@ -53,7 +53,7 @@ const InProgressPage = () => {
             onPress={() => returnBack()}
             style={styles.goBackButton}
           >
-            <AntDesign name="arrowleft" size={30} color="black" />
+            <AntDesign name="arrowleft" size={30} color="white" />
           </TouchableOpacity>
           <View style={styles.headerContainer}>
             <Text style={styles.pageHeader}>Your Order</Text>
@@ -89,7 +89,7 @@ const InProgressPage = () => {
             <InProgressList
               duration={duration}
               distance={distance}
-              orderItemDetails={item}
+              orderItemDetails={order}
             />
           </BottomSheet>
         </GestureHandlerRootView>
@@ -111,6 +111,10 @@ const styles = StyleSheet.create({
     marginTopLeft: "5%",
     marginLeft: "5%",
     marginTop: "10%",
+    borderRadius: 20,
+    padding: '2%',
+    width: '12.5%',
+    backgroundColor: '#78DBFF'
   },
   pageHeader: {
     textAlign: "center",

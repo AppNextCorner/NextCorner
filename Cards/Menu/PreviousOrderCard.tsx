@@ -6,17 +6,12 @@ import "moment-timezone";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import orderItem from "../../types/interfaces/orderItem.interface";
 
-/**
- * To DOOO
- *  what is previousOrders?
- *
- *  what is location?
- */
 interface Props {
-  previousOrders: any;
+  previousOrders: orderItem;
   businessName: string;
-  location: any;
+  location: {latitude: number; longitude: number};
 }
 
 const PreviousOrderCard = (props: Props) => {
@@ -43,7 +38,7 @@ const PreviousOrderCard = (props: Props) => {
     setOrder(false);
     navigation.navigate("Item", {
       business: businessName,
-      foodItem: parse.cartData,
+      menuItem: parse.cartData,
       location: location,
     });
   };
@@ -128,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 10,
     padding: "3%",
-
+    height: 125,
     borderColor: "#f2f0f0",
     borderStyle: "solid",
     borderWidth: 2,

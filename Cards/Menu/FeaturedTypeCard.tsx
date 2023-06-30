@@ -18,7 +18,7 @@ const FeaturedTypeCard = (props: any) => {
     navigation.navigate("Item", {
       //  Props data sent to food details to be able to display the details
       business: businessName,
-      foodItem: menuItem,
+      menuItem: menuItem,
       location: location,
     });
   };

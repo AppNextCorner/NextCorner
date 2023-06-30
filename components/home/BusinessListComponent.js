@@ -13,7 +13,7 @@ const BusinessListComponent = React.memo((props) => {
           showsHorizontalScrollIndicator={false}
           data={props.business}
           keyExtractor={(item) => item.id.toString()} // Assuming 'id' is a unique identifier property
-          renderItem={({ item }) => <BusinessCard businesItem={item} />}
+          renderItem={({ item }) => <BusinessCard businessItem={item} />}
         />
       </View>
       <View style={styles.margin}></View>

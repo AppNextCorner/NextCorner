@@ -15,7 +15,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           org: "Next-Corner" #only needed for  pick-one-from-persons-or-team=true
           teams: "Developers" # only works for GitHub Organisation/Teams
-          persons: ["RealHenryMartinez", "RalphAnthonyLopez"] # add individual persons here
+          persons: "RealHenryMartinez, RalphAnthonyLopez" # add individual persons here
           include-draft: false # Draft PRs will be skipped (default: false)
           skip-with-manual-reviewers: 1 # Skip this action, if the number of reviwers was already assigned (default: 0)
           pick-one-from-persons-or-team: false # Will pick out one reviewer from persons and/or the first GitHub team and "org" set (default: false)

@@ -5,9 +5,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { createToken } from "hooks/handleUsers/useCreateToken";
-import { IP } from "@env";
+import { auth } from "hooks/handleUsers/useFirebase";
 
-const POSTS_URL = `https://nextcornerdevelopment.onrender.com/api/`;
+const POSTS_URL = `https://nextcornerdevelopment.onrender.com/api/`
 
 export const deleteItem = createAsyncThunk(
   "addToCart/deleteItem",
@@ -31,7 +31,7 @@ export const fetchCart = createAsyncThunk("addToCart/fetchCart", async () => {
   const headers = await createToken();
   try {
     const response = await axios.get(POSTS_URL, headers);
-    console.log("fetch cart: ", response);
+    console.log("fetch cart here:  ", response.data);
     return response.data; // Return a value synchronously using Async-await
   } catch (err) {
     if (err.response) {
@@ -85,7 +85,7 @@ export const addNewCartItem = createAsyncThunk(
     console.log("headers in cart: ", headers);
     try {
       const resp = await axios.post(POSTS_URL, cartItem, headers);
-
+      console.log('cart response: ', resp.data)
       return resp.data;
     } catch (error) {
       if (error.response) {
@@ -122,20 +122,6 @@ export const addToCart = createSlice({
     },
     addItem: (state, { payload }) => {
       state.cart.push(payload);
-    },
-    setCart: (state, { payload }) => {
-      const mapCart = state.cart.map((itemList) => itemList.cartData);
-      const cartItem = mapCart.find((item) => item.itemId === payload.id);
-      const index = mapCart.indexOf(cartItem);
-
-      if (index > -1) {
-        cartItem.amountInCart += 1;
-        mapCart.splice(index, 1);
-      } else {
-        state.cart.push(payload);
-      }
-
-      state.cartButton = state.cart.length > 0;
     },
     orderPlaced: (state) => {
       state.cartButton = state.cart.length > 0;
@@ -181,19 +167,19 @@ export const addToCart = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCart.pending, (state) => {
-      console.log("pending");
+      console.log("pending in cart");
+      console.log(state.cart)
     });
     builder.addCase(fetchCart.rejected, (state) => {
       console.log("Rejected");
     });
     builder.addCase(fetchCart.fulfilled, (state, { payload }) => {
       state.cartButton = true;
+      
       state.cart = payload.filter(
         (uidItem) => uidItem.userId === auth.currentUser.uid
       );
-      state.cart = state.cart.filter(
-        (item, index) => state.cart.indexOf(item) === index
-      );
+      console.log('total user cart: ', payload)
     });
     builder.addCase(addNewCartItem.pending, (state) => {
       console.log("pending");

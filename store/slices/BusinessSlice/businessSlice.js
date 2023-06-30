@@ -4,8 +4,6 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-import { IP } from "@env";
 import { createToken } from "hooks/handleUsers/useCreateToken";
 const BUSINESS_URL = `https://nextcornerdevelopment.onrender.com/business/`;
 export const getAllBusinesses = createAsyncThunk(
@@ -19,7 +17,7 @@ export const getAllBusinesses = createAsyncThunk(
       return response.data; // Return a value synchronously using Async-await
     } catch (err) {
       if (err.response) {
-        console.log("Error in getallbusinesses: ", err.response);
+        console.log("Error in getallbusiness: ", err.response);
 
         return err;
       }

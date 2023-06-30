@@ -6,7 +6,8 @@ import { itemStatus } from "./itemStatus.interface";
 export interface business {
   name: string;
   image: string;
-  announcements: announcementType;
+  // Replace with announcements later when vendor pages are finished
+  announcementCards: announcementType[];
   location: { longitude: number; latitude: number };
   open: string;
   close: string;

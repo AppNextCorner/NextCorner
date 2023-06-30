@@ -23,10 +23,6 @@ export default function BusinessCard({
   checkForStyleChange,
 }: Props) {
   // The style is changed when a category is selected on the home page
-  console.log(
-    "image from card: ",
-    `https://nextcornerdevelopment.onrender.com/${businessItem.image.toString()}`
-  );
   const changeStyle = (checkForStyleChange: boolean): StyleProp<ViewStyle> => {
     let change: StyleProp<ViewStyle> =
       checkForStyleChange === true
@@ -56,7 +52,8 @@ export default function BusinessCard({
         <Image
           style={styles.foodImages}
           source={{
-            uri: `https://nextcornerdevelopment.onrender.com/${businessItem.image}`,
+            // Add URL's later when uploading vendor 
+            uri: 'https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI='
           }}
         />
 

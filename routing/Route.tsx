@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import * as React from "react";
 import HomePage from "pages/HomePage";
-import ItemPage from "pages/BusinessStack/itemDetails";
+import ItemPage from "pages/BusinessStack/ItemPage";
 import OrdersPage from "pages/OrdersPage";
 import MenuListPage from "pages/BusinessStack/MenuListPage";
 import PickUpPage from "pages/ProfilePage";
@@ -69,7 +69,8 @@ export default function Route() {
         </NavigationContainer>
       </>
     );
-  } else if (isDone === false) {
+  
+  } else if (isDone === true && !isLoggedin) {
     return (
       <NavigationContainer>
         <Stack.Navigator>

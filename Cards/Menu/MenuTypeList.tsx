@@ -1,41 +1,35 @@
 import { FlatList, View } from "react-native";
 import React from "react";
-import MenuItemCard from "./MenuItemCard";
 // import { useRoute } from "@react-navigation/native"; not used
 import { itemType } from "../../types/interfaces/item.interface";
+import MenuItemCard from "./MenuItemCard";
 
-/**
- *  TO DOO
- *  is menuItem a list of itemTypes?
- *
- *  location is what?
- */
 interface Props {
-  menuItem: itemType[];
+  menu: itemType[];
   type: string;
   businessName: string;
-  location: any;
+  location: {longitude: number; latitude: number};
 }
 
-interface foodItem {
+interface menuItem {
   item: itemType;
 }
 const MenuTypeList = React.memo(
-  ({ menuItem, type, businessName, location }: Props) => {
+  ({ menu, type, businessName, location }: Props) => {
     // type is a string that represents the type of food that the menu item represents: ex: Burger, Pizza, etc.
 
     // Optimized: Memoize the filtered array using React.useMemo
     const getItemsThatMatchType = React.useMemo(
-      () => menuItem.filter((item) => item.category === type),
-      [menuItem, type]
+      () => menu.filter((item) => item.category === type),
+      [menu, type]
     );
 
     // Optimized: Memoize the renderItem function using React.useCallback
     const renderItem = React.useCallback(
-      ({ item }: foodItem) => (
+      ({ item }: menuItem) => (
         <View>
           <MenuItemCard
-            foodItem={item}
+            menuItem={item}
             businessName={businessName}
             location={location}
           />

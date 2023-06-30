@@ -102,22 +102,19 @@ const PaymentDetailsPage = () => {
   const navigateToAddPaymentMethod = async () => {
     try {
       //await handlePaymentMethodCreation();
-      console.log("vendor name: ", cart[0].businessOrderedFrom);
-      const response = await fetch(
-        `https://nextcornerdevelopment.onrender.com/payment`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            merchantDisplayName: cart[0].businessOrderedFrom,
-          },
-          body: JSON.stringify({
-            amount: totalCost,
-            name: mainUser.firstName + " " + mainUser.lastName,
-          }),
-        }
-      );
-      console.log("here is payment data: ", response);
+      console.log('vendor name: ',cart[0].businessOrderedFrom);
+      const response = await fetch(`https://nextcornerdevelopment.onrender.com/payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'merchantDisplayName': cart[0].businessOrderedFrom,
+        },
+        body: JSON.stringify({
+          amount: totalCost,
+          name: mainUser.firstName + ' ' + mainUser.lastName,
+        }),
+      });
+      console.log('here is payment data: ', response);
       // getting the client secret after sending the request with client data
       const data = await response.json();
       if (!response.ok) {
@@ -213,6 +210,7 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
+                    <Image style={styles.foodImages} source={{uri:`https://nextcornerdevelopment.onrender.com/${item.image.toString()}`}} />
                     <Image
                       style={styles.foodImages}
                       source={{
@@ -467,8 +465,12 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   goBackButton: {
-    margin: "10%",
+    margin: "5%",
     marginTop: "15%",
+    borderRadius: 20,
+    padding: '2%',
+    width: '12%',
+    backgroundColor: '#78DBFF'
   },
   descriptionOfItem: {
     flex: 1,

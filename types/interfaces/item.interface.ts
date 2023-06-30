@@ -6,9 +6,10 @@ export interface itemType {
   image: string;
   price: number;
   description: string;
-  customizations: option;
+  customizations: option[];
   category: string;
   featured: boolean;
   amountInCart: number;
   rating: number;
+  createdAt?: string
 }

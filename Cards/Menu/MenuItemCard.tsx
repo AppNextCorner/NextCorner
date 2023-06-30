@@ -2,8 +2,6 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
-import { useEffect } from "react";
-// import { IP } from "@env";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { itemType } from "../../types/interfaces/item.interface";
 
@@ -12,39 +10,29 @@ import { itemType } from "../../types/interfaces/item.interface";
  * @param {*} props - be able to pass additional properties through the cart after coming from the business property prior to this page
  *
  */
-
-/**
- *  TO DOO
- *
- *  location is what?
- */
 interface Props {
-  foodItem: itemType;
+  menuItem: itemType;
   businessName: string;
-  location: any;
+  location: {latitude: number; longitude: number};
 }
 export default function MenuItemCard({
-  foodItem,
+  menuItem,
   businessName,
   location,
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
-  // Match the location to the current location
-  useEffect(() => {
-    location;
-  });
 
   // Section to re-new the option selection buttons for the menu item - IMPORTANT
-  Object.assign({}, { ...foodItem });
-  const parse = { cartData: JSON.parse(JSON.stringify(foodItem)) };
+  Object.assign({}, { ...menuItem });
+  const parse = { cartData: JSON.parse(JSON.stringify(menuItem)) };
 
-  let limitTextAmount = foodItem.description.slice(0, 75) + "...";
+  let limitTextAmount = menuItem.description.slice(0, 75) + "...";
   const goToFoodDetails = () => {
     setOrder(false);
     navigation.navigate("Item", {
       business: businessName,
-      foodItem: parse.cartData,
+      menuItem: parse.cartData,
       location: location,
     });
   };
@@ -60,14 +48,14 @@ export default function MenuItemCard({
           <Image
             style={styles.foodImages}
             source={{
-              uri: `https://nextcornerdevelopment.onrender.com/${foodItem.image.toString()}`,
+              uri: `https://nextcornerdevelopment.onrender.com/${menuItem?.image.toString()}`,
             }}
           />
         </View>
         <View style={styles.foodTexts}>
-          <Text style={styles.categoryText}>{foodItem.name}</Text>
+          <Text style={styles.categoryText}>{menuItem.name}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
-          <Text style={styles.priceText}>${Math.fround(foodItem.price)}</Text>
+          <Text style={styles.priceText}>${Math.fround(menuItem.price)}</Text>
         </View>
         {/* Store image with button  */}
       </View>

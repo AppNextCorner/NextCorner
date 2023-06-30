@@ -70,93 +70,91 @@ const CartPage = () => {
       <Pressable style={styles.goBackButton} onPress={goHome}>
         <AntDesign name="arrowleft" size={30} color="black" />
       </Pressable>
+        <FlatList
+          ListFooterComponent={<View style={styles.totalItemsContainer}></View>}
+          data={isCartFull}
+          renderItem={({ item }) => {
+            const grabCartItem = item.cartData;
 
-      <FlatList
-        data={isCartFull}
-        renderItem={({ item }) => {
-          const grabCartItem = item.cartData;
+            return (
+              <>
+                {/* Display cards added */}
+                <TouchableOpacity
+                  disabled={true}
+                  style={styles.foodCategoryStyle}
+                >
+                  <View style={styles.card}>
+                    <View style={styles.imageBox}>
+                      <Image
+                        style={styles.foodImages}
+                        source={{
+                          uri: `https://nextcornerdevelopment.onrender.com/${grabCartItem.image.toString()}`,
+                        }}
+                      />
+                    </View>
+                    <View style={styles.foodTexts}>
+                      <Text style={styles.categoryText}>
+                        {grabCartItem.name}
+                      </Text>
+                      <Text style={styles.descriptionOfItem}>
+                        {grabCartItem.description}
+                      </Text>
+                      <Text style={styles.priceText}>{grabCartItem.price}</Text>
+                    </View>
 
-          return (
-            <>
-              {/* Display cards added */}
-              <TouchableOpacity
-                disabled={true}
-                style={styles.foodCategoryStyle}
-              >
-                <View style={styles.card}>
-                  <View style={styles.imageBox}>
-                    <Image
-                      style={styles.foodImages}
-                      source={{
-                        uri: `https://nextcornerdevelopment.onrender.com/${grabCartItem.image.toString()}`,
-                      }}
-                    />
+                    {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
+                    <View style={styles.amountContainer}>
+                      <AntDesign
+                        style={styles.icon}
+                        name="minuscircle"
+                        size={24}
+                        color="#78DBFF"
+                        onPress={() => {
+                          const updatedCartItem = {
+                            ...grabCartItem,
+                            amountInCart: (grabCartItem.amountInCart -= 1),
+                          };
+                          updateCartItemData({
+                            updatedCartItem: updatedCartItem,
+                            id: item.id,
+                          });
+                        }}
+                      />
+                      <Text>{grabCartItem.amountInCart}</Text>
+                      <AntDesign
+                        style={styles.icon}
+                        name="pluscircle"
+                        size={24}
+                        color="#78DBFF"
+                        onPress={() => {
+                          const updatedCartItem = {
+                            ...grabCartItem,
+                            amountInCart: (grabCartItem.amountInCart += 1),
+                          };
+                          updateCartItemData({
+                            updatedCartItem: updatedCartItem,
+                            id: item.id,
+                          });
+                        }}
+                      />
+                    </View>
                   </View>
-                  <View style={styles.foodTexts}>
-                    <Text style={styles.categoryText}>{grabCartItem.name}</Text>
-                    <Text style={styles.descriptionOfItem}>
-                      {grabCartItem.description}
-                    </Text>
-                    <Text style={styles.priceText}>{grabCartItem.price}</Text>
-                  </View>
+                </TouchableOpacity>
+              </>
+            );
+          }}
+        />
 
-                  {/* Takes in 3rd part of the whole card containing increment and decrement icons to increase or decrease the amount of one single item gets */}
-                  <View style={styles.amountContainer}>
-                    <AntDesign
-                      style={styles.icon}
-                      name="minuscircle"
-                      size={24}
-                      color="#78DBFF"
-                      onPress={() => {
-                        const updatedCartItem = {
-                          ...grabCartItem,
-                          amountInCart: (grabCartItem.amountInCart -= 1),
-                        };
-                        updateCartItemData({
-                          updatedCartItem: updatedCartItem,
-                          id: item.id,
-                        });
-                      }}
-                    />
-                    <Text>{grabCartItem.amountInCart}</Text>
-                    <AntDesign
-                      style={styles.icon}
-                      name="pluscircle"
-                      size={24}
-                      color="#78DBFF"
-                      onPress={() => {
-                        const updatedCartItem = {
-                          ...grabCartItem,
-                          amountInCart: (grabCartItem.amountInCart += 1),
-                        };
-                        updateCartItemData({
-                          updatedCartItem: updatedCartItem,
-                          id: item.id,
-                        });
-                      }}
-                    />
-                  </View>
-                </View>
-              </TouchableOpacity>
-            </>
-          );
-        }}
-      />
-
-      <View>
-        <View style={styles.bottomButtons}>
-          <Text style={styles.businessText}>Ordered from: {businessName}</Text>
-          {/* Payment button */}
-          <View style={styles.proceedToPaymentContainer}>
-            <TouchableOpacity
-              onPress={() => goToPayment()}
-              style={styles.proceedToPaymentButton}
-            >
-              <Text style={styles.proceedToPaymentText}>
-                Proceed to payment
-              </Text>
-            </TouchableOpacity>
-          </View>
+      <View style={styles.bottomButtons}>
+        <Text style={styles.businessText}>Ordered from: {businessName}</Text>
+        {/* Payment button */}
+        <View style={styles.proceedToPaymentContainer}>
+          <TouchableOpacity
+            onPress={() => goToPayment()}
+            style={styles.proceedToPaymentButton}
+          >
+            <Text style={styles.proceedToPaymentText}>Proceed to payment</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -165,15 +163,29 @@ const CartPage = () => {
 export default CartPage;
 
 const styles = StyleSheet.create({
+  totalItemsContainer: {
+    marginBottom: '50%'
+  },
   businessText: {
     textAlign: "center",
     fontSize: 25,
     fontWeight: "bold",
   },
   bottomButtons: {
-    paddingHorizontal: 20,
+    alignSelf: "center",
+    backgroundColor: "#fff",
     paddingTop: 10,
-    paddingBottom: "10%",
+    paddingBottom: "5%",
+    padding: "5%",
+    borderRadius: 10,
+    marginHorizontal: "2.5%",
+    position: "absolute",
+    bottom: "5%",
+
+    shadowColor: "#c2c3c4",
+    shadowOffset: { width: 0, height: 1.5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
   },
   addItemsButtonContainer: {
     flexDirection: "column",
@@ -203,7 +215,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: "5%",
   },
-  proceedToPaymentContainer: {},
   amountContainer: {
     flex: 1,
     marginTop: 0,
@@ -222,8 +233,6 @@ const styles = StyleSheet.create({
   descriptionOfItem: {
     flex: 1,
     fontSize: 10,
-
-    //fontFamily: 'monospace',
   },
   imageBox: {
     flex: 1,
@@ -239,7 +248,6 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 17,
     fontWeight: "bold",
-    //fontFamily: 'monospace',
     marginTop: 15,
     flex: 1,
   },

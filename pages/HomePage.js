@@ -106,7 +106,7 @@ export default function HomePage() {
                   keyExtractor={(item) => item.id.toString()}
                   renderItem={({ item }) => (
                     <BusinessCard
-                      businesItem={item}
+                      businessItem={item}
                       checkForStyleChange={!checkForStyleChange}
                     />
                   )}

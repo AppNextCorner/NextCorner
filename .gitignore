@@ -13,4 +13,7 @@ web-build/
 # macOS
 .DS_Store
 
+# Be able to prevent npm and yarn conflicts
+package-lock.json
+
 .env

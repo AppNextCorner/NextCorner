@@ -13,6 +13,7 @@ import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import order from "../types/interfaces/order.interface";
 
 export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false);
@@ -21,31 +22,25 @@ export default function OrdersPage() {
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  /**
-   *
-   * what is item?
-   *
-   * what is m?
-   */
-  const goToProgressPage = (item: any) => {
-    navigation.navigate("InProgressOrder", { item: item });
+  const goToProgressPage = (order: order) => {
+    navigation.navigate("InProgressOrder", { order });
   };
 
   useEffect(() => {
     dispatch(getOrderList());
   }, [dispatch]);
 
-  const filterCompletedData = orderData.filter(
+  const filterCompletedData: order[] = orderData.filter(
     (item: any) => item.orderStatus === "Order taking longer than expected"
   );
 
-  const unique = [
+  const finishedOrders = [
     ...new Map(
       filterCompletedData.reverse().map((m: any) => [m.createdAt, m])
     ).values(),
   ];
 
-  const filterInProgressData = orderData.filter(
+  const filterInProgressData: order[] = orderData.filter(
     (item: any) => item.orderStatus === "In Progress"
   );
 
@@ -72,18 +67,17 @@ export default function OrdersPage() {
             <Text style={styles.sectionHeader}>Complete</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={!orderSelection ? filterInProgressData : unique}
+        
+        <FlatList<order>
+          data={!orderSelection ? filterInProgressData : finishedOrders}
           keyExtractor={(_item, index) => index.toString()}
           style={styles.cardContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) =>
+          renderItem={({item}) =>
             !orderSelection ? (
               <TouchableOpacity onPress={() => goToProgressPage(item)}>
                 <InProgressOrderCard
-                  orderTimeData={item}
-                  orderItemId={item.id}
-                  orderStatusData={item.orderStatus}
+                  order={item}
                 />
               </TouchableOpacity>
             ) : (

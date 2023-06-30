@@ -2,21 +2,21 @@
  * Purpose of file: Used to send our requests to the server and be able to create and get a new user from the server and be able to display the new changes to our frontend after changing our redux state
  */
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { IP } from "@env";
-import { auth } from "hooks/handleUsers/useFirebase";
-import { createToken } from "../../hooks/handleUsers/useCreateToken";
-const USER_URL = `https://nextcornerdevelopment.onrender.com/auth/`;
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { IP } from '@env'
+import {auth} from 'hooks/handleUsers/useFirebase'
+import { createToken } from '../../hooks/handleUsers/useCreateToken'
+const USER_URL = `https://nextcornerdevelopment.onrender.com/auth/`
 
-export const getUsers = createAsyncThunk("userSession/getUsers", async () => {
-  const headers = await createToken();
-  console.log("get users by this IP", "IP: ", IP);
-  console.log("headers: ", headers);
+export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
+  const headers = await createToken()
+  console.log('get users by this IP: ', IP)
+  console.log("headers: ", headers)
   try {
-    const response = await axios.get(USER_URL, headers);
-    console.log("RESPONSE DATA", response.data);
-    return response.data; // Return a value synchronously using Async-await
+    const response = await axios.get(USER_URL, headers)
+    console.log("RESPONSE DATA", response.data)
+    return response.data // Return a value synchronously using Async-await
   } catch (err) {
     console.log("error in user:", err);
     if (err.response) {
@@ -30,7 +30,8 @@ export const createUser = createAsyncThunk(
   "userSession/createUser",
   async (userData) => {
     try {
-      const resp = await axios.post(USER_URL + "signup", userData, {
+      console.log('here is user data: ', userData.firstName)
+      const resp = await axios.post(USER_URL + 'signup', userData.firstName, {
         headers: {
           "Content-Type": "application/json",
         },

@@ -4,44 +4,35 @@ import moment from "moment";
 import "moment-timezone";
 import UseOrders from "hooks/handleVendors/useOrders";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
+import order from "../../types/interfaces/order.interface";
+import orderItem from "../../types/interfaces/orderItem.interface";
+import location from "../../types/interfaces/location.interface";
 
-/**
- * What is orderTimeData?
- * What is orderStatusData?
- * what is location?
- * what is cart?
- */
 interface Props {
-  orderTimeData: any;
-  orderStatusData: any;
-  orderItemId?: any;
+  order: order
 }
 const InProgressOrderCard = ({
-  orderTimeData,
-  orderStatusData,
-  orderItemId,
+  order
 }: Props) => {
-  const [duration, setDuration] = useState(0);
-  const [distance, setDistance] = useState(0);
+  const [_duration, setDuration] = useState(0);
+  const [_distance, setDistance] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
 
-  const mapOrderItem = orderTimeData.singleOrderList
-    .map((location: any) => location.location)
+  const mapOrderItem: location[] = order.singleOrderList
+    .map((orderItem: orderItem) => orderItem.location)
     .flat();
 
   const { updateOrder } = UseOrders();
 
   useEffect(() => {
-    const timer = orderTimeData.timer * 60;
+    const timer = order.timer * 60;
     const returned_endate = moment(
-      new Date(orderTimeData.createdAt),
+      new Date(order.createdAt),
       "YYYY-M-D H:mm:ss"
     )
       .tz("America/Los_Angeles")
       .add(timer, "seconds")
       .format("YYYY-MM-DD HH:mm:ss");
-
-    const now = moment().tz("America/Los_Angeles").format("YYYY-MM-DD HH:mm");
 
     const calculateDuration = () => {
       const duration = moment().diff(returned_endate, "seconds");
@@ -57,11 +48,11 @@ const InProgressOrderCard = ({
     return () => {
       clearInterval(intervalId);
     };
-  }, [orderTimeData.timer]);
+  }, [order.timer]);
 
   useEffect(() => {
     const updatedStatus = {
-      ...orderTimeData,
+      ...order,
       orderStatus: "Order taking longer than expected",
     };
 
@@ -75,8 +66,8 @@ const InProgressOrderCard = ({
     };
   }, [timeLeft]);
 
-  const businessOrderedText = orderTimeData.singleOrderList.map(
-    (cart: any) => cart.businessOrderedFrom
+  const businessOrderedText = order.singleOrderList.map(
+    (orderItem: orderItem) => orderItem.businessOrderedFrom
   );
 
   return (
@@ -93,7 +84,7 @@ const InProgressOrderCard = ({
 
       <View style={styles.orderDetailTextContainer}>
         <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
-        <Text style={styles.orderStatusText}>{orderStatusData}</Text>
+        <Text style={styles.orderStatusText}>{order.orderStatus}</Text>
         <Text style={styles.timeText}>
           Ready In:{" "}
           {timeLeft
