@@ -29,7 +29,7 @@ import AnnouncementList from "components/menu/AnnouncementList";
 
 export default function MenuListPage() {
   const route = useRoute();
-  const { business }: any = route.params;
+  const { business } : any = route.params;
   const [menuTypeData] = useState(business);
   // menu of the business through params
   const [menu] = useState(business.menu);

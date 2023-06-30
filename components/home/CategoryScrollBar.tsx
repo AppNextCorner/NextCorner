@@ -13,7 +13,7 @@ import { vendorCategory } from "../../types/interfaces/vendorCategory.interface"
 
 interface categoryProps {
   categoryList: vendorCategory[];
-  showItem: (key: number) => boolean;
+  showItem: (key: number) => void;
   itemId: number;
 }
 

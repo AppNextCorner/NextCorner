@@ -13,7 +13,7 @@ const Icon = styled.Image`
 `;
 
 interface Props {
-  handlePress: (key: number) => boolean;
+  handlePress: (key: number) => void;
   businessItem: vendorCategory;
   foodId: number;
 }

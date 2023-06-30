@@ -3,6 +3,7 @@ const HomeIcon = require("assets/logo.png");
 import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const Container = styled.View`
   flex: 1;
@@ -60,7 +61,7 @@ const CreateVendorContainer = styled.View`
 `;
 
 const Vendor = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const goToUser = () => {
     navigation.navigate("Profile");

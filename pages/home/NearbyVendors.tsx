@@ -6,7 +6,6 @@ import {
   FlatList,
   Dimensions,
   Image,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import { useAppSelector } from "../../store/hook";
@@ -16,32 +15,34 @@ import { Circle, Marker } from "react-native-maps";
 import MapStyle from "../../constants/MapStyle.json";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
-import { IP } from "@env";
 import { useNavigation } from "@react-navigation/native";
-
+import { vendor }  from "../../types/interfaces/vendor.interface";
+import { location } from "../../types/interfaces/location.interface";
+import { mapRegion } from "../../types/interfaces/mapRegion.interface";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
 export const NearbyVendors = () => {
-  const [mapRegion, setMapRegion] = useState({
+  const [mapRegion, setMapRegion] = useState<mapRegion>({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
   const [viewLocation, setViewLocation] = useState(false);
-  const mapRef = useRef();
-  const flatListRef = useRef();
-  const vendors = useAppSelector(getBusiness);
-  const navigate = useNavigation();
+  const mapRef = useRef<any>();
+  const flatListRef = useRef<any>();
+  const vendors: vendor[] = useAppSelector(getBusiness);
+  const navigate = useNavigation<NativeStackNavigationProp<any>>();
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
     if (!mapRegion) return []; // Return an empty array if mapRegion is not set yet
 
-    const filteredVendors = vendors.filter((vendor) => {
+    const filteredVendors = vendors.filter((vendor: vendor) => {
       const vendorLocation = {
-        latitude: parseFloat(vendor.location.latitude),
-        longitude: parseFloat(vendor.location.longitude),
+        latitude: vendor.location.latitude,
+        longitude: vendor.location.longitude,
       };
       const distance = haversineDistance(mapRegion, vendorLocation);
       return distance <= RADIUS;
@@ -76,7 +77,7 @@ export const NearbyVendors = () => {
   }, []);
 
   useEffect(() => {
-    const callback = (newRegion) => {
+    const callback = (newRegion: mapRegion) => {
       console.log("new region:", newRegion);
     };
 
@@ -86,26 +87,33 @@ export const NearbyVendors = () => {
   }, [mapRegion]);
 
   // Calculate haversine distance between two points
-  const haversineDistance = useCallback((point1, point2) => {
-    const R = 6371e3; // Earth's radius in meters
-    const lat1 = toRadians(point1.latitude);
-    const lat2 = toRadians(point2.latitude);
-    const deltaLat = toRadians(point2.latitude - point1.latitude);
-    const deltaLng = toRadians(point2.longitude - point1.longitude);
+  const haversineDistance = useCallback(
+    (point1: mapRegion, point2: location) => {
+      const R = 6371e3; // Earth's radius in meters
+      const lat1 = toRadians(point1.latitude);
+      const lat2 = toRadians(parseFloat(point2.latitude));
+      const deltaLat = toRadians(
+        parseFloat(point2.latitude) - point1.latitude
+      );
+      const deltaLng = toRadians(
+        parseFloat(point2.longitude) - point1.longitude
+      );
 
-    const a =
-      Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-      Math.cos(lat1) *
-        Math.cos(lat2) *
-        Math.sin(deltaLng / 2) *
-        Math.sin(deltaLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const a =
+        Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+        Math.cos(lat1) *
+          Math.cos(lat2) *
+          Math.sin(deltaLng / 2) *
+          Math.sin(deltaLng / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const distance = R * c;
-    return distance;
-  }, []);
+      const distance = R * c;
+      return distance;
+    },
+    []
+  );
 
-  const toRadians = useCallback((value) => {
+  const toRadians = useCallback((value: number) => {
     return (value * Math.PI) / 180;
   }, []);
 

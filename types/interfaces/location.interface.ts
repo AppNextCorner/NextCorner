@@ -1,5 +1,5 @@
 
-export default interface location {
-    longitude: number,
-    latitude: number
+export interface location {
+    longitude: string,
+    latitude: string
 }

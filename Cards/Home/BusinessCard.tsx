@@ -10,12 +10,12 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { itemType } from "../../types/interfaces/item.interface";
+import { vendor }  from "../../types/interfaces/vendor.interface";
 // import { IP } from "@env";
 
 interface Props {
-  businessItem: itemType;
-  checkForStyleChange: boolean;
+  businessItem: vendor;
+  checkForStyleChange?: boolean;
 }
 
 export default function BusinessCard({
@@ -23,7 +23,7 @@ export default function BusinessCard({
   checkForStyleChange,
 }: Props) {
   // The style is changed when a category is selected on the home page
-  const changeStyle = (checkForStyleChange: boolean): StyleProp<ViewStyle> => {
+  const changeStyle = (checkForStyleChange: boolean | undefined): StyleProp<ViewStyle> => {
     let change: StyleProp<ViewStyle> =
       checkForStyleChange === true
         ? {
@@ -48,7 +48,10 @@ export default function BusinessCard({
       }
       style={styles.foodCategoryStyle}
     >
-      <View style={changeStyle(checkForStyleChange)}>
+      <View style={checkForStyleChange ? changeStyle(checkForStyleChange): {
+            height: 200,
+            width: 275,
+          }}>
         <Image
           style={styles.foodImages}
           source={{
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
   foodImages: {
     width: "100%",
     flex: 0,
-    height: "75%",
+    height: 150,
   },
   card: {
     width: 250,
