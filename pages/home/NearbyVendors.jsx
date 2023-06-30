@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -7,33 +7,37 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useAppSelector } from "../../store/hook";
 import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Circle } from "react-native-maps";
+import { Circle, Marker } from "react-native-maps";
 import MapStyle from "../../constants/MapStyle.json";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
 import { IP } from "@env";
 import { useNavigation } from "@react-navigation/native";
-import { Pressable } from "react-native";
+
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
 export const NearbyVendors = () => {
   const [mapRegion, setMapRegion] = useState({
     latitude: 0,
     longitude: 0,
-    latitudeData: 0.0922,
-    longitudeData: 0.0421,
+    latitudeDelta: 0,
+    longitudeDelta: 0,
   });
   const [viewLocation, setViewLocation] = useState(false);
   const mapRef = useRef();
+  const flatListRef = useRef();
   const vendors = useAppSelector(getBusiness);
   const navigate = useNavigation();
 
-  // Function to filter vendors based on the radius
-  const filterVendorsByRadius = () => {
+  // Filter vendors within the specified radius
+  const filterVendorsByRadius = useCallback(() => {
+    if (!mapRegion) return []; // Return an empty array if mapRegion is not set yet
+
     const filteredVendors = vendors.filter((vendor) => {
       const vendorLocation = {
         latitude: parseFloat(vendor.location.latitude),
@@ -43,10 +47,46 @@ export const NearbyVendors = () => {
       return distance <= RADIUS;
     });
     return filteredVendors;
-  };
+  }, [mapRegion, vendors]);
 
-  // Function to calculate the Haversine distance between two coordinates
-  const haversineDistance = (point1, point2) => {
+  // Update user location
+  const updateUserLocation = useCallback(async () => {
+    const updatedMapRegion = await userLocation(
+      setViewLocation,
+      setMapRegion,
+      mapRegion,
+      vendors
+    );
+    if (updatedMapRegion) {
+      setMapRegion(updatedMapRegion);
+      setViewLocation(true);
+    }
+  }, [vendors]);
+
+  useEffect(() => {
+    updateUserLocation();
+  }, [updateUserLocation]);
+
+  useEffect(() => {
+    const intervalId = setInterval(updateUserLocation, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const callback = (newRegion) => {
+      console.log("new region:", newRegion);
+    };
+
+    if (mapRegion && typeof callback === "function") {
+      callback(mapRegion);
+    }
+  }, [mapRegion]);
+
+  // Calculate haversine distance between two points
+  const haversineDistance = useCallback((point1, point2) => {
     const R = 6371e3; // Earth's radius in meters
     const lat1 = toRadians(point1.latitude);
     const lat2 = toRadians(point2.latitude);
@@ -63,11 +103,11 @@ export const NearbyVendors = () => {
 
     const distance = R * c;
     return distance;
-  };
+  }, []);
 
-  const toRadians = (value) => {
+  const toRadians = useCallback((value) => {
     return (value * Math.PI) / 180;
-  };
+  }, []);
 
   const CustomUserMarker = () => {
     return (
@@ -77,30 +117,6 @@ export const NearbyVendors = () => {
     );
   };
 
-  const updateUserLocation = useCallback(async () => {
-    const updatedMapRegion = await userLocation(
-      setViewLocation,
-      setMapRegion,
-      mapRegion
-    );
-    if (updatedMapRegion) {
-      setMapRegion(updatedMapRegion);
-    }
-  }, [mapRegion]);
-
-  const flatListRef = useRef(null);
-
-  useEffect(() => {
-    updateUserLocation();
-    setViewLocation(true);
-
-    const intervalId = setInterval(updateUserLocation, 2000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [updateUserLocation]);
-
   const CustomMarker = () => {
     return (
       <View style={styles.marker}>
@@ -109,9 +125,15 @@ export const NearbyVendors = () => {
     );
   };
 
+  if (!viewLocation) {
+    return <Text>Waiting for Maps</Text>;
+  }
+
+  // Rest of the component code
+
   return (
     <View style={styles.container}>
-      {viewLocation === true ? (
+      {mapRegion.latitude !== 0 && (
         <>
           <MapView
             scrollEnabled={true}
@@ -124,7 +146,6 @@ export const NearbyVendors = () => {
             style={{ flex: 1, position: "relative" }}
             initialRegion={mapRegion}
           >
-            {/* Create markers for filtered vendors within the radius */}
             {filterVendorsByRadius().map((vendor, index) => (
               <Marker
                 onPress={() => {
@@ -150,11 +171,10 @@ export const NearbyVendors = () => {
               strokeColor={"#0FBCF926"}
               fillColor={"#0FBCF926"}
             />
+
             <Marker coordinate={mapRegion}>
               <CustomUserMarker />
             </Marker>
-
-            {/* Has to be styled for all content to be in bottom */}
           </MapView>
 
           <FlatList
@@ -168,7 +188,13 @@ export const NearbyVendors = () => {
             style={styles.cardList}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({ item, index }) => (
-              <Pressable onPress={() => navigate.navigate('MenuList', {business: item})} key={index} style={styles.card}>
+              <Pressable
+                onPress={() =>
+                  navigate.navigate("MenuList", { business: item })
+                }
+                key={index}
+                style={styles.card}
+              >
                 <Text style={styles.amountHeader}>
                   {index + 1} of {filterVendorsByRadius().length}
                 </Text>
@@ -178,7 +204,7 @@ export const NearbyVendors = () => {
                     <Image
                       style={styles.cardImage}
                       source={{
-                        uri: `http://${IP}:4020/${item.image.toString()}`,
+                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
                       }}
                     />
                   </View>
@@ -191,8 +217,6 @@ export const NearbyVendors = () => {
             )}
           />
         </>
-      ) : (
-        <Text>Waiting for Maps</Text>
       )}
     </View>
   );

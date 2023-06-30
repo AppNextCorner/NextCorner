@@ -12,34 +12,36 @@ import { getOrderList, getOrders } from "../store/slices/addToOrders";
 import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import order from "../types/interfaces/order.interface";
 
 export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false);
   const dispatch = useAppDispatch();
   const getOrderFromSlice = useAppSelector(getOrders);
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  const goToProgressPage = (item) => {
-    navigation.navigate("InProgressOrder", { item: item });
+  const goToProgressPage = (order: order) => {
+    navigation.navigate("InProgressOrder", { order });
   };
 
   useEffect(() => {
     dispatch(getOrderList());
   }, [dispatch]);
 
-  const filterCompletedData = orderData.filter(
-    (item) => item.orderStatus === "Order taking longer than expected"
+  const filterCompletedData: order[] = orderData.filter(
+    (item: any) => item.orderStatus === "Order taking longer than expected"
   );
 
-  const unique = [
+  const finishedOrders = [
     ...new Map(
-      filterCompletedData.reverse().map((m) => [m.createdAt, m])
+      filterCompletedData.reverse().map((m: any) => [m.createdAt, m])
     ).values(),
   ];
 
-  const filterInProgressData = orderData.filter(
-    (item) => item.orderStatus === "In Progress"
+  const filterInProgressData: order[] = orderData.filter(
+    (item: any) => item.orderStatus === "In Progress"
   );
 
   const inProgress = () => {
@@ -65,18 +67,17 @@ export default function OrdersPage() {
             <Text style={styles.sectionHeader}>Complete</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={!orderSelection ? filterInProgressData : unique}
-          keyExtractor={(item, index) => index.toString()}
+        
+        <FlatList<order>
+          data={!orderSelection ? filterInProgressData : finishedOrders}
+          keyExtractor={(_item, index) => index.toString()}
           style={styles.cardContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) =>
+          renderItem={({item}) =>
             !orderSelection ? (
               <TouchableOpacity onPress={() => goToProgressPage(item)}>
                 <InProgressOrderCard
-                  orderTimeData={item}
-                  orderItemId={item.id}
-                  orderStatusData={item.orderStatus}
+                  order={item}
                 />
               </TouchableOpacity>
             ) : (
@@ -111,8 +112,8 @@ const styles = StyleSheet.create({
     padding: "5%",
   },
   cardContainer: {
-    width: '100%',
-    marginBottom: '25%'
+    width: "100%",
+    marginBottom: "25%",
   },
   // header
   amountContainer: {
@@ -130,18 +131,18 @@ const styles = StyleSheet.create({
   sectionButton: {
     borderRadius: 10,
     backgroundColor: "#f2f5f5",
-    padding: '2.5%',
-    paddingHorizontal: '10%',
-    marginHorizontal: '5%'
+    padding: "2.5%",
+    paddingHorizontal: "10%",
+    marginHorizontal: "5%",
   },
   headerOfOrder: {
     flexDirection: "row",
-    paddingBottom: '2%'
+    paddingBottom: "2%",
   },
   orderTypeContainer: {
     flex: 1,
     alignItems: "center",
-    width: '100%'
+    width: "100%",
   },
   orderPageContainer: {
     flex: 1,

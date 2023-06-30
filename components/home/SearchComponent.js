@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   magnifyIcon: {
     flex: 0.75,
     justifyContent: "center",
-    marginLeft: '5%'
+    marginLeft: "5%",
   },
   textInput: {
     flex: 6,

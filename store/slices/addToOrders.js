@@ -4,11 +4,11 @@
 
  import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  import axios from 'axios';
- import {createToken} from '@hooks/handleUsers/useCreateToken'
+ import {createToken} from 'hooks/handleUsers/useCreateToken'
  import { IP } from '@env'
  import {auth} from '../../hooks/handleUsers/useFirebase'
  
- const ORDERS_URL = `http://${IP}:4020/orders/`;
+ const ORDERS_URL = `https://nextcornerdevelopment.onrender.com/orders/`;
  
  // Asynchronous action to add an order
  export const addOrder = createAsyncThunk(
@@ -52,6 +52,7 @@
          ORDERS_URL + 'order-status/' + itemStatus.id,
          itemStatus,
        );
+       console.log('response from order:  ', response.data)
  
        return response.data;
      } catch (err) {

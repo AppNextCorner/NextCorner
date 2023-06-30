@@ -1,25 +1,33 @@
 /**
  * Purpose of the file: It is used to display the business and its content by rendering multiple business and multiple horizontal list for each business
  */
-import { StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
-import React from 'react'
-import { BottomSheetFlatList, BottomSheetView } from '@gorhom/bottom-sheet'
-import { IP } from '@env'
+import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
+import React from "react";
+import { BottomSheetFlatList, BottomSheetView } from "@gorhom/bottom-sheet";
+import { IP } from "@env";
 
-export default function InProgressList({ orderItemDetails, distance, duration }) {
+export default function InProgressList({
+  orderItemDetails,
+  distance,
+  duration,
+}) {
   // grabbing the data of the trendingFood from the data folder
 
   // mapping through the data and retrieving the data from one order
   const mapThroughOrder = orderItemDetails.singleOrderList.map(
-    (getItemData) => getItemData.cartData,
-  )
+    (getItemData) => getItemData.cartData
+  );
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
     <>
       <BottomSheetView style={styles.statusContainer}>
         {/* Converting distance which is default in km from google maps to miles */}
-        <Text style={styles.statusText}>Distance: {(distance * 0.62137).toString().slice(0, 5)} miles</Text>
-        <Text style={styles.statusText}>Time To Walk: {duration.toString().slice(0, 3)} min</Text>
+        <Text style={styles.statusText}>
+          Distance: {(distance * 0.62137).toString().slice(0, 5)} miles
+        </Text>
+        <Text style={styles.statusText}>
+          Time To Walk: {duration.toString().slice(0, 3)} min
+        </Text>
       </BottomSheetView>
       <BottomSheetFlatList
         ListHeaderComponent={
@@ -44,86 +52,93 @@ export default function InProgressList({ orderItemDetails, distance, duration })
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`http://${IP}:4020/${item.image.toString()}`}} />
+                    <Image
+                      style={styles.foodImages}
+                      source={{
+                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
+                      }}
+                    />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>
-                    
+
                     <Text style={styles.descriptionOfItem}>
                       {item.description}
                     </Text>
-                    <Text style={styles.priceText}>${item.price * item.amountInCart}</Text>
+                    <Text style={styles.priceText}>
+                      ${item.price * item.amountInCart}
+                    </Text>
                   </View>
                 </View>
               </TouchableOpacity>
             </>
-          )
+          );
         }}
       />
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   statusContainer: {
-   margin: '5%',
+    margin: "5%",
   },
   statusText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 18,
   },
 
   margin: {
-    backgroundColor: '#f2f3f5',
+    backgroundColor: "#f2f3f5",
     flex: 1,
     paddingVertical: 5,
   },
   // modal container
   bottomModalContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopEndRadius: 20,
-    borderTopStartRadius: 20
+    borderTopStartRadius: 20,
   },
   // business name styles
   businessName: {
-    margin: '5%',
+    margin: "5%",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   // header
   headerTitle: {
     fontSize: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   bottomButtons: {
     paddingHorizontal: 20,
     paddingTop: 10,
   },
   addItemsButtonContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    paddingRight: '1%',
+    flexDirection: "column",
+    alignItems: "flex-end",
+    paddingRight: "1%",
   },
   addItemsButton: {
-    backgroundColor: '#DFDFDF',
-    padding: '4%',
+    backgroundColor: "#DFDFDF",
+    padding: "4%",
     borderRadius: 20,
   },
   amountContainer: {
     flex: 1,
     marginTop: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
 
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   icon: {
     margin: 10,
   },
   goBackButton: {
-    margin: '10%',
+    margin: "10%",
   },
   descriptionOfItem: {
     flex: 1,
@@ -133,8 +148,8 @@ const styles = StyleSheet.create({
   },
   imageBox: {
     flex: 1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   distanceText: {
     marginLeft: 10,
@@ -144,51 +159,51 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     //fontFamily: 'monospace',
     marginTop: 15,
     flex: 1,
   },
   foodImages: {
-    width: '50%',
+    width: "50%",
     flex: 1,
 
     // Increase the image size
-    padding: '30%',
+    padding: "30%",
     marginLeft: 25,
-    marginTop: '18%',
-    marginBottom: '70%',
+    marginTop: "18%",
+    marginBottom: "70%",
     borderRadius: 10,
   },
   card: {
     width: 250,
     height: 115,
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     borderRadius: 10,
   },
   priceText: {
     flex: 1,
-    alignContent: 'flex-end',
-    color: '#97989F',
+    alignContent: "flex-end",
+    color: "#97989F",
     marginTop: 0,
   },
   foodTexts: {
     flex: 2,
-    flexDirection: 'column',
+    flexDirection: "column",
     marginLeft: 10,
     marginTop: 5,
   },
   foodCategoryStyle: {
     flex: 1,
-    flexDirection: 'row',
-    alignContent: 'center',
-    backgroundColor: '#fff',
-    borderColor: '#d6d6d6',
-    borderStyle: 'solid',
+    flexDirection: "row",
+    alignContent: "center",
+    backgroundColor: "#fff",
+    borderColor: "#d6d6d6",
+    borderStyle: "solid",
 
     borderBottomWidth: 1,
     marginBottom: -0.1,
     marginTop: 0,
   },
-})
+});

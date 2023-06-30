@@ -1,21 +1,28 @@
-import { StyleSheet, Text, View, FlatList, Dimensions } from 'react-native'
-import React from 'react'
-import FeaturedTypeCard from '@cards/Menu/FeaturedTypeCard'
+import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
+import React from "react";
+import FeaturedTypeCard from "cards/Menu/FeaturedTypeCard";
+import { itemType } from "../../types/interfaces/item.interface";
+import location from "../../types/interfaces/location.interface";
 
-const FeaturedList = (props) => {
-  const { menuData, businessName, location } = props
+interface Props {
+  menuData: itemType[];
+  businessName: string;
+  location: location;
+}
+const FeaturedList = (props: Props) => {
+  const { menuData, businessName, location } = props;
   // grab all items from the business menu to get the menu items that are featured
-  const findFeaturedList = menuData.filter((item) => item.featured === true)
- 
+  const findFeaturedList = menuData.filter((item) => item.featured === true);
+
   return (
     <>
       {findFeaturedList.length > 0 ? (
         <>
-         <Text style={styles.featuredText}>Featured</Text>
+          <Text style={styles.featuredText}>Featured</Text>
           <FlatList
             snapToAlignment="start"
-            decelerationRate={'fast'}
-            snapToInterval={Dimensions.get('window').width}
+            decelerationRate={"fast"}
+            snapToInterval={Dimensions.get("window").width}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             data={findFeaturedList}
@@ -29,32 +36,31 @@ const FeaturedList = (props) => {
                     location={location}
                   />
                 </View>
-              )
+              );
             }}
           />
           <View style={styles.margin}></View>
         </>
       ) : null}
-     
     </>
-  )
-}
+  );
+};
 
-export default FeaturedList
+export default FeaturedList;
 
 const styles = StyleSheet.create({
   featuredCard: {},
   margin: {
-    backgroundColor: '#f2f3f5',
+    backgroundColor: "#f2f3f5",
     //flex: 1,
     paddingVertical: 5,
   },
   featuredText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    margin: '3%',
+    fontWeight: "bold",
+    margin: "3%",
   },
   featuredList: {
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
-})
+});

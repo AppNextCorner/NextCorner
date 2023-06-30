@@ -4,13 +4,20 @@
 
 import { FlatList } from "react-native";
 import React from "react";
-import BusinessCategoryCard from "@cards/Home/BusinessCategoryCard";
+import BusinessCategoryCard from "cards/Home/BusinessCategoryCard";
 import styled from "@emotion/native";
 
-const Header = styled.View`
-`;
+const Header = styled.View``;
 
-export default function CategoryScrollBar(props) {
+import { vendorCategory } from "../../types/interfaces/vendorCategory.interface";
+
+interface categoryProps {
+  categoryList: vendorCategory[];
+  showItem: (key: number) => boolean;
+  itemId: number;
+}
+
+export default function CategoryScrollBar(props: categoryProps) {
   /**
    * Category List: List of categories
    * showItem: boolean to show the list of business where it is the default list or the filtered list
@@ -29,7 +36,7 @@ export default function CategoryScrollBar(props) {
           <BusinessCategoryCard
             // padd in the state of showItem to the category card
             handlePress={showItem}
-            businesItem={item}
+            businessItem={item}
             foodId={itemId}
           />
         )}
