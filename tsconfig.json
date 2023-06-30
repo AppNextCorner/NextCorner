@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "jsx": "react-native",
+    "module": "commonjs",
+    "rootDir": "./",
+    "allowJs": true,
+    // "checkJs": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "paths": {
+      "cards/*": ["./Cards/*"],
+      "components/*": ["./components/*"],
+      "constants/*": ["./constants/*"],
+      "data/*": ["./data/*"],
+      "hooks/*": ["./hooks/*"],
+      "pages/*": ["./pages/*"],
+      "routing/*": ["./routing/*"],
+      "util/*": ["./util/*"],
+      "global/*": ["./"],
+      "assets/*": ["./assets/*"]
+    }
+  },
+  "extends": "expo/tsconfig.base"
+}

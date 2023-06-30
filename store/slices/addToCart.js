@@ -2,109 +2,101 @@
  * Purpose of file: used to send requests to our server and be able to receive and display the results throughout our application for the user's cart items only
  */
 
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { createToken } from "hooks/handleUsers/useCreateToken";
+import { auth } from "hooks/handleUsers/useFirebase";
 
-import { IP } from '@env'
-import { auth } from '../../App'
-
-const POSTS_URL = `http://${IP}:4020/api/`
-
-const createToken = async () => {
-  let user = auth.currentUser
-  const token = user && (await user.getIdToken())
-
-  const payloadHeader = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  }
-  return payloadHeader
-}
+const POSTS_URL = `https://nextcornerdevelopment.onrender.com/api/`
 
 export const deleteItem = createAsyncThunk(
-  'addToCart/deleteItem',
+  "addToCart/deleteItem",
   async (cartItem) => {
+    console.log("reset");
     try {
       const response = await axios.delete(
-        POSTS_URL + 'delete-item/' + cartItem.id,
-        // headers,
-      )
-      return response.data // Return a value synchronously using Async-await
+        POSTS_URL + "delete-item/" + cartItem.id
+      );
+      return response.data; // Return a value synchronously using Async-await
     } catch (err) {
-      if (!err.response) {
-        console.log(err.response)
-        throw err
+      if (err.response) {
+        console.log(err.response);
+        throw err;
       }
-    }
-  },
-)
-
-export const fetchCart = createAsyncThunk('addToCart/fetchCart', async () => {
-  const headers = await createToken()
-  try {
-    const response = await axios.get(POSTS_URL, headers)
-    return response.data // Return a value synchronously using Async-await
-  } catch (err) {
-    if (!err.response) {
-      console.log(err.response)
-      throw err
     }
   }
-})
+);
+
+export const fetchCart = createAsyncThunk("addToCart/fetchCart", async () => {
+  const headers = await createToken();
+  try {
+    const response = await axios.get(POSTS_URL, headers);
+    console.log("fetch cart here:  ", response.data);
+    return response.data; // Return a value synchronously using Async-await
+  } catch (err) {
+    if (err.response) {
+      console.log(err.response);
+      throw err;
+    }
+  }
+});
 
 export const updateCartItemAmount = createAsyncThunk(
-  'addToCart/updateCartItemAmount',
+  "addToCart/updateCartItemAmount",
   async (cartItem) => {
     try {
       const response = await axios.put(
-        POSTS_URL + 'item-amount/' + cartItem.id,
-        cartItem.updatedItem,
-      )
-      return response.data
+        POSTS_URL + "item-amount/" + cartItem.id,
+        cartItem.updatedItem
+      );
+      return response.data;
     } catch (err) {
-      if (!err.response) {
-        console.log(err.response)
-        throw err
+      if (err.response) {
+        console.log(err.response);
+        throw err;
       }
     }
-  },
-)
+  }
+);
 
 export const updateRemoveCartItemAmount = createAsyncThunk(
-  'addToCart/updateRemoveCartItemAmount',
+  "addToCart/updateRemoveCartItemAmount",
   async (cartItem) => {
     try {
       const response = await axios.put(
-        POSTS_URL + 'item-amount/' + cartItem.id,
-        cartItem.updatedItem,
-      )
+        POSTS_URL + "item-amount/" + cartItem.id,
+        cartItem.updatedItem
+      );
 
-      return response.data
+      return response.data;
     } catch (err) {
-      if (!err.response) {
-        console.log(err.response)
-        throw err
+      if (err.response) {
+        console.log(err.response);
+        throw err;
       }
     }
-  },
-)
+  }
+);
 
 export const addNewCartItem = createAsyncThunk(
-  'addToCart/addNewCartItem',
+  "addToCart/addNewCartItem",
   async (cartItem) => {
-    const headers = await createToken()
+    const headers = await createToken();
+    console.log("headers in cart: ", headers);
     try {
-      const resp = await axios.post(POSTS_URL, cartItem, headers)
-
-      return resp.data
+      const resp = await axios.post(POSTS_URL, cartItem, headers);
+      console.log('cart response: ', resp.data)
+      return resp.data;
     } catch (error) {
-      console.log('error')
-      console.log(error)
+      if (error.response) {
+        console.log("error");
+        console.log(error);
+        return error;
+      }
+      return error;
     }
-  },
-)
+  }
+);
 
 // setting the de fault state for the app
 const initialState = {
@@ -112,12 +104,12 @@ const initialState = {
   cart: [],
   order: [],
   total: 0,
-  businessName: '',
-}
+  businessName: "",
+};
 
 // create a slice object to store the state -> creates action creators for each case inside reducers and can safely mutate the state
 export const addToCart = createSlice({
-  name: 'addToCart',
+  name: "addToCart",
   initialState,
   reducers: {
     setBusinessName: (state, { payload }) => {
@@ -130,20 +122,6 @@ export const addToCart = createSlice({
     },
     addItem: (state, { payload }) => {
       state.cart.push(payload);
-    },
-    setCart: (state, { payload }) => {
-      const mapCart = state.cart.map((itemList) => itemList.cartData);
-      const cartItem = mapCart.find((item) => item.itemId === payload.id);
-      const index = mapCart.indexOf(cartItem);
-
-      if (index > -1) {
-        cartItem.amountInCart += 1;
-        mapCart.splice(index, 1);
-      } else {
-        state.cart.push(payload);
-      }
-
-      state.cartButton = state.cart.length > 0;
     },
     orderPlaced: (state) => {
       state.cartButton = state.cart.length > 0;
@@ -189,43 +167,54 @@ export const addToCart = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCart.pending, (state) => {
-      console.log('pending');
+      console.log("pending in cart");
+      console.log(state.cart)
     });
     builder.addCase(fetchCart.rejected, (state) => {
-      console.log('Rejected');
+      console.log("Rejected");
     });
     builder.addCase(fetchCart.fulfilled, (state, { payload }) => {
       state.cartButton = true;
-      state.cart = payload.filter((uidItem) => uidItem.userId === auth.currentUser.uid);
-      state.cart = state.cart.filter((item, index) => state.cart.indexOf(item) === index);
+      
+      state.cart = payload.filter(
+        (uidItem) => uidItem.userId === auth.currentUser.uid
+      );
+      console.log('total user cart: ', payload)
     });
     builder.addCase(addNewCartItem.pending, (state) => {
-      console.log('pending');
+      console.log("pending");
     });
     builder.addCase(addNewCartItem.rejected, (state) => {
-      console.log('Rejected');
+      console.log("Rejected");
     });
     builder.addCase(addNewCartItem.fulfilled, (state, { payload }) => {
       state.cartButton = true;
       state.cart.push(payload);
-      state.cart = state.cart.filter((item, index) => state.cart.indexOf(item) === index);
+      state.cart = state.cart.filter(
+        (item, index) => state.cart.indexOf(item) === index
+      );
     });
     builder.addCase(updateCartItemAmount.pending, (state) => {
-      console.log('pending');
+      console.log("pending");
     });
     builder.addCase(updateCartItemAmount.rejected, (state, { payload }) => {
-      console.log('Rejected', payload);
+      console.log("Rejected", payload);
     });
     builder.addCase(updateCartItemAmount.fulfilled, (state, { payload }) => {
       const cartItem = state.cart.find((item) => item.id === payload.id);
       cartItem.cartData.amountInCart += 1;
     });
-    builder.addCase(updateRemoveCartItemAmount.fulfilled, (state, { payload }) => {
-      const cartItem = state.cart.find((item) => item.id === payload.id);
-      cartItem.cartData.amountInCart -= 1;
-    });
+    builder.addCase(
+      updateRemoveCartItemAmount.fulfilled,
+      (state, { payload }) => {
+        const cartItem = state.cart.find((item) => item.id === payload.id);
+        cartItem.cartData.amountInCart -= 1;
+      }
+    );
     builder.addCase(deleteItem.fulfilled, (state, { payload }) => {
-      state.cart = state.cart.filter((cartItemId) => cartItemId.id !== payload.id);
+      state.cart = state.cart.filter(
+        (cartItemId) => cartItemId.id !== payload.id
+      );
     });
   },
 });
@@ -242,17 +231,17 @@ export const {
   deleteItemReducer,
   setBusinessName,
   deleteItemAfterOrder,
-} = addToCart.actions
+} = addToCart.actions;
 
 // create getters
 
 // get the user loggedInSTate whether it is true or false and the value of the user -> USED MOSTLY FOR USEAPPSELECTOR methods
 // export state values through a function
-export const getButton = (state) => state.addToCart.cartButton
-export const getCart = (state) => state.addToCart.cart
-export const getTotal = (state) => state.addToCart.total
-export const getOrder = (state) => state.addToCart.order
-export const getBusinessName = (state) => state.addToCart.businessName
+export const getButton = (state) => state.addToCart.cartButton;
+export const getCart = (state) => state.addToCart.cart;
+export const getTotal = (state) => state.addToCart.total;
+export const getOrder = (state) => state.addToCart.order;
+export const getBusinessName = (state) => state.addToCart.businessName;
 
 // export the reducer of the slice
-export default addToCart.reducer
+export default addToCart.reducer;
