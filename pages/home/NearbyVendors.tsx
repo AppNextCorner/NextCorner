@@ -20,6 +20,7 @@ import { vendor }  from "../../types/interfaces/vendor.interface";
 import { location } from "../../types/interfaces/location.interface";
 import { mapRegion } from "../../types/interfaces/mapRegion.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { API } from "constants/API";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
 export const NearbyVendors = () => {
@@ -212,7 +213,7 @@ export const NearbyVendors = () => {
                     <Image
                       style={styles.cardImage}
                       source={{
-                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
+                        uri: `${API}/${item.image.toString()}`,
                       }}
                     />
                   </View>

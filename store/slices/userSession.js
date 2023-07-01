@@ -7,7 +7,8 @@ import axios from 'axios'
 import { IP } from '@env'
 import {auth} from 'hooks/handleUsers/useFirebase'
 import { createToken } from '../../hooks/handleUsers/useCreateToken'
-const USER_URL = `https://nextcornerdevelopment.onrender.com/auth/`
+import { API } from 'constants/API'
+const USER_URL = `${API}/auth/`
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()

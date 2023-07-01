@@ -25,6 +25,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
+import { API } from "constants/API";
 // import { IP } from "@env";
 
 export default function MenuListPage() {
@@ -69,7 +70,7 @@ export default function MenuListPage() {
                 <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
 
-              <Image style={styles.image} source={{uri:`https://nextcornerdevelopment.onrender.com/${business.image.toString()}`}} />
+              <Image style={styles.image} source={{uri:`${API}/${business.image.toString()}`}} />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}

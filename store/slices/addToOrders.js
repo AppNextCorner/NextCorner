@@ -7,8 +7,9 @@
  import {createToken} from 'hooks/handleUsers/useCreateToken'
  import { IP } from '@env'
  import {auth} from '../../hooks/handleUsers/useFirebase'
+import { API } from 'constants/API';
  
- const ORDERS_URL = `https://nextcornerdevelopment.onrender.com/orders/`;
+ const ORDERS_URL = `${API}/orders/`;
  
  // Asynchronous action to add an order
  export const addOrder = createAsyncThunk(

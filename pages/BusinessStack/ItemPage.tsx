@@ -24,6 +24,7 @@ import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { API } from "constants/API";
 
 export default function ItemPage() {
   const { addToCart } = useCart();
@@ -133,7 +134,7 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}` }}
+          source={{ uri: `${API}/${menuItem.image.toString()}` }}
         />
 
         <View style={styles.headerContainer}>
