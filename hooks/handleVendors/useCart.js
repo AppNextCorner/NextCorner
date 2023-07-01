@@ -21,7 +21,7 @@ export default UseCart = () => {
 
   const getCurrentCartItems = async () => {
     try {
-      await dispatch(fetchCart())
+      dispatch(fetchCart())
     } catch (err) {
       console.error('Failed to save the post', err)
     }
@@ -47,7 +47,7 @@ export default UseCart = () => {
       console.log(
         'sending cart item: ', cartItem
       )
-      await dispatch(addNewCartItem(cartItem))
+      dispatch(addNewCartItem(cartItem))
     } catch (e) {
       console.error(e)
     }

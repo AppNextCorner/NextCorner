@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import BusinessCard from "cards/Home/BusinessCard";
-import { vendor }  from "../../types/interfaces/vendor.interface";
+import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
 interface Props {
   title:string,
   business:vendor[],

@@ -9,6 +9,7 @@ import {auth} from 'hooks/handleUsers/useFirebase'
 import { createToken } from '../../hooks/handleUsers/useCreateToken'
 import { API } from 'constants/API'
 const USER_URL = `${API}/auth/`
+console.log('user url: ', USER_URL)
 
 export const getUsers = createAsyncThunk('userSession/getUsers', async () => {
   const headers = await createToken()

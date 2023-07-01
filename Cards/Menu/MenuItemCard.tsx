@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { itemType } from "../../types/interfaces/item.interface";
+import { itemType } from "../../typeDefinitions/interfaces/item.interface";
 import { API } from "constants/API";
 
 /**

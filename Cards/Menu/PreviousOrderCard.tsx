@@ -6,7 +6,7 @@ import "moment-timezone";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import orderItem from "../../types/interfaces/orderItem.interface";
+import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
 
 interface Props {
   previousOrders: orderItem;

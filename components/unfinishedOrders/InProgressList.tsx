@@ -4,7 +4,7 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React from "react";
 import { BottomSheetFlatList, BottomSheetView } from "@gorhom/bottom-sheet";
-import order from "../../types/interfaces/order.interface";
+import order from "../../typeDefinitions/interfaces/order.interface";
 import { API } from "constants/API";
 
 interface Props {

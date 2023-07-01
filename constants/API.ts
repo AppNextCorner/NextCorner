@@ -1,12 +1,16 @@
 // Configuring API Url to use when developing
 
 export let API = ""
+const apiStatus: string = "development"
 
-switch(process.env.NODE_ENV){
+switch(apiStatus){
     case "production":
         API = ""
+        break
     case "development":
         API = "https://nextcornerdevelopment.onrender.com"
-    case "local":
+        break
+    default:
         API = `http://${process.env.IP}:4020`
+        break
 }

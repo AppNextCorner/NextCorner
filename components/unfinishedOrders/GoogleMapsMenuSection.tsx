@@ -7,9 +7,9 @@ import MapViewDirections from "react-native-maps-directions";
 import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
 // icons
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { vendor } from "../../types/interfaces/vendor.interface";
-import { location } from "../../types/interfaces/location.interface";
-import { mapRegion } from "../../types/interfaces/mapRegion.interface";
+import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
+import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 
 interface Props {
   time?: vendor;

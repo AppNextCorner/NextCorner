@@ -1,7 +1,7 @@
 import { FlatList, View } from "react-native";
 import React from "react";
 // import { useRoute } from "@react-navigation/native"; not used
-import { itemType } from "../../types/interfaces/item.interface";
+import { itemType } from "../../typeDefinitions/interfaces/item.interface";
 import MenuItemCard from "./MenuItemCard";
 
 interface Props {

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, FlatList, Dimensions } from "react-native";
 import React from "react";
 import FeaturedTypeCard from "cards/Menu/FeaturedTypeCard";
-import { itemType } from "../../types/interfaces/item.interface";
-import location from "../../types/interfaces/location.interface";
+import { itemType } from "../../typeDefinitions/interfaces/item.interface";
+import location from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
   menuData: itemType[];

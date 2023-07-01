@@ -9,7 +9,7 @@ import styled from "@emotion/native";
 
 const Header = styled.View``;
 
-import { vendorCategory } from "../../types/interfaces/vendorCategory.interface";
+import { vendorCategory } from "../../typeDefinitions/interfaces/vendorCategory.interface";
 
 interface categoryProps {
   categoryList: vendorCategory[];

@@ -75,13 +75,12 @@ export default function ItemPage() {
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
-        const { payload }: any = await addToCart(
+        await addToCart(
           addItem,
           userId,
           business,
           location
         );
-        console.log("cart payload: ", payload);
         console.log(addItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
         for (let i = 0; i < resetOptions.length; i++) {
