@@ -5,13 +5,18 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useAppSelector } from "../../../store/hook";
+import { getUser } from "../../../store/slices/userSession";
 
 export default function reviewCreatePage() {
-  const navigate = useNavigation();
+  const [reviewComment, setReviewComment] = useState<string>("");
 
+  const navigate = useNavigation();
   const cancel = () => navigate.goBack();
+
+  const user = useAppSelector(getUser());
 
   return (
     <View>
@@ -19,7 +24,7 @@ export default function reviewCreatePage() {
       <TextInput
         style={styles.textInput}
         onChangeText={(val) => {
-          console.log(val);
+          setReviewComment(val);
         }}
       />
       <View style={styles.buttonContainer}>
@@ -58,5 +63,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
 });
-
-//  Add a style for a horizontal flex container?

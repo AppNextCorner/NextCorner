@@ -17,8 +17,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OptionSelectionComponent from "components/menu/OptionSelectionComponent";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import {
+  getBusinessName,
+  setBusinessName,
+} from "../../../store/slices/addToCart";
 import useCart from "hooks/handleVendors/useCart";
 import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
@@ -124,10 +127,7 @@ export default function ItemPage() {
     // You can update the state or perform any other actions based on the selected options
   };
 
-  const goToReviewPage = () => {
-    navigation.navigate("ReviewCreate");
-  };
-
+  const goToReviewsPage = () => navigation.navigate("Reviews");
   const Header = () => {
     return (
       <>
@@ -157,8 +157,12 @@ export default function ItemPage() {
             />
             <Text style={styles.ratingText}>{menuItem.rating}</Text>
             <Text style={styles.info}>Rating and reviews</Text>
+
+            {/* 
+              On press goToReviewsPage
+            */}
             <AntDesign
-              onPress={goToReviewPage}
+              onPress={goToReviewsPage}
               style={styles.arrowRight}
               name="arrowright"
               size={30}

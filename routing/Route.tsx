@@ -1,9 +1,9 @@
 import { Text } from "react-native";
 import * as React from "react";
 import HomePage from "pages/HomePage";
-import ItemPage from "pages/BusinessStack/ItemPage";
+import ItemPage from "pages/BusinessStack/components/ItemPage";
 import OrdersPage from "pages/OrdersPage";
-import MenuListPage from "pages/BusinessStack/MenuListPage";
+import MenuListPage from "pages/BusinessStack/components/MenuListPage";
 import PickUpPage from "pages/ProfilePage";
 import SignInPage from "pages/auth/SignInPage";
 import CartPage from "pages/CartPage";
@@ -24,9 +24,10 @@ import useGetUserData from "hooks/handleUsers/useGetUserData";
 import InProgressPage from "pages/OrdersStack/InProgressPage";
 import SignUpPage from "pages/auth/SignUpPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
-import Vendor from "pages/BusinessStack/Vendor";
-import VendorMore from "pages/BusinessStack/VendorMore";
-import reviewCreatePage from "pages/BusinessStack/reviewCreatePage";
+import Vendor from "pages/BusinessStack/components/Vendor";
+import VendorMore from "pages/BusinessStack/components/VendorMore";
+import reviewCreatePage from "pages/BusinessStack/components/reviewCreatePage";
+import reviewsPage from "pages/BusinessStack/components/reviewsPage";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -63,7 +64,16 @@ export default function Route() {
             <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
             <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             <Stack.Screen name="Browse" component={NearbyVendors} />
+            {/* 
+              Reviews Pages Start
+            */}
+            <Stack.Screen name="Reviews" component={reviewsPage} />
             <Stack.Screen name="ReviewCreate" component={reviewCreatePage} />
+
+            {/*
+              Reviews Pages end 
+            */}
+
             {/* Vendor Pages */}
             <Stack.Screen name="Vendor" component={VendorStack} />
           </Stack.Navigator>
