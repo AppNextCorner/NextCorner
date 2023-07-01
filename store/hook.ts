@@ -4,9 +4,10 @@
  */
 
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "./store";
 
 // It enables to use any action towards the store by adding the action as an argument to the dispatch variable
-export const useAppDispatch = () => useDispatch();
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 // gets to the redux store -> runs the function in the store -> after each dispatch, rerender the component based on the updated values that the state has
 export const useAppSelector = useSelector;

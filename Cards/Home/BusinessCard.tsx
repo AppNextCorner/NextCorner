@@ -10,7 +10,7 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { vendor }  from "../../types/interfaces/vendor.interface";
+import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
 // import { IP } from "@env";
 
 interface Props {

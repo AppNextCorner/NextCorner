@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
 import { getCart, setBusinessName } from "../../store/slices/addToCart";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import orderItem from "../../types/interfaces/orderItem.interface";
+import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
 
 const OrderButton = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();

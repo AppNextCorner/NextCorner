@@ -13,7 +13,7 @@ import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import order from "../types/interfaces/order.interface";
+import order from "../typeDefinitions/interfaces/order.interface";
 
 export default function OrdersPage() {
   const [orderSelection, setOrderSelection] = useState(false);

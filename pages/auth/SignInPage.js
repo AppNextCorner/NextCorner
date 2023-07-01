@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import logo from "../../assets/logo.png";
 import { useAppDispatch } from "../../store/hook";
-import { getUsers, setUser } from "../../store/slices/userSession";
+import { getUsers, setUser } from "../../store/slices/userSessionSlice";
 import { useState } from "react";
 import { auth } from "hooks/handleUsers/useFirebase";
 // importing firebase
@@ -42,8 +42,8 @@ export default function SignInPage() {
         // set the user as a variable containing the information of the user
         const user = userCredential.user;
 
-        const { payload } = dispatch(getUsers());
-        dispatch(setUser(payload));
+     
+        // dispatch(setUser(payload));
         navigation.navigate("HomeStack");
       })
       .catch((err) => {

@@ -4,10 +4,11 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API } from "constants/API";
 import { createToken } from "hooks/handleUsers/useCreateToken";
 import { auth } from "hooks/handleUsers/useFirebase";
 
-const POSTS_URL = `https://nextcornerdevelopment.onrender.com/api/`
+const POSTS_URL = `${API}/api/`
 
 export const deleteItem = createAsyncThunk(
   "addToCart/deleteItem",

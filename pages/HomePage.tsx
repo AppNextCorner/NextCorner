@@ -14,7 +14,7 @@ import { useAppSelector } from "../store/hook";
 import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
 import { getButton } from "../store/slices/addToCart";
 import useCategoryList from "hooks/handlePages/useCategoryList";
-import { vendor } from "../types/interfaces/vendor.interface";
+import { vendor } from "../typeDefinitions/interfaces/vendor.interface";
 export default function HomePage() {
   const {
     categoryWasSelected,

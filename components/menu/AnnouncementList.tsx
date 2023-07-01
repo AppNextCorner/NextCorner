@@ -1,7 +1,7 @@
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import AnnouncementCard from "cards/Menu/AnnouncementCard";
-import { vendor }  from "../../types/interfaces/vendor.interface";
+import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
 
 interface Props {
   vendor: vendor;

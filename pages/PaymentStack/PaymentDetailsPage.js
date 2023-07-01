@@ -21,7 +21,8 @@ import { useStripe } from "@stripe/stripe-react-native";
 import { IP } from "@env";
 import useCart from "hooks/handleVendors/useCart";
 import UseOrders from "hooks/handleVendors/useOrders";
-import { getUser } from "../../store/slices/userSession";
+import { getUserz } from "../../store/slices/userSessionSlice";
+import { API } from "constants/API";
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
@@ -37,7 +38,7 @@ const PaymentDetailsPage = () => {
   const { addCartToOrder, getCurrentOrder } = UseOrders();
 
   // grab user information from the current state of the user
-  const user = useAppSelector(getUser);
+  const user = useAppSelector(getUserz);
   const mainUser = user; // grab the only user from the list
 
   const getCartFromSlice = useAppSelector(getCart);
@@ -103,7 +104,7 @@ const PaymentDetailsPage = () => {
     try {
       //await handlePaymentMethodCreation();
       console.log('vendor name: ',cart[0].businessOrderedFrom);
-      const response = await fetch(`https://nextcornerdevelopment.onrender.com/payment`, {
+      const response = await fetch(`${API}/payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -210,11 +211,11 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`https://nextcornerdevelopment.onrender.com/${item.image.toString()}`}} />
+                    <Image style={styles.foodImages} source={{uri:`${API}/${item.image.toString()}`}} />
                     <Image
                       style={styles.foodImages}
                       source={{
-                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
+                        uri: `${API}/${item.image.toString()}`,
                       }}
                     />
                   </View>

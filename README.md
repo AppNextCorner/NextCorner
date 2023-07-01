@@ -34,6 +34,7 @@ storageBucket =
 messagingSenderId =
 appId =
 measurementId =
+NODE_ENV = 
 ```
 
 ## Usage

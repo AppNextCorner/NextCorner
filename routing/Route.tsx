@@ -17,7 +17,7 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hook";
-import { getIsLoggedIn } from "../store/slices/userSession";
+import { getIsLoggedIn } from "../store/slices/userSessionSlice";
 import PaymentDetailsPage from "pages/PaymentStack/PaymentDetailsPage";
 import OrderPlacedPage from "pages/PaymentStack/OrderPlacedPage";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
