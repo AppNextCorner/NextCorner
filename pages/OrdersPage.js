@@ -20,9 +20,9 @@ export default function OrdersPage() {
   const dispatch = useAppDispatch();
   const getOrderFromSlice = useAppSelector(getOrders);
   const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const navigation = useNavigation();
 
-  const goToProgressPage = (order: order) => {
+  const goToProgressPage = (order) => {
     navigation.navigate("InProgressOrder", { order });
   };
 
@@ -30,18 +30,18 @@ export default function OrdersPage() {
     dispatch(getOrderList());
   }, [dispatch]);
 
-  const filterCompletedData: order[] = orderData.filter(
-    (item: any) => item.orderStatus === "Order taking longer than expected"
+  const filterCompletedData = orderData.filter(
+    (item) => item.orderStatus === "Order taking longer than expected"
   );
 
   const finishedOrders = [
     ...new Map(
-      filterCompletedData.reverse().map((m: any) => [m.createdAt, m])
+      filterCompletedData.reverse().map((m) => [m.createdAt, m])
     ).values(),
   ];
 
-  const filterInProgressData: order[] = orderData.filter(
-    (item: any) => item.orderStatus === "In Progress"
+  const filterInProgressData = orderData.filter(
+    (item) => item.orderStatus === "In Progress"
   );
 
   const inProgress = () => {
@@ -67,18 +67,16 @@ export default function OrdersPage() {
             <Text style={styles.sectionHeader}>Complete</Text>
           </TouchableOpacity>
         </View>
-        
-        <FlatList<order>
+
+        <FlatList
           data={!orderSelection ? filterInProgressData : finishedOrders}
           keyExtractor={(_item, index) => index.toString()}
           style={styles.cardContainer}
           showsVerticalScrollIndicator={false}
-          renderItem={({item}) =>
+          renderItem={({ item }) =>
             !orderSelection ? (
               <TouchableOpacity onPress={() => goToProgressPage(item)}>
-                <InProgressOrderCard
-                  order={item}
-                />
+                <InProgressOrderCard order={item} />
               </TouchableOpacity>
             ) : (
               <Pressable>

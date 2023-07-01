@@ -26,7 +26,7 @@ import SignUpPage from "pages/auth/SignUpPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
 import Vendor from "pages/BusinessStack/Vendor";
 import VendorMore from "pages/BusinessStack/VendorMore";
-
+import reviewCreatePage from "pages/BusinessStack/reviewCreatePage";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -59,17 +59,17 @@ export default function Route() {
               name="PaymentDetails"
               component={PaymentDetailsPage}
             />
+
             <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
             <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             <Stack.Screen name="Browse" component={NearbyVendors} />
-
+            <Stack.Screen name="ReviewCreate" component={reviewCreatePage} />
             {/* Vendor Pages */}
             <Stack.Screen name="Vendor" component={VendorStack} />
           </Stack.Navigator>
         </NavigationContainer>
       </>
     );
-  
   } else if (isDone === true && !isLoggedin) {
     return (
       <NavigationContainer>

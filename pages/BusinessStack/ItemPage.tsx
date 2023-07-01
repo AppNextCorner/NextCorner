@@ -124,6 +124,10 @@ export default function ItemPage() {
     // You can update the state or perform any other actions based on the selected options
   };
 
+  const goToReviewPage = () => {
+    navigation.navigate("ReviewCreate");
+  };
+
   const Header = () => {
     return (
       <>
@@ -133,7 +137,9 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}` }}
+          source={{
+            uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}`,
+          }}
         />
 
         <View style={styles.headerContainer}>
@@ -152,6 +158,7 @@ export default function ItemPage() {
             <Text style={styles.ratingText}>{menuItem.rating}</Text>
             <Text style={styles.info}>Rating and reviews</Text>
             <AntDesign
+              onPress={goToReviewPage}
               style={styles.arrowRight}
               name="arrowright"
               size={30}
@@ -271,10 +278,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 1,
     zIndex: 2,
-    width: '15%',
+    width: "15%",
     borderRadius: 20,
-    padding: '2%',
-    backgroundColor: '#78DBFF'
+    padding: "2%",
+    backgroundColor: "#78DBFF",
   },
   description: {
     flex: 0,
