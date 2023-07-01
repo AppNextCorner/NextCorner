@@ -26,8 +26,8 @@ import SignUpPage from "pages/auth/SignUpPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
 import Vendor from "pages/BusinessStack/components/Vendor";
 import VendorMore from "pages/BusinessStack/components/VendorMore";
-import reviewCreatePage from "pages/BusinessStack/components/reviewCreatePage";
-import reviewsPage from "pages/BusinessStack/components/reviewsPage";
+import ReviewsPage from "pages/BusinessStack/components/ReviewsPage";
+import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -67,8 +67,8 @@ export default function Route() {
             {/* 
               Reviews Pages Start
             */}
-            <Stack.Screen name="Reviews" component={reviewsPage} />
-            <Stack.Screen name="ReviewCreate" component={reviewCreatePage} />
+            <Stack.Screen name="Reviews" component={ReviewsPage} />
+            <Stack.Screen name="ReviewCreate" component={ReviewCreatePage} />
 
             {/*
               Reviews Pages end 

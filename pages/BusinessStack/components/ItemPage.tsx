@@ -38,6 +38,7 @@ export default function ItemPage() {
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem, location }: any = route.params;
+
   const businessName = useAppSelector(getBusinessName);
 
   /**
@@ -127,7 +128,9 @@ export default function ItemPage() {
     // You can update the state or perform any other actions based on the selected options
   };
 
-  const goToReviewsPage = () => navigation.navigate("Reviews");
+  const goToReviewsPage = () =>
+    // pass in business and menuItem when entering the Reviews page
+    navigation.navigate("Reviews", { business, menuItem });
   const Header = () => {
     return (
       <>
