@@ -1,7 +1,8 @@
 import postReview from "pages/BusinessStack/api/postReview";
 import { reviewInterface } from "../../../typeDefinitions/interfaces/reviews.interface";
-
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 export default function useCreateReview() {
+  const { fetchBusinesses } = useGetUserData();
   /**
    *
    * This function writes the Review
@@ -13,6 +14,7 @@ export default function useCreateReview() {
     try {
       // get the created review
       const createdReview = await postReview(payload);
+      await fetchBusinesses();
       // do something with the createdReview
     } catch (err) {
       console.log(err);

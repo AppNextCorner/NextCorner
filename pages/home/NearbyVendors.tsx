@@ -16,10 +16,11 @@ import MapStyle from "../../constants/MapStyle.json";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
 import { useNavigation } from "@react-navigation/native";
-import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
+import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 import { API } from "constants/API";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
@@ -30,11 +31,17 @@ export const NearbyVendors = () => {
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
+
+  const { fetchBusinesses } = useGetUserData();
   const [viewLocation, setViewLocation] = useState(false);
   const mapRef = useRef<any>();
   const flatListRef = useRef<any>();
   const vendors: vendor[] = useAppSelector(getBusiness);
   const navigate = useNavigation<NativeStackNavigationProp<any>>();
+
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
@@ -93,9 +100,7 @@ export const NearbyVendors = () => {
       const R = 6371e3; // Earth's radius in meters
       const lat1 = toRadians(point1.latitude);
       const lat2 = toRadians(parseFloat(point2.latitude));
-      const deltaLat = toRadians(
-        parseFloat(point2.latitude) - point1.latitude
-      );
+      const deltaLat = toRadians(parseFloat(point2.latitude) - point1.latitude);
       const deltaLng = toRadians(
         parseFloat(point2.longitude) - point1.longitude
       );

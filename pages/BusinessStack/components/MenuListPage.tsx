@@ -11,7 +11,7 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -25,6 +25,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 // import { IP } from "@env";
 
 export default function MenuListPage() {
@@ -33,9 +34,13 @@ export default function MenuListPage() {
   const [menuTypeData] = useState(business);
   // menu of the business through params
   const [menu] = useState(business.menu);
+  const { fetchBusinesses } = useGetUserData();
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
 
   /**
    * This code section is used to get the orders that have been previously ordered if they match with the current store

@@ -19,7 +19,7 @@ export default function useFetchReviews() {
    */
   const fetchReviews = async (id: string) => {
     try {
-      // Fetche the reviews with the id
+      // Fetch the reviews with the id
       const fetchedReviews = await getReviews(id);
 
       // update the state values

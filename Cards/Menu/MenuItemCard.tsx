@@ -4,7 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { itemType } from "../../typeDefinitions/interfaces/item.interface";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 import { API } from "constants/API";
+import { useEffect } from "react";
 
 /**
  * The default business card item
@@ -14,7 +16,7 @@ import { API } from "constants/API";
 interface Props {
   menuItem: itemType;
   businessName: string;
-  location: {latitude: number; longitude: number};
+  location: { latitude: number; longitude: number };
 }
 export default function MenuItemCard({
   menuItem,
@@ -23,6 +25,11 @@ export default function MenuItemCard({
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
+  const { fetchBusinesses } = useGetUserData();
+
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
 
   // Section to re-new the option selection buttons for the menu item - IMPORTANT
   Object.assign({}, { ...menuItem });
