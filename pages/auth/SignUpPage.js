@@ -58,13 +58,8 @@ export default function SignUpPage() {
     if (user !== null) {
       signInWithEmailAndPassword(auth, email, password)
         // takes in the credentials from email and password
-        .then((userCredential) => {
-          // set the user as a variable
-          const user = userCredential.user;
-          // const { payload } = dispatch(getUsers());
-          // dispatch(setUser(payload));
-          navigation.navigate("HomeStack");
-          console.log("user from signing in:", user);
+        .then((_userCredential) => {
+          navigation.navigate("HomeStack", { screen: 'Home' });
         })
         .catch((err) => {
           console.log(err);

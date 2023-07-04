@@ -11,5 +11,6 @@ export interface itemType {
   featured: boolean;
   amountInCart: number;
   rating: number;
-  createdAt?: string
+  createdAt?: string;
+  _id: string
 }

@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -27,46 +27,32 @@ import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
 
 export default function ItemPage() {
   const { addToCart } = useCart();
   const { setOrder, order } = useOrderButton();
-
-  const [render, setRender] = useState(false);
-
   const dispatch = useAppDispatch();
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem, location }: any = route.params;
+  const [vendorItem, setVendorItem] = useState<itemType>(menuItem)
 
   const businessName = useAppSelector(getBusinessName);
-
+  const updateVendorItem = (updatedVendorItem: itemType) => {
+    setVendorItem(updatedVendorItem);
+  };
+  
   /**
    * What is selectedOptions?
    * What is customization?
    * what is option?
    * what is payload?
    */
-
-  useEffect(() => {
-    // Create a deep copy of menuItem when render state changes
-    Object.assign({}, { ...menuItem });
-  }, [render]);
-
-  const parse = { cartData: JSON.parse(JSON.stringify(menuItem)) };
-  const name = (parse || {}).cartData;
-
-  const resetOptions = name.customizations.flat().map((c: any) => c.selected);
-
   const goHome = async () => {
     setOrder(true);
     try {
       navigation.goBack();
-      if (order === true) {
-        for (let i = 0; i < resetOptions.length; i++) {
-          resetOptions[i] = false;
-        }
-      }
     } catch (e) {
       console.log(e);
     }
@@ -74,22 +60,18 @@ export default function ItemPage() {
 
   const goToCartButton = async () => {
     const userId = auth?.currentUser?.uid;
-    const addItem = name;
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
         const { payload }: any = await addToCart(
-          addItem,
+          vendorItem,
           userId,
           business,
           location
         );
         console.log("cart payload: ", payload);
-        console.log(addItem.customizations[0].optionCustomizations);
+        console.log(vendorItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
-        for (let i = 0; i < resetOptions.length; i++) {
-          resetOptions[i] = false;
-        }
         navigation.goBack();
       } catch (e) {
         console.log("error");
@@ -98,39 +80,10 @@ export default function ItemPage() {
       Alert.alert("Added item from a different business");
     }
   };
-
-  // Bug Issue: When uploading an option, option customizations are all the same
-  // Potential Fix: Get only the selected options for that category option
-  const handleOptionSelect = (selectedOptions: any, customization: any) => {
-    // Perform the necessary logic with the selected options
-    // Update the selected options in the menuItem object
-    name.customizations.forEach((option: any) => {
-      for (let i = 0; i < customization.length; i++) {
-        console.log(
-          "option name: ",
-          option.name,
-          " custom name: ",
-          customization[i].name,
-          "SELECTION: ",
-          option.name == customization[i].name
-        );
-        if (option.name == customization[i].name) {
-          console.log(
-            "custom name: ",
-            customization[i].name,
-            "option.optionCustomizations: ",
-            option.optionCustomizations
-          );
-          option.optionCustomizations = selectedOptions;
-        }
-      }
-    });
-    // You can update the state or perform any other actions based on the selected options
-  };
-
+  
   const goToReviewsPage = () =>
-    // pass in business and menuItem when entering the Reviews page
-    navigation.navigate("Reviews", { business, menuItem });
+    // pass in business and vendorItem when entering the Reviews page
+    navigation.navigate("Reviews", { business, vendorItem });
   const Header = () => {
     return (
       <>
@@ -141,16 +94,16 @@ export default function ItemPage() {
         <Image
           style={styles.image}
           source={{
-            uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}`,
+            uri: `https://nextcornerdevelopment.onrender.com/${vendorItem?.image.toString()}`,
           }}
         />
 
         <View style={styles.headerContainer}>
           <View style={styles.headerText}>
-            <Text style={styles.title}>{menuItem.name}</Text>
-            <Text style={styles.price}>${menuItem.price}</Text>
+            <Text style={styles.title}>{vendorItem.name}</Text>
+            <Text style={styles.price}>${vendorItem.price}</Text>
           </View>
-          <Text style={styles.description}>{menuItem.description}</Text>
+          <Text style={styles.description}>{vendorItem.description}</Text>
           <View style={styles.ratingContainer}>
             <AntDesign
               style={styles.star}
@@ -158,7 +111,7 @@ export default function ItemPage() {
               size={20}
               color="#ffc247"
             />
-            <Text style={styles.ratingText}>{menuItem.rating}</Text>
+            <Text style={styles.ratingText}>{vendorItem.rating}</Text>
             <Text style={styles.info}>Rating and reviews</Text>
 
             {/* 
@@ -188,12 +141,9 @@ export default function ItemPage() {
         <View style={{ flex: 1 }}>
           <OptionSelectionComponent
             header={Header}
-            data={menuItem.customizations}
-            render={setRender}
-            onSelect={(selectedOptions: any) =>
-              handleOptionSelect(selectedOptions, name.customizations)
-            }
-            stateRender={render}
+            initialOptions={[]}
+            changePreference={updateVendorItem}
+            customizations={menuItem.customizations}
           />
         </View>
 

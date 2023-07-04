@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,9 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native";
-import { FontAwesome} from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { itemType } from "../../typeDefinitions/interfaces/item.interface";
+import { option } from "../../typeDefinitions/interfaces/option.interface";
 
 interface Option {
   label: string;
@@ -17,45 +19,89 @@ interface Option {
 interface Item {
   name: string;
   type: string;
+  _id: string;
   optionCustomizations: Option[];
 }
 
 interface OptionSelectionComponentProps {
-  data: Item[];
-  header: () => JSX.Element; 
-  onSelect: (updatedOptions: SetStateAction<any[]>, data: Item[]) => void;
-  stateRender: boolean;
-  render: Dispatch<SetStateAction<boolean>>; 
+  customizations: option[];
+  header: () => JSX.Element;
+  initialOptions: [] | Option[]; // Handles whether a user has ordered previously
+  changePreference: React.Dispatch<React.SetStateAction<any>>;
 }
 
 export default function OptionSelectionComponent(
   props: OptionSelectionComponentProps
 ) {
-  const { data, header, onSelect } = props;
-  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
+  let { customizations, header, changePreference, initialOptions } = props;
+  // Starting with no options selected
+  const [selectedCustoms, setSelectedCustoms] = useState<Item[]>(() => {
+    return customizations.map((item) => ({
+      ...item,
+      optionCustomizations: initialOptions,
+    }));
+  });
 
-  const handlePress = (item: Item, option: Option) => {
-    let updatedOptions: SetStateAction<any[]> = [];
-    console.log("type: ", item.type);
+  
+/**
+ * Handles the selection of an option for a specific item.
+ *
+ * @param item - The selected item.
+ * @param option - The selected option for the item.
+ * @param index - The index of the item in the list.
+ */
+const handlePress = (item: Item, option: Option, index: number) => {
+  setSelectedCustoms((prevCustoms) => {
+    // Create a copy of the previous customs array
+    const updatedCustoms = [...prevCustoms];
+
+    // Create a copy of the selected item
+    const selectedItem = { ...updatedCustoms[index] };
+
+    // Create a copy of the selected options array
+    const selectedOptions = [...selectedItem.optionCustomizations];
+
+    // Find the index of the selected option in the options array
+    const optionIndex = selectedOptions.findIndex(
+      (o) => o.label === option.label
+    );
+
+    // Perform option selection based on the item type
     if (item.type === "single") {
       // Single selection, update the selected option
-      if (selectedOptions.includes(option)) {
-        updatedOptions = [];
+      if (optionIndex === -1) {
+        selectedOptions.splice(0, selectedOptions.length, option);
       } else {
-        updatedOptions = [option];
+        selectedOptions.splice(optionIndex, 1);
       }
     } else if (item.type === "multiple") {
       // Multiple selection, toggle the selected option
-      if (selectedOptions.includes(option)) {
-        updatedOptions = selectedOptions.filter((item) => item !== option);
+      if (optionIndex === -1) {
+        selectedOptions.push(option);
       } else {
-        updatedOptions = [...selectedOptions, option];
+        selectedOptions.splice(optionIndex, 1);
       }
     }
-    console.log(updatedOptions);
-    setSelectedOptions(updatedOptions);
-    onSelect(updatedOptions, data);
-  };
+
+    // Update the option customizations for the selected item
+    selectedItem.optionCustomizations = selectedOptions;
+
+    // Update the updated customs array with the modified item
+    updatedCustoms[index] = selectedItem;
+
+    // Return the updated customs array
+    return updatedCustoms;
+  });
+
+  // Update the preference in the parent component
+  changePreference((prevState: itemType) => {
+    return {
+      ...prevState,
+      customizations: selectedCustoms,
+    };
+  });
+};
+
 
   const styles: {
     optionContainer: ViewStyle;
@@ -79,15 +125,18 @@ export default function OptionSelectionComponent(
       borderRightWidth: 3,
       borderLeftWidth: 3,
       borderColor: "#f2f0f0",
+      flexDirection: "row",
     },
     optionTitle: {
       fontSize: 15,
       fontWeight: "bold",
+      flex: 0.5,
     },
     optionsContainer: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "flex-start",
+      flex: 1,
     },
     optionButton: {
       flexDirection: "row",
@@ -118,40 +167,48 @@ export default function OptionSelectionComponent(
     <View>
       <FlatList
         ListHeaderComponent={header}
-        data={data}
+        data={customizations}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View style={styles.optionCard}>
             <Text style={styles.optionTitle}>{item.name}</Text>
             <View style={styles.optionsContainer}>
               <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                {item.optionCustomizations.map((option, index) => (
+                {item.optionCustomizations.map((option, optionIndex) => (
                   <TouchableOpacity
-                    key={index}
+                    key={optionIndex}
                     style={[
                       styles.optionButton,
-                      selectedOptions.includes(option) &&
-                        styles.optionButtonSelected,
+                      selectedCustoms[index]?.optionCustomizations.some(
+                        (o) => o.label === option.label
+                      ) && styles.optionButtonSelected,
                     ]}
-                    onPress={() => handlePress(item, option)}
+                    onPress={() => handlePress(item, option, index)}
                   >
                     <FontAwesome
                       style={styles.selectIcon}
                       name={
-                        selectedOptions.includes(option)
+                        selectedCustoms[index]?.optionCustomizations.some(
+                          (o) => o.label === option.label
+                        )
                           ? "check-square"
                           : "square-o"
                       }
                       size={24}
                       color={
-                        selectedOptions.includes(option) ? "#fff" : "#78DBFF"
+                        selectedCustoms[index]?.optionCustomizations.some(
+                          (o) => o.label === option.label
+                        )
+                          ? "#fff"
+                          : "#78DBFF"
                       }
                     />
                     <Text
                       style={[
                         styles.optionButtonText,
-                        selectedOptions.includes(option) &&
-                          styles.optionButtonTextSelected,
+                        selectedCustoms[index]?.optionCustomizations.some(
+                          (o) => o.label === option.label
+                        ) && styles.optionButtonTextSelected,
                       ]}
                     >
                       {option.label}

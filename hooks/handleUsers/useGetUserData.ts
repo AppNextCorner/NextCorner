@@ -24,6 +24,7 @@ import { makePostRequest } from "../../config/axios.config";
  */
 const useGetUserData = () => {
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dispatch: AppDispatch = useAppDispatch();
 
   const user2 = useAppSelector(getUser);
@@ -89,7 +90,8 @@ const useGetUserData = () => {
       try {
         console.log("auth", auth);
         console.log("user: ", user);
-        if (user && user.email) {
+        console.log('IP: ')
+        if (user !== null && user.email) {
           const data = await getUserData(user.email);
           console.log(data.payload);
           dispatch(setUser(data.payload));
@@ -98,10 +100,13 @@ const useGetUserData = () => {
           fetchUserAsync();
           fetchBusinesses();
           setIsDone(true);
+          setIsLoggedIn(true);
         } else {
           // User is signed out
+          console.log('logging out')
           dispatch(logOut());
           setIsDone(true);
+          setIsLoggedIn(false);
         }
       } catch (err) {
         console.log(err);
@@ -114,6 +119,7 @@ const useGetUserData = () => {
 
   return {
     isDone,
+    isLoggedIn
   };
 };
 
