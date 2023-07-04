@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import useAddUser from "hooks/handleUsers/useAddUser";
 import { useAppDispatch } from "../../store/hook";
-import { getUsers, setUser } from "../../store/slices/userSession";
+import { getUsers, setUser } from "../../store/slices/userSessionSlice";
 import { auth } from "hooks/handleUsers/useFirebase";
 
 /**
@@ -61,8 +61,8 @@ export default function SignUpPage() {
         .then((userCredential) => {
           // set the user as a variable
           const user = userCredential.user;
-          const { payload } = dispatch(getUsers());
-          dispatch(setUser(payload));
+          // const { payload } = dispatch(getUsers());
+          // dispatch(setUser(payload));
           navigation.navigate("HomeStack");
           console.log("user from signing in:", user);
         })

@@ -1,9 +1,9 @@
 import { Text } from "react-native";
 import * as React from "react";
 import HomePage from "pages/HomePage";
-import ItemPage from "pages/BusinessStack/ItemPage";
+import ItemPage from "pages/BusinessStack/components/ItemPage";
 import OrdersPage from "pages/OrdersPage";
-import MenuListPage from "pages/BusinessStack/MenuListPage";
+import MenuListPage from "pages/BusinessStack/components/MenuListPage";
 import PickUpPage from "pages/ProfilePage";
 import SignInPage from "pages/auth/SignInPage";
 import CartPage from "pages/CartPage";
@@ -17,16 +17,17 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import { useAppSelector } from "../store/hook";
-import { getIsLoggedIn } from "../store/slices/userSession";
+import { getIsLoggedIn } from "../store/slices/userSessionSlice";
 import PaymentDetailsPage from "pages/PaymentStack/PaymentDetailsPage";
 import OrderPlacedPage from "pages/PaymentStack/OrderPlacedPage";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
 import InProgressPage from "pages/OrdersStack/InProgressPage";
 import SignUpPage from "pages/auth/SignUpPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
-import Vendor from "pages/BusinessStack/Vendor";
-import VendorMore from "pages/BusinessStack/VendorMore";
-
+import Vendor from "pages/BusinessStack/components/Vendor";
+import VendorMore from "pages/BusinessStack/components/VendorMore";
+import ReviewsPage from "pages/BusinessStack/components/ReviewsPage";
+import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -43,8 +44,7 @@ const Stack = createNativeStackNavigator();
 export default function Route() {
   const { isDone } = useGetUserData();
   const isLoggedin = useAppSelector(getIsLoggedIn);
-  console.log("isDone: ", isDone);
-  console.log("isloggedin: ", isLoggedin);
+
   if (isDone === true && isLoggedin) {
     return (
       <>
@@ -59,9 +59,19 @@ export default function Route() {
               name="PaymentDetails"
               component={PaymentDetailsPage}
             />
+
             <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
             <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             <Stack.Screen name="Browse" component={NearbyVendors} />
+            {/* 
+              Reviews Pages Start
+            */}
+            <Stack.Screen name="Reviews" component={ReviewsPage} />
+            <Stack.Screen name="ReviewCreate" component={ReviewCreatePage} />
+
+            {/*
+              Reviews Pages end 
+            */}
 
             {/* Vendor Pages */}
             <Stack.Screen name="Vendor" component={VendorStack} />
@@ -69,7 +79,6 @@ export default function Route() {
         </NavigationContainer>
       </>
     );
-  
   } else if (isDone === true && !isLoggedin) {
     return (
       <NavigationContainer>

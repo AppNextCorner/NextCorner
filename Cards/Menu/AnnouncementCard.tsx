@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React from "react";
+import { API } from "constants/API";
 
 /**
  * announcementCard component displays an announcement with its data.
@@ -48,7 +49,7 @@ const AnnouncementCard = (props: any) => {
       <Image
         style={styles.announcementImageContainer}
         source={{
-          uri: `https://nextcornerdevelopment.onrender.com/${announcement.image.toString()}`,
+          uri: `${API}/${announcement.image.toString()}`,
         }}
       />
     </TouchableOpacity>

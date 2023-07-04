@@ -17,8 +17,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OptionSelectionComponent from "components/menu/OptionSelectionComponent";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getBusinessName, setBusinessName } from "../../store/slices/addToCart";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import {
+  getBusinessName,
+  setBusinessName,
+} from "../../../store/slices/addToCart";
 import useCart from "hooks/handleVendors/useCart";
 import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
@@ -35,6 +38,7 @@ export default function ItemPage() {
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem, location }: any = route.params;
+
   const businessName = useAppSelector(getBusinessName);
 
   /**
@@ -51,6 +55,12 @@ export default function ItemPage() {
 
   const parse = { cartData: JSON.parse(JSON.stringify(menuItem)) };
   const name = (parse || {}).cartData;
+
+  // Transform the rating into a string and then into an array
+  const convert = menuItem.rating.toString().split("");
+
+  // From that array, slice it so it only shows the first 2 digits
+  const rating = convert.slice(0, 3);
 
   const resetOptions = name.customizations.flat().map((c: any) => c.selected);
 
@@ -124,6 +134,9 @@ export default function ItemPage() {
     // You can update the state or perform any other actions based on the selected options
   };
 
+  const goToReviewsPage = () =>
+    // pass in business and menuItem when entering the Reviews page
+    navigation.navigate("Reviews", { business, menuItem });
   const Header = () => {
     return (
       <>
@@ -133,7 +146,9 @@ export default function ItemPage() {
 
         <Image
           style={styles.image}
-          source={{ uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}` }}
+          source={{
+            uri: `https://nextcornerdevelopment.onrender.com/${menuItem.image.toString()}`,
+          }}
         />
 
         <View style={styles.headerContainer}>
@@ -149,9 +164,14 @@ export default function ItemPage() {
               size={20}
               color="#ffc247"
             />
-            <Text style={styles.ratingText}>{menuItem.rating}</Text>
+            <Text style={styles.ratingText}>{rating}</Text>
             <Text style={styles.info}>Rating and reviews</Text>
+
+            {/* 
+              On press goToReviewsPage
+            */}
             <AntDesign
+              onPress={goToReviewsPage}
               style={styles.arrowRight}
               name="arrowright"
               size={30}
@@ -271,10 +291,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 1,
     zIndex: 2,
-    width: '15%',
+    width: "15%",
     borderRadius: 20,
-    padding: '2%',
-    backgroundColor: '#78DBFF'
+    padding: "2%",
+    backgroundColor: "#78DBFF",
   },
   description: {
     flex: 0,

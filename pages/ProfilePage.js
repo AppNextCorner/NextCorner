@@ -8,11 +8,11 @@ import { auth } from "hooks/handleUsers/useFirebase";
 // import firebase features
 import { signOut } from "firebase/auth";
 
-import { getUser, logOut } from "../store/slices/userSession";
+import { getUserz, logOut } from "../store/slices/userSessionSlice";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ProfilePage() {
-  const user = useAppSelector(getUser);
+  const user = useAppSelector(getUserz);
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   // grabs the only user from the array as it has been already filtered out to include the current user

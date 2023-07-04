@@ -4,18 +4,26 @@
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import React from "react";
 import { BottomSheetFlatList, BottomSheetView } from "@gorhom/bottom-sheet";
-import { IP } from "@env";
+import order from "../../typeDefinitions/interfaces/order.interface";
+import { API } from "constants/API";
+
+interface Props {
+  order: order;
+  distance: number;
+  duration: number;
+}
 
 export default function InProgressList({
-  orderItemDetails,
+  order,
   distance,
   duration,
-}) {
+}: Props) {
   // grabbing the data of the trendingFood from the data folder
 
   // mapping through the data and retrieving the data from one order
-  const mapThroughOrder = orderItemDetails.singleOrderList.map(
-    (getItemData) => getItemData.cartData
+  const mapThroughOrder = order.singleOrderList.map(
+    // What is getItemData
+    (getItemData: any) => getItemData.cartData
   );
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
@@ -30,10 +38,11 @@ export default function InProgressList({
         </Text>
       </BottomSheetView>
       <BottomSheetFlatList
+   
         ListHeaderComponent={
           <View>
             <Text style={styles.businessName}>
-              {orderItemDetails.singleOrderList[0].businessOrderedFrom}
+              {order.singleOrderList[0].businessOrderedFrom}
             </Text>
             <View style={styles.margin}></View>
           </View>
@@ -53,14 +62,19 @@ export default function InProgressList({
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
                     <Image
+                      /**
+                       * order was originally item
+                       */
                       style={styles.foodImages}
                       source={{
-                        uri: `https://nextcornerdevelopment.onrender.com/${item.image.toString()}`,
+                        uri: `${API}/${item.image.toString()}`,
                       }}
                     />
                   </View>
                   <View style={styles.foodTexts}>
-                    <Text style={styles.categoryText}>{item.name}</Text>
+                    <Text style={styles.categoryText}>
+                      {item.name}
+                    </Text>
 
                     <Text style={styles.descriptionOfItem}>
                       {item.description}

@@ -2,11 +2,10 @@
  * Purpose of the file: It is used to be the first page the user has access to after opening the app / login in through the app
  * - Displays business based on location or depending on the section from either the category or default sections
  */
-import { StyleSheet, View, FlatList, Text } from "react-native";
-import React, { useState, useEffect, useMemo } from "react";
+import { StyleSheet, View, FlatList } from "react-native";
+import React, { useMemo } from "react";
 import HeaderComponent from "components/home/HeaderComponent";
 import { StatusBar } from "expo-status-bar";
-import SearchComponent from "components/home/SearchComponent";
 import BusinessCard from "cards/Home/BusinessCard";
 import BusinessListComponent from "components/home/BusinessListComponent";
 import CategoryScrollBar from "components/home/CategoryScrollBar";
@@ -15,7 +14,7 @@ import { useAppSelector } from "../store/hook";
 import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
 import { getButton } from "../store/slices/addToCart";
 import useCategoryList from "hooks/handlePages/useCategoryList";
-
+import { vendor } from "../typeDefinitions/interfaces/vendor.interface";
 export default function HomePage() {
   const {
     categoryWasSelected,
@@ -68,7 +67,7 @@ export default function HomePage() {
   ];
 
   const isClicked = useAppSelector(getButton);
-  const vendors = useAppSelector(getBusiness);
+  const vendors: vendor[] = useAppSelector(getBusiness);
 
   // Only re-render the data in the dependency when it changes values
   const filterBusinessCards = useMemo(() => {
@@ -117,16 +116,16 @@ export default function HomePage() {
             renderItem={({ item }) => {
               if (!categoryWasSelected) {
                 const trendingRow = vendors.filter(
-                  (vendor) => vendor.trendingCategory === item.name
+                  (vendor: vendor) => vendor.trendingCategory === item.name
                 );
                 return (
                   <BusinessListComponent
                     title={item.name}
-                    style={styles.list}
                     business={trendingRow}
                   />
                 );
               }
+              return null;
             }}
           />
         </>
@@ -162,10 +161,6 @@ const styles = StyleSheet.create({
     paddingVertical: 25,
     flex: 0,
     alignContent: "center",
-  },
-  list: {
-    alignContent: "center",
-    flex: 0,
   },
   remainingCards: {
     paddingBottom: "25%",

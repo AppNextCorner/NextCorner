@@ -11,20 +11,21 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "components/global/OrderButton";
-import { useAppSelector } from "../../store/hook";
-import { getButton } from "../../store/slices/addToCart";
+import { useAppSelector } from "../../../store/hook";
+import { getButton } from "../../../store/slices/addToCart";
 import MenuTypeList from "cards/Menu/MenuTypeList";
 import FeaturedList from "components/menu/FeaturedList";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
-import { getOrders } from "../../store/slices/addToOrders";
+import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 // import { IP } from "@env";
 
 export default function MenuListPage() {
@@ -33,9 +34,13 @@ export default function MenuListPage() {
   const [menuTypeData] = useState(business);
   // menu of the business through params
   const [menu] = useState(business.menu);
+  const { fetchBusinesses } = useGetUserData();
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  useEffect(() => {
+    fetchBusinesses();
+  }, []);
 
   /**
    * This code section is used to get the orders that have been previously ordered if they match with the current store
@@ -69,7 +74,12 @@ export default function MenuListPage() {
                 <AntDesign name="arrowleft" size={40} color="white" />
               </Pressable>
 
-              <Image style={styles.image} source={{uri:`https://nextcornerdevelopment.onrender.com/${business.image.toString()}`}} />
+              <Image
+                style={styles.image}
+                source={{
+                  uri: `https://nextcornerdevelopment.onrender.com/${business.image.toString()}`,
+                }}
+              />
 
               {/* Business Logo - not needed as many small businesses don't have one*/}
               {/* <Image style={styles.logoImage} source={business.logo} /> */}
@@ -81,9 +91,7 @@ export default function MenuListPage() {
                   </Text>
                 </View>
 
-                <AnnouncementList
-                  vendor={business}
-                />
+                <AnnouncementList vendor={business} />
                 <FeaturedList
                   menuData={menu}
                   businessName={business.name}
@@ -191,9 +199,9 @@ const styles = StyleSheet.create({
     margin: 20,
     marginTop: 40,
     borderRadius: 20,
-    padding: '2%',
-    width: '15%',
-    backgroundColor: '#78DBFF'
+    padding: "2%",
+    width: "15%",
+    backgroundColor: "#78DBFF",
   },
   description: {
     flex: 0,

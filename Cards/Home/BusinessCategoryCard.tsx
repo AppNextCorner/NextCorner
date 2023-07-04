@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { css } from "@emotion/native";
 import styled from "@emotion/native";
-import { vendorCategory } from "../../types/interfaces/vendorCategory.interface";
+import { vendorCategory } from "../../typeDefinitions/interfaces/vendorCategory.interface";
 const CategoryButton = styled.TouchableOpacity`
   /* Add your styles here */
 `;
@@ -13,7 +13,7 @@ const Icon = styled.Image`
 `;
 
 interface Props {
-  handlePress: (key: number) => boolean;
+  handlePress: (key: number) => void;
   businessItem: vendorCategory;
   foodId: number;
 }

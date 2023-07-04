@@ -2,22 +2,20 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 // for bottom modal
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { StatusBar } from "expo-status-bar";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
 import InProgressList from "components/unfinishedOrders/InProgressList";
-import BottomSheetView from "@gorhom/bottom-sheet";
-import { AntDesign, Feather } from "@expo/vector-icons";
-
+import { AntDesign} from "@expo/vector-icons";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
+import {location} from "../../typeDefinitions/interfaces/location.interface";
 /**
  * Used to display the status, map, and the items that are currently in the progress of being made
  */
@@ -25,18 +23,18 @@ const InProgressPage = () => {
   // used to get the current location and duration from the user's home to the business
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const route = useRoute();
 
   const returnBack = () => {
     navigation.goBack();
   };
 
-  const { order } = route.params;
+  const { order }: any = route.params;
 
   // items displayed on the Google Maps component after being passed in
-  const mapOrderItem = order.singleOrderList
-    .map((location) => location.location)
+  const mapOrderItem: location[] = order.singleOrderList
+    .map((orderItem: orderItem) => orderItem.location)
     .flat();
 
   const bottomSheetRef = useRef(null); // set the initial bottom sheet to have nothing instantly until it is changed
@@ -69,7 +67,7 @@ const InProgressPage = () => {
             }}
           >
             <GoogleMapsMenuSection
-              time={item}
+              time={order}
               location={mapOrderItem}
               setDuration={setDuration}
               setDistance={setDistance}
@@ -89,7 +87,7 @@ const InProgressPage = () => {
             <InProgressList
               duration={duration}
               distance={distance}
-              orderItemDetails={order}
+              order={order}
             />
           </BottomSheet>
         </GestureHandlerRootView>

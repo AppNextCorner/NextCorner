@@ -27,6 +27,7 @@ import {
 } from "react-native";
 import useCart from "hooks/handleVendors/useCart";
 import { IP } from "@env";
+import { API } from "constants/API";
 /**
  *
  * After user finishes selecting an item and wants to proceed, they can remove from items cart list
@@ -88,7 +89,7 @@ const CartPage = () => {
                       <Image
                         style={styles.foodImages}
                         source={{
-                          uri: `https://nextcornerdevelopment.onrender.com/${grabCartItem.image.toString()}`,
+                          uri: `${API}/${grabCartItem.image.toString()}`,
                         }}
                       />
                     </View>

@@ -1,31 +1,35 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, Dispatch, SetStateAction } from "react";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { StyleSheet, View, Text } from "react-native";
 import MapStyle from "../../constants/MapStyle.json";
 import MapViewDirections from "react-native-maps-directions";
-import { googleDirectionsAPIKey } from "@env";
+// import { googleDirectionsAPIKey } from "@env";
 import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
 // icons
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
+import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 
-export default function GoogleMapsMenuSection(props) {
-  const {
-    time,
-    location,
-    setDuration,
-    setDistance,
-    scrollEnabled,
-    pointerEvents,
-  } = props;
+interface Props {
+  time?: vendor;
+  location: location[];
+  scrollEnabled?: boolean;
+  pointerEvents?: string;
+  setDuration: Dispatch<SetStateAction<number>>;
+  setDistance: Dispatch<SetStateAction<number>>;
+}
+export default function GoogleMapsMenuSection(props: Props) {
+  const { location, setDuration, setDistance, scrollEnabled } = props;
 
   const [mapFitted, setMapFitted] = useState(false);
-  const [mapCoordinates, setMapCoordinates] = useState({
+  const [mapCoordinates, setMapCoordinates] = useState<mapRegion>({
     latitude: parseFloat(location[0].latitude),
     longitude: parseFloat(location[0].longitude),
     latitudeDelta: 0.0106,
     longitudeDelta: 0.0121,
   });
-  const mapRef = useRef();
+  const mapRef = useRef<any>();
 
   const updateUserLocation = useCallback(async () => {
     const updatedMapCoordinates = await userLocation(
@@ -36,7 +40,7 @@ export default function GoogleMapsMenuSection(props) {
     if (updatedMapCoordinates) {
       setMapCoordinates(updatedMapCoordinates);
     }
-    console.log('new coords: ', mapCoordinates)
+    console.log("new coords: ", mapCoordinates);
   }, [mapCoordinates]);
 
   useEffect(() => {
@@ -50,9 +54,9 @@ export default function GoogleMapsMenuSection(props) {
     updateUserLocation();
   }, []);
 
-
   useEffect(() => {
-    const callback = (newRegion) => {
+    // what is newRegion?
+    const callback = (newRegion: any) => {
       console.log("new region:", newRegion);
     };
 
@@ -61,34 +65,35 @@ export default function GoogleMapsMenuSection(props) {
     }
   }, [mapCoordinates]);
 
-  const traceRouteOnReady = useCallback((result) => {
-    setDistance(result.distance);
-    setDuration(result.duration);
+  const traceRouteOnReady = useCallback(
+    // what is result?
+    (result: any) => {
+      setDistance(result.distance);
+      setDuration(result.duration);
 
-    if (!mapFitted) {
-      mapRef.current?.fitToCoordinates(result.coordinates, {
-        edgePadding: {
-          right: 70,
-          bottom: 70,
-          left: 70,
-          top: 70,
-        },
-      });
-      setMapFitted(true);
-    }
-  }, [mapFitted]);
+      if (!mapFitted) {
+        mapRef.current?.fitToCoordinates(result.coordinates, {
+          edgePadding: {
+            right: 70,
+            bottom: 70,
+            left: 70,
+            top: 70,
+          },
+        });
+        setMapFitted(true);
+      }
+    },
+    [mapFitted]
+  );
 
   const destination = {
     latitude: parseFloat(location[0].latitude),
     longitude: parseFloat(location[0].longitude),
   };
 
-  function CustomMarker({ icon }) {
-    return (
-      <View style={styles.marker}>
-        {icon}
-      </View>
-    );
+  // what is icon?
+  function CustomMarker({ icon }: any) {
+    return <View style={styles.marker}>{icon}</View>;
   }
 
   return (
@@ -106,15 +111,25 @@ export default function GoogleMapsMenuSection(props) {
           //onRegionChangeComplete={setMapCoordinates}
         >
           <Marker coordinate={destination}>
-            <CustomMarker icon={<MaterialCommunityIcons name="store" size={24} color="white" />} />
+            <CustomMarker
+              icon={
+                <MaterialCommunityIcons name="store" size={24} color="white" />
+              }
+            />
           </Marker>
           <Marker coordinate={mapCoordinates} anchor={{ x: 0.5, y: 0.5 }}>
-            <CustomMarker icon={<Entypo name="home" size={24} color="white" />} />
+            <CustomMarker
+              icon={<Entypo name="home" size={24} color="white" />}
+            />
           </Marker>
           <MapViewDirections
             origin={mapCoordinates}
             destination={destination}
-            apikey={googleDirectionsAPIKey}
+            apikey={
+              process.env.googleDirectionsAPIKey
+                ? process.env.googleDirectionsAPIKey
+                : ""
+            }
             strokeColor="#78DBFF"
             strokeWidth={4}
             onReady={traceRouteOnReady}

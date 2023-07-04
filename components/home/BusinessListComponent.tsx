@@ -1,21 +1,26 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import BusinessCard from "cards/Home/BusinessCard";
+import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
+interface Props {
+  title:string,
+  business:vendor[],
+  styles?: any,
+}
 
-const BusinessListComponent = React.memo((props) => {
+const BusinessListComponent = React.memo((props: Props) => {
   return (
-    <View>
+    <View >
       <Text style={styles.title}>{props.title}</Text>
-      <View style={styles.list}>
+      
         <FlatList
           horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={props.business}
-          keyExtractor={(item) => item.id.toString()} // Assuming 'id' is a unique identifier property
+          keyExtractor={(item) => item.id} // Assuming 'id' is a unique identifier property
           renderItem={({ item }) => <BusinessCard businessItem={item} />}
         />
-      </View>
       <View style={styles.margin}></View>
     </View>
   );

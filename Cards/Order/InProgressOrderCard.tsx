@@ -4,9 +4,9 @@ import moment from "moment";
 import "moment-timezone";
 import UseOrders from "hooks/handleVendors/useOrders";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
-import order from "../../types/interfaces/order.interface";
-import orderItem from "../../types/interfaces/orderItem.interface";
-import location from "../../types/interfaces/location.interface";
+import order from "../../typeDefinitions/interfaces/order.interface";
+import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
+import location from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
   order: order

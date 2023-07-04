@@ -2,7 +2,7 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import PreviousOrderCard from "cards/Menu/PreviousOrderCard";
-import { itemType } from "../../types/interfaces/item.interface";
+import { itemType } from "../../typeDefinitions/interfaces/item.interface";
 
 interface Props {
   businessName: string;
