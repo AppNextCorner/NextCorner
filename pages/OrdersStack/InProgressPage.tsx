@@ -15,7 +15,7 @@ import InProgressList from "components/unfinishedOrders/InProgressList";
 import { AntDesign} from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
-import {location} from "../../typeDefinitions/interfaces/location.interface";
+import location from "../../typeDefinitions/interfaces/location.interface";
 /**
  * Used to display the status, map, and the items that are currently in the progress of being made
  */

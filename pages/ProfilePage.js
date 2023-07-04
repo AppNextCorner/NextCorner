@@ -8,11 +8,12 @@ import { auth } from "hooks/handleUsers/useFirebase";
 // import firebase features
 import { signOut } from "firebase/auth";
 
-import { getUserz, logOut } from "../store/slices/userSessionSlice";
+import { getUser, logOut } from "../store/slices/userSessionSlice";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ProfilePage() {
-  const user = useAppSelector(getUserz);
+  const user = useAppSelector(getUser);
+  
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   // grabs the only user from the array as it has been already filtered out to include the current user
@@ -26,7 +27,7 @@ export default function ProfilePage() {
       // change the state of the user screen to false to change the routes we want the user to access
       dispatch(logOut());
       const result = await signOut(auth); // Sign out the user from firebase authentication
-
+      console.log(result)
       return result;
     } catch (err) {
       console.log(err.message);

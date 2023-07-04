@@ -38,13 +38,8 @@ export default function SignInPage() {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
     signInWithEmailAndPassword(auth, email, password) // firebase auth that requires password, email, and the auth status of the user
       // takes in the credentials from email and password
-      .then((userCredential) => {
-        // set the user as a variable containing the information of the user
-        const user = userCredential.user;
-
-     
-        // dispatch(setUser(payload));
-        navigation.navigate("HomeStack");
+      .then((_userCredential) => {
+        navigation.navigate("HomeStack", { screen: 'Home' });
       })
       .catch((err) => {
         console.log(err);

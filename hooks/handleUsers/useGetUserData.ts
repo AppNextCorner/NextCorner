@@ -19,6 +19,7 @@ import { makePostRequest } from "../../config/axios.config";
  */
 const useGetUserData = () => {
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const dispatch: AppDispatch = useAppDispatch();
 
   /**
@@ -87,10 +88,13 @@ const useGetUserData = () => {
           fetchUserAsync();
           fetchBusinesses();
           setIsDone(true);
+          setIsLoggedIn(true);
         } else {
           // User is signed out
+          console.log('logging out')
           dispatch(logOut());
           setIsDone(true);
+          setIsLoggedIn(false);
         }
       } catch (err) {
         console.log(err);
@@ -104,6 +108,7 @@ const useGetUserData = () => {
   return {
     fetchBusinesses,
     isDone,
+    isLoggedIn
   };
 };
 

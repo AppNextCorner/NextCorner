@@ -16,8 +16,6 @@ import {
   Octicons,
   Ionicons,
 } from "@expo/vector-icons";
-import { useAppSelector } from "../store/hook";
-import { getIsLoggedIn } from "../store/slices/userSessionSlice";
 import PaymentDetailsPage from "pages/PaymentStack/PaymentDetailsPage";
 import OrderPlacedPage from "pages/PaymentStack/OrderPlacedPage";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
@@ -26,8 +24,8 @@ import SignUpPage from "pages/auth/SignUpPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
 import Vendor from "pages/BusinessStack/components/Vendor";
 import VendorMore from "pages/BusinessStack/components/VendorMore";
-import ReviewsPage from "pages/BusinessStack/components/ReviewsPage";
-import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
+import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
+import ReviewCreatePage from "pages/BusinessStack/components/reviewCreatePage";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -42,10 +40,10 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export default function Route() {
-  const { isDone } = useGetUserData();
-  const isLoggedin = useAppSelector(getIsLoggedIn);
-
-  if (isDone === true && isLoggedin) {
+  const { isDone, isLoggedIn } = useGetUserData();
+  console.log("isDone: ", isDone);
+  console.log("isloggedin: ", isLoggedIn);
+  if (isDone === true && isLoggedIn) {
     return (
       <>
         <NavigationContainer independent={true}>
@@ -79,7 +77,7 @@ export default function Route() {
         </NavigationContainer>
       </>
     );
-  } else if (isDone === true && !isLoggedin) {
+  } else if (isDone === true && !isLoggedIn) {
     return (
       <NavigationContainer>
         <Stack.Navigator>
@@ -130,13 +128,6 @@ function VendorStack() {
               />
             );
           }
-          // else if (rn === profileName) {
-          //   iconName = focused ? "person" : "person";
-          //   return <Ionicons name={iconName} size={size} color={color} />;
-          // } else if (rn === vendorsName) {
-          //   iconName = focused ? "running" : "running";
-          //   return <FontAwesome5 name={iconName} size={size} color={color} />;
-          // }
         },
         headerShown: false,
         tabBarActiveTintColor: "#78DBFF",
