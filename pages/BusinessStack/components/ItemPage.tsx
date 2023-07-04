@@ -56,6 +56,12 @@ export default function ItemPage() {
   const parse = { cartData: JSON.parse(JSON.stringify(menuItem)) };
   const name = (parse || {}).cartData;
 
+  // Transform the rating into a string and then into an array
+  const convert = menuItem.rating.toString().split("");
+
+  // From that array, slice it so it only shows the first 2 digits
+  const rating = convert.slice(0, 3);
+
   const resetOptions = name.customizations.flat().map((c: any) => c.selected);
 
   const goHome = async () => {
@@ -158,7 +164,7 @@ export default function ItemPage() {
               size={20}
               color="#ffc247"
             />
-            <Text style={styles.ratingText}>{menuItem.rating}</Text>
+            <Text style={styles.ratingText}>{rating}</Text>
             <Text style={styles.info}>Rating and reviews</Text>
 
             {/* 

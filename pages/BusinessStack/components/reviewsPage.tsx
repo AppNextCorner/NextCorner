@@ -30,41 +30,43 @@ export default function ReviewsPage() {
   }, []);
 
   return (
-    <View>
-      {isLoading ? (
-        <Text>Loading...</Text> // Render a loading message
-      ) : (
-        /**
-         * Map through the review
-         *
-         * review is type ReviewInterface
-         *
-         */
-        reviews.map((review: any, index: number) => {
+    <>
+      <View>
+        {isLoading ? (
+          <Text>Loading...</Text> // Render a loading message
+        ) : (
           /**
-           * Get the user by finding the Id of review.user
-           * it is type AppUser
+           * Map through the review
+           *
+           * review is type ReviewInterface
+           *
            */
-          const user = reviewByUser.find(
-            (user: any) => user._id === review.user
-          );
-          // Pass in review and user to the ReviewCard component
-          return <ReviewCard review={review} user={user} key={index} />;
-        })
-      )}
-      <TouchableOpacity
-        style={styles.createReviewBtn}
-        // ON press go to createReviewpage
-        onPress={createReviewNav}
-      >
-        <Text>Create Review</Text>
-      </TouchableOpacity>
-    </View>
+          reviews.map((review: any, index: number) => {
+            /**
+             * Get the user by finding the Id of review.user
+             * it is type AppUser
+             */
+            const user = reviewByUser.find(
+              (user: any) => user._id === review.user
+            );
+            // Pass in review and user to the ReviewCard component
+            return <ReviewCard review={review} user={user} key={index} />;
+          })
+        )}
+        <TouchableOpacity
+          style={styles.createReviewBtn}
+          // ON press go to createReviewpage
+          onPress={createReviewNav}
+        >
+          <Text>Create Review</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   createReviewBtn: {
-    marginTop: 60,
+    marginTop: 1,
   },
 });

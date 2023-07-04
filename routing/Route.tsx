@@ -44,8 +44,7 @@ const Stack = createNativeStackNavigator();
 export default function Route() {
   const { isDone } = useGetUserData();
   const isLoggedin = useAppSelector(getIsLoggedIn);
-  console.log("isDone: ", isDone);
-  console.log("isloggedin: ", isLoggedin);
+
   if (isDone === true && isLoggedin) {
     return (
       <>

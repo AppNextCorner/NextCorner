@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 
 // set user2
-import {
-  getUsers,
-  setUser,
-  logOut,
-  getUser,
-} from "../../store/slices/userSessionSlice";
+import { getUsers, setUser, logOut } from "../../store/slices/userSessionSlice";
 import { NextFn, User, onAuthStateChanged } from "firebase/auth";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { useAppDispatch } from "../../store/hook";
 import { fetchCart } from "../../store/slices/addToCart";
 import { getOrderList } from "../../store/slices/addToOrders";
 import { auth } from "hooks/handleUsers/useFirebase";
@@ -25,8 +20,6 @@ import { makePostRequest } from "../../config/axios.config";
 const useGetUserData = () => {
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const dispatch: AppDispatch = useAppDispatch();
-
-  const user2 = useAppSelector(getUser);
 
   /**
    * Call the redux slice to send a request to grab the authenticated information from the mongodb server
@@ -56,6 +49,16 @@ const useGetUserData = () => {
     return response.data;
   };
 
+  const fetchBusinesses = async () => {
+    try {
+      // Fetch the businesses from the API
+      const { payload } = await dispatch(getAllBusinesses());
+      console.log("business in payload:", payload);
+    } catch (error) {
+      console.log("Error fetching businesses:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchUserAsync = async () => {
       // after user is confirmed, grab their data
@@ -70,15 +73,6 @@ const useGetUserData = () => {
         console.log("error: ", e);
       }
     };
-    const fetchBusinesses = async () => {
-      try {
-        // Fetch the businesses from the API
-        const { payload } = await dispatch(getAllBusinesses());
-        console.log("business in payload:", payload);
-      } catch (error) {
-        console.log("Error fetching businesses:", error);
-      }
-    };
 
     /**
      * Checking if the user is authenticated in firebase, and if so, then fetch the data of the user
@@ -87,14 +81,9 @@ const useGetUserData = () => {
       user: User | null
     ) => {
       try {
-        console.log("auth", auth);
-        console.log("user: ", user);
         if (user && user.email) {
           const data = await getUserData(user.email);
-          console.log(data.payload);
           dispatch(setUser(data.payload));
-          console.log("SUPER IMPORTANT");
-          console.log(user2);
           fetchUserAsync();
           fetchBusinesses();
           setIsDone(true);
@@ -113,6 +102,7 @@ const useGetUserData = () => {
   }, [auth, dispatch]);
 
   return {
+    fetchBusinesses,
     isDone,
   };
 };

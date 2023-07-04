@@ -13,8 +13,9 @@ import { reviewInterface } from "../../../typeDefinitions/interfaces/reviews.int
 import AppUser from "../../../typeDefinitions/interfaces/user.interface";
 import useCreateReview from "hooks/api/reviews/useCreateReview";
 import { useRoute } from "@react-navigation/native";
-export default function ReviewCreatePage() {
+import { Rating } from "react-native-ratings";
 
+export default function ReviewCreatePage() {
   const route = useRoute();
   // Obtain user with selector
   const user: AppUser = useAppSelector(getUser)!;
@@ -26,12 +27,16 @@ export default function ReviewCreatePage() {
   // A state for reviewRatings and setReviewRatings
   const [reviewRating, setReviewRating] = useState<number>(0);
 
-
   /**
    * Navigations
    */
   const navigate = useNavigation();
-  const cancel = () => navigate.goBack();
+  const cancel = (goBack: () => void) => goBack();
+
+  const handlePress = async () => {
+    await writeReview(reviewData);
+    cancel(() => navigate.goBack());
+  };
 
   // Obtain route params
   const { itemId }: any = route.params;
@@ -45,28 +50,30 @@ export default function ReviewCreatePage() {
   };
   return (
     <View>
-      <Text style={styles.title}>reviewsPage</Text>
+      <Text style={styles.title}>Create a review!</Text>
       <TextInput
         style={styles.textInput}
-        onChangeText={(val) => {
-          setReviewComment(val);
-        }}
+        onChangeText={(val) => setReviewComment(val)}
+        placeholder="Write your review here"
+        multiline
+        numberOfLines={4}
       />
-      <TextInput
-        style={styles.textInput}
-        onChangeText={(val) => {
-          setReviewRating(parseInt(val));
-        }}
+      <Rating
+        type="star"
+        ratingCount={5}
+        imageSize={30}
+        startingValue={reviewRating}
+        onFinishRating={setReviewRating}
+        style={styles.starRating}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.buttonStyles} onPress={cancel}>
-          <Text>Cancel</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           style={styles.buttonStyles}
-          // Send review data to the backend
-          onPress={() => writeReview(reviewData)}
+          onPress={() => cancel(() => navigate.goBack())}
         >
+          <Text>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonStyles} onPress={handlePress}>
           <Text>Post</Text>
         </TouchableOpacity>
       </View>
@@ -81,11 +88,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     alignSelf: "center",
-    height: 244,
-    width: 328,
-    borderStyle: "solid",
+    height: 120,
+    width: 300,
+    marginTop: 20,
+    borderWidth: 1,
     borderColor: "black",
-    borderWidth: 5,
+    paddingHorizontal: 10,
   },
   buttonContainer: {
     display: "flex",
@@ -96,5 +104,9 @@ const styles = StyleSheet.create({
   },
   buttonStyles: {
     marginHorizontal: 20,
+  },
+  starRating: {
+    alignSelf: "center",
+    marginTop: 20,
   },
 });
