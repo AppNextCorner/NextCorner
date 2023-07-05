@@ -19,7 +19,7 @@ import { makePostRequest } from "../../config/axios.config";
  */
 const useGetUserData = () => {
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false) // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
 
   /**
