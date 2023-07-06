@@ -13,6 +13,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { vendor } from "../../../typeDefinitions/interfaces/vendor.interface";
 import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
 import BusinessCard from "cards/Home/BusinessCard";
+import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
+import SelectingCategory from "components/vendors/SelectingCategory";
+
 /**
  *
  *
@@ -32,9 +35,7 @@ const VendorsCreate = () => {
     },
     open: "",
     close: "",
-    category: {
-      category: "",
-    },
+    category: "",
     item: menuStructure,
     userId: 0,
     categoryId: 0,
@@ -54,6 +55,11 @@ const VendorsCreate = () => {
       [property]: text,
     }));
   };
+  const handleImageChange = async() => {
+    const response: string = await openImageLibrary() 
+    handlePropertyChange('image', response)
+  }
+  const { openImageLibrary } = usePhotoHandler();
   return (
     <View style={styles.page}>
       <TouchableOpacity
@@ -63,21 +69,37 @@ const VendorsCreate = () => {
         <AntDesign name="arrowleft" size={30} color="white" />
       </TouchableOpacity>
 
-      <BusinessCard businessItem={structure} checkForStyleChange={true} />
+      <BusinessCard
+        disabled={true}
+        businessItem={structure}
+        checkForStyleChange={true}
+      />
       <View style={styles.form}>
-        <Text>Name: </Text>
-        <TextInput
-          value={structure.name}
-          onChangeText={(text) => handlePropertyChange("name", text)}
-          placeholder="John Doe's Stand"
-        />
+        <View style={styles.inputContainer}>
+          <Text>Name: </Text>
+          <TextInput
+            value={structure.name}
+            onChangeText={(text) => handlePropertyChange("name", text)}
+            placeholder="John Doe's Stand"
+          />
+        </View>
+
+        <TouchableOpacity onPress={handleImageChange}>
+          <View style={styles.imageForm}>
+            <Text>Add Image</Text>
+          </View>
+        </TouchableOpacity>
+        <View>
+          <Text>Hello</Text>
+          <SelectingCategory chooseCategory={handlePropertyChange}/>
+          
+        </View>
       </View>
 
       {/* <FlatList 
         data={}
 
     /> */}
-      <Text>VendorsCreate</Text>
     </View>
   );
 };
@@ -85,6 +107,22 @@ const VendorsCreate = () => {
 export default VendorsCreate;
 
 const styles = StyleSheet.create({
+  imageForm: {
+    marginHorizontal: "5%",
+    padding: "5%",
+    borderRadius: 7.5,
+    borderWidth: 3,
+    borderColor: "#f2f0f0",
+  },
+  inputContainer: {
+    borderRadius: 7.5,
+    borderWidth: 3,
+    borderColor: "#f2f0f0",
+    backgroundColor: "#fff",
+    padding: "4%",
+    margin: "5%",
+    flexDirection: "column",
+  },
   form: {
     flex: 2,
   },

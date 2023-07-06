@@ -7,10 +7,11 @@ import { useAppDispatch } from "../../store/hook";
 import { fetchCart } from "../../store/slices/addToCart";
 import { getOrderList } from "../../store/slices/addToOrders";
 import { auth } from "hooks/handleUsers/useFirebase";
-import { getAllBusinesses } from "../../store/slices/BusinessSlice/businessSlice";
 import UserAction from "../../typeDefinitions/interfaces/reduxAction.interface";
 import { AppDispatch } from "../../typeDefinitions/action.type";
 import { makePostRequest } from "../../config/axios.config";
+import fetchBusinesses from "pages/BusinessStack/api/getBusinessess";
+import { setBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -46,14 +47,19 @@ const useGetUserData = () => {
    */
   const getUserData = async (email: string) => {
     const url = "/auth/getUser";
+    console.log(
+      'email: ', email
+    )
     const response = await makePostRequest(url, { email: email });
+    console.log('response from user: ', response.data)
     return response.data;
   };
 
-  const fetchBusinesses = async () => {
+  const dispatchBusinesses = async () => {
     try {
       // Fetch the businesses from the API
-      const { payload } = await dispatch(getAllBusinesses());
+      const businesses = await fetchBusinesses();
+      const { payload } = dispatch(setBusinesses(businesses));
       console.log("business in payload:", payload);
     } catch (error) {
       console.log("Error fetching businesses:", error);
@@ -85,9 +91,10 @@ const useGetUserData = () => {
         console.log(user)
         if (user && user.email) {
           const data = await getUserData(user.email);
+          console.log('payload from user: ', data.payload)
           dispatch(setUser(data.payload));
           fetchUserAsync();
-          fetchBusinesses();
+          dispatchBusinesses();
           setIsDone(true);
           setIsLoggedIn(true);
         } else {
@@ -107,7 +114,6 @@ const useGetUserData = () => {
   }, [auth, dispatch]);
 
   return {
-    fetchBusinesses,
     isDone,
     isLoggedIn
   };

@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 const usePhotoHandler = () => {
-  const openImageLibrary = async () => {
+  const openImageLibrary = async (): Promise<string>  => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
@@ -17,6 +17,7 @@ const usePhotoHandler = () => {
         return response.assets[0].uri;
       }
     }
+    return 'no image found';
   };
 
   // const imageObj = {

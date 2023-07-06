@@ -1,39 +1,34 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import { RootState } from "../store";
-
-/**
- * temp
- */
 import { auth } from "hooks/handleUsers/useFirebase";
 import { createToken } from "../../hooks/handleUsers/useCreateToken";
 import axios from "axios";
 import { API } from "constants/API";
 const USER_URL = `${API}/auth/`;
-/**
- * temp
- *
- */
 
 export const createUser = createAsyncThunk(
   "userSession/createUser",
   async (userData: any) => {
     try {
-      console.log("here is user data: ", userData);
       const resp = await axios.post(USER_URL + "signup", userData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log('resp: ', resp)
-      return resp.data;
-    } catch (err: any) {
-      console.log("error from user");
-      console.log(err.message);
-      return err.message;
+      return resp.data.payload;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        // Access the error payload from response.data
+        return error.response.data; 
+      }
+      return error.response; 
+     
     }
   }
 );
+
+
 
 export const getUsers = createAsyncThunk("userSession/getUsers", async () => {
   const headers: any = await createToken();

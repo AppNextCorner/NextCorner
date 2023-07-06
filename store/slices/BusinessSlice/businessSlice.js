@@ -7,6 +7,8 @@ import axios from "axios";
 import { API } from "constants/API";
 import { createToken } from "hooks/handleUsers/useCreateToken";
 const BUSINESS_URL = `${API}/business/`;
+
+
 export const getAllBusinesses = createAsyncThunk(
   "businessSlice/getAllBusinesses",
   async () => {

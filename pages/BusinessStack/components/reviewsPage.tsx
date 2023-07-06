@@ -28,6 +28,7 @@ export default function ReviewsPage() {
   useEffect(() => {
     fetchReviews(menuItem._id.toString());
   }, []);
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   return (
     <>
@@ -53,6 +54,11 @@ export default function ReviewsPage() {
             return <ReviewCard review={review} user={user} key={index} />;
           })
         )}
+        <TouchableOpacity onPress={() => {
+    navigation.goBack()
+  }} style={styles.createReviewBtn}>
+          <Text>Go Back</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.createReviewBtn}
           // ON press go to createReviewpage
@@ -67,6 +73,6 @@ export default function ReviewsPage() {
 
 const styles = StyleSheet.create({
   createReviewBtn: {
-    marginTop: 1,
+    marginTop: '20%',
   },
 });

@@ -15,12 +15,13 @@ import React, { useState } from "react";
 import { Foundation } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useAppSelector } from "../../store/hook";
-import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
+import { getBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
+// import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
 
 export default function SearchComponent() {
   const [showStores, setShowStores] = useState("");
 
-  const vendors = useAppSelector(getBusiness);
+  const vendors = useAppSelector(getBusinesses);
   const navigation = useNavigation();
   const filteredStores = [];
   const mapStores = vendors.map((il) => il.name);

@@ -10,20 +10,25 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
-// import { IP } from "@env";
+import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
+const logo = require("assets/logo.png");
 
 interface Props {
   businessItem: vendor;
   checkForStyleChange?: boolean;
+  disabled?: boolean;
 }
 
 export default function BusinessCard({
   businessItem,
   checkForStyleChange,
+  disabled
+  
 }: Props) {
   // The style is changed when a category is selected on the home page
-  const changeStyle = (checkForStyleChange: boolean | undefined): StyleProp<ViewStyle> => {
+  const changeStyle = (
+    checkForStyleChange: boolean | undefined
+  ): StyleProp<ViewStyle> => {
     let change: StyleProp<ViewStyle> =
       checkForStyleChange === true
         ? {
@@ -43,22 +48,30 @@ export default function BusinessCard({
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
       // pass in data of business items / all of business, but pin pointing which business data to get
+      disabled={disabled}
       onPress={() =>
         navigation.navigate("MenuList", { business: businessItem })
       }
       style={styles.foodCategoryStyle}
     >
-      <View style={checkForStyleChange ? changeStyle(checkForStyleChange): {
-            height: 200,
-            width: 275,
-          }}>
-        <Image
-          style={styles.foodImages}
-          source={{
-            // Add URL's later when uploading vendor 
-            uri: businessItem.image
-          }}
-        />
+      <View
+        style={
+          checkForStyleChange
+            ? changeStyle(checkForStyleChange)
+            : {
+                height: 200,
+                width: 275,
+              }
+        }
+      >
+        <View
+          style={businessItem.image ? styles.vendorImageContainer : styles.noVendorImageContainer}
+        >
+          <Image
+            style={businessItem.image ? styles.vendorImage : styles.noVendorImage}
+            source={businessItem.image ? { uri: businessItem.image } : logo}
+          />
+        </View>
 
         <View style={styles.foodTexts}>
           <MaterialIcons name="store" size={24} color="#606160" />
@@ -94,10 +107,28 @@ const styles = StyleSheet.create({
     color: "#606160",
     flex: 1,
   },
-  foodImages: {
+  vendorImage: {
     width: "100%",
-    flex: 0,
+    flex: 1,
     height: 150,
+  },
+  noVendorImageContainer: {
+    flex: 5,
+    width: "100%",
+  },
+  vendorImageContainer: {
+    flex: 5,
+    width: "100%",
+  },
+  noVendorImage: {
+    flex:1,
+    width: 175,
+    height: 250,
+    margin: "2%",
+    alignSelf: "center",
+    objectFit: "scale-down",
+    tintColor: 'gray',
+    opacity: 0.5
   },
   card: {
     width: 250,

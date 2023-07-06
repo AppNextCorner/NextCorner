@@ -1,3 +1,4 @@
+import { Alert } from "react-native";
 import { useAppDispatch } from "../../store/hook";
 import { createUser } from "../../store/slices/userSessionSlice";
 import UserAction from "../../typeDefinitions/interfaces/reduxAction.interface";
@@ -23,13 +24,14 @@ const useAddUser = () => {
     userData: AppUser
   ) => {
     try {
-      const user = dispatch(createUser(userData)).then((action: UserAction) => {
+      const user = await dispatch(createUser(userData)).then((action: UserAction) => {
         const userCreated = action.payload; // Access the payload
         return userCreated;
+      }).catch((err) => {
+        return err
       }); // wait for user to be created in the backend
       return user
-    } catch (err) {
-      console.log("user was not created", err);
+    } catch (err: any) {
     }
   };
 

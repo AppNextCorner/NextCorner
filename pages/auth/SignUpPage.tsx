@@ -45,20 +45,22 @@ export default function SignUpPage() {
   ) => {
     // create a user with async thunk and through our backend, firebase admin will return a user
     const user = await makeUser(userData);
+    console.log(userData)
+    console.log('here is user: ', user)
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
       signInWithEmailAndPassword(auth, userData.email, userData.password)
         // takes in the credentials from email and password
         .then((_userCredential) => {
+          console.log("cred: ",_userCredential)
           navigation.navigate("HomeStack");
-          useGetUserData() 
         })
         .catch((err) => {
-          console.log(err);
           // error message for lack of password characters, email existing, etc...
-          Alert.alert(err.message);
+          Alert.alert(user.message);
         });
     }
+    console.log(user)
 
     //dispatch(setUser(user));
     return user;

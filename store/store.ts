@@ -2,10 +2,11 @@
  * Purpose of store: Being used to store all of our global state
  */
 
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import userSessionReducer from "./slices/userSessionSlice";
 import addToCart from "./slices/addToCart";
 import addToOrders from "./slices/addToOrders";
+import businessSessionReducer from "./slices/BusinessSlice/businessSessionSlice";
 import businessSlice from "./slices/BusinessSlice/businessSlice";
 // import userSession from "./slices/userSession";
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     addToCart: addToCart,
     addToOrders: addToOrders,
     businessSlice: businessSlice,
+    businessSession: businessSessionReducer,
   },
   devTools: true,
 });

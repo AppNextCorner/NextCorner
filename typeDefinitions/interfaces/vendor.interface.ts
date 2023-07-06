@@ -1,5 +1,4 @@
 import { announcementType } from "./announcementData.interface";
-import { categoryType } from "./category.interface";
 import { itemType } from "./item.interface";
 import { itemStatus } from "./itemStatus.interface";
 import {location} from "./location.interface";
@@ -11,7 +10,7 @@ export interface vendor {
   location: location;
   open: string;
   close: string;
-  category: categoryType;
+  category: string;
   item: itemType[];
   userId: number;
   categoryId: number;

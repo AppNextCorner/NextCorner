@@ -4,15 +4,15 @@ import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import 'moment-timezone'
 
-const CompletedOrderCard = ({ completedOrder }) => {
+const CompletedOrderCard = ({ completedOrder } : any) => {
   // Get the time the order was placed and format it using moment.js
   const getTimeOrdered = moment(new Date(completedOrder.createdAt), 'YYYY-M-D H:mm')
     .tz('America/Los_Angeles')
     .format('dddd, MMM D')
 
   // Calculate the total price of the order
-  const calculateOrderPrice = completedOrder.singleOrderList.map((cart) => cart.cartData.price * cart.cartData.amountInCart)
-  const addOrderPrice = Math.round(calculateOrderPrice.reduce((a, b) => a + b));
+  const calculateOrderPrice = completedOrder.singleOrderList.map((cart: any) => cart.cartData.price * cart.cartData.amountInCart)
+  const addOrderPrice = Math.round(calculateOrderPrice.reduce((a: number, b: number) => a + b));
 
   // Get the business name and the number of items in the order
   const getBusinessName = completedOrder.singleOrderList[0].businessOrderedFrom
@@ -35,7 +35,7 @@ const CompletedOrderCard = ({ completedOrder }) => {
 
         <View style={styles.itemData}>
           {/* Render each item's name */}
-          {getItemAmount.map((order, index) => (
+          {getItemAmount.map((order: any, index: number) => (
             <Text key={index.toString()}> {order.cartData.name} /</Text>
           ))}
         </View>
