@@ -26,6 +26,7 @@ import Vendor from "pages/BusinessStack/components/Vendor";
 import VendorMore from "pages/BusinessStack/components/VendorMore";
 import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
 import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
+import VendorsCreate from "pages/BusinessStack/components/VendorsCreate";
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -73,6 +74,7 @@ export default function Route() {
 
             {/* Vendor Pages */}
             <Stack.Screen name="Vendor" component={VendorStack} />
+            <Stack.Screen name="VendorCreate" component={VendorsCreate} />
           </Stack.Navigator>
         </NavigationContainer>
       </>

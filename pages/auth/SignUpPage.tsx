@@ -10,56 +10,48 @@ import {
   Alert,
 } from "react-native";
 import useAddUser from "hooks/handleUsers/useAddUser";
-import { useAppDispatch } from "../../store/hook";
-import { getUsers, setUser } from "../../store/slices/userSessionSlice";
 import { auth } from "hooks/handleUsers/useFirebase";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
+import AppUser from "../../typeDefinitions/interfaces/user.interface";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
  */
 export default function SignUpPage() {
+  
   // form data
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  /**
-   * Backend structure:
-   * firstName: {type: String, required: true},
-    firstLast: {type: String, required: true},
-    phoneNumber: {type: Number, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-   */
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
+  const [userData, setUserData] = useState<AppUser>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+  });
+ 
   const { makeUser } = useAddUser();
 
-  const dispatch = useAppDispatch();
-
+  
+  const handlePropertyChange = (property: string, text: string) => {
+    setUserData((prevStructure) => ({
+      ...prevStructure,
+      [property]: text,
+    }));
+  };
+  const navigation = useNavigation<NativeStackNavigationProp<any>>()
   // after gaining the input value - check if the form is complete and move them onto a user slice
   const registerUser = async (
-    firstName,
-    lastName,
-    email,
-    password,
-    phoneNumber
+   userData: AppUser
   ) => {
     // create a user with async thunk and through our backend, firebase admin will return a user
-    const user = await makeUser({
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-    });
+    const user = await makeUser(userData);
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
-      signInWithEmailAndPassword(auth, email, password)
+      signInWithEmailAndPassword(auth, userData.email, userData.password)
         // takes in the credentials from email and password
         .then((_userCredential) => {
-          navigation.navigate("HomeStack", { screen: 'Home' });
+          navigation.navigate("HomeStack");
+          useGetUserData() 
         })
         .catch((err) => {
           console.log(err);
@@ -71,8 +63,6 @@ export default function SignUpPage() {
     //dispatch(setUser(user));
     return user;
   };
-
-  const navigation = useNavigation();
 
   const goToLoginPage = () => {
     navigation.navigate("Login");
@@ -91,18 +81,18 @@ export default function SignUpPage() {
         <Text style={styles.inputText}>Email Address</Text>
         <TextInput
           style={styles.textInput}
-          readOnly={false}
+        
           onChangeText={(text) => {
-            setEmail(text);
+            handlePropertyChange('email', text)
           }}
           placeholder="email@gmail.com"
         />
         <Text style={styles.inputText}>Password</Text>
         <TextInput
           style={styles.textInput}
-          readOnly={false}
-          onChangeText={setPassword}
-          value={password}
+          
+          onChangeText={(text) => handlePropertyChange('password', text)}
+          value={userData.password}
           placeholder="password"
         />
         {/* Name container */}
@@ -111,9 +101,9 @@ export default function SignUpPage() {
             <Text style={styles.inputText}>First Name</Text>
             <TextInput
               style={styles.nameInput}
-              readOnly={false}
-              onChangeText={setFirstName}
-              value={firstName}
+              
+              onChangeText={(text) => handlePropertyChange('firstName', text)}
+              value={userData.firstName}
               placeholder="Joe"
             />
           </View>
@@ -121,9 +111,9 @@ export default function SignUpPage() {
             <Text style={styles.inputText}>Last Name</Text>
             <TextInput
               style={styles.nameInput}
-              readOnly={false}
-              onChangeText={setLastName}
-              value={lastName}
+              
+              onChangeText={(text) => handlePropertyChange('lastName', text)}
+              value={userData.lastName}
               placeholder="bobaguard"
             />
           </View>
@@ -132,9 +122,9 @@ export default function SignUpPage() {
         <Text style={styles.inputText}>Phone Number</Text>
         <TextInput
           style={styles.textInput}
-          readOnly={false}
-          onChangeText={setPhoneNumber}
-          value={phoneNumber}
+          
+          onChangeText={(text) => handlePropertyChange('phoneNumber', text)}
+          value={userData.phoneNumber}
           // Splice the dashes later
           placeholder="123-123-1234"
         />
@@ -142,7 +132,7 @@ export default function SignUpPage() {
 
       <TouchableOpacity
         onPress={() =>
-          registerUser(firstName, lastName, email, password, phoneNumber)
+          registerUser(userData)
         }
         style={styles.signInButton}
       >

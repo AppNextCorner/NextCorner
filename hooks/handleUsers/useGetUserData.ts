@@ -82,6 +82,7 @@ const useGetUserData = () => {
       user: User | null
     ) => {
       try {
+        console.log(user)
         if (user && user.email) {
           const data = await getUserData(user.email);
           dispatch(setUser(data.payload));

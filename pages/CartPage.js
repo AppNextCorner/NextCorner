@@ -49,6 +49,8 @@ const CartPage = () => {
   };
 
   const getCartFromSlice = useAppSelector(getCart);
+
+  // console.log(getCartFromSlice[0].cartData.customizations[1].optionCustomizations)
   const isCartFull = JSON.parse(JSON.stringify(getCartFromSlice));
   const businessName = useAppSelector(getBusinessName);
 

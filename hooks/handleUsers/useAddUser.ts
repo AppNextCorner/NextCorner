@@ -1,9 +1,7 @@
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { Alert } from "react-native";
 import { useAppDispatch } from "../../store/hook";
 import { createUser } from "../../store/slices/userSessionSlice";
-
+import UserAction from "../../typeDefinitions/interfaces/reduxAction.interface";
+import AppUser from "../../typeDefinitions/interfaces/user.interface";
 /**
  * This hook shall help developers add a user to the firebase account
  *
@@ -11,8 +9,6 @@ import { createUser } from "../../store/slices/userSessionSlice";
 const useAddUser = () => {
   // User sessions using dispacth hook
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
-
   /**
    * make user will ensure that user submits all fields that include the following:
    *
@@ -22,22 +18,16 @@ const useAddUser = () => {
    * @param password
    * @param phoneNumber
    */
-  const makeUser = async (
-    firstName,
-    lastName,
-    email,
-    password,
-    phoneNumber
+  
+  const makeUser = async(
+    userData: AppUser
   ) => {
-    const userData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-    };
     try {
-      await dispatch(createUser(userData)); // wait for user to be created in the backend
+      const user = dispatch(createUser(userData)).then((action: UserAction) => {
+        const userCreated = action.payload; // Access the payload
+        return userCreated;
+      }); // wait for user to be created in the backend
+      return user
     } catch (err) {
       console.log("user was not created", err);
     }

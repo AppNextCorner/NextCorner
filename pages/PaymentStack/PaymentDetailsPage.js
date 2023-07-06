@@ -43,7 +43,7 @@ const PaymentDetailsPage = () => {
 
   const getCartFromSlice = useAppSelector(getCart);
   const cart = JSON.parse(JSON.stringify(getCartFromSlice));
-  console.log("cart in payment page:", cart);
+  //console.log("cart in payment page:", cart[0].cartData.customizations[1].optionCustomizations);
   const totalCost = useAppSelector(getTotal);
   const dispatch = useAppDispatch();
 

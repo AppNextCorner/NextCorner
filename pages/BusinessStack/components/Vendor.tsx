@@ -30,11 +30,6 @@ const ButtonText = styled.Text`
   font-weight: bold;
 `;
 
-const LogoImage = styled.Image`
-  width: 25px;
-  height: 25px;
-`;
-
 const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
@@ -52,7 +47,7 @@ const HeaderTitle = styled.Text`
   font-size: 16px;
   font-weight: bold;
 `;
-const CreateVendorContainer = styled.View`
+const CreateVendorContainer = styled.TouchableOpacity`
   paddinghorizontal: 15%;
   paddingvertical: 5%;
   border: 3px #f2f0f0 solid;
@@ -73,7 +68,7 @@ const Vendor = () => {
         <HeaderLogoImage source={HomeIcon} />
         <HeaderTitle>Next Corner Vendors</HeaderTitle>
       </HeaderContainer>
-      <CreateVendorContainer>
+      <CreateVendorContainer onPress={() => navigation.navigate("VendorCreate")}>
         <FontAwesome
           style={{ alignSelf: "center" }}
           name="plus-circle"

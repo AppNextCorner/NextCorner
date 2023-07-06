@@ -2,7 +2,7 @@ import { announcementType } from "./announcementData.interface";
 import { categoryType } from "./category.interface";
 import { itemType } from "./item.interface";
 import { itemStatus } from "./itemStatus.interface";
-import  location from "./location.interface";
+import {location} from "./location.interface";
 export interface vendor {
   name: string;
   image: string;
@@ -12,7 +12,7 @@ export interface vendor {
   open: string;
   close: string;
   category: categoryType;
-  item: itemType;
+  item: itemType[];
   userId: number;
   categoryId: number;
   trendingCategory: string;

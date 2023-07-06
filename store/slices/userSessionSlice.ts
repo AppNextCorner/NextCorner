@@ -19,13 +19,13 @@ export const createUser = createAsyncThunk(
   "userSession/createUser",
   async (userData: any) => {
     try {
-      console.log("here is user data: ", userData.firstName);
-      const resp = await axios.post(USER_URL + "signup", userData.firstName, {
+      console.log("here is user data: ", userData);
+      const resp = await axios.post(USER_URL + "signup", userData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+      console.log('resp: ', resp)
       return resp.data;
     } catch (err: any) {
       console.log("error from user");

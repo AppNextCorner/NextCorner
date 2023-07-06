@@ -1,8 +1,8 @@
 export default interface AppUser {
-  _id: string;
+  _id?: string;
   lastName: string;
   firstName: string;
-  phoneNumber: number;
+  phoneNumber: string;
   email: string;
   password: string;
 }
