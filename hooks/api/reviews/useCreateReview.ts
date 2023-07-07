@@ -13,7 +13,7 @@ export default function useCreateReview() {
   const writeReview = async (payload: reviewInterface) => {
     try {
       // get the created review
-      const createdReview = await postReview(payload);
+      await postReview(payload);
       await fetchBusinesses();
       // do something with the createdReview
     } catch (err) {

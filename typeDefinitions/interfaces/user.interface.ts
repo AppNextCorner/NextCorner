@@ -5,4 +5,5 @@ export default interface AppUser {
   phoneNumber: number;
   email: string;
   password: string;
+  role: string;
 }

@@ -76,9 +76,6 @@ export const userSessionSlice = createSlice({
     setUser: (state, action) => {
       state.activeSession = true;
       state.user = action.payload;
-      // state.users = action.payload.filter(
-      //   (getOneUser: AppUser) => getOneUser.email === auth?.currentUser?.email
-      // );
     },
     setUser2: (state, action) => {
       // console.log(
