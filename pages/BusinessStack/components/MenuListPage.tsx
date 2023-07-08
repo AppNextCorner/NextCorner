@@ -72,7 +72,7 @@ export default function MenuListPage() {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `https://nextcornerdevelopment.onrender.com/${business.image.toString()}`,
+                  uri: `https://nextcornerdevelopment.onrender.com/${business.image}`,
                 }}
               />
 

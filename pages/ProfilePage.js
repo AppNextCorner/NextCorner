@@ -7,15 +7,16 @@ import { useAppDispatch, useAppSelector } from "../store/hook";
 import { auth } from "hooks/handleUsers/useFirebase";
 // import firebase features
 import { signOut } from "firebase/auth";
-
+import useUpdateRole from "hooks/api/useUpdateRole";
 import { getUser, logOut } from "../store/slices/userSessionSlice";
 import { useNavigation } from "@react-navigation/native";
 
 export default function ProfilePage() {
   const user = useAppSelector(getUser);
-  
+
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
+  const { changeRoleToVendor } = useUpdateRole();
   // grabs the only user from the array as it has been already filtered out to include the current user
   console.log("user: ", user);
   const mainUser = user[0] || {
@@ -27,7 +28,6 @@ export default function ProfilePage() {
       // change the state of the user screen to false to change the routes we want the user to access
       dispatch(logOut());
       const result = await signOut(auth); // Sign out the user from firebase authentication
-      console.log(result)
       return result;
     } catch (err) {
       console.log(err.message);
@@ -86,6 +86,13 @@ export default function ProfilePage() {
             onPress={() => handleSignOutUser()}
           >
             <Text style={styles.logOutTextButton}>Log Out</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.logOutButton}
+            onPress={() => changeRoleToVendor(user._id)}
+          >
+            <Text style={styles.logOutTextButton}>Become a Vendor</Text>
           </Pressable>
         </View>
       </View>

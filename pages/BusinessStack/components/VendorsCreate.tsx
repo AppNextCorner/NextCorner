@@ -1,5 +1,5 @@
 import {
-
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -13,11 +13,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
 import BusinessCard from "cards/Home/BusinessCard";
 import SelectingCategory from "components/vendors/SelectingCategory";
-import {time} from "../../../typeDefinitions/interfaces/IVendor/time";
+import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
 import { vendorTime } from "constants/vendorTime";
 import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
 import { makeImagePostRequest } from "../../../config/axios.config";
+import CreateCategories from "./vendorCreate/CreateCategories";
 
 /**
  *
@@ -25,7 +26,7 @@ import { makeImagePostRequest } from "../../../config/axios.config";
  */
 
 const VendorsCreate = () => {
-  const{upload, openImageLibrary} = usePhotoHandler();
+  const { upload, openImageLibrary } = usePhotoHandler();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [menuStructure, setMenuStructure] = useState<itemType[]>([]);
   const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
@@ -35,12 +36,13 @@ const VendorsCreate = () => {
     // Replace with announcements later when vendor pages are finished
     announcements: {
       cards: [],
-      toggle: false
+      toggle: false,
     },
     location: {
       longitude: "",
       latitude: "",
     },
+    itemCategories: [],
     times: vendorTime,
     category: {
       name: "",
@@ -68,23 +70,25 @@ const VendorsCreate = () => {
   };
 
   return (
-    <View style={styles.page}>
+    <SafeAreaView style={styles.page}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
         style={styles.goBackButton}
       >
         <AntDesign name="arrowleft" size={30} color="#000" />
       </TouchableOpacity>
+      <View style={styles.cardPreview}>
+        <BusinessCard
+          disabled={true}
+          businessItem={structure}
+          checkForStyleChange={true}
+          create={true}
+        />
+      </View>
 
-      <BusinessCard
-        disabled={true}
-        businessItem={structure}
-        checkForStyleChange={true}
-        create={true}
-      />
       <View style={styles.form}>
         <View style={styles.inputContainer}>
-          <Text>Name: </Text>
+          <Text>Store Name: </Text>
           <TextInput
             value={structure.name}
             onChangeText={(text) => handlePropertyChange("name", text)}
@@ -97,25 +101,60 @@ const VendorsCreate = () => {
             <Text>Add Image</Text>
           </View>
         </TouchableOpacity>
-        <SelectingCategory chooseCategory={handlePropertyChange} form={structure}/>
+        <SelectingCategory
+          chooseCategory={handlePropertyChange}
+          form={structure}
+        />
+        <CreateCategories
+          chooseCategory={handlePropertyChange}
+          form={structure}
+        />
         {/* <SelectingTime times={structure.times} chooseTime={handlePropertyChange}/> */}
-
-        <TouchableOpacity onPress={async() => await upload(structure.image, '/business/uploadStore', makeImagePostRequest, {payload: structure})}>
-          <Text>Upload Store</Text>
-        </TouchableOpacity>
+        <View style={styles.uploadContainer}>
+          <TouchableOpacity
+            style={styles.upload}
+            onPress={async () =>
+              await upload(
+                structure.image,
+                "/business/uploadStore",
+                makeImagePostRequest,
+                { payload: structure }
+              )
+            }
+          >
+            <Text style={styles.uploadText}>Create Store</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* <FlatList 
         data={}
 
     /> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default VendorsCreate;
 
 const styles = StyleSheet.create({
+  cardPreview: {
+    flex: 1,
+  },
+  uploadText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  uploadContainer: {
+    flex: 1,
+    alignSelf: "center",
+  },
+  upload: {
+    padding: "5%",
+    paddingHorizontal: "35%",
+    borderRadius: 10,
+    backgroundColor: "#78dbff",
+  },
   imageForm: {
     marginHorizontal: "5%",
     padding: "5%",
@@ -133,7 +172,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   form: {
-    flex: 2,
+    flex: 1.75,
   },
   page: {
     flex: 1,

@@ -1,5 +1,9 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
 const usePhotoHandler = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
 
   const openImageLibrary = async (): Promise<string> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -48,8 +52,8 @@ const usePhotoHandler = () => {
       const formData = new FormData();
       formData.append("image",JSON.parse(JSON.stringify(imageObj)));
       formData.append("payload",JSON.stringify(payload.payload));
-
-      request(endpoint, formData);
+      navigation.navigate('')
+      //request(endpoint, formData);
     } catch (err) {
       console.log(err);
     }

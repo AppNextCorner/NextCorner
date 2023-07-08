@@ -49,7 +49,7 @@ export default function MenuItemCard({
           <Image
             style={styles.foodImages}
             source={{
-              uri: `${API}/${menuItem?.image.toString()}`,
+              uri: `${API}/${menuItem.image}`,
             }}
           />
         </View>

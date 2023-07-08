@@ -42,4 +42,5 @@ export const foodCategories: vendorCategory[] = [
     foodType: require("assets/CategoryIcons/pizza.png"),
     key: 7,
   },
+  
 ];

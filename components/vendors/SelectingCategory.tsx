@@ -46,7 +46,7 @@ export default function SelectingCategory(props: IProps) {
         }
         showsHorizontalScrollIndicator={false}
         numColumns={4}
-        data={foodCategories}
+        data={foodCategories.slice(0, 10)}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={toggleChip(item.text)}

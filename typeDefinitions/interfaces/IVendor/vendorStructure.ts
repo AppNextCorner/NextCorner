@@ -19,6 +19,7 @@ export interface vendorStructure {
   }
   location: location;
   times: time[];
+  itemCategories: string[],
   category: category;
   item: itemType[];
   uid: string;
