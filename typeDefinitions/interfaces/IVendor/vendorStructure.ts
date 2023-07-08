@@ -1,12 +1,12 @@
 import { announcementType } from "../announcementData.interface";
 import { itemType } from "../item.interface";
 import { status } from "../status.interface";
-import {location} from "../location.interface";
+import { location } from "../location.interface";
 import { time } from "./time";
 
 interface category {
-    name: string;
-    id: number;
+  name: string;
+  id: number;
 }
 
 export interface vendorStructure {
@@ -15,16 +15,17 @@ export interface vendorStructure {
   // Replace with announcements later when vendor pages are finished
   announcements: {
     cards: announcementType[];
-    toggle: boolean
-  }
+    toggle: boolean;
+  };
   location: location;
   times: time[];
   itemCategories: string[],
   category: category;
-  item: itemType[];
+  menu: itemType[];
   uid: string;
   trending: string;
   rating: number;
   status: status;
+  storeStatus: string;
   id?: string;
 }

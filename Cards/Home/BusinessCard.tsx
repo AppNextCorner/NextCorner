@@ -16,7 +16,7 @@ import { API } from "constants/API";
 
 interface Props {
   businessItem: vendor | vendorStructure;
-  create?: boolean
+  create?: boolean;
   checkForStyleChange?: boolean;
   disabled?: boolean;
 }
@@ -47,24 +47,26 @@ export default function BusinessCard({
   };
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
+  console.log("TEST");
+  console.log(businessItem);
   const checkCreateProp = (prop: boolean | undefined) => {
-    if(prop) {
+    if (prop) {
+      console.log(prop);
       return { uri: `${businessItem.image}` };
-    } else  {
-      return { uri: `${API}/${businessItem.image}` }
-    }
-  }
-
-  
-  const checkIfImageExists = (img: string, prop: boolean | undefined) => {
-    if(img){
-     return checkCreateProp(prop);
     } else {
-      return {uri: 'https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI='}
+      return { uri: `${API}/${businessItem.image}` };
     }
-  } 
+  };
 
+  const checkIfImageExists = (img: string, prop: boolean | undefined) => {
+    if (img) {
+      return checkCreateProp(prop);
+    } else {
+      return {
+        uri: "https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI=",
+      };
+    }
+  };
 
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
@@ -85,13 +87,18 @@ export default function BusinessCard({
                 width: 275,
               }
         }
-
       >
         <View
-          style={businessItem.image ? styles.vendorImageContainer : styles.noVendorImageContainer}
+          style={
+            businessItem.image
+              ? styles.vendorImageContainer
+              : styles.noVendorImageContainer
+          }
         >
           <Image
-            style={businessItem.image ? styles.vendorImage : styles.noVendorImage}
+            style={
+              businessItem.image ? styles.vendorImage : styles.noVendorImage
+            }
             // Old source, will change it back
             // source ={{uri: 'https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI='}}
 
@@ -147,7 +154,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   noVendorImage: {
-    flex:1,
+    flex: 1,
     width: 175,
     height: 250,
     margin: "2%",

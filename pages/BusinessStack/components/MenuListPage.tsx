@@ -25,6 +25,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
+import { API } from "constants/API";
 // import { IP } from "@env";
 
 export default function MenuListPage() {
@@ -52,6 +53,9 @@ export default function MenuListPage() {
     (val: any) => val.businessOrderedFrom === business.name
   );
 
+  console.log("Important");
+  console.log(business);
+  console.log(`${API}/${business.image}`);
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate("Home");
@@ -72,7 +76,7 @@ export default function MenuListPage() {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `https://nextcornerdevelopment.onrender.com/${business.image}`,
+                  uri: `${API}/${business.image.toString()}`,
                 }}
               />
 

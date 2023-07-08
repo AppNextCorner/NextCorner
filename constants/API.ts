@@ -11,7 +11,7 @@ switch (apiStatus) {
     API = "https://nextcornerdevelopment.onrender.com";
     break;
   default:
-    API = `http://192.168.1.19:4020`;
+    API = `http://${process.env.IP}:4020`;
     break;
 }
 

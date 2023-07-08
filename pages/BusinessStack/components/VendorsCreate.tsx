@@ -48,10 +48,12 @@ const VendorsCreate = () => {
       name: "",
       id: 0,
     },
-    item: menuStructure,
+
+    menu: menuStructure,
     uid: "",
     rating: 0,
     trending: "",
+    storeStatus: "Not Approved",
     status: {
       text: "",
       color: "",

@@ -213,7 +213,7 @@ export const NearbyVendors = () => {
                     <Image
                       style={styles.cardImage}
                       source={{
-                        uri: `${API}/${item.image.toString()}`,
+                        uri: `${API}/${item.image}`,
                       }}
                     />
                   </View>
