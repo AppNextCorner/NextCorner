@@ -43,7 +43,7 @@ export default function SearchComponent() {
     <View style={styles.menu}>
       <View style={styles.textInputBox}>
         <View style={styles.magnifyIcon}>
-          <Foundation name="magnifying-glass" size={24} color="#78DBFF" />
+          <Foundation name="magnifying-glass" size={24} color="#f0efed" />
         </View>
         <TextInput
           readOnly={false}
@@ -97,9 +97,8 @@ const styles = StyleSheet.create({
   },
   // Input box style
   textInputBox: {
-    borderRadius: 20,
     borderWidth: 2,
-    borderColor: "#78DBFF",
+    borderColor: "#f0efed",
     backgroundColor: "#fff",
     flexDirection: "row",
     marginBottom: 10,
@@ -112,10 +111,11 @@ const styles = StyleSheet.create({
   textInput: {
     flex: 6,
     padding: 15,
+    
     alignContent: "flex-start",
   },
   menu: {
-    paddingHorizontal: 50,
+    paddingHorizontal: '7.5%',
     paddingTop: 5,
     overflow: "hidden",
   },

@@ -1,6 +1,6 @@
 import { announcementType } from "./announcementData.interface";
 import { itemType } from "./item.interface";
-import { itemStatus } from "./itemStatus.interface";
+import { status } from "./status.interface";
 import {location} from "./location.interface";
 export interface vendor {
   name: string;
@@ -17,6 +17,6 @@ export interface vendor {
   trendingCategory: string;
   rating: number;
   trending: string;
-  status: itemStatus;
-  id: string;
+  status: status;
+  id?: string;
 }

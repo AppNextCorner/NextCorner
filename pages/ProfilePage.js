@@ -65,7 +65,7 @@ export default function ProfilePage() {
         <View style={styles.buttonContainer}>
           <Pressable
             style={styles.profileButton}
-            onPress={() => navigation.navigate("Vendor")}
+            onPress={() => navigation.navigate("Vendor", user.role)}
           >
             <Text style={styles.logOutText}>Vendor Portal</Text>
           </Pressable>

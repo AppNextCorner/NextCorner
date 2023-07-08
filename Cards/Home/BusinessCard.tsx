@@ -11,10 +11,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
-const logo = require("assets/logo.png");
+import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { API } from "constants/API";
 
 interface Props {
-  businessItem: vendor;
+  businessItem: vendor | vendorStructure;
+  create?: boolean
   checkForStyleChange?: boolean;
   disabled?: boolean;
 }
@@ -22,8 +24,8 @@ interface Props {
 export default function BusinessCard({
   businessItem,
   checkForStyleChange,
-  disabled
-  
+  disabled,
+  create,
 }: Props) {
   // The style is changed when a category is selected on the home page
   const changeStyle = (
@@ -43,7 +45,27 @@ export default function BusinessCard({
           };
     return change;
   };
+
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  const checkCreateProp = (prop: boolean | undefined) => {
+    if(prop) {
+      return { uri: `${businessItem.image}` };
+    } else  {
+      return { uri: `${API}/${businessItem.image}` }
+    }
+  }
+
+  
+  const checkIfImageExists = (img: string, prop: boolean | undefined) => {
+    if(img){
+     return checkCreateProp(prop);
+    } else {
+      return {uri: 'https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI='}
+    }
+  } 
+
+
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
@@ -63,13 +85,17 @@ export default function BusinessCard({
                 width: 275,
               }
         }
+
       >
         <View
           style={businessItem.image ? styles.vendorImageContainer : styles.noVendorImageContainer}
         >
           <Image
             style={businessItem.image ? styles.vendorImage : styles.noVendorImage}
-            source={businessItem.image ? { uri: businessItem.image } : logo}
+            // Old source, will change it back
+            // source ={{uri: 'https://media.istockphoto.com/id/1365555722/vector/street-food-icon.jpg?s=612x612&w=0&k=20&c=AGtos738uAWi4GfVMOQQqvY1c0rB9HpVtfCO4Rf7-WI='}}
+
+            source={checkIfImageExists(businessItem.image, create)}
           />
         </View>
 
@@ -127,8 +153,6 @@ const styles = StyleSheet.create({
     margin: "2%",
     alignSelf: "center",
     objectFit: "scale-down",
-    tintColor: 'gray',
-    opacity: 0.5
   },
   card: {
     width: 250,

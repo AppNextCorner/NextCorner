@@ -1,4 +1,4 @@
-export interface itemStatus {
+export interface status {
   text: string;
   color: string;
 }

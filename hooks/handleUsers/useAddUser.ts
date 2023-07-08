@@ -1,4 +1,3 @@
-import { Alert } from "react-native";
 import { useAppDispatch } from "../../store/hook";
 import { createUser } from "../../store/slices/userSessionSlice";
 import UserAction from "../../typeDefinitions/interfaces/reduxAction.interface";

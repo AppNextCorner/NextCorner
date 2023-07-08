@@ -8,7 +8,7 @@ import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
 // icons
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
-import location from '../../typeDefinitions/interfaces/location.interface'
+import {location} from '../../typeDefinitions/interfaces/location.interface'
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 
 interface Props {

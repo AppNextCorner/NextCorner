@@ -54,25 +54,7 @@ export default function HomePage() {
             }
             keyExtractor={(_item, index) => index.toString()}
             data={categories}
-            ListFooterComponent={
-              <>
-                <FlatList
-                  ListHeaderComponent={
-                    <View style={styles.businessHeaderContainer}></View>
-                  }
-                  style={styles.remainingCards}
-                  showsVerticalScrollIndicator={false}
-                  data={!categoryWasSelected ? vendors : filterBusinessCards}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={({ item }) => (
-                    <BusinessCard
-                      businessItem={item}
-                      checkForStyleChange={!checkForStyleChange}
-                    />
-                  )}
-                />
-              </>
-            }
+            
             // Main content of the page
             renderItem={({ item }) => {
               if (!categoryWasSelected) {

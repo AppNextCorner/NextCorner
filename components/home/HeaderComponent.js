@@ -45,7 +45,10 @@ export default function HeaderComponent() {
     <>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Image style={styles.nextCornerIcon} source={HomeIcon} />
+          <View style={styles.iconContainer}>
+            <Image style={styles.nextCornerIcon} source={HomeIcon} />
+          </View>
+
           <Text style={styles.appName}>Next Corner</Text>
         </View>
 
@@ -101,6 +104,7 @@ export default function HeaderComponent() {
                     alignItems: "flex-end",
                     alignSelf: "flex-start",
                     margin: 10,
+                    marginBottom: 15,
                   }}
                 >
                   <View></View>
@@ -142,6 +146,11 @@ export default function HeaderComponent() {
 }
 
 const styles = StyleSheet.create({
+  iconContainer: {
+    padding: "3%",
+    borderRadius: 5,
+    backgroundColor: "#E4F8FF",
+  },
   magnifyIcon: {
     flex: 2,
     justifyContent: "center",
@@ -161,8 +170,7 @@ const styles = StyleSheet.create({
   basketContainer: {
     flexDirection: "row",
     marginRight: 10,
-    justifyContent: "flex-end",
-    flex: 1,
+    flex: 1, 
   },
   appName: {
     marginHorizontal: "5%",
@@ -173,6 +181,7 @@ const styles = StyleSheet.create({
     flex: 10,
     flexDirection: "row",
     alignItems: "center",
+   
   },
   nextCornerIcon: {
     marginTop: 2,

@@ -12,5 +12,5 @@ export interface itemType {
   amountInCart: number;
   rating: number;
   createdAt?: string;
-  _id: string
+  _id?: string
 }

@@ -15,7 +15,7 @@ const Title = styled.Text`
   font-weight: bold;
   margin-bottom: 20px;
   color: #827c7c;
-  marginvertical: 10%;
+  margin-vertical: 10%;
 `;
 
 const Button = styled.Pressable`
@@ -34,7 +34,7 @@ const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 10%;
-  margintop: 10%;
+  margin-top: 10%;
 `;
 
 const HeaderLogoImage = styled.Image`
@@ -48,12 +48,16 @@ const HeaderTitle = styled.Text`
   font-weight: bold;
 `;
 const CreateVendorContainer = styled.TouchableOpacity`
-  paddinghorizontal: 15%;
-  paddingvertical: 5%;
+  padding-horizontal: 15%;
+  padding-vertical: 5%;
   border: 3px #f2f0f0 solid;
   margin: 5%;
   borderradius: 10px;
 `;
+const PromptVendor = styled.View`
+
+`
+
 
 const Vendor = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -68,6 +72,11 @@ const Vendor = () => {
         <HeaderLogoImage source={HomeIcon} />
         <HeaderTitle>Next Corner Vendors</HeaderTitle>
       </HeaderContainer>
+      
+      <PromptVendor>
+
+      </PromptVendor>
+      
       <CreateVendorContainer onPress={() => navigation.navigate("VendorCreate")}>
         <FontAwesome
           style={{ alignSelf: "center" }}
