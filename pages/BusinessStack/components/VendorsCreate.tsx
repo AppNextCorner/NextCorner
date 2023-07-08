@@ -1,5 +1,4 @@
 import {
-
   StyleSheet,
   Text,
   TextInput,
@@ -13,7 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
 import BusinessCard from "cards/Home/BusinessCard";
 import SelectingCategory from "components/vendors/SelectingCategory";
-import {time} from "../../../typeDefinitions/interfaces/IVendor/time";
+import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
 import { vendorTime } from "constants/vendorTime";
 import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
@@ -25,7 +24,7 @@ import { makeImagePostRequest } from "../../../config/axios.config";
  */
 
 const VendorsCreate = () => {
-  const{upload, openImageLibrary} = usePhotoHandler();
+  const { upload, openImageLibrary } = usePhotoHandler();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [menuStructure, setMenuStructure] = useState<itemType[]>([]);
   const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
@@ -35,21 +34,24 @@ const VendorsCreate = () => {
     // Replace with announcements later when vendor pages are finished
     announcements: {
       cards: [],
-      toggle: false
+      toggle: false,
     },
     location: {
       longitude: "",
       latitude: "",
     },
     times: vendorTime,
-    category: {
-      name: "",
-      id: 0,
-    },
-    item: menuStructure,
+    category: [
+      {
+        name: "",
+        id: 0,
+      },
+    ],
+    menu: menuStructure,
     uid: "",
     rating: 0,
     trending: "",
+    storeStatus: "Not Approved",
     status: {
       text: "",
       color: "",
@@ -97,10 +99,22 @@ const VendorsCreate = () => {
             <Text>Add Image</Text>
           </View>
         </TouchableOpacity>
-        <SelectingCategory chooseCategory={handlePropertyChange} form={structure}/>
+        <SelectingCategory
+          chooseCategory={handlePropertyChange}
+          form={structure}
+        />
         {/* <SelectingTime times={structure.times} chooseTime={handlePropertyChange}/> */}
 
-        <TouchableOpacity onPress={async() => await upload(structure.image, '/business/uploadStore', makeImagePostRequest, {payload: structure})}>
+        <TouchableOpacity
+          onPress={async () =>
+            await upload(
+              structure.image,
+              "/business/uploadStore",
+              makeImagePostRequest,
+              { payload: structure }
+            )
+          }
+        >
           <Text>Upload Store</Text>
         </TouchableOpacity>
       </View>
