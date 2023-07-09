@@ -9,4 +9,3 @@ export  interface time {
     status: boolean
 }
 
-export type timeSelector = string[]

@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
-import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
 import BusinessCard from "cards/Home/BusinessCard";
 import SelectingCategory from "components/vendors/SelectingCategory";
 import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
@@ -17,6 +16,8 @@ import { vendorTime } from "constants/vendorTime";
 import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
 import { makeImagePostRequest } from "../../../config/axios.config";
+// import CreateCategories from "./vendorCreate/CreateCategories";
+import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
 
 /**
  *
@@ -26,7 +27,7 @@ import { makeImagePostRequest } from "../../../config/axios.config";
 const VendorsCreate = () => {
   const { upload, openImageLibrary } = usePhotoHandler();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const [menuStructure, setMenuStructure] = useState<itemType[]>([]);
+  const [menuStructure, setMenuStructure] = useState<Iitem[]>([]);
   const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
   const [structure, setStructure] = useState<vendorStructure>({
     name: "",
@@ -41,12 +42,11 @@ const VendorsCreate = () => {
       latitude: "",
     },
     times: vendorTime,
-    category: [
-      {
-        name: "",
-        id: 0,
-      },
-    ],
+    category: {
+      name: "",
+      id: 0,
+    },
+    itemCategories: [],
     menu: menuStructure,
     uid: "",
     rating: 0,

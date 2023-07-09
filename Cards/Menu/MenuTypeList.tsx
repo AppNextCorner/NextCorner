@@ -1,18 +1,18 @@
 import { FlatList, View } from "react-native";
 import React from "react";
 // import { useRoute } from "@react-navigation/native"; not used
-import { itemType } from "../../typeDefinitions/interfaces/item.interface";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 import MenuItemCard from "./MenuItemCard";
 
 interface Props {
-  menu: itemType[];
+  menu: Iitem[];
   type: string;
   businessName: string;
-  location: {longitude: number; latitude: number};
+  location: { longitude: number; latitude: number };
 }
 
 interface menuItem {
-  item: itemType;
+  item: Iitem;
 }
 const MenuTypeList = React.memo(
   ({ menu, type, businessName, location }: Props) => {

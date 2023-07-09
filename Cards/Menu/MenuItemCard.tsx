@@ -3,8 +3,8 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { itemType } from "../../typeDefinitions/interfaces/item.interface";
 import { API } from "constants/API";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 
 /**
  * The default business card item
@@ -12,7 +12,7 @@ import { API } from "constants/API";
  *
  */
 interface Props {
-  menuItem: itemType;
+  menuItem: Iitem;
   businessName: string;
   location: { latitude: number; longitude: number };
 }
