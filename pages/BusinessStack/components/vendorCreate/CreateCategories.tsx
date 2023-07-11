@@ -4,6 +4,8 @@
 
 import {
   FlatList,
+  KeyboardAvoidingView,
+  Platform,
   StyleProp,
   StyleSheet,
   Text,
@@ -22,50 +24,61 @@ interface IProps {
 export default function CreateCategories(props: IProps) {
   const { chooseCategory, form } = props;
   const [handleText, setHandleText] = useState("");
-
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
   return (
     <View style={styles.chipContainer}>
       <FlatList
-        scrollEnabled={false}
+        scrollEnabled={true}
         ListHeaderComponent={
           <>
-            <Text style={styles.header}>Add categories for your items</Text>
-            <View style={styles.inputContainer}>
-              <TextInput
-                value={handleText}
-                onChangeText={(text: string) => setHandleText(text)}
-                placeholder="Fresh Drinks"
-              />
-              <TouchableOpacity
-                onPress={() =>
-                  chooseCategory(
-                    "itemCategories",
-                    form.itemCategories.concat(handleText)
-                  )
-                }
-                style={styles.add}
-              >
-                <Text>Add</Text>
-              </TouchableOpacity>
-            </View>
+            <KeyboardAvoidingView
+              behavior="padding"
+              style={{ flex: 1 }}
+              enabled
+              keyboardVerticalOffset={keyboardVerticalOffset}
+            >
+              <Text style={styles.header}>Add categories for your items</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={handleText}
+                  onChangeText={(text: string) => setHandleText(text)}
+                  placeholder="Fresh Drinks"
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    chooseCategory(
+                      "itemCategories",
+                      form.itemCategories.concat(handleText)
+                    );
+                    setHandleText("");
+                  }}
+                  style={styles.add}
+                >
+                  <Text style={styles.buttonText}>Add</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
           </>
         }
         showsHorizontalScrollIndicator={false}
         numColumns={4}
         data={form.itemCategories}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <TouchableOpacity
             style={styles.chip}
             onPress={() =>
               chooseCategory(
                 "itemCategories",
-                form.itemCategories.filter((chip) => chip !== item)
+                form.itemCategories.filter(
+                  (_chip, itemIndex) => itemIndex !== index
+                )
               )
             }
           >
             <View style={styles.chipContent}>
-              <Text>{item}</Text>
               <Foundation name="x-circle" size={24} color="#f2f0f0" />
+              <Text style={styles.chipText}>{item}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -75,9 +88,15 @@ export default function CreateCategories(props: IProps) {
 }
 
 const styles = StyleSheet.create({
+  chipText: {
+    fontSize: 16,
+
+  },
   chipContent: {
-    display: "flex",
     flexDirection: "row",
+    padding: '1%',
+    alignItems: "center",
+    justifyContent: "center",
   },
   chip: {
     backgroundColor: "#fff",
@@ -87,21 +106,38 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "#f2f0f0",
     margin: "2%",
+   
   },
   inputContainer: {
     display: "flex",
     flexDirection: "row",
+    borderRadius: 7.5,
+    borderWidth: 3,
+    borderColor: "#f2f0f0",
+    backgroundColor: "#fff",
+    padding: 10,
+    marginHorizontal: 5,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "#fff",
+  },
+  input: {
+    flex: 1,
   },
   add: {
     padding: "2%",
     paddingHorizontal: "5%",
     backgroundColor: "#78dbff",
+    borderRadius: 5,
   },
   header: {
     color: "#a1a1a1",
     margin: "2%",
   },
   chipContainer: {
-    flex: 2,
+    flex: 1.5,
+    borderRadius: 10,
+    //backgroundColor: 'red'
   },
 });

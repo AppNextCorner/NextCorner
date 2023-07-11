@@ -2,13 +2,13 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import PreviousOrderCard from "cards/Menu/PreviousOrderCard";
-import { itemType } from "../../typeDefinitions/interfaces/item.interface";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 
 interface Props {
   businessName: string;
   listData: any;
   location: any;
-  menuData?: itemType;
+  menuData?: Iitem;
 }
 const PreviousOrdersComponent = (props: Props) => {
   const { businessName, listData, location } = props;

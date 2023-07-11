@@ -47,8 +47,7 @@ export default function BusinessCard({
   };
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  console.log("TEST");
-  console.log(businessItem);
+
   const checkCreateProp = (prop: boolean | undefined) => {
     if (prop) {
       console.log(prop);

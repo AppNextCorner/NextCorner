@@ -1,5 +1,7 @@
-import { timeSelector, time } from "../typeDefinitions/interfaces/IVendor/time";
-
+import {
+  Itime,
+  timeSelector,
+} from "../typeDefinitions/interfaces/vendorTime.interface";
 export const totalTime: timeSelector = [
   "1:00 am",
   "2:00 am",
@@ -27,7 +29,7 @@ export const totalTime: timeSelector = [
   "12:00 am",
 ];
 
-export const vendorTime: time[] = [
+export const vendorTime: Itime[] = [
   {
     day: "Sunday",
     time: {

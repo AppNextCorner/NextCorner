@@ -9,8 +9,8 @@ import {
   ViewStyle,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { itemType } from "../../typeDefinitions/interfaces/item.interface";
-import { option } from "../../typeDefinitions/interfaces/option.interface";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
+import { IOptions } from "../../typeDefinitions/interfaces/options.interface";
 
 interface Option {
   label: string;
@@ -24,7 +24,7 @@ interface Item {
 }
 
 interface OptionSelectionComponentProps {
-  customizations: option[];
+  customizations: IOptions[];
   header: () => JSX.Element;
   initialOptions: [] | Option[]; // Handles whether a user has ordered previously
   changePreference: React.Dispatch<React.SetStateAction<any>>;
@@ -42,66 +42,64 @@ export default function OptionSelectionComponent(
     }));
   });
 
-  
-/**
- * Handles the selection of an option for a specific item.
- *
- * @param item - The selected item.
- * @param option - The selected option for the item.
- * @param index - The index of the item in the list.
- */
-const handlePress = (item: Item, option: Option, index: number) => {
-  setSelectedCustoms((prevCustoms) => {
-    // Create a copy of the previous customs array
-    const updatedCustoms = [...prevCustoms];
+  /**
+   * Handles the selection of an option for a specific item.
+   *
+   * @param item - The selected item.
+   * @param option - The selected option for the item.
+   * @param index - The index of the item in the list.
+   */
+  const handlePress = (item: Item, option: Option, index: number) => {
+    setSelectedCustoms((prevCustoms) => {
+      // Create a copy of the previous customs array
+      const updatedCustoms = [...prevCustoms];
 
-    // Create a copy of the selected item
-    const selectedItem = { ...updatedCustoms[index] };
+      // Create a copy of the selected item
+      const selectedItem = { ...updatedCustoms[index] };
 
-    // Create a copy of the selected options array
-    const selectedOptions = [...selectedItem.optionCustomizations];
+      // Create a copy of the selected options array
+      const selectedOptions = [...selectedItem.optionCustomizations];
 
-    // Find the index of the selected option in the options array
-    const optionIndex = selectedOptions.findIndex(
-      (o) => o.label === option.label
-    );
+      // Find the index of the selected option in the options array
+      const optionIndex = selectedOptions.findIndex(
+        (o) => o.label === option.label
+      );
 
-    // Perform option selection based on the item type
-    if (item.type === "single") {
-      // Single selection, update the selected option
-      if (optionIndex === -1) {
-        selectedOptions.splice(0, selectedOptions.length, option);
-      } else {
-        selectedOptions.splice(optionIndex, 1);
+      // Perform option selection based on the item type
+      if (item.type === "single") {
+        // Single selection, update the selected option
+        if (optionIndex === -1) {
+          selectedOptions.splice(0, selectedOptions.length, option);
+        } else {
+          selectedOptions.splice(optionIndex, 1);
+        }
+      } else if (item.type === "multiple") {
+        // Multiple selection, toggle the selected option
+        if (optionIndex === -1) {
+          selectedOptions.push(option);
+        } else {
+          selectedOptions.splice(optionIndex, 1);
+        }
       }
-    } else if (item.type === "multiple") {
-      // Multiple selection, toggle the selected option
-      if (optionIndex === -1) {
-        selectedOptions.push(option);
-      } else {
-        selectedOptions.splice(optionIndex, 1);
-      }
-    }
 
-    // Update the option customizations for the selected item
-    selectedItem.optionCustomizations = selectedOptions;
+      // Update the option customizations for the selected item
+      selectedItem.optionCustomizations = selectedOptions;
 
-    // Update the updated customs array with the modified item
-    updatedCustoms[index] = selectedItem;
+      // Update the updated customs array with the modified item
+      updatedCustoms[index] = selectedItem;
 
-    // Return the updated customs array
-    return updatedCustoms;
-  });
+      // Return the updated customs array
+      return updatedCustoms;
+    });
 
-  // Update the preference in the parent component
-  changePreference((prevState: itemType) => {
-    return {
-      ...prevState,
-      customizations: selectedCustoms,
-    };
-  });
-};
-
+    // Update the preference in the parent component
+    changePreference((prevState: Iitem) => {
+      return {
+        ...prevState,
+        customizations: selectedCustoms,
+      };
+    });
+  };
 
   const styles: {
     optionContainer: ViewStyle;

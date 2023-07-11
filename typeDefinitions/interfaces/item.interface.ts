@@ -1,16 +1,16 @@
-import { option } from "./option.interface";
+import { IOptions } from "./options.interface";
 
-export interface itemType {
+export interface Iitem {
+  _id: string;
   name: string;
   time: number;
   image: string;
   price: number;
   description: string;
-  customizations: option[];
+  customizations: IOptions[];
   category: string;
   featured: boolean;
   amountInCart: number;
   rating: number;
   createdAt?: string;
-  _id?: string
 }

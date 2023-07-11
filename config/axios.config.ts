@@ -17,11 +17,10 @@ const axiosImageInstance = axios.create({
   baseURL: url.API_URL,
 })
 
-// Set the Content-Type header for multipart/form-data requests
-axiosImageInstance.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+// // Set the Content-Type header for multipart/form-data requests
+axiosInstance.defaults.headers.post["Content-Type"] = "application/json";
 
-// Ensures that the content is received as JSON
-axiosImageInstance.defaults.headers.post['Accept'] = 'application/json';
+
 /**
  * Token updater
  * @returns

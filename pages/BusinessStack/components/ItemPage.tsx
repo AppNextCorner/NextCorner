@@ -27,7 +27,7 @@ import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { itemType } from "../../../typeDefinitions/interfaces/item.interface";
+import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
 
 export default function ItemPage() {
   const { addToCart } = useCart();
@@ -36,13 +36,13 @@ export default function ItemPage() {
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem, location }: any = route.params;
-  const [vendorItem, setVendorItem] = useState<itemType>(menuItem)
+  const [vendorItem, setVendorItem] = useState<Iitem>(menuItem);
 
   const businessName = useAppSelector(getBusinessName);
-  const updateVendorItem = (updatedVendorItem: itemType) => {
+  const updateVendorItem = (updatedVendorItem: Iitem) => {
     setVendorItem(updatedVendorItem);
   };
-  
+
   /**
    * What is selectedOptions?
    * What is customization?
@@ -81,7 +81,7 @@ export default function ItemPage() {
       Alert.alert("Added item from a different business");
     }
   };
-  
+
   const goToReviewsPage = () =>
     // pass in business and vendorItem when entering the Reviews page
     navigation.navigate("Reviews", { business, vendorItem });

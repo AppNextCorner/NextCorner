@@ -1,4 +1,4 @@
-export interface announcementType {
+export interface Iannouncements {
   color: string;
   header: string;
   description: string;

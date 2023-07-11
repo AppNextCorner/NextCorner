@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as ImagePicker from "expo-image-picker";
+import { makeImagePostRequest, makePostRequest } from "../../config/axios.config";
 const usePhotoHandler = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -26,10 +27,6 @@ const usePhotoHandler = () => {
   };
 
   /**
-   * <input name="image" type="file"/>
-   */
-
-  /**
    * 
    * @param uri 
    * @param endpoint 
@@ -52,13 +49,13 @@ const usePhotoHandler = () => {
       const formData = new FormData();
       formData.append("image",JSON.parse(JSON.stringify(imageObj)));
       formData.append("payload",JSON.stringify(payload.payload));
-      navigation.navigate('')
-      //request(endpoint, formData);
+
+      // await makePostRequest(endpoint, payload.payload)
+      await request(endpoint, formData);
     } catch (err) {
       console.log(err);
     }
   };
-  
   return {
     //uploadProfileImage,
     openImageLibrary,
