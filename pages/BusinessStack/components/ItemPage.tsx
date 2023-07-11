@@ -95,7 +95,7 @@ export default function ItemPage() {
         <Image
           style={styles.image}
           source={{
-            uri: `https://nextcornerdevelopment.onrender.com/${vendorItem?.image.toString()}`,
+            uri: `${vendorItem?.image}`,
           }}
         />
 

@@ -1,5 +1,5 @@
 import { makePostRequest } from "../../../config/axios.config";
-import { vendor } from "../../../typeDefinitions/interfaces/vendor.interface";
+import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 
 /**
  *
@@ -7,7 +7,7 @@ import { vendor } from "../../../typeDefinitions/interfaces/vendor.interface";
  * @param payload payload is businessName
  * @returns
  */
-const getVendorWithName = async (payload: any): Promise<vendor> => {
+const getVendorWithName = async (payload: any): Promise<vendorStructure> => {
   const url = "/business/getVendorByName";
   const response = await makePostRequest(url, payload);
   return response.data.payload;

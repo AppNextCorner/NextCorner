@@ -15,24 +15,24 @@ import { getBusinesses } from "../store/slices/BusinessSlice/businessSessionSlic
 // import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
 import { getButton } from "../store/slices/addToCart";
 import useCategoryList from "hooks/handlePages/useCategoryList";
-import { vendor } from "../typeDefinitions/interfaces/vendor.interface";
 import { categories, foodCategories } from "constants/vendorCategories";
+import { vendorStructure } from "../typeDefinitions/interfaces/IVendor/vendorStructure";
 export default function HomePage() {
   const {
+    checkForStyleChange,
     categoryWasSelected,
     categoryId,
-    checkForStyleChange,
     onSelectCategory,
   } = useCategoryList();
 
 
 
   const isClicked = useAppSelector(getButton);
-  const vendors: vendor[] = useAppSelector(getBusinesses);
-
+  const vendors: vendorStructure[] = useAppSelector(getBusinesses);
+  console.log('vendors: ', vendors)
   // Only re-render the data in the dependency when it changes values
   const filterBusinessCards = useMemo(() => {
-    return vendors.filter((i) => i.categoryId === categoryId);
+    return vendors.filter((i) => i.category.id == categoryId);
   }, [categoryId, vendors]);
 
   return (
@@ -50,6 +50,23 @@ export default function HomePage() {
                   itemId={categoryId}
                   showItem={onSelectCategory}
                 />
+                <>
+                <FlatList
+                  ListHeaderComponent={
+                    <View style={styles.businessHeaderContainer}></View>
+                  }
+                  style={styles.remainingCards}
+                  showsVerticalScrollIndicator={false}
+                  data={!categoryWasSelected ? vendors : filterBusinessCards}
+                  keyExtractor={(item) => item._id!}
+                  renderItem={({ item }) => (
+                    <BusinessCard
+                      businessItem={item}
+                      checkForStyleChange={!checkForStyleChange}
+                    />
+                  )}
+                />
+              </>
               </>
             }
             keyExtractor={(_item, index) => index.toString()}
@@ -59,7 +76,7 @@ export default function HomePage() {
             renderItem={({ item }) => {
               if (!categoryWasSelected) {
                 const trendingRow = vendors.filter(
-                  (vendor: vendor) => vendor.trendingCategory === item.name
+                  (vendor: vendorStructure) => vendor.trending === item.name
                 );
                 return (
                   <BusinessListComponent

@@ -4,7 +4,7 @@ export default interface orderItem {
   cartData: Iitem;
   businessOrderedFrom: string;
   userId: string;
-  location: { longitude: number; latitude: number };
+  location: { longitude: string; latitude: string };
   logo: string;
   createdAt: string;
 }

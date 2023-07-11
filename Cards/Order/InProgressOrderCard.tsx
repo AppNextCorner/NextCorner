@@ -6,7 +6,7 @@ import UseOrders from "hooks/handleVendors/useOrders";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
 import order from "../../typeDefinitions/interfaces/order.interface";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
-import location from "../../typeDefinitions/interfaces/location.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
   order: order

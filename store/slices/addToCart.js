@@ -32,7 +32,6 @@ export const fetchCart = createAsyncThunk("addToCart/fetchCart", async () => {
   const headers = await createToken();
   try {
     const response = await axios.get(POSTS_URL, headers);
-    console.log("fetch cart here:  ", response.data);
     return response.data; // Return a value synchronously using Async-await
   } catch (err) {
     if (err.response) {
@@ -180,7 +179,6 @@ export const addToCart = createSlice({
       state.cart = payload.filter(
         (uidItem) => uidItem.userId === auth.currentUser.uid
       );
-      console.log('total user cart: ', payload)
     });
     builder.addCase(addNewCartItem.pending, (state) => {
       console.log("pending");

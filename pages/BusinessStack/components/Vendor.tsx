@@ -4,6 +4,8 @@ import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAppSelector } from "../../../store/hook";
+import { getBusinesses } from "../../../store/slices/BusinessSlice/businessSessionSlice";
 
 const Container = styled.View`
   flex: 1;
@@ -65,6 +67,7 @@ const Vendor = () => {
   const goToUser = () => {
     navigation.navigate("Profile");
   };
+  const vendors = useAppSelector(getBusinesses)
 
   return (
     <Container>

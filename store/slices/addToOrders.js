@@ -33,7 +33,6 @@ import { API } from 'constants/API';
      const headers = await createToken();
      try {
        const response = await axios.get(ORDERS_URL, headers);
-       console.log('response from order', response.data)
        return response.data;
      } catch (err) {
        if (err.response) {
@@ -53,7 +52,6 @@ import { API } from 'constants/API';
          ORDERS_URL + 'order-status/' + itemStatus.id,
          itemStatus,
        );
-       console.log('response from order:  ', response.data)
  
        return response.data;
      } catch (err) {

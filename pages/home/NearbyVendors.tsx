@@ -17,11 +17,11 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
 // import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
 import { useNavigation } from "@react-navigation/native";
-import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { API } from "constants/API";
+import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 
 export const NearbyVendors = () => {
@@ -35,14 +35,14 @@ export const NearbyVendors = () => {
   const [viewLocation, setViewLocation] = useState(false);
   const mapRef = useRef<any>();
   const flatListRef = useRef<any>();
-  const vendors: vendor[] = useAppSelector(getBusinesses);
+  const vendors: vendorStructure[] = useAppSelector(getBusinesses);
   const navigate = useNavigation<NativeStackNavigationProp<any>>();
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
     if (!mapRegion) return []; // Return an empty array if mapRegion is not set yet
 
-    const filteredVendors = vendors.filter((vendor: vendor) => {
+    const filteredVendors = vendors.filter((vendor: vendorStructure) => {
       const vendorLocation = {
         latitude: vendor.location.latitude,
         longitude: vendor.location.longitude,
@@ -113,6 +113,11 @@ export const NearbyVendors = () => {
     },
     []
   );
+
+  // get the day today to find the days open for the vendor
+  const currentDate = new Date();
+  const currentDayString = currentDate.toLocaleDateString('en-US', {weekday: 'long'});
+  
 
   const toRadians = useCallback((value: number) => {
     return (value * Math.PI) / 180;
@@ -196,7 +201,10 @@ export const NearbyVendors = () => {
             data={filterVendorsByRadius()}
             style={styles.cardList}
             keyExtractor={(_item, index) => index.toString()}
-            renderItem={({ item, index }) => (
+            renderItem={({ item, index }) => {
+              // Find day index 
+              const indexOfDay = item.times.map( (currentTime) => currentTime.day).indexOf(currentDayString)
+              return (
               <Pressable
                 onPress={() =>
                   navigate.navigate("MenuList", { business: item })
@@ -219,11 +227,11 @@ export const NearbyVendors = () => {
                   </View>
                   <View style={styles.vendorInfo}>
                     <Text style={styles.vendorName}>{item.name}</Text>
-                    <Text style={styles.description}>{item.open}</Text>
+                    <Text style={styles.description}>{item.times[indexOfDay].time.open}</Text>
                   </View>
                 </View>
               </Pressable>
-            )}
+            )}}
           />
         </>
       )}

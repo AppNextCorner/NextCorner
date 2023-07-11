@@ -1,18 +1,18 @@
 import { Dimensions, FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import AnnouncementCard from "cards/Menu/AnnouncementCard";
-import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
+import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 
 interface Props {
-  vendor: vendor;
+  vendor: vendorStructure;
 }
 const AnnouncementList = (props: Props) => {
   // Grabbing the data and the direction of the announcement list
   const { vendor } = props;
-  const announcements = vendor.announcementCards
+  const announcements = vendor.announcements
   return (
     <>
-      {announcements.length > 0 ? (
+      {announcements.cards.length > 0 && announcements.toggle ? (
         <>
           <FlatList
             style={styles.cardContainer}
@@ -21,7 +21,7 @@ const AnnouncementList = (props: Props) => {
             decelerationRate={"fast"}
             snapToInterval={Dimensions.get("window").width}
             showsHorizontalScrollIndicator={false}
-            data={announcements}
+            data={announcements.cards}
             renderItem={({ item }) => (
               <View>
                 <AnnouncementCard announcement={item} />

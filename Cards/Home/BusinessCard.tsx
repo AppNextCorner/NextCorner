@@ -10,12 +10,10 @@ import {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { vendor } from "../../typeDefinitions/interfaces/vendor.interface";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
-import { API } from "constants/API";
 
 interface Props {
-  businessItem: vendor | vendorStructure;
+  businessItem:  vendorStructure;
   create?: boolean;
   checkForStyleChange?: boolean;
   disabled?: boolean;
@@ -50,10 +48,9 @@ export default function BusinessCard({
 
   const checkCreateProp = (prop: boolean | undefined) => {
     if (prop) {
-      console.log(prop);
       return { uri: `${businessItem.image}` };
     } else {
-      return { uri: `${API}/${businessItem.image}` };
+      return { uri: `${businessItem.image}` };
     }
   };
 

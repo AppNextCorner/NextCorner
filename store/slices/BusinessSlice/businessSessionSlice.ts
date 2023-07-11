@@ -1,8 +1,8 @@
 import { RootState } from "../../store";
-import { vendor } from "../../../typeDefinitions/interfaces/vendor.interface";
 import { createSlice } from "@reduxjs/toolkit";
+import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 export interface BusinessState {
-  businessess: vendor[];
+  businessess: vendorStructure[];
 }
 
 const initialState: BusinessState = {

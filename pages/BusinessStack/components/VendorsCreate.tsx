@@ -27,7 +27,6 @@ import { getUser } from "../../../store/slices/userSessionSlice";
  *
  *
  */
-
 const VendorsCreate = () => {
   const { upload, openImageLibrary } = usePhotoHandler();
   const user = useAppSelector(getUser)

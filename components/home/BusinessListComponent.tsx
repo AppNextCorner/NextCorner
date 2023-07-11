@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import BusinessCard from "cards/Home/BusinessCard";
-import { vendor }  from "../../typeDefinitions/interfaces/vendor.interface";
+import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 interface Props {
   title:string,
-  business:vendor[],
+  business:vendorStructure[],
   styles?: any,
 }
 
@@ -18,7 +18,7 @@ const BusinessListComponent = React.memo((props: Props) => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={props.business}
-          keyExtractor={(item) => item.id} // Assuming 'id' is a unique identifier property
+          keyExtractor={(item) => item._id!} // Assuming 'id' is a unique identifier property
           renderItem={({ item }) => <BusinessCard businessItem={item} />}
         />
       <View style={styles.margin}></View>

@@ -1,9 +1,10 @@
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import * as ImagePicker from "expo-image-picker";
-import { makeImagePostRequest, makePostRequest } from "../../config/axios.config";
+import useBusinessInformation from "hooks/api/business/useBusinessInformation";
+
+
 const usePhotoHandler = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const {updateBusinessInformation} = useBusinessInformation();
 
 
   const openImageLibrary = async (): Promise<string> => {
@@ -50,8 +51,9 @@ const usePhotoHandler = () => {
       formData.append("image",JSON.parse(JSON.stringify(imageObj)));
       formData.append("payload",JSON.stringify(payload.payload));
 
-      // await makePostRequest(endpoint, payload.payload)
       await request(endpoint, formData);
+      // Re-render the vendors with the new one added
+      await updateBusinessInformation();
     } catch (err) {
       console.log(err);
     }

@@ -76,7 +76,7 @@ export default function MenuListPage() {
               <Image
                 style={styles.image}
                 source={{
-                  uri: `${API}/${business.image.toString()}`,
+                  uri: `${business.image.toString()}`,
                 }}
               />
 
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     height: 250,
     overflow: "hidden",
     resizeMode: "cover",
-    marginTop: -105,
+    marginTop: '-30%',
   },
   container: {
     flex: 1,
