@@ -116,6 +116,8 @@ export const NearbyVendors = () => {
 
   // get the day today to find the days open for the vendor
   const currentDate = new Date();
+
+  // new comment
   const currentDayString = currentDate.toLocaleDateString('en-US', {weekday: 'long'});
   
 
