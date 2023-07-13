@@ -7,13 +7,12 @@ import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSec
 import order from "../../typeDefinitions/interfaces/order.interface";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
+import { useIsFocused } from "@react-navigation/native";
 
 interface Props {
-  order: order
+  order: order;
 }
-const InProgressOrderCard = ({
-  order
-}: Props) => {
+const InProgressOrderCard = ({ order }: Props) => {
   const [_duration, setDuration] = useState(0);
   const [_distance, setDistance] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
@@ -65,6 +64,7 @@ const InProgressOrderCard = ({
       // Cleanup code (if any)
     };
   }, [timeLeft]);
+  const isFocused = useIsFocused();
 
   const businessOrderedText = order.singleOrderList.map(
     (orderItem: orderItem) => orderItem.businessOrderedFrom
@@ -73,13 +73,17 @@ const InProgressOrderCard = ({
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
-        <GoogleMapsMenuSection
-          scrollEnabled={false}
-          pointerEvents={"none"}
-          location={mapOrderItem}
-          setDuration={setDuration}
-          setDistance={setDistance}
-        />
+        {isFocused ? (
+          <GoogleMapsMenuSection
+            scrollEnabled={false}
+            pointerEvents={"none"}
+            location={mapOrderItem}
+            setDuration={setDuration}
+            setDistance={setDistance}
+          />
+        ) : (
+          <></>
+        )}
       </View>
 
       <View style={styles.orderDetailTextContainer}>

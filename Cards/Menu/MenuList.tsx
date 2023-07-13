@@ -3,25 +3,26 @@ import React from "react";
 // import { useRoute } from "@react-navigation/native"; not used
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 import MenuItemCard from "./MenuItemCard";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
   menu: Iitem[];
-  type: string;
-  businessName: string;
-  location: { longitude: number; latitude: number };
+  category: string;
+  vendorName: string;
+  location: location;
 }
 
 interface menuItem {
   item: Iitem;
 }
-const MenuTypeList = React.memo(
-  ({ menu, type, businessName, location }: Props) => {
-    // type is a string that represents the type of food that the menu item represents: ex: Burger, Pizza, etc.
+const MenuList = React.memo(
+  ({ menu, category, vendorName, location }: Props) => {
+    // category is a string that represents the category of food that the menu item represents: ex: Burger, Pizza, etc.
 
     // Optimized: Memoize the filtered array using React.useMemo
-    const getItemsThatMatchType = React.useMemo(
-      () => menu.filter((item) => item.category === type),
-      [menu, type]
+    const getItemsThatMatchcategory = React.useMemo(
+      () => menu.filter((item) => item.category === category),
+      [menu, category]
     );
 
     // Optimized: Memoize the renderItem function using React.useCallback
@@ -30,20 +31,20 @@ const MenuTypeList = React.memo(
         <View>
           <MenuItemCard
             menuItem={item}
-            businessName={businessName}
+            vendorName={vendorName}
             location={location}
           />
         </View>
       ),
-      [businessName, location]
+      [vendorName, location]
     );
 
     // Optimized: Memoize the keyExtractor function using React.useCallback
 
-    return <FlatList data={getItemsThatMatchType} renderItem={renderItem} />;
+    return <FlatList data={getItemsThatMatchcategory} renderItem={renderItem} />;
   }
 );
 
-export default MenuTypeList;
+export default MenuList;
 
 // const styles = StyleSheet.create({}); not used

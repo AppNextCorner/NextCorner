@@ -11,8 +11,9 @@ switch (apiStatus) {
     API = "https://nextcornerdevelopment.onrender.com";
     break;
   default:
-    API = `http://${process.env.IP}:4020`;
+    API = `http://192.168.1.24:4020`;
     break;
 }
 
 export const url = { API_URL: API };
+console.log('url: ', url)

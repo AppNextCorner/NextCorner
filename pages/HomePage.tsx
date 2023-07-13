@@ -17,6 +17,7 @@ import { getButton } from "../store/slices/addToCart";
 import useCategoryList from "hooks/handlePages/useCategoryList";
 import { categories, foodCategories } from "constants/vendorCategories";
 import { vendorStructure } from "../typeDefinitions/interfaces/IVendor/vendorStructure";
+
 export default function HomePage() {
   const {
     checkForStyleChange,
@@ -25,11 +26,8 @@ export default function HomePage() {
     onSelectCategory,
   } = useCategoryList();
 
-
-
   const isClicked = useAppSelector(getButton);
   const vendors: vendorStructure[] = useAppSelector(getBusinesses);
-  console.log('vendors: ', vendors)
   // Only re-render the data in the dependency when it changes values
   const filterBusinessCards = useMemo(() => {
     return vendors.filter((i) => i.category.id == categoryId);
@@ -101,7 +99,7 @@ const styles = StyleSheet.create({
   },
   businessHeader: {
     fontSize: 25,
-    fonWeight: 800,
+    fonWeight: 700,
   },
   selectedCategory: {
     backgroundColor: "blue",

@@ -1,3 +1,4 @@
+import {  useFonts, Poppins_500Medium, Poppins_600SemiBold, Poppins_100Thin_Italic } from '@expo-google-fonts/poppins';
 import { Text } from "react-native";
 import * as React from "react";
 import HomePage from "pages/HomePage";
@@ -27,6 +28,9 @@ import VendorMore from "pages/BusinessStack/components/VendorMore";
 import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
 import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
 import VendorsCreate from "pages/BusinessStack/components/VendorsCreate";
+import VendorMenu from "pages/BusinessStack/components/vendorPages/VendorMenu";
+import VendorOptions from "pages/BusinessStack/components/vendorPages/VendorOptions";
+import CreateMenuItem from 'pages/BusinessStack/components/vendorCreate/CreateMenuItem';
 // Vendor pages
 const vendorName = "Vendors";
 const vendorOptions = "More";
@@ -44,13 +48,25 @@ export default function Route() {
   const { isDone, isLoggedIn } = useGetUserData();
   console.log("isDone: ", isDone);
   console.log("isloggedin: ", isLoggedIn);
+  const [fontsLoaded] = useFonts({
+    Poppins_500Medium
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+  
+
+  // const CustomText = ({ children }: {children: any}) => (
+  //   <Text style={{ fontFamily: 'Poppins_500Medium' }}>{children}</Text>
+  // );
   if (isDone === true && isLoggedIn) {
     return (
       <>
         <NavigationContainer independent={true}>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {/* User pages */}
-            <Stack.Screen name="HomeStack" component={Home} />
+            <Stack.Screen  name="HomeStack" component={Home} />
             <Stack.Screen name="Cart" component={CartPage} />
             <Stack.Screen name="Item" component={ItemPage} />
             <Stack.Screen name="MenuList" component={MenuListPage} />
@@ -62,9 +78,13 @@ export default function Route() {
             <Stack.Screen name="OrderPlaced" component={OrderPlacedPage} />
             <Stack.Screen name="InProgressOrder" component={InProgressPage} />
             <Stack.Screen name="Browse" component={NearbyVendors} />
+
+
             {/* 
               Reviews Pages Start
             */}
+
+            
             <Stack.Screen name="Reviews" component={ReviewsPage} />
             <Stack.Screen name="ReviewCreate" component={ReviewCreatePage} />
 
@@ -74,7 +94,13 @@ export default function Route() {
 
             {/* Vendor Pages */}
             <Stack.Screen name="Vendor" component={VendorStack} />
+
+            {/* Forms */}
             <Stack.Screen name="VendorCreate" component={VendorsCreate} />
+            <Stack.Screen name="VendorMenuCreate" component={CreateMenuItem} />
+
+            <Stack.Screen name="VendorMenu" component={VendorMenu} />
+            <Stack.Screen name="VendorOptions" component={VendorOptions} />
           </Stack.Navigator>
         </NavigationContainer>
       </>
@@ -102,6 +128,17 @@ export default function Route() {
 }
 
 function VendorStack() {
+  const [fontsLoaded] = useFonts({
+    Poppins_500Medium
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+  
+  // const CustomText = ({ children }: {children: any}) => (
+  //   <Text style={{ fontFamily: 'Poppins_500Medium' }}>{children}</Text>
+  // );
   return (
     <Tab.Navigator
       initialRouteName={vendorName}
@@ -158,6 +195,21 @@ function VendorStack() {
 }
 
 function Home() {
+  const [fontsLoaded] = useFonts({
+    Poppins_100Thin_Italic,
+    Poppins_600SemiBold
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  // const CustomText = ({ children }: { children: React.ReactNode }) => (
+  //   <Text >{children}</Text>
+  // );
+
+  const Tab = createBottomTabNavigator();
+
   return (
     <Tab.Navigator
       initialRouteName={homeName}
@@ -200,7 +252,15 @@ function Home() {
         },
       })}
     >
-      <Tab.Screen name={homeName} component={HomePage} />
+      <Tab.Screen name={homeName} component={HomePage}/>
+      {/* <Tab.Screen name={homeName} component={HomePage}/> */}
+
+        {/* {() => (
+          <CustomText>
+            <HomePage />
+          </CustomText>
+        )} */}
+
       <Tab.Screen name={vendorsName} component={NearbyVendors} />
       <Tab.Screen name={ordersName} component={OrdersPage} />
       <Tab.Screen name={profileName} component={PickUpPage} />

@@ -9,3 +9,7 @@ export  interface time {
     status: boolean
 }
 
+export interface clockFormat {
+    minutes: number;
+    seconds: number;
+}

@@ -1,21 +1,20 @@
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 
 // for bottom modal
-import React, {useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
 import InProgressList from "components/unfinishedOrders/InProgressList";
-import { AntDesign} from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
-import {location} from "../../typeDefinitions/interfaces/location.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 /**
  * Used to display the status, map, and the items that are currently in the progress of being made
  */
@@ -29,6 +28,7 @@ const InProgressPage = () => {
   const returnBack = () => {
     navigation.goBack();
   };
+  const isFocused = useIsFocused();
 
   const { order }: any = route.params;
 
@@ -38,7 +38,7 @@ const InProgressPage = () => {
     .flat();
 
   const bottomSheetRef = useRef(null); // set the initial bottom sheet to have nothing instantly until it is changed
-
+  
   // first value -> initial value / point to start with on the bottom
   // second value -> final point where the modal is supposed to stop in with snapping to it when near it
   const snapPoints = useMemo(() => ["20%", "100%"], []);
@@ -66,12 +66,16 @@ const InProgressPage = () => {
               overflow: "hidden",
             }}
           >
-            <GoogleMapsMenuSection
-              time={order}
-              location={mapOrderItem}
-              setDuration={setDuration}
-              setDistance={setDistance}
-            />
+            {isFocused ? (
+              <GoogleMapsMenuSection
+                time={order}
+                location={mapOrderItem}
+                setDuration={setDuration}
+                setDistance={setDistance}
+              />
+            ) : (
+              <></>
+            )}
           </View>
 
           {/* Our bottom modal containing the business and each individual menu */}
@@ -110,9 +114,9 @@ const styles = StyleSheet.create({
     marginLeft: "5%",
     marginTop: "10%",
     borderRadius: 20,
-    padding: '2%',
-    width: '12.5%',
-    backgroundColor: '#78DBFF'
+    padding: "2%",
+    width: "12.5%",
+    backgroundColor: "#78DBFF",
   },
   pageHeader: {
     textAlign: "center",

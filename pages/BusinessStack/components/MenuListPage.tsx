@@ -11,7 +11,7 @@ import {
   Pressable,
   FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -19,21 +19,18 @@ import { useNavigation } from "@react-navigation/native";
 import OrderButton from "components/global/OrderButton";
 import { useAppSelector } from "../../../store/hook";
 import { getButton } from "../../../store/slices/addToCart";
-import MenuTypeList from "cards/Menu/MenuTypeList";
+import MenuList from "cards/Menu/MenuList";
 import FeaturedList from "components/menu/FeaturedList";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
-import { API } from "constants/API";
 // import { IP } from "@env";
 
 export default function MenuListPage() {
   const route = useRoute();
   const { business }: any = route.params;
-  const [menuTypeData] = useState(business);
-  // menu of the business through params
-  const [menu] = useState(business.menu);
+
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -52,10 +49,6 @@ export default function MenuListPage() {
   const filterOrder = getSingleOrders.filter(
     (val: any) => val.businessOrderedFrom === business.name
   );
-
-  console.log("Important");
-  console.log(business);
-  console.log(`${API}/${business.image}`);
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate("Home");
@@ -92,18 +85,18 @@ export default function MenuListPage() {
 
                 <AnnouncementList vendor={business} />
                 <FeaturedList
-                  menuData={menu}
-                  businessName={business.name}
+                  menuData={business.menu}
+                  vendorName={business.name}
                   location={business.location}
                 />
                 {/* Section for Featured Items*/}
               </View>
 
               <PreviousOrdersComponent
-                menuData={menu}
+                menuData={business.menu}
                 location={business.location}
                 listData={filterOrder}
-                businessName={business.name}
+                vendorName={business.name}
               />
 
               {/* ALL menu items located here */}
@@ -115,15 +108,15 @@ export default function MenuListPage() {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           // pass in the menu list coming from the route.params of the business items which we can access through params
-          data={menuTypeData.categoriesForMenu}
+          data={business.itemCategories}
           renderItem={({ item }) => {
             return (
               <>
                 <Text style={styles.typeText}>{item.type}</Text>
-                <MenuTypeList
-                  type={item.type}
-                  menu={menu}
-                  businessName={business.name}
+                <MenuList
+                 category={item}
+                  menu={business.menu}
+                  vendorName={business.name}
                   location={business.location}
                 />
                 <View style={styles.margin}></View>

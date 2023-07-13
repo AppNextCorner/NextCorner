@@ -38,7 +38,8 @@ const usePhotoHandler = () => {
     uri: string,
     endpoint: string,
     request: (reqUrl: string, payload: any) => any,
-    payload: any
+    payload: any,
+    uid: string
   ) => {
     try {
       const imageObj = {
@@ -53,13 +54,12 @@ const usePhotoHandler = () => {
 
       await request(endpoint, formData);
       // Re-render the vendors with the new one added
-      await updateBusinessInformation();
+      await updateBusinessInformation(uid);
     } catch (err) {
       console.log(err);
     }
   };
   return {
-    //uploadProfileImage,
     openImageLibrary,
     upload
   };

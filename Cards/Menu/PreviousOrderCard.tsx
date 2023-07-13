@@ -7,15 +7,16 @@ import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
   previousOrders: orderItem;
-  businessName: string;
-  location: {latitude: number; longitude: number};
+  vendorName: string;
+  location: location;
 }
 
 const PreviousOrderCard = (props: Props) => {
-  const { previousOrders, businessName, location } = props;
+  const { previousOrders, vendorName, location } = props;
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
@@ -37,7 +38,7 @@ const PreviousOrderCard = (props: Props) => {
   const goToFoodDetails = () => {
     setOrder(false);
     navigation.navigate("Item", {
-      business: businessName,
+      business: vendorName,
       menuItem: parse.cartData,
       location: location,
     });

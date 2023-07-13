@@ -16,27 +16,28 @@ import MapStyle from "../../constants/MapStyle.json";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
 // import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { API } from "constants/API";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
-
 export const NearbyVendors = () => {
+  const isFocused = useIsFocused();
+  const route = useRoute();
+  const navigate = useNavigation<NativeStackNavigationProp<any>>();
+
   const [mapRegion, setMapRegion] = useState<mapRegion>({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
-
   const [viewLocation, setViewLocation] = useState(false);
+  const vendors: vendorStructure[] = useAppSelector(getBusinesses);
   const mapRef = useRef<any>();
   const flatListRef = useRef<any>();
-  const vendors: vendorStructure[] = useAppSelector(getBusinesses);
-  const navigate = useNavigation<NativeStackNavigationProp<any>>();
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
@@ -68,26 +69,33 @@ export const NearbyVendors = () => {
   }, [vendors]);
 
   useEffect(() => {
-    updateUserLocation();
-  }, [updateUserLocation]);
+    if (isFocused) {
+      updateUserLocation();
+    }
+  }, [isFocused, updateUserLocation]);
 
   useEffect(() => {
-    const intervalId = setInterval(updateUserLocation, 5000);
+    let intervalId: any;
+
+    if (isFocused) {
+      intervalId = setInterval(() => {
+        updateUserLocation();
+      }, 5000);
+    }
 
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [isFocused, updateUserLocation]);
 
   useEffect(() => {
     const callback = (newRegion: mapRegion) => {
       console.log("new region:", newRegion);
     };
-
-    if (mapRegion && typeof callback === "function") {
+    if (route.name === "Browse" && mapRegion && typeof callback === "function") {
       callback(mapRegion);
     }
-  }, [mapRegion]);
+  }, [route.name, mapRegion]);
 
   // Calculate haversine distance between two points
   const haversineDistance = useCallback(

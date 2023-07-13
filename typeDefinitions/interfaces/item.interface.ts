@@ -1,9 +1,9 @@
+import { clockFormat } from "./IVendor/time";
 import { IOptions } from "./options.interface";
-
 export interface Iitem {
-  _id: string;
+  _id?: string;
   name: string;
-  time: number;
+  time: clockFormat;
   image: string;
   price: number;
   description: string;
@@ -12,5 +12,9 @@ export interface Iitem {
   featured: boolean;
   amountInCart: number;
   rating: number;
+  storeInfo: {
+    storeName: string;
+    storeId: string | undefined;
+  }
   createdAt?: string;
 }

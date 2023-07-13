@@ -23,5 +23,5 @@ export interface vendorStructure {
   rating: number;
   status: status;
   storeStatus: string;
-  _id?: string;
+  id?: string;
 }

@@ -4,12 +4,20 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { AntDesign } from "@expo/vector-icons";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 
-const FeaturedTypeCard = (props: any) => {
+interface IProps {
+  menuItem: Iitem | null;
+  vendorName: string | null;
+  location: location | null
+}
+
+const FeaturedTypeCard = (props: IProps) => {
   // Button hook to prevent multiple presses
   const { setOrder } = useOrderButton();
   // Data coming from the business to be sent towards the food details page
-  const { menuItem, businessName, location } = props;
+  const { menuItem, vendorName, location } = props;
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -17,43 +25,49 @@ const FeaturedTypeCard = (props: any) => {
     setOrder(false);
     navigation.navigate("Item", {
       //  Props data sent to food details to be able to display the details
-      business: businessName,
+      business: vendorName,
       menuItem: menuItem,
       location: location,
     });
   };
-  return (
-    <View style={[styles.cardContainer, styles.shadowBox]}>
-      <TouchableOpacity onPress={() => goToFoodDetails()}>
-        <View style={styles.container}>
-          <View style={styles.ratingContainer}>
-            <AntDesign
-              style={styles.star}
-              name="star"
-              size={20}
-              color="#ffc247"
-            />
-            <Text style={styles.rating}>{menuItem.rating}</Text>
+  if(menuItem){
+    return (
+      <View style={[styles.cardContainer, styles.shadowBox]}>
+        <TouchableOpacity onPress={() => goToFoodDetails()}>
+          <View style={styles.container}>
+            <View style={styles.ratingContainer}>
+              <AntDesign
+                style={styles.star}
+                name="star"
+                size={20}
+                color="#ffc247"
+              />
+              <Text style={styles.rating}>{menuItem.rating}</Text>
+            </View>
+            <View style={styles.imageContainer}>
+              <Image source={{uri: menuItem.image}} style={styles.image} />
+            </View>
+  
+            <View style={styles.itemDescription}>
+              <Text style={styles.menuItemName}>{menuItem.name}</Text>
+              <Text style={styles.descriptionText}>
+                {menuItem.description.slice(0, 45) + "..."}
+              </Text>
+            </View>
+            <View style={styles.priceContainer}>
+              <Text style={styles.menuItemPrice}>
+                ${Math.fround(menuItem.price)}
+              </Text>
+            </View>
           </View>
-          <View style={styles.imageContainer}>
-            <Image source={menuItem.image} style={styles.image} />
-          </View>
-
-          <View style={styles.itemDescription}>
-            <Text style={styles.menuItemName}>{menuItem.name}</Text>
-            <Text style={styles.descriptionText}>
-              {menuItem.description.slice(0, 45) + "..."}
-            </Text>
-          </View>
-          <View style={styles.priceContainer}>
-            <Text style={styles.menuItemPrice}>
-              ${Math.fround(menuItem.price)}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  else{
+    return null
+  }
+  
 };
 
 export default FeaturedTypeCard;

@@ -1,6 +1,7 @@
 import axios from "axios";
 import refreshTokenId from "util/refreshTokenId";
 import { url } from "constants/API";
+import { Platform } from "react-native";
 
 /**
  * The axiosInstance
@@ -10,16 +11,13 @@ const axiosInstance = axios.create({
 });
 
 // Ensures that the content is recieved as json
-axiosInstance.defaults.headers.post["Content-Type"] = "application/json";
-
+axiosInstance.defaults.headers.post["Content-Type"] = "application/json; charset=utf-8";
 
 const axiosImageInstance = axios.create({
   baseURL: url.API_URL,
 })
 
-// // Set the Content-Type header for multipart/form-data requests
-axiosInstance.defaults.headers.post["Content-Type"] = "application/json";
-
+Platform.OS === "ios" ? null : axiosImageInstance.defaults.headers.post["Content-Type"] = "multipart/form-data";
 
 /**
  * Token updater
@@ -72,5 +70,10 @@ const makeImagePostRequest = async (reqUrl: string, payload: any) => {
   return axiosImageInstance.post<any>(reqUrl, payload);
 };
 
+// add comments
+const makeImagePutRequest = async (reqUrl: string, payload: any) => {
+  setUpdatedToken();
+  return axiosImageInstance.put<any>(reqUrl, payload);
+};
 
-export {makeDeleteRequest, makeGetRequest, makePostRequest, makePutRequest,  makeImagePostRequest, }
+export {makeDeleteRequest, makeGetRequest, makePostRequest, makePutRequest,  makeImagePostRequest, makeImagePutRequest }

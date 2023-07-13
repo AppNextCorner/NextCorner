@@ -8,14 +8,14 @@ import React from "react";
 
 export default function App() {
   return (
-    <StripeProvider
-      publishableKey={
-        process.env.STRIPE_API_KEY ? process.env.STRIPE_API_KEY : ""
-      }
-    >
-      <Provider store={store}>
+    <Provider store={store}>
+      <StripeProvider
+        publishableKey={
+          process.env.STRIPE_API_KEY ? process.env.STRIPE_API_KEY : ""
+        }
+      >
         <Route />
-      </Provider>
-    </StripeProvider>
+      </StripeProvider>
+    </Provider>
   );
 }

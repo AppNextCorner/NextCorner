@@ -5,18 +5,20 @@ import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 interface Props {
-  menuData: Iitem[];
-  businessName: string;
-  location: location;
+  menuData: Iitem[] | null;
+  vendorName: string;
+  location: location | null;
 }
 const FeaturedList = (props: Props) => {
-  const { menuData, businessName, location } = props;
+  const { menuData, vendorName, location } = props;
   // grab all items from the business menu to get the menu items that are featured
-  const findFeaturedList = menuData.filter((item) => item.featured === true);
+  const findFeaturedList = menuData
+    ? menuData.filter((item) => item.featured === true)
+    : null;
 
   return (
     <>
-      {findFeaturedList.length > 0 ? (
+      {findFeaturedList ? (
         <>
           <Text style={styles.featuredText}>Featured</Text>
           <FlatList
@@ -32,7 +34,7 @@ const FeaturedList = (props: Props) => {
                 <View style={styles.featuredCard} key={index.toString()}>
                   <FeaturedTypeCard
                     menuItem={item}
-                    businessName={businessName}
+                    vendorName={vendorName}
                     location={location}
                   />
                 </View>
@@ -41,7 +43,15 @@ const FeaturedList = (props: Props) => {
           />
           <View style={styles.margin}></View>
         </>
-      ) : null}
+      ) : (
+        <View style={styles.featuredCard}>
+          <FeaturedTypeCard
+            menuItem={null}
+            vendorName={vendorName}
+            location={location}
+          />
+        </View>
+      )}
     </>
   );
 };

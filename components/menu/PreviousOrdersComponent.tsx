@@ -5,13 +5,13 @@ import PreviousOrderCard from "cards/Menu/PreviousOrderCard";
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 
 interface Props {
-  businessName: string;
+  vendorName: string;
   listData: any;
   location: any;
   menuData?: Iitem;
 }
 const PreviousOrdersComponent = (props: Props) => {
-  const { businessName, listData, location } = props;
+  const { vendorName, listData, location } = props;
   return (
     <View>
       {listData.length > 0 ? (
@@ -30,7 +30,7 @@ const PreviousOrdersComponent = (props: Props) => {
             renderItem={({ item, index }) => (
               <PreviousOrderCard
                 previousOrders={item}
-                businessName={businessName}
+                vendorName={vendorName}
                 key={index}
                 location={location}
               />

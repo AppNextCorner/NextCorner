@@ -8,12 +8,12 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons";
+// import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+// import { useNavigation } from "@react-navigation/native";
+// import { AntDesign } from "@expo/vector-icons";
 import BusinessCard from "cards/Home/BusinessCard";
 import SelectingCategory from "components/vendors/SelectingCategory";
-import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
+// import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
 import { vendorTime } from "constants/vendorTime";
 import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
@@ -22,6 +22,7 @@ import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
 import CreateCategories from "./vendorCreate/CreateCategories";
 import { useAppSelector } from "../../../store/hook";
 import { getUser } from "../../../store/slices/userSessionSlice";
+import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 
 /**
  *
@@ -30,12 +31,10 @@ import { getUser } from "../../../store/slices/userSessionSlice";
 const VendorsCreate = () => {
   const { upload, openImageLibrary } = usePhotoHandler();
   const user = useAppSelector(getUser)
-  console.log("THE usea ")
-  console.log(user)
 
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const [menuStructure, setMenuStructure] = useState<Iitem[]>([]);
-  const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
+  // const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const [menuStructure] = useState<Iitem[]>([]);
+  // const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
   const [structure, setStructure] = useState<vendorStructure>({
     name: "",
     image: "",
@@ -78,18 +77,13 @@ const VendorsCreate = () => {
   const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
   return (
     <View style={{ flex: 1, paddingTop: '5%', backgroundColor: '#fff' }}>
+      <NextCornerVendorHeader />
       <KeyboardAvoidingView
         behavior="padding"
         style={styles.page}
-        enabled
+        enabled={Platform.OS === "ios" ? true : false}
         keyboardVerticalOffset={keyboardVerticalOffset}
       >
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.goBackButton}
-        >
-          <AntDesign name="arrowleft" size={30} color="#000" />
-        </TouchableOpacity>
         <View style={styles.cardPreview}>
           <BusinessCard
             disabled={true}
@@ -136,7 +130,8 @@ const VendorsCreate = () => {
               structure.image,
               "/business/createStore",
               makeImagePostRequest,
-              { payload: structure }
+              { payload: structure },
+              user?._id!,
             )
           }
         >

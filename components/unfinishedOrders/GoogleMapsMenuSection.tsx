@@ -10,6 +10,7 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import {location} from '../../typeDefinitions/interfaces/location.interface'
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { useIsFocused, useRoute } from "@react-navigation/native";
 
 interface Props {
   time?: vendorStructure;
@@ -41,7 +42,7 @@ export default function GoogleMapsMenuSection(props: Props) {
       setMapCoordinates(updatedMapCoordinates);
     }
     console.log("new coords: ", mapCoordinates);
-  }, [mapCoordinates]);
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(updateUserLocation, 5000);
@@ -54,16 +55,38 @@ export default function GoogleMapsMenuSection(props: Props) {
     updateUserLocation();
   }, []);
 
+  const isFocused = useIsFocused();
+  const route = useRoute();
+
   useEffect(() => {
-    // what is newRegion?
-    const callback = (newRegion: any) => {
+    if (isFocused) {
+      updateUserLocation();
+    }
+  }, [isFocused, updateUserLocation]);
+
+  useEffect(() => {
+    let intervalId: any;
+
+    if (isFocused) {
+      intervalId = setInterval(() => {
+        updateUserLocation();
+      }, 5000);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isFocused]);
+
+  useEffect(() => {
+    const callback = (newRegion: mapRegion) => {
       console.log("new region:", newRegion);
     };
-
-    if (mapCoordinates && typeof callback === "function") {
+    console.log('route: ', route.name)
+    if (route.name === "Orders" && mapCoordinates && typeof callback === "function") {
       callback(mapCoordinates);
     }
-  }, [mapCoordinates]);
+  }, [route.name, mapCoordinates]);
 
   const traceRouteOnReady = useCallback(
     // what is result?

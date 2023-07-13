@@ -10,13 +10,15 @@ import { signOut } from "firebase/auth";
 import useUpdateRole from "hooks/api/useUpdateRole";
 import { getUser, logOut } from "../store/slices/userSessionSlice";
 import { useNavigation } from "@react-navigation/native";
-
+import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 export default function ProfilePage() {
   const user = useAppSelector(getUser);
-
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const { changeRoleToVendor } = useUpdateRole();
+  const { updateUserStores } = useBusinessInformation();
+  updateUserStores(user?._id);
+
   // grabs the only user from the array as it has been already filtered out to include the current user
   console.log("user: ", user);
   const mainUser = user[0] || {
@@ -34,10 +36,23 @@ export default function ProfilePage() {
     }
   };
 
+  const vendorPortal = () => {
+    if(user.role === "vendor") {
+      return (
+      <View style={styles.buttonContainer}>
+        <Pressable
+          style={styles.profileButton}
+          onPress={ () => navigation.navigate("Vendor") }
+        >
+          <Text style={styles.logOutText}>Vendor Portal</Text>
+        </Pressable>
+      </View>
+      )
+    }
+  }
+
   return (
     <View style={styles.profileContainer}>
-      {/* Name information */}
-
       <View style={styles.profileHeaderContainer}>
         <Text style={styles.profileHeaderText}>Account</Text>
         <View style={styles.emailContainer}>
@@ -62,14 +77,7 @@ export default function ProfilePage() {
             <Text style={styles.logOutText}>Settings</Text>
           </Pressable>
         </View>
-        <View style={styles.buttonContainer}>
-          <Pressable
-            style={styles.profileButton}
-            onPress={() => navigation.navigate("Vendor", user.role)}
-          >
-            <Text style={styles.logOutText}>Vendor Portal</Text>
-          </Pressable>
-        </View>
+       
         <View style={styles.buttonContainer}>
           <Pressable style={styles.profileButton}>
             <Text style={styles.logOutText}>Help</Text>
@@ -80,6 +88,18 @@ export default function ProfilePage() {
             <Text style={styles.logOutText}>Privacy Policy</Text>
           </Pressable>
         </View>
+
+      {vendorPortal()}
+
+      <View> 
+        <Pressable
+        style={styles.logOutButton}
+        onPress={() => changeRoleToVendor(user._id)}
+        >
+          <Text style={styles.logOutTextButton}>Become a Vendor</Text>
+        </Pressable>
+      </View>
+
         <View style={styles.logOutContainer}>
           <Pressable
             style={styles.logOutButton}
@@ -88,12 +108,7 @@ export default function ProfilePage() {
             <Text style={styles.logOutTextButton}>Log Out</Text>
           </Pressable>
 
-          <Pressable
-            style={styles.logOutButton}
-            onPress={() => changeRoleToVendor(user._id)}
-          >
-            <Text style={styles.logOutTextButton}>Become a Vendor</Text>
-          </Pressable>
+        
         </View>
       </View>
     </View>

@@ -3,8 +3,9 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { API } from "constants/API";
+const logo = require('assets/logo.png')
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 /**
  * The default business card item
@@ -13,13 +14,15 @@ import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
  */
 interface Props {
   menuItem: Iitem;
-  businessName: string;
-  location: { latitude: number; longitude: number };
+  vendorName?: string;
+  location?: location;
+  disabled?: boolean
 }
 export default function MenuItemCard({
   menuItem,
-  businessName,
+  vendorName,
   location,
+  disabled
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
@@ -28,11 +31,11 @@ export default function MenuItemCard({
   Object.assign({}, { ...menuItem });
   const parse = { cartData: JSON.parse(JSON.stringify(menuItem)) };
 
-  let limitTextAmount = menuItem.description.slice(0, 75) + "...";
+  let limitTextAmount = menuItem.description.slice(0, 20) + "...";
   const goToFoodDetails = () => {
     setOrder(false);
     navigation.navigate("Item", {
-      business: businessName,
+      business: vendorName,
       menuItem: parse.cartData,
       location: location,
     });
@@ -43,14 +46,15 @@ export default function MenuItemCard({
       // passing data through the FoodDetails page to access the selection data from the menu list
       onPress={() => goToFoodDetails()}
       style={styles.foodCategoryStyle}
+      disabled={disabled}
     >
       <View style={styles.card}>
         <View style={styles.imageBox}>
           <Image
             style={styles.foodImages}
-            source={{
-              uri: `${API}/${menuItem.image}`,
-            }}
+            source={menuItem.image ? {
+              uri: menuItem.image
+            }: logo}
           />
         </View>
         <View style={styles.foodTexts}>
@@ -58,7 +62,6 @@ export default function MenuItemCard({
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
           <Text style={styles.priceText}>${Math.fround(menuItem.price)}</Text>
         </View>
-        {/* Store image with button  */}
       </View>
     </TouchableOpacity>
   );

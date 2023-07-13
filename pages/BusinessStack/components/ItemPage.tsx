@@ -64,21 +64,19 @@ export default function ItemPage() {
     setOrder(true);
     if (businessName === "" || business === businessName) {
       try {
-        const { payload }: any = await addToCart(
+        await addToCart(
           vendorItem,
           userId,
           business,
           location
         );
-        console.log("cart payload: ", payload);
-        console.log(vendorItem.customizations[0].optionCustomizations);
         dispatch(setBusinessName(business));
         navigation.goBack();
       } catch (e) {
         console.log("error");
       }
     } else {
-      Alert.alert("Added item from a different business");
+      Alert.alert("Added item from a different vendor");
     }
   };
 
