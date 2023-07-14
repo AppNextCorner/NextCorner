@@ -27,10 +27,7 @@ export default function useBusinessInformation() {
     if(uid) {updateUserStores(uid)};
   };
 
-  const updateVendorMenu = async(newVendor: vendorStructure) => {
-    
 
-  }
 
   
 
