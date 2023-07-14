@@ -3,10 +3,10 @@ import styled from "@emotion/native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useAppSelector } from "../../../store/hook";
+import { useAppSelector } from "../../../../store/hook";
 import StoreWithImage from "cards/Misc/StoreImageCard";
-import { getUserBusiness } from "../../../store/slices/BusinessSlice/businessSessionSlice";
-import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
+import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 const Container = styled.ScrollView`
   flex: 1;

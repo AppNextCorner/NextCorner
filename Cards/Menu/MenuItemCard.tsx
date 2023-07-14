@@ -16,13 +16,13 @@ interface Props {
   menuItem: Iitem;
   vendorName?: string;
   location?: location;
-  disabled?: boolean
+
 }
 export default function MenuItemCard({
   menuItem,
   vendorName,
   location,
-  disabled
+  
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { setOrder } = useOrderButton();
@@ -46,7 +46,6 @@ export default function MenuItemCard({
       // passing data through the FoodDetails page to access the selection data from the menu list
       onPress={() => goToFoodDetails()}
       style={styles.foodCategoryStyle}
-      disabled={disabled}
     >
       <View style={styles.card}>
         <View style={styles.imageBox}>

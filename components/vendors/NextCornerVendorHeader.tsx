@@ -14,7 +14,8 @@ const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 5%;
-  margin-top: 10%;
+  padding-top: 15%;
+  background-color: #fff;
 `;
 
 const HeaderLogoImage = styled.Image`

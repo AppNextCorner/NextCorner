@@ -20,11 +20,15 @@ export const businessSessionSlice = createSlice({
     },
     setUserBusiness: (state, action) => {
       state.userBusiness = action.payload;
+    },
+    setUserMenu: (state, action) => {
+      const vendorMatch = state.userBusiness?.filter((store) => store.id === action.payload.id)
+      vendorMatch![0].menu = action.payload.menu
     }
   },
 });
 
-export const { setBusinesses, setUserBusiness } = businessSessionSlice.actions;
+export const { setBusinesses, setUserBusiness, setUserMenu } = businessSessionSlice.actions;
 export const getBusinesses = (state: RootState) =>
   state.businessSession.businessess;
 

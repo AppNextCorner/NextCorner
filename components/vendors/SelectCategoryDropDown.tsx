@@ -18,9 +18,11 @@ const SelectCategoryDropDown = (props: IProps) => {
   const { store, setItem, handlePropertyChange } = props;
   return (
     <SelectDropdown
+      showsVerticalScrollIndicator={true}
+      defaultButtonText="Item Category"
       buttonTextStyle={{ fontSize: 15 }}
       buttonStyle={styles.dropdown}
-      dropdownStyle={{ backgroundColor: "red" }}
+      dropdownStyle={{ backgroundColor: "#fff", borderRadius: 10 }}
       data={store.itemCategories}
       onSelect={(selected: string) => {
         handlePropertyChange(setItem, "category", selected);
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     borderRadius: 7.5,
     borderWidth: 3,
     borderColor: "#f2f0f0",
-
-    marginHorizontal: "10%",
+    width: "90%",
+    marginHorizontal: "5%",
   },
 });

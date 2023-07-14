@@ -7,8 +7,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
+import FullMenuList from "components/vendors/FullMenuList";
 interface RouteParams {
-  store?: vendorStructure;
+  store?: {store:vendorStructure};
 }
 
 const VendorMenu = () => {
@@ -16,7 +17,7 @@ const VendorMenu = () => {
 
   // vendor is vendorStructure type
   const { store }: RouteParams = route.params as RouteParams;
-
+  console.log('store: ', store!.store.menu)
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
     navigation.navigate('VendorMenuCreate', {store})
@@ -28,14 +29,17 @@ const VendorMenu = () => {
     <>
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <FlatList
+           ListFooterComponent={<>
+              <FullMenuList menu={store.store.menu} vendorName={store.store.name} location={store.store.location} />
+            </>}
           ListHeaderComponent={
             <>
               <NextCornerVendorHeader />
               <View>
                 <FeaturedList
-                  menuData={store.menu ? store.menu : null}
-                  vendorName={store.name}
-                  location={store.location}
+                  menuData={store.store.menu ? store.store.menu : null}
+                  vendorName={store.store.name}
+                  location={store.store.location}
                 />
               </View>
 
@@ -55,21 +59,22 @@ const VendorMenu = () => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           // pass in the menu list coming from the route.params of the vendor items which we can access through params
-          data={store.itemCategories}
+          data={store.store.itemCategories}
           renderItem={({ item }) => {
             return (
               <>
                 <Text style={styles.category}>{item}</Text>
                 <MenuList
                   category={item}
-                  menu={store.menu}
-                  vendorName={store.name}
-                  location={store.location}
+                  menu={store.store.menu}
+                  vendorName={store.store.name}
+                  location={store.store.location}
                 />
                 <View style={styles.margin}></View>
               </>
             );
           }}
+         
         />
       </View>
     </>

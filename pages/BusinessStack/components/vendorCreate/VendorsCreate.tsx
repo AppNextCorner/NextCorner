@@ -15,13 +15,13 @@ import BusinessCard from "cards/Home/BusinessCard";
 import SelectingCategory from "components/vendors/SelectingCategory";
 // import { time } from "../../../typeDefinitions/interfaces/IVendor/time";
 import { vendorTime } from "constants/vendorTime";
-import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
-import { makeImagePostRequest } from "../../../config/axios.config";
-import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
-import CreateCategories from "./vendorCreate/CreateCategories";
-import { useAppSelector } from "../../../store/hook";
-import { getUser } from "../../../store/slices/userSessionSlice";
+import { makeImagePostRequest } from "../../../../config/axios.config";
+import { Iitem } from "../../../../typeDefinitions/interfaces/item.interface";
+import CreateCategories from "./CreateCategories";
+import { useAppSelector } from "../../../../store/hook";
+import { getUser } from "../../../../store/slices/userSessionSlice";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 
 /**
@@ -64,14 +64,14 @@ const VendorsCreate = () => {
     },
   });
 
-  const handlePropertyChange = (property: string, text: string | object) => {
+  const handlePropertyChange = (property: string, text: any) => {
     setStructure((prevStructure) => ({
       ...prevStructure,
       [property]: text,
     }));
   };
   const handleImageChange = async () => {
-    const response: string = await openImageLibrary();
+    const response: string | null = await openImageLibrary();
     handlePropertyChange("image", response);
   };
   const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;

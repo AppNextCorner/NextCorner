@@ -1,13 +1,16 @@
-
 import * as ImagePicker from "expo-image-picker";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
-
+import { Alert } from "react-native";
+import { useAppDispatch } from "../../store/hook";
+import { setUserMenu } from "../../store/slices/BusinessSlice/businessSessionSlice";
+import { useNavigation } from "@react-navigation/native";
 
 const usePhotoHandler = () => {
-  const {updateBusinessInformation} = useBusinessInformation();
+  const { updateBusinessInformation } = useBusinessInformation();
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
-
-  const openImageLibrary = async (): Promise<string> => {
+  const openImageLibrary = async (): Promise<string | null> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
@@ -24,15 +27,15 @@ const usePhotoHandler = () => {
         return response.assets[0].uri;
       }
     }
-    return "no image found";
+    return null;
   };
 
   /**
-   * 
-   * @param uri 
-   * @param endpoint 
-   * @param request 
-   * @param payload 
+   *
+   * @param uri
+   * @param endpoint
+   * @param request
+   * @param payload
    */
   const upload = async (
     uri: string,
@@ -47,21 +50,32 @@ const usePhotoHandler = () => {
         uri: uri,
         type: "image/png", // Use the appropriate MIME type for your image file
       };
-    
-      const formData = new FormData();
-      formData.append("image",JSON.parse(JSON.stringify(imageObj)));
-      formData.append("payload",JSON.stringify(payload.payload));
+      if (!imageObj.uri) {
+        return Alert.alert("Missing Image");
+      }
 
-      await request(endpoint, formData);
+      const formData = new FormData();
+      formData.append("image", JSON.parse(JSON.stringify(imageObj)));
+      formData.append("payload", JSON.stringify(payload.payload));
+
+      const response = await request(endpoint, formData);
+      dispatch(
+        setUserMenu({
+          id: response.data.payload.id,
+          menu: response.data.payload.menu,
+        })
+      );
+      navigation.goBack();
       // Re-render the vendors with the new one added
-      await updateBusinessInformation(uid);
-    } catch (err) {
-      console.log(err);
+      //await updateBusinessInformation(uid);
+    } catch (err: any) {
+      Alert.alert(err.response.data.payload)
+      console.log(err.response.data);
     }
   };
   return {
     openImageLibrary,
-    upload
+    upload,
   };
 };
 

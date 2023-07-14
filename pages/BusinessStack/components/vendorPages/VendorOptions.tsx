@@ -36,7 +36,6 @@ const VendorOptions = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const { store }: RouteParams = route.params as RouteParams;
-
   const buttons = [
     {
       name: "My Menu",
