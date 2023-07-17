@@ -56,7 +56,7 @@ const Vendor = () => {
       <NextCornerVendorHeader />
 
       <PromptVendor></PromptVendor>
-      {stores![0] ? (
+      {stores != null && stores!.length > 0 ? (
         <Card onPress={() => goToVendorDetails(stores![0])}>
           <StoreWithImage store={stores![0]} />
         </Card>

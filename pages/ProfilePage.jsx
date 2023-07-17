@@ -16,8 +16,10 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const { changeRoleToVendor } = useUpdateRole();
-  const { updateUserStores } = useBusinessInformation();
-  updateUserStores(user?._id);
+  const { updateBusinessInformation } = useBusinessInformation();
+
+  // Setting the 
+  updateBusinessInformation(user?._id);
 
   // grabs the only user from the array as it has been already filtered out to include the current user
   console.log("user: ", user);

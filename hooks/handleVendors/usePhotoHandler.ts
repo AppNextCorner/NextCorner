@@ -57,17 +57,10 @@ const usePhotoHandler = () => {
       const formData = new FormData();
       formData.append("image", JSON.parse(JSON.stringify(imageObj)));
       formData.append("payload", JSON.stringify(payload.payload));
-
-      const response = await request(endpoint, formData);
-      dispatch(
-        setUserMenu({
-          id: response.data.payload.id,
-          menu: response.data.payload.menu,
-        })
-      );
+      await request(endpoint, formData);
       navigation.goBack();
       // Re-render the vendors with the new one added
-      //await updateBusinessInformation(uid);
+      await updateBusinessInformation(uid);
     } catch (err: any) {
       Alert.alert(err.response.data.payload)
       console.log(err.response.data);

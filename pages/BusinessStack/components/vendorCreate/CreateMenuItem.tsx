@@ -63,7 +63,7 @@ const CreateMenuItem = () => {
       <NextCornerVendorHeader />
       <ScrollView style={styles.page}>
         <View style={styles.previewContainer}>
-          <EditingMenuItemCard menuItem={item}/>
+          <EditingMenuItemCard menuItem={item} vendor={store.store}/>
         </View>
         <View style={styles.subHeaderContainer}>
           <Text style={styles.subHeader}>General Info: </Text>

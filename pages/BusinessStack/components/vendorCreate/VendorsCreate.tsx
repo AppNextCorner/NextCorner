@@ -105,7 +105,7 @@ const VendorsCreate = () => {
 
           <TouchableOpacity onPress={handleImageChange}>
             <View style={styles.imageForm}>
-              <Text>Add Image</Text>
+              <Text>Upload Store Banner</Text>
             </View>
           </TouchableOpacity>
           <View style={styles.categoriesContainer}>

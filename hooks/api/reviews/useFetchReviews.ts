@@ -21,10 +21,10 @@ export default function useFetchReviews() {
    *
    * @param id the id of the menuItem
    */
-  const fetchReviews = async (id: string) => {
+  const fetchReviews = async (itemId: string) => {
     try {
       // Fetch the reviews with the id
-      const fetchedReviews = await getReviews(id);
+      const fetchedReviews = await getReviews(itemId);
       const fetchedBusinesses = await fetchBusinesses();
       dispatch(setBusinesses(fetchedBusinesses));
       // update the state values

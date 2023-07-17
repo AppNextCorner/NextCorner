@@ -8,7 +8,7 @@ interface Props {
   vendorName: string;
   listData: any;
   location: any;
-  menuData?: Iitem;
+  menuData?: Iitem[];
 }
 const PreviousOrdersComponent = (props: Props) => {
   const { vendorName, listData, location } = props;

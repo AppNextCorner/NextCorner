@@ -4,9 +4,18 @@ import React, { useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useFetchReviews from "hooks/api/reviews/useFetchReviews";
 import ReviewCard from "components/reviews/ReviewCard";
+import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
+import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
+
+interface IParams {
+  vendorItem: Iitem;
+  business: vendorStructure;
+}
+
 export default function ReviewsPage() {
   const route = useRoute();
-  const { menuItem }: any = route.params;
+  const { vendorItem }: IParams = route.params as IParams;
+  console.log(vendorItem);
   const { fetchReviews, reviews, reviewByUser } = useFetchReviews();
   const isLoading = !reviews || !reviewByUser;
 
@@ -20,13 +29,13 @@ export default function ReviewsPage() {
    * When navigating to the ReviewsCreate page, pass in the itemId
    */
   const createReviewNav = () =>
-    navigate.navigate("ReviewCreate", { itemId: menuItem._id });
+    navigate.navigate("ReviewCreate", { itemId: vendorItem._id });
 
   /**
    * Fetch the reviews of the item
    */
   useEffect(() => {
-    fetchReviews(menuItem._id.toString());
+    fetchReviews(vendorItem._id!.toString());
   }, []);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -54,9 +63,12 @@ export default function ReviewsPage() {
             return <ReviewCard review={review} user={user} key={index} />;
           })
         )}
-        <TouchableOpacity onPress={() => {
-    navigation.goBack()
-  }} style={styles.createReviewBtn}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+          style={styles.createReviewBtn}
+        >
           <Text>Go Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -73,6 +85,6 @@ export default function ReviewsPage() {
 
 const styles = StyleSheet.create({
   createReviewBtn: {
-    marginTop: '20%',
+    marginTop: "20%",
   },
 });

@@ -8,8 +8,10 @@ import { FontAwesome } from "@expo/vector-icons";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import FullMenuList from "components/vendors/FullMenuList";
+import { useAppSelector } from "../../../../store/hook";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 interface RouteParams {
-  store?: {store:vendorStructure};
+  store?: { store: vendorStructure };
 }
 
 const VendorMenu = () => {
@@ -17,21 +19,90 @@ const VendorMenu = () => {
 
   // vendor is vendorStructure type
   const { store }: RouteParams = route.params as RouteParams;
-  console.log('store: ', store!.store.menu)
+  console.log("store: ", store!.store.menu);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
-    navigation.navigate('VendorMenuCreate', {store})
-  }
-  if (!store) {
-    return null;
+    navigation.navigate("VendorMenuCreate", { store });
+  };
+
+  const selectedStore: vendorStructure[] | null | undefined= useAppSelector(getUserBusiness);
+
+  if (store?.store !== selectedStore![0]) {
+    return (
+      <>
+        <View style={{ flex: 1, backgroundColor: "#fff" }}>
+          <FlatList
+            ListFooterComponent={
+              <>
+                <FullMenuList
+                  menu={selectedStore![0].menu}
+                  vendor={selectedStore![0]}
+                  location={selectedStore![0].location}
+                  create={true}
+                />
+              </>
+            }
+            ListHeaderComponent={
+              <>
+                <NextCornerVendorHeader />
+                <View>
+                  <FeaturedList
+                    menuData={selectedStore![0].menu ? selectedStore![0].menu : null}
+                    vendorName={selectedStore![0].name}
+                    location={selectedStore![0].location}
+                  />
+                </View>
+
+                {/* ALL menu items located here */}
+                <View style={styles.marginSet}>
+                  <Text style={styles.titleOfMenu}>Full Menu</Text>
+                  <FontAwesome
+                    onPress={navigateToCreate}
+                    style={styles.icon}
+                    name="plus-circle"
+                    size={40}
+                    color="#f2f0f0"
+                  />
+                </View>
+              </>
+            }
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            // pass in the menu list coming from the route.params of the vendor items which we can access through params
+            data={selectedStore![0].itemCategories}
+            renderItem={({ item }) => {
+              return (
+                <>
+                  <Text style={styles.category}>{item}</Text>
+                  <MenuList
+                    category={item}
+                    menu={selectedStore![0].menu}
+                    vendorName={selectedStore![0].name}
+                    location={selectedStore![0].location}
+                  />
+                  <View style={styles.margin}></View>
+                </>
+              );
+            }}
+          />
+        </View>
+      </>
+    );
   }
   return (
     <>
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <FlatList
-           ListFooterComponent={<>
-              <FullMenuList menu={store.store.menu} vendorName={store.store.name} location={store.store.location} />
-            </>}
+          ListFooterComponent={
+            <>
+              <FullMenuList
+                menu={store.store.menu}
+                vendor={store.store}
+                location={store.store.location}
+                create={true}
+              />
+            </>
+          }
           ListHeaderComponent={
             <>
               <NextCornerVendorHeader />
@@ -74,7 +145,6 @@ const VendorMenu = () => {
               </>
             );
           }}
-         
         />
       </View>
     </>

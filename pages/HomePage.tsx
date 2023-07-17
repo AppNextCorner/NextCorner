@@ -56,7 +56,7 @@ export default function HomePage() {
                   style={styles.remainingCards}
                   showsVerticalScrollIndicator={false}
                   data={!categoryWasSelected ? vendors : filterBusinessCards}
-                  keyExtractor={(item) => item._id!}
+                  keyExtractor={(_item, index) => index.toString()}
                   renderItem={({ item }) => (
                     <BusinessCard
                       businessItem={item}

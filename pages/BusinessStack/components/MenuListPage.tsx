@@ -25,11 +25,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
 import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
+import FullMenuList from "components/vendors/FullMenuList";
+import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 // import { IP } from "@env";
+
+interface IRoute {
+  business: vendorStructure;
+}
 
 export default function MenuListPage() {
   const route = useRoute();
-  const { business }: any = route.params;
+  const { business }: IRoute = route.params as IRoute;
 
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
 
@@ -53,12 +59,40 @@ export default function MenuListPage() {
   const goHome = () => {
     navigation.navigate("Home");
   };
+  const currentDate = new Date();
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const currentDayIndex = currentDate.getDay();
+  const currentDayString = weekdays[currentDayIndex];
+  const indexOfDay = business.times.findIndex(
+    (currentTime) =>
+      currentTime.day.toLowerCase() === currentDayString.toLowerCase()
+  );
+  console.log(indexOfDay);
+
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
         {/* Menu list containing food items */}
         <FlatList
+          ListFooterComponent={
+            <>
+              <FullMenuList
+                location={business.location}
+                create={false}
+                menu={business.menu}
+                vendor={business}
+              />
+            </>
+          }
           ListHeaderComponent={
             <>
               {/* Pressable for the purpose of using an icon to go back home  */}
@@ -78,9 +112,7 @@ export default function MenuListPage() {
               {/* Section for small google maps preview */}
               <View style={{ marginTop: -60 }}>
                 <View style={styles.timeContainer}>
-                  <Text style={styles.timeOfMenu}>
-                    Open: {business.open} - {business.close}
-                  </Text>
+                  <Text style={styles.timeOfMenu}>Open: {business.times[indexOfDay].time.open} - {business.times[indexOfDay].time.closed}</Text>
                 </View>
 
                 <AnnouncementList vendor={business} />
@@ -112,9 +144,9 @@ export default function MenuListPage() {
           renderItem={({ item }) => {
             return (
               <>
-                <Text style={styles.typeText}>{item.type}</Text>
+                <Text style={styles.typeText}>{item}</Text>
                 <MenuList
-                 category={item}
+                  category={item}
                   menu={business.menu}
                   vendorName={business.name}
                   location={business.location}
@@ -206,7 +238,7 @@ const styles = StyleSheet.create({
     height: 250,
     overflow: "hidden",
     resizeMode: "cover",
-    marginTop: '-30%',
+    marginTop: "-30%",
   },
   container: {
     flex: 1,

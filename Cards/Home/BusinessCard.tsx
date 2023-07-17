@@ -47,8 +47,10 @@ export default function BusinessCard({
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   let goTo: string = "";
   {
-    create ? (goTo = "MenuList") : (goTo = "VendorMenu");
+    !create ? (goTo = "MenuList") : (goTo = "VendorMenu");
   }
+
+  console.log('business: ', businessItem)
 
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
