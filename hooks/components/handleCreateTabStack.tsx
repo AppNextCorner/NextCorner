@@ -1,67 +1,65 @@
+import React from "react";
+import handleTabChange from "./handleTabChange";
 import {
-  useFonts,
-  Poppins_600SemiBold,
-  Poppins_100Thin_Italic,
-} from "@expo-google-fonts/poppins";
-import {
-  BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
 import { defaultTabStyles } from "constants/components/styles/tabBarStyles";
-import React from "react";
-import handleTabChange from "./handleTabChange";
 
-export default function handleCreateTabStack(props: any) {
+interface TabScreen {
+  name: string;
+  component: React.ComponentType<any>;
+}
+
+interface TabStackProps {
+  tabList: TabScreen[];
+  initialRoute: string;
+}
+
+const handleCreateTabStack: React.FC<TabStackProps> = (props) => {
   const { tabList, initialRoute } = props;
-  const [fontsLoaded] = useFonts({
-    Poppins_100Thin_Italic,
-    Poppins_600SemiBold,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-  const Tab = createBottomTabNavigator();
 
   const screenOptions = ({
     route,
   }: {
-    route: any;
-  }): BottomTabNavigationOptions => {
+    route: { name: string };
+  }) => {
     return {
-      tabBarIcon: ({ focused, color, size }) => {
-        let rn = route.name;
-        const styles = {
-          color,
-          size,
-        };
-        const tab: any = {
-          tab: rn,
-          styles,
-          focused,
-        };
-        return handleTabChange(tab);
+      tabBarIcon: ({ focused, color, size }: any) => {
+        const tab = tabList.find((tab) => tab.name === route.name);
+        if (tab) {
+          return handleTabChange({
+            tab: tab.name,
+            styles: {
+              color,
+              size,
+            },
+            focused,
+            tabList,
+          });
+        }
+        return null;
       },
       headerShown: false,
       tabBarActiveTintColor: "#78DBFF",
       tabBarInactiveTintColor: "grey",
       tabBarShowLabel: true,
-      tabBarStyle: defaultTabStyles.tabBarStyle,
+      tabBarStyle: defaultTabStyles.tabBarStyle, // Uncomment this if needed
     };
   };
 
+  const Tab = createBottomTabNavigator();
+
   return (
-    <Tab.Navigator
-      initialRouteName={initialRoute}
-      screenOptions={screenOptions}
-    >
-      {tabList.map((screen: any) => (
+    <Tab.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
+      {tabList.map((screen) => (
         <Tab.Screen
-          key={screen.name} // Add a unique key prop
+          key={screen.name}
           name={screen.name}
           component={screen.component}
         />
       ))}
     </Tab.Navigator>
   );
-}
+};
+
+export default handleCreateTabStack;

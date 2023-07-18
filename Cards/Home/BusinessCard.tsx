@@ -39,7 +39,7 @@ export default function BusinessCard({
         : // for the default business list on home screen to display it smaller then the category business list
           {
             height: 200,
-            width: 275,
+            width: 175,
           };
     return change;
   };
@@ -49,9 +49,6 @@ export default function BusinessCard({
   {
     !create ? (goTo = "MenuList") : (goTo = "VendorMenu");
   }
-
-  console.log('business: ', businessItem)
-
   return (
     // Each card is going to have a different data source, so we need to create a custom button being the touchable opacity in order to navigate through the cards and as well as pass in data through the cards with navigation
     <TouchableOpacity
@@ -64,9 +61,10 @@ export default function BusinessCard({
         style={
           checkForStyleChange
             ? changeStyle(checkForStyleChange)
+            // This is for category business cards
             : {
-                height: 200,
-                width: 275,
+                height: 250,
+                width: '100%',
               }
         }
       >
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
   vendorImage: {
     width: "100%",
     flex: 1,
-    height: 150,
   },
   noVendorImageContainer: {
     flex: 5,
@@ -114,9 +111,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 175,
     height: 250,
-    margin: "2%",
-    alignSelf: "center",
-    objectFit: "scale-down",
   },
   card: {
     width: 250,

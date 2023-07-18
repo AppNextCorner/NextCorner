@@ -2,13 +2,12 @@ import { View, Image, StyleSheet, Text } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 
-interface Props  {
-    store: vendorStructure
+interface Props {
+  store: vendorStructure;
 }
 
-
 export default function StoreWithImage(props: Props) {
-  const {store} = props;
+  const { store } = props;
   const checkCreateProp = (prop: boolean | undefined) => {
     if (prop) {
       return { uri: `${store.image}` };
@@ -29,13 +28,7 @@ export default function StoreWithImage(props: Props) {
 
   return (
     <View style={styles.card}>
-      <View
-        style={
-          store.image
-            ? styles.vendorImageContainer
-            : styles.noVendorImageContainer
-        }
-      >
+      <View style={styles.vendorImageContainer}>
         <Image
           style={store.image ? styles.vendorImage : styles.noVendorImage}
           source={checkIfImageExists(store.image, true)}
@@ -71,18 +64,14 @@ const styles = StyleSheet.create({
   },
   businesText: {
     fontSize: 12,
-    fontFamily: 'Poppins_600SemiBold',
     color: "#606160",
+    fontWeight: '600',
     flex: 1,
   },
   vendorImage: {
-    width: "100%",
     flex: 1,
-    height: 150,
-  },
-  noVendorImageContainer: {
-    flex: 5,
     width: "100%",
+    objectFit: "cover",
   },
   vendorImageContainer: {
     flex: 5,
@@ -93,14 +82,14 @@ const styles = StyleSheet.create({
     width: 175,
     height: 250,
     margin: "2%",
-    alignSelf: "center",
-    objectFit: "scale-down",
+    //alignSelf: "center",
+    // objectFit: "scale-down",
   },
   card: {
-    width: '100%',
+    width: "100%",
     height: 250,
     flex: 1,
-    alignSelf: 'center'
+    alignSelf: "center",
   },
   priceText: {
     flex: 1,

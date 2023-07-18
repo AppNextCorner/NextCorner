@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Iitem } from "../../../../typeDefinitions/interfaces/item.interface";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
@@ -10,6 +10,14 @@ import SelectCategoryDropDown from "components/vendors/SelectCategoryDropDown";
 import { makeImagePutRequest } from "../../../../config/axios.config";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import EditingMenuItemCard from "cards/Vendors/EditingMenuItemCard";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { handlePropertyChange } from "hooks/components/handleChangeProperty";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import {
+  getModel,
+  setModel,
+} from "../../../../store/slices/BusinessSlice/menuCreateSlice";
+import { debounce } from "hooks/components/handleTimeout";
 
 interface RouteParams {
   store: { store: vendorStructure };
@@ -18,52 +26,52 @@ interface RouteParams {
 const CreateMenuItem = () => {
   // Hooks
   const route = useRoute();
+  const model = useAppSelector(getModel);
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { openImageLibrary } = usePhotoHandler();
   const { upload } = usePhotoHandler();
   // vendor is vendorStructure type
   const { store }: RouteParams = route.params as RouteParams;
-  const [item, setItem] = useState<Iitem>({
-    name: "",
-    time: {
-      minutes: 0,
-      seconds: 0,
-    },
-    image: "",
-    price: 0,
-    description: "",
-    customizations: [],
-    category: "",
-    featured: false,
-    amountInCart: 0,
-    rating: 0,
-    storeInfo: {
-      storeName: store.store.name,
-      storeId: store.store.id,
-    },
-  });
+
+  const [item, setItem] = useState<Iitem>(model);
+  const [debouncedItem, setDebouncedItem] = useState<Iitem>(item);
+
+  React.useEffect(() => {
+    const debouncedDispatch = debounce((updatedItem: Iitem) => {
+      console.log("Debounced item has changed:", updatedItem);
+      dispatch(setModel(updatedItem));
+    }, 300); // Set the debounce delay as per your needs (e.g., 300ms)
+
+    debouncedDispatch(debouncedItem);
+
+    // Cleanup the debounce function
+    return () => {
+      debouncedDispatch.cancel();
+    };
+  }, [debouncedItem, dispatch]);
+
+  // Update debouncedItem whenever item changes
+  React.useEffect(() => {
+    setDebouncedItem(item);
+  }, [item]);
   // Change a menu item property
-  const handlePropertyChange = (
-    setState: Dispatch<SetStateAction<any>>,
-    property: string,
-    text: any
-  ) => {
-    setState((prevStructure: any) => ({
-      ...prevStructure,
-      [property]: text,
-    }));
-  };
 
   // Image handler changer
   const handleImageChange = async () => {
     const response: string | null = await openImageLibrary();
     handlePropertyChange(setItem, "image", response);
   };
+
+  const handleNavigationChange = (route: string, data: null | any) => {
+    navigation.navigate(route, data !== null ? { data: data } : null);
+  };
   return (
     <>
       <NextCornerVendorHeader />
       <ScrollView style={styles.page}>
         <View style={styles.previewContainer}>
-          <EditingMenuItemCard menuItem={item} vendor={store.store}/>
+          <EditingMenuItemCard menuItem={item} vendor={store.store} />
         </View>
         <View style={styles.subHeaderContainer}>
           <Text style={styles.subHeader}>General Info: </Text>
@@ -81,12 +89,25 @@ const CreateMenuItem = () => {
             />
           </View>
 
-          {/* TODO: Fix on checking the correct image */}
-          <TouchableOpacity onPress={handleImageChange}>
-            <View style={styles.imageForm}>
-              <Text>Add Image</Text>
-            </View>
-          </TouchableOpacity>
+          <View style={styles.timeContainer}>
+            {/* TODO: Fix on checking the correct image */}
+            <TouchableOpacity onPress={handleImageChange}>
+              <View style={styles.imageForm}>
+                <Text>Add Image</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleNavigationChange("VendorCustomizationCreate", {
+                  custom: item.customizations,
+                });
+              }}
+            >
+              <View style={styles.imageForm}>
+                <Text>Add Customizations</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
 
           {/* Price and time to prepare */}
           <View>
@@ -221,11 +242,14 @@ const styles = StyleSheet.create({
   subHeaderContainer: { marginLeft: "5%" },
   subHeader: { fontWeight: "700" },
   inputElement: { flex: 1, backgroundColor: "#fff" },
-  timeContainer: { flexDirection: "row" },
+  timeContainer: { flexDirection: "row", justifyContent: "center" },
   container: { flexDirection: "row", flex: 1 },
   imageForm: {
+    justifyContent: "center",
+    alignItems: "center",
     marginHorizontal: "5%",
     padding: "5%",
+    flex: 1,
     borderRadius: 7.5,
     borderWidth: 3,
     borderColor: "#f2f0f0",

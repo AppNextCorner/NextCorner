@@ -1,25 +1,25 @@
 import React from "react";
-import { user } from "constants/components/tabs";
-
 interface route {
   tab: string;
   styles: any;
   focused?: boolean;
+  tabList: any[]
 }
 
 const handleTabChange: any = (props: route) => {
-  const { tab, styles, focused } = props;
-  const tabLocation = user.map((tab) => tab.name).indexOf(tab);
-  const TabIcon: any = user[tabLocation].icon;
+  const { tab, styles, focused, tabList } = props;
+  
+  const tabLocation = tabList.map((tab) => tab.name).indexOf(tab);
+  const TabIcon: any = tabList[tabLocation].icon;
   console.log('tab icon', TabIcon)
   return (
     <TabIcon
       name={
         focused
-          ? user[tabLocation].focusedName
+          ? tabList[tabLocation].focusedName
           : focused
-          ? user[tabLocation].focusedName
-          : user[tabLocation].unfocused
+          ? tabList[tabLocation].focusedName
+          : tabList[tabLocation].unfocused
       }
       size={styles.size}
       color={styles.color}

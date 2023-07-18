@@ -9,4 +9,5 @@ export interface IOptions extends Document {
   name: string;
   type: string;
   optionCustomizations: IOptionsLabel[];
+  optional?: boolean;
 }

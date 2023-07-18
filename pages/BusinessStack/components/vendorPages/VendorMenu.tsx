@@ -8,24 +8,50 @@ import { FontAwesome } from "@expo/vector-icons";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import FullMenuList from "components/vendors/FullMenuList";
-import { useAppSelector } from "../../../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
+import { setModel } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 interface RouteParams {
   store?: { store: vendorStructure };
 }
 
 const VendorMenu = () => {
   const route = useRoute();
+  const dispatch = useAppDispatch();
 
   // vendor is vendorStructure type
   const { store }: RouteParams = route.params as RouteParams;
   console.log("store: ", store!.store.menu);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
+    // Reset the model and create a state
+    // TODO: Create an app selector next page to edit each item and array
+    dispatch(
+      setModel({
+        name: "",
+        time: {
+          minutes: 0,
+          seconds: 0,
+        },
+        image: "",
+        price: 0,
+        description: "",
+        customizations: [],
+        category: "",
+        featured: false,
+        amountInCart: 0,
+        rating: 0,
+        storeInfo: {
+          storeName: store!.store.name,
+          storeId: store!.store.id,
+        },
+      })
+    );
     navigation.navigate("VendorMenuCreate", { store });
   };
-
-  const selectedStore: vendorStructure[] | null | undefined= useAppSelector(getUserBusiness);
+  // This function is called when the store is updated
+  const selectedStore: vendorStructure[] | null | undefined =
+    useAppSelector(getUserBusiness);
 
   if (store?.store !== selectedStore![0]) {
     return (
@@ -47,7 +73,9 @@ const VendorMenu = () => {
                 <NextCornerVendorHeader />
                 <View>
                   <FeaturedList
-                    menuData={selectedStore![0].menu ? selectedStore![0].menu : null}
+                    menuData={
+                      selectedStore![0].menu ? selectedStore![0].menu : null
+                    }
                     vendorName={selectedStore![0].name}
                     location={selectedStore![0].location}
                   />

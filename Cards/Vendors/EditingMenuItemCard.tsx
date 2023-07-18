@@ -1,5 +1,6 @@
 import {
   Animated,
+  Easing,
   GestureResponderEvent,
   Image,
   StyleSheet,
@@ -7,21 +8,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useRef } from "react";
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 const logo = require("assets/logo.png");
-//import { GestureHandlerRootView, Swipeable } from "react-native-gesture-handler";
-//import * as Swipeable from 'react-native-swipeable';
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import useUpdateMenu from "hooks/api/business/menu/useUpdateMenu";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
-/**
- * The default business card item
- * @param {*} props - be able to pass additional properties through the cart after coming from the business property prior to this page
- *
- */
+
 interface Props {
   menuItem: Iitem;
   vendor: vendorStructure;
@@ -30,7 +25,7 @@ interface Props {
 
 const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
   const { deleteItem } = useUpdateMenu();
-  const swipeableContentPosition = new Animated.Value(0);
+  const swipeableContentPosition = useRef(new Animated.Value(0)).current;
   let limitTextAmount = menuItem.description.slice(0, 20) + "...";
 
   const renderRightActions = () => {
@@ -57,7 +52,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
               <Feather name="trash" size={30} color="#fff" />
             </TouchableOpacity>
           </Animated.View>
-  
+
           <Animated.View
             style={[
               styles.rightActionContainer,
@@ -75,7 +70,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
       </>
     );
   };
-  
+
   if (!disabled) {
     return (
       <GestureHandlerRootView>
@@ -84,14 +79,16 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
           onSwipeableOpen={() => {
             Animated.timing(swipeableContentPosition, {
               toValue: 0,
-              duration: 300,
+              duration: 175,
+              easing: Easing.linear,
               useNativeDriver: true,
             }).start();
           }}
           onSwipeableClose={() => {
             Animated.timing(swipeableContentPosition, {
               toValue: 50,
-              duration: 300,
+              duration: 100,
+              easing: Easing.linear,
               useNativeDriver: true,
             }).start();
           }}
@@ -121,9 +118,9 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
       </GestureHandlerRootView>
     );
   }
+
   return (
     <TouchableOpacity
-      // passing data through the FoodDetails page to access the selection data from the menu list
       style={styles.foodCategoryStyle}
       disabled={disabled}
     >
@@ -143,7 +140,9 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{menuItem.name}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
-          <Text style={styles.priceText}>${Math.fround(menuItem.price)}</Text>
+          <Text style={styles.priceText}>
+            ${Math.fround(menuItem.price)}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>

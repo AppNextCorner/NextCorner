@@ -3,6 +3,7 @@ import MenuListPage from "pages/BusinessStack/components/MenuListPage";
 import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
 import VendorsCreate from "pages/BusinessStack/components/VendorsCreate";
 import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
+import CreateCustomizations from "pages/BusinessStack/components/vendorCreate/CreateCustomizations";
 import CreateMenuItem from "pages/BusinessStack/components/vendorCreate/CreateMenuItem";
 import VendorMenu from "pages/BusinessStack/components/vendorPages/VendorMenu";
 import VendorOptions from "pages/BusinessStack/components/vendorPages/VendorOptions";
@@ -52,20 +53,24 @@ export const screens = [
 ];
 
 export const vendorScreens = [
-    {
-        name: "VendorCreate",
-        component: VendorsCreate,
-      },
-      {
-        name: "VendorMenuCreate",
-        component: CreateMenuItem,
-      },
-      {
-        name: "VendorMenu",
-        component: VendorMenu,
-      },
-      {
-        name: "VendorOptions",
-        component: VendorOptions,
-      },
-]
+  {
+    name: "VendorCreate",
+    component: VendorsCreate,
+  },
+  {
+    name: "VendorMenuCreate",
+    component: CreateMenuItem,
+  },
+  {
+    name: "VendorMenu",
+    component: VendorMenu,
+  },
+  {
+    name: "VendorOptions",
+    component: VendorOptions,
+  },
+  {
+    name: "VendorCustomizationCreate",
+    component: CreateCustomizations,
+  },
+];
