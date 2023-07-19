@@ -13,7 +13,7 @@ import OrderButton from "components/global/OrderButton";
 import { useAppSelector } from "../store/hook";
 import { getBusinesses } from "../store/slices/BusinessSlice/businessSessionSlice";
 // import { getBusiness } from "../store/slices/BusinessSlice/businessSlice";
-import { getButton } from "../store/slices/addToCart";
+import { getButton } from "../store/slices/addToCartSessionSlice";
 import useCategoryList from "hooks/handlePages/useCategoryList";
 import { categories, foodCategories } from "constants/vendorCategories";
 import { vendorStructure } from "../typeDefinitions/interfaces/IVendor/vendorStructure";

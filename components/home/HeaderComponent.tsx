@@ -5,9 +5,9 @@
 import { StyleSheet, View, Text, Image, Alert, Pressable } from "react-native";
 // import HomeIcon from 'assets/logo.png'
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { getCart, setBusinessName } from "../../store/slices/addToCart";
+import { getCart} from "../../store/slices/addToCartSessionSlice";
 import { Foundation } from "@expo/vector-icons";
 import SearchComponent from "./SearchComponent";
 import { useState } from "react";
@@ -15,27 +15,13 @@ import { useState } from "react";
 const HomeIcon = require("assets/logo.png");
 export default function HeaderComponent() {
   const [magnifyClicked, setMagnifyClicked] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
   //JSON.parse(JSON.stringify(getCartFromSlice))
   const getCartFromSlice = useAppSelector(getCart);
-  const getCartOption = JSON.parse(JSON.stringify(getCartFromSlice));
-
-  const dispatch = useAppDispatch();
 
   // setting up the businessname to that of our first cart item then check if the business is already there, and if it is, then we can proceed to that page, and if not then give an alert to the user
   const navigateCart = () => {
-    if (getCartOption.length > 0) {
-      //;
-      navigation.navigate("Cart");
-      // Change the state of the business in the cart page to match the business from the cart data
-      dispatch(setBusinessName(getCartOption[0].businessOrderedFrom));
-      // Remove any existing duplicate cart items
-      getCartOption.filter(
-        (item, index) => getCartOption.indexOf(item) === index
-      );
-    } else {
-      Alert.alert("Buy some items to proceed...");
-    }
+    navigation.navigate("Cart");
   };
   const toggleSearch = () => {
     setMagnifyClicked((prev) => !prev);
@@ -114,7 +100,7 @@ export default function HeaderComponent() {
                       { flexDirection: "column" },
                     ]}
                   >
-                    <Text style={styles.amount}>{getCartOption.length}</Text>
+                    <Text style={styles.amount}>{getCartFromSlice.length}</Text>
                   </View>
                 </View>
               </View>

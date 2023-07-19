@@ -27,7 +27,7 @@ const ButtonList = styled.FlatList``;
 const ButtonContent = styled.Text``;
 
 interface RouteParams {
-  store: vendorStructure;
+  store: { store: vendorStructure };
 }
 
 const VendorOptions = () => {
@@ -43,6 +43,11 @@ const VendorOptions = () => {
       navigate: "VendorMenu",
       data: { store },
     },
+    {
+      name: "Incoming Orders",
+      navigate: "VendorIncomingOrders",
+      data: { store },
+    }
   ];
   const renderItem = ({ item }: ListRenderItemInfo<button>) => (
     <Button  onPress={() => navigation.navigate(item.navigate, {store: item.data})}>

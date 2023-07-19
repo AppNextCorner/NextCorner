@@ -18,27 +18,35 @@ import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OptionSelectionComponent from "components/menu/OptionSelectionComponent";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
-import {
-  getBusinessName,
-  setBusinessName,
-} from "../../../store/slices/addToCart";
-import useCart from "hooks/handleVendors/useCart";
+import useCart from "hooks/handleVendors/useCart.hook";
 import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Iitem } from "../../../typeDefinitions/interfaces/item.interface";
+import { getCart } from "../../../store/slices/addToCartSessionSlice";
+import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 
 export default function ItemPage() {
-  const { addToCart } = useCart();
+  const {initializeCart} =  useFetchCart();
+  React.useEffect(() => {
+    // Call initializeCart when the component mounts to fetch and initialize the cart data
+    initializeCart();
+  }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
+
+  const { addItemToCart } = useCart();
   const { setOrder, order } = useOrderButton();
-  const dispatch = useAppDispatch();
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { business, menuItem, location }: any = route.params;
+  const { business, menuItem }: any = route.params;
   const [vendorItem, setVendorItem] = useState<Iitem>(menuItem);
 
-  const businessName = useAppSelector(getBusinessName);
+  const cart = useAppSelector(getCart);
+  const businessName =
+    !cart || cart.length === 0
+      ? ""
+      : cart[0]?.inCart?.storeInfo?.storeName || "";
+  console.log("name: ", businessName);
   const updateVendorItem = (updatedVendorItem: Iitem) => {
     setVendorItem(updatedVendorItem);
   };
@@ -62,18 +70,22 @@ export default function ItemPage() {
   const goToCartButton = async () => {
     const userId = auth?.currentUser?.uid;
     setOrder(true);
-    if (businessName === "" || business === businessName) {
+    if (businessName === "" || menuItem.storeInfo.storeName === businessName) {
       try {
-        await addToCart(
-          vendorItem,
-          userId,
-          business,
-          location
-        );
-        dispatch(setBusinessName(business));
+        console.log("adding this item: ", {
+          inCart: vendorItem,
+          uid: userId,
+          storeName: menuItem.storeInfo.storeName,
+        });
+        await addItemToCart({
+          inCart: vendorItem,
+          uid: userId,
+          storeName: menuItem.storeInfo.storeName,
+        });
+
         navigation.goBack();
       } catch (e) {
-        console.log("error");
+        console.log("error", e);
       }
     } else {
       Alert.alert("Added item from a different vendor");

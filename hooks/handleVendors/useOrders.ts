@@ -1,4 +1,5 @@
 import { useAppDispatch } from "../../store/hook";
+import { ICart } from "../../store/slices/addToCartSessionSlice";
 import {
   addOrder,
   getOrderList,
@@ -6,6 +7,9 @@ import {
   updateOrderStatusReducer,
 } from "../../store/slices/addToOrders";
 import { auth } from "hooks/handleUsers/useFirebase";
+import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
+import { clockFormat } from "../../typeDefinitions/interfaces/IVendor/time";
+import("../../store/slices/addToCartSessionSlice").
 /**
  * After the user has entered the order, they should update the order list through the request to our backend.
  * - Be able to grab the order list from the backend when the function is called asynchronously
@@ -25,23 +29,30 @@ const UseOrders = () => {
   };
   /**
    * addCartToOrder - after user has confirmed the order, we can grab the order and send a request to the server
-   * @param {*} singleOrderList - Contains
+   * @param {*} cart - Contains the cart items
    */
-  const addCartToOrder = async (singleOrderList) => {
+  const addCartToOrder = async (cart: ICart[]) => {
     // multiply a single order item with the time it takes to complete and the amount it has
-    const orderItemTimes = singleOrderList
-      .map((order) => order.cartData)
-      .map((time) => time.time * time.amountInCart);
+    const orderItemTimes = cart.map(
+        (time: ICart) =>
+          time.inCart.time.minutes * time.inCart.amountInCart +
+          (time.inCart.time.seconds * time.inCart.amountInCart) / 60
+      );
     // add up all the previous cart items times together to make one single order time
     let sumOfTimes = orderItemTimes.reduce(function (a, b) {
       return a + b;
     });
     const orderList = {
-      singleOrderList: singleOrderList,
-      timer: sumOfTimes,
-      orderStatus: "In Progress", // initial order status when first made
-      userId: auth.currentUser.uid,
+      orders: cart,
+      minutesToDone: sumOfTimes,
+      status: "Order Not Completed",
+      accepted: "pending",
+      uid: cart[0].uid,
     };
+
+    // Make a request
+
+    // Get request data and send it to the dispatch
     try {
       await dispatch(addOrder(orderList));
     } catch (e) {

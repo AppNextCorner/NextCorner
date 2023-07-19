@@ -18,7 +18,7 @@ import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "components/global/OrderButton";
 import { useAppSelector } from "../../../store/hook";
-import { getButton } from "../../../store/slices/addToCart";
+import { getButton } from "../../../store/slices/addToCartSessionSlice";
 import MenuList from "cards/Menu/MenuList";
 import FeaturedList from "components/menu/FeaturedList";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

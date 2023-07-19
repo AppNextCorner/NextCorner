@@ -2,24 +2,15 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import InputBox from "components/global/InputBox";
 import { handlePropertyChange } from "hooks/components/handleChangeProperty";
-import { checkObjectProperties } from "hooks/components/helpers/checkForProp";
 import { customizationBoilerplate } from "constants/components/boilerplates";
 const types = ["multiple", "single"];
 
 const CustomizationForm = (props: any) => {
-  const {
-    editModel,
-    setEditModel,
-    addToSelector,
-    selector,
-    editing,
-  } = props;
-
-  
+  const { editModel, setEditModel, addToSelector, selector, editing } = props;
   return (
     <View style={styles.add}>
       <Text>
-        {!editing ? "Add an item option" : `Editing ${editModel!.name}`}
+        {editing ? `Editing ${editModel!.name}` : `Add an item to option`}
       </Text>
       <View style={styles.inputContainer}>
         <InputBox
@@ -62,17 +53,29 @@ const CustomizationForm = (props: any) => {
 
       <TouchableOpacity
         onPress={() => {
-         //if (!checkObjectProperties(editModel)) return;
+          //if (!checkObjectProperties(editModel)) return;
 
-          if(selector === null && editing){
-            addToSelector(editModel, editModel.index)
+          if (editing) {
+            console.log('editModel: ', editModel);
+            const updatedSelector = [...selector];
+            const updatedObject = { ...updatedSelector[editModel.index] };
+            delete updatedObject.index;
+            updatedSelector[editModel.index] = {
+              ...updatedObject,
+              ...editModel,
+            };
+            addToSelector(updatedSelector);
+            return setEditModel(null);
           }
+          
           addToSelector([...selector, JSON.parse(JSON.stringify(editModel))]);
           setEditModel(customizationBoilerplate); // Reset values
         }}
         style={styles.addItemButton}
       >
-        <Text style={styles.addItemButtonText}>Add Item</Text>
+        <Text style={styles.addItemButtonText}>
+          {editing ? "Editing" : `Add Item`}
+        </Text>
       </TouchableOpacity>
     </View>
   );

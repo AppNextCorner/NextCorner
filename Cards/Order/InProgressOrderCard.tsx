@@ -24,6 +24,7 @@ const InProgressOrderCard = ({ order }: Props) => {
   const { updateOrder } = UseOrders();
 
   useEffect(() => {
+    // Converting to seconds
     const timer = order.timer * 60;
     const returned_endate = moment(
       new Date(order.createdAt),

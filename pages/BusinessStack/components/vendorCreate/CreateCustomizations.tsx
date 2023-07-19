@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import {
   setCustomizations,
   getCustomizations,
-  editCustomizations,
 } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 import { debounce } from "hooks/components/handleTimeout";
 import { handlePropertyChange } from "hooks/components/handleChangeProperty";
@@ -37,20 +36,16 @@ const CreateCustomizations = () => {
   const [edit, setEdit] = useState<any | null>(null);
   const [editModel, setEditModel] = useState<any>(customizationBoilerplate);
 
-
   const debouncedDispatch = debounce((customizations: any) => {
     console.log("Dispatching customizations:", customizations);
-    if (customizations.index === null || undefined){
-      console.log('editing an object with customizations')
-      dispatch(editCustomizations(customizations));
-    }
+    // if (customizations.index >= 0) {
+    //   console.log("editing an object with customizations");
+    //   return dispatch(editCustomizations(customizations));
+    // }
     dispatch(setCustomizations(customizations));
   }, 500);
 
   useEffect(() => {
-    {editModel !== null}{
-      debouncedDispatch(editModel);
-    }
     debouncedDispatch(selected);
   }, [selected, debouncedDispatch]);
 
@@ -59,71 +54,26 @@ const CreateCustomizations = () => {
       <NextCornerVendorHeader />
       <View style={styles.page}>
         {/* Preview Container */}
-        <CustomContainer customizations={selected} setEditModel={setEditModel} />
+        <CustomContainer customizations={selected} setEditModel={setEdit} />
 
         {/* Form  */}
         <View style={styles.form}>
-          {edit == null ? (
-            // Name
-            // <View style={styles.add}>
-            //   <View style={styles.inputContainer}>
-            //     <InputBox
-            //       value={editModel.name}
-            //       setState={setEditModel}
-            //       property={"name"}
-            //     />
-            //   </View>
-
-            //   {/* Option type */}
-            //   <View style={styles.container}>
-            //     <View style={styles.subContainer}>
-            //       <Text style={styles.optionText}>Option Type</Text>
-            //       <View style={styles.optionTypes}>
-            //         {types.map((type: string, index: number) => (
-            //           <TouchableOpacity
-            //             onPress={() =>
-            //               handlePropertyChange(setEditModel, "type", type)
-            //             }
-            //             key={index}
-            //             style={styles.chip}
-            //           >
-            //             <Text style={styles.optionTypeText}>{type}</Text>
-            //           </TouchableOpacity>
-            //         ))}
-            //       </View>
-            //     </View>
-
-            //     {/* Optional status */}
-            //     <View style={styles.subContainer}>
-            //       <Text style={styles.optionText}>Optional</Text>
-            //       <TouchableOpacity
-            //         style={styles.chip}
-            //         // onPress={() => setEdit({ ...editModel, optional: !editModel.optional })}
-            //       >
-            //         <Text style={styles.optionalButtonText}>*</Text>
-            //       </TouchableOpacity>
-            //     </View>
-            //   </View>
-
-            //   {/* Upload Items */}
-
-            //   <TouchableOpacity
-            //     onPress={() => {
-            //       if (!checkObjectProperties(editModel)) return;
-            //       setSelected([
-            //         ...selected,
-            //         JSON.parse(JSON.stringify(editModel)),
-            //       ]);
-            //       setEditModel(customizationBoilerplate); // Reset values
-            //     }}
-            //     style={styles.addItemButton}
-            //   >
-            //     <Text style={styles.addItemButtonText}>Add Item</Text>
-            //   </TouchableOpacity>
-            // </View>
-            <CustomizationForm editModel={editModel} setEditModel={setEditModel} addToSelector={setSelected} selector={selected}/>
+          {edit !== null ? (
+            <CustomizationForm
+              editModel={edit}
+              setEditModel={setEdit}
+              selector={selected}
+              addToSelector={setSelected}
+              editing={true}
+            />
           ) : (
-            <CustomizationForm editModel={editModel} setEditModel={setEditModel} addToSelector={setSelected} editing={true}/>
+            <CustomizationForm
+              editModel={editModel}
+              setEditModel={setEditModel}
+              selector={selected}
+              editing={false}
+              addToSelector={setSelected}
+            />
           )}
         </View>
       </View>
@@ -139,7 +89,7 @@ const styles = StyleSheet.create({
   add: { backgroundColor: "#fff" },
   form: { flex: 2, backgroundColor: "#fff" },
   editText: { fontSize: 20, fontWeight: "bold" },
-    optionText: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
+  optionText: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
   subContainer: { margin: "5%", alignItems: "center" },
   container: { flexDirection: "row" },
   optionTypes: { flexDirection: "row" },

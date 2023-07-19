@@ -17,7 +17,7 @@ interface RouteParams {
 
 const VendorMenu = () => {
   const route = useRoute();
-  const dispatch = useAppDispatch();
+  const dispatch: any = useAppDispatch();
 
   // vendor is vendorStructure type
   const { store }: RouteParams = route.params as RouteParams;
@@ -39,7 +39,7 @@ const VendorMenu = () => {
         customizations: [],
         category: "",
         featured: false,
-        amountInCart: 0,
+        amountInCart: 1,
         rating: 0,
         storeInfo: {
           storeName: store!.store.name,
@@ -53,69 +53,9 @@ const VendorMenu = () => {
   const selectedStore: vendorStructure[] | null | undefined =
     useAppSelector(getUserBusiness);
 
+  let storeInfo = store?.store!;
   if (store?.store !== selectedStore![0]) {
-    return (
-      <>
-        <View style={{ flex: 1, backgroundColor: "#fff" }}>
-          <FlatList
-            ListFooterComponent={
-              <>
-                <FullMenuList
-                  menu={selectedStore![0].menu}
-                  vendor={selectedStore![0]}
-                  location={selectedStore![0].location}
-                  create={true}
-                />
-              </>
-            }
-            ListHeaderComponent={
-              <>
-                <NextCornerVendorHeader />
-                <View>
-                  <FeaturedList
-                    menuData={
-                      selectedStore![0].menu ? selectedStore![0].menu : null
-                    }
-                    vendorName={selectedStore![0].name}
-                    location={selectedStore![0].location}
-                  />
-                </View>
-
-                {/* ALL menu items located here */}
-                <View style={styles.marginSet}>
-                  <Text style={styles.titleOfMenu}>Full Menu</Text>
-                  <FontAwesome
-                    onPress={navigateToCreate}
-                    style={styles.icon}
-                    name="plus-circle"
-                    size={40}
-                    color="#f2f0f0"
-                  />
-                </View>
-              </>
-            }
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            // pass in the menu list coming from the route.params of the vendor items which we can access through params
-            data={selectedStore![0].itemCategories}
-            renderItem={({ item }) => {
-              return (
-                <>
-                  <Text style={styles.category}>{item}</Text>
-                  <MenuList
-                    category={item}
-                    menu={selectedStore![0].menu}
-                    vendorName={selectedStore![0].name}
-                    location={selectedStore![0].location}
-                  />
-                  <View style={styles.margin}></View>
-                </>
-              );
-            }}
-          />
-        </View>
-      </>
-    );
+    storeInfo = selectedStore![0];
   }
   return (
     <>
@@ -124,9 +64,9 @@ const VendorMenu = () => {
           ListFooterComponent={
             <>
               <FullMenuList
-                menu={store.store.menu}
-                vendor={store.store}
-                location={store.store.location}
+                menu={storeInfo.menu}
+                vendor={storeInfo}
+                location={storeInfo.location}
                 create={true}
               />
             </>
@@ -136,9 +76,9 @@ const VendorMenu = () => {
               <NextCornerVendorHeader />
               <View>
                 <FeaturedList
-                  menuData={store.store.menu ? store.store.menu : null}
-                  vendorName={store.store.name}
-                  location={store.store.location}
+                  menuData={storeInfo.menu ? storeInfo.menu : null}
+                  vendorName={storeInfo.name}
+                  location={storeInfo.location}
                 />
               </View>
 
@@ -158,16 +98,16 @@ const VendorMenu = () => {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           // pass in the menu list coming from the route.params of the vendor items which we can access through params
-          data={store.store.itemCategories}
+          data={storeInfo.itemCategories}
           renderItem={({ item }) => {
             return (
               <>
                 <Text style={styles.category}>{item}</Text>
                 <MenuList
                   category={item}
-                  menu={store.store.menu}
-                  vendorName={store.store.name}
-                  location={store.store.location}
+                  menu={storeInfo.menu}
+                  vendorName={storeInfo.name}
+                  location={storeInfo.location}
                 />
                 <View style={styles.margin}></View>
               </>

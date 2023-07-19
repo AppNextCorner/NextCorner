@@ -10,19 +10,17 @@ import {
   Image,
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import {
+  deleteAllCartItems,
   getCart,
-  getTotal,
-  setBusinessName,
-} from "../../store/slices/addToCart";
+} from "../../store/slices/addToCartSessionSlice";
 import { useStripe } from "@stripe/stripe-react-native";
-import { IP } from "@env";
-import useCart from "hooks/handleVendors/useCart";
 import UseOrders from "hooks/handleVendors/useOrders";
 import { getUserz } from "../../store/slices/userSessionSlice";
 import { API } from "constants/API";
+import { calculateTotal } from "hooks/handlePages/useCalculateTotal";
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
@@ -30,11 +28,8 @@ import { API } from "constants/API";
 const PaymentDetailsPage = () => {
   const [proceed, setProceed] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
-  const [location, setLocation] = useState("");
-
   // Hooks to transition from cart towards order page
   // delete the current cart after grabbing and add to order instead
-  const { deleteCartData, getCurrentCartItems } = useCart();
   const { addCartToOrder, getCurrentOrder } = UseOrders();
 
   // grab user information from the current state of the user
@@ -42,16 +37,14 @@ const PaymentDetailsPage = () => {
   const mainUser = user; // grab the only user from the list
 
   const getCartFromSlice = useAppSelector(getCart);
-  const cart = JSON.parse(JSON.stringify(getCartFromSlice));
-  //console.log("cart in payment page:", cart[0].cartData.customizations[1].optionCustomizations);
-  const totalCost = useAppSelector(getTotal);
+  console.log("cart from slice: ", getCartFromSlice);
+  const totalCost = calculateTotal(getCartFromSlice).toString().slice(0, 10);
   const dispatch = useAppDispatch();
 
   const stripe = useStripe();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   // grabbing all the cart item's data to display them on the receipt and the component cards
-  const getCartItems = cart.map((list) => list.cartData).flat();
   // async function getLocation() {
   //   return await cart[0].location
   // }
@@ -65,8 +58,7 @@ const PaymentDetailsPage = () => {
   // +getLocationOfBusiness.latitude
   // const getLong =
   // +getLocationOfBusiness.longitude
-  const calculateTotal = totalCost.toString().slice(0, 10);
-  const addTotal = parseFloat(calculateTotal);
+  const addTotal = parseFloat(totalCost);
   const plus = addTotal + addTotal / 10;
   useEffect(() => {
     // const geoname = async () => {
@@ -103,19 +95,18 @@ const PaymentDetailsPage = () => {
   const navigateToAddPaymentMethod = async () => {
     try {
       //await handlePaymentMethodCreation();
-      console.log('vendor name: ',cart[0].businessOrderedFrom);
       const response = await fetch(`${API}/payment`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'merchantDisplayName': cart[0].businessOrderedFrom,
+          "Content-Type": "application/json",
+          merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeName,
         },
         body: JSON.stringify({
           amount: totalCost,
-          name: mainUser.firstName + ' ' + mainUser.lastName,
+          name: mainUser.firstName + " " + mainUser.lastName,
         }),
       });
-      console.log('here is payment data: ', response);
+      console.log("here is payment data: ", response);
       // getting the client secret after sending the request with client data
       const data = await response.json();
       if (!response.ok) {
@@ -126,15 +117,12 @@ const PaymentDetailsPage = () => {
       const initSheet = await stripe.initPaymentSheet({
         // setting the client secret for the initPaymentSheet without storing it in - key for an individual payment
         paymentIntentClientSecret: data.client_secret,
-        // applePay: {
-        //   merchantCountryCode: 'US',
-        // },
 
         // creates a payment flow - one time payments with saving a customer's card without an initial payment
         customFlow: true,
         customerId: data.customer,
         customerEphemeralKeySecret: data.ephemeralKey,
-        merchantDisplayName: cart[0].businessOrderedFrom,
+        merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeName,
         returnURL: "stripe-example://stripe-redirect",
       });
       // check for errors -> show / alert the user on the error message
@@ -142,10 +130,11 @@ const PaymentDetailsPage = () => {
         console.error(initSheet.error);
         return Alert.alert(initSheet.error.message);
       }
+      
       // show the stripe API sheet -> update the clientSecret to the response data
-      const presentSheet = await stripe.presentPaymentSheet({
-        clientSecret: data.client_secret,
-      });
+      // Make sure data.client_secret is a valid value before calling presentPaymentSheet
+        const presentSheet = await stripe.presentPaymentSheet();
+      
 
       console.log("Present Sheet", presentSheet);
       console.log("Client Secret", data.client_secret);
@@ -166,26 +155,13 @@ const PaymentDetailsPage = () => {
   const navigateToOrderComplete = async () => {
     // fixing multi order bug with only making the button work once by disabling after this is called
     setProceed(true);
-    // grab the user id from the cart list that is going to be used for deleting from our backend
-    const mapIdInCart = cart.map((item) => item.id);
-
     navigation.navigate("OrderPlaced");
-
-    // grab the item id from the cart list that is going to be used for deleting from our frontend through redux reducers
-    const mapItemIdInCart = cart
-      .map((item) => item.cartData)
-      .map((cartItem) => cartItem.itemId);
     try {
-      await addCartToOrder(cart);
+      await addCartToOrder(getCartFromSlice);
 
-      // go through the cart items and delete them
-      for (let i = 0; i < mapIdInCart.length; i++) {
-        deleteCartData({ id: mapIdInCart[i], itemId: mapItemIdInCart[i] });
-      }
-      dispatch(setBusinessName(cart[0].businessOrderedFrom));
-      cart.filter((item, index) => cart.indexOf(item) === index);
-      getCurrentCartItems();
-      getCurrentOrder();
+      dispatch(deleteAllCartItems());
+      // getCurrentCartItems();
+      // getCurrentOrder();
     } catch (e) {
       console.log(e);
     }
@@ -201,7 +177,7 @@ const PaymentDetailsPage = () => {
       {/* Flat list for multiple items */}
       <FlatList
         style={{ flex: 1 }}
-        data={getCartItems}
+        data={getCartFromSlice.map((value) => value.inCart)}
         renderItem={({ item }) => {
           return (
             <>
@@ -211,17 +187,22 @@ const PaymentDetailsPage = () => {
               >
                 <View style={styles.card}>
                   <View style={styles.imageBox}>
-                    <Image style={styles.foodImages} source={{uri:`${API}/${item.image.toString()}`}} />
+                    <Image
+                      style={styles.foodImages}
+                      source={{ uri: `${item.image.toString()}` }}
+                    />
                     <Image
                       style={styles.foodImages}
                       source={{
-                        uri: `${API}/${item.image.toString()}`,
+                        uri: `${item.image.toString()}`,
                       }}
                     />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>
-                    <Text style={styles.descriptionOfItem}>{item.type}</Text>
+                    <Text style={styles.descriptionOfItem}>
+                      {item.description}
+                    </Text>
                     <Text style={styles.priceText}>
                       Qty: {item.amountInCart}
                     </Text>
@@ -251,12 +232,12 @@ const PaymentDetailsPage = () => {
         <View style={styles.individualCostInfoContainer}>
           <Text style={styles.costLabel}>Fees</Text>
           <Text style={styles.costNumber}>
-            ${(calculateTotal / 10).toString().slice(0, 4)}
+            ${(parseInt(totalCost) / 10).toString().slice(0, 4)}
           </Text>
         </View>
         <View style={styles.individualCostInfoContainer}>
           <Text style={styles.costLabel}>SubTotal</Text>
-          <Text style={styles.costNumber}>${calculateTotal}</Text>
+          <Text style={styles.costNumber}>${totalCost}</Text>
         </View>
         <View style={styles.individualCostInfoContainer}>
           <Text style={styles.costLabel}>Total</Text>
@@ -345,7 +326,6 @@ const styles = StyleSheet.create({
   },
   placeOrderButton: {
     backgroundColor: "#78DBFF",
-    borderRadius: 20,
     padding: "4%",
     margin: "5%",
     justifyContent: "center",
@@ -464,14 +444,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     margin: 10,
-  },
-  goBackButton: {
-    margin: "5%",
-    marginTop: "15%",
-    borderRadius: 20,
-    padding: '2%',
-    width: '12%',
-    backgroundColor: '#78DBFF'
   },
   descriptionOfItem: {
     flex: 1,

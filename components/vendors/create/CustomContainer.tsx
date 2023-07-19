@@ -18,11 +18,9 @@ interface IProps {
 const CustomContainer = (props: IProps) => {
   const { customizations, setEditModel } = props;
   const editHandler = (item: IOptions, index: number) => {
-    setEditModel(item);
-    setEditModel((prevState: any) => {
-      // Match the callback return with its return type being any or null
-      return { ...prevState, index };
-    });
+    const addIndex = {...item, index}
+    setEditModel(addIndex);
+   
   };
 
   return (

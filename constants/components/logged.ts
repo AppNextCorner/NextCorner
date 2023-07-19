@@ -5,6 +5,7 @@ import VendorsCreate from "pages/BusinessStack/components/VendorsCreate";
 import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
 import CreateCustomizations from "pages/BusinessStack/components/vendorCreate/CreateCustomizations";
 import CreateMenuItem from "pages/BusinessStack/components/vendorCreate/CreateMenuItem";
+import VendorIncomingOrders from "pages/BusinessStack/components/vendorPages/VendorIncomingOrders";
 import VendorMenu from "pages/BusinessStack/components/vendorPages/VendorMenu";
 import VendorOptions from "pages/BusinessStack/components/vendorPages/VendorOptions";
 import CartPage from "pages/CartPage";
@@ -72,5 +73,9 @@ export const vendorScreens = [
   {
     name: "VendorCustomizationCreate",
     component: CreateCustomizations,
+  },
+  {
+    name: "VendorIncomingOrders",
+    component: VendorIncomingOrders,
   },
 ];
