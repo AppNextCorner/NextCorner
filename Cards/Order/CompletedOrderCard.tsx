@@ -11,12 +11,12 @@ const CompletedOrderCard = ({ completedOrder } : any) => {
     .format('dddd, MMM D')
 
   // Calculate the total price of the order
-  const calculateOrderPrice = completedOrder.singleOrderList.map((cart: any) => cart.cartData.price * cart.cartData.amountInCart)
-  const addOrderPrice = Math.round(calculateOrderPrice.reduce((a: number, b: number) => a + b));
+  const calculateOrderPrice = completedOrder.orders.map((cart: any) => cart.inCart.price * cart.inCart.amountInCart)
+  const addOrderPrice = Math.round(calculateOrderPrice.reduce((a: number, b: number) => a + b, 0));
 
   // Get the business name and the number of items in the order
-  const getBusinessName = completedOrder.singleOrderList[0].businessOrderedFrom
-  const getItemAmount = completedOrder.singleOrderList
+  const getBusinessName = completedOrder.orders[0].inCart.storeInfo.storeName
+  const getItemAmount = completedOrder.orders
 
   return (
     <View style={styles.completedContainer}>
@@ -36,7 +36,7 @@ const CompletedOrderCard = ({ completedOrder } : any) => {
         <View style={styles.itemData}>
           {/* Render each item's name */}
           {getItemAmount.map((order: any, index: number) => (
-            <Text key={index.toString()}> {order.cartData.name} /</Text>
+            <Text key={index.toString()}> {order.inCart.name} /</Text>
           ))}
         </View>
 

@@ -14,7 +14,9 @@ export const useFetchCart = () => {
       const cartData: string | null = await AsyncStorage.getItem("cart");
       console.log("cart data", cartData);
       const addData: any = cartData !== null ? JSON.parse(cartData) : [];
+      console.log('new length of app data: ', addData.length)
       if (addData.length > 0) {
+        console.log('this function is running')
         dispatch(setButtonState(true));
       }
       dispatch(setCart(addData));

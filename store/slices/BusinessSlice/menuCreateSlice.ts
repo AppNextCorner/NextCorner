@@ -9,6 +9,7 @@ export interface IEditMyMenuCreateState {
   customizations: IOptions[];
 }
 
+// TODO: Fix this
 const initialState: IEditMyMenuCreateState = {
   model: {
     name: "",
@@ -22,11 +23,13 @@ const initialState: IEditMyMenuCreateState = {
     customizations: [],
     category: "",
     featured: false,
-    amountInCart: 0,
+    amountInCart: 1,
     rating: 0,
     storeInfo: {
       storeName: "",
       storeId: "",
+
+      // selector and dispatch
     },
   },
   customizations: [],
@@ -52,12 +55,16 @@ export const menuCreateSlice = createSlice({
     setCustomizations: (state, action: PayloadAction<IOptions[]>) => {
       state.customizations = action.payload as Draft<IOptions[]>;
 
-      state.model.customizations = state.customizations;
+      // state.model.customizations = state.customizations;
+      console.log('state customizations', state.model.customizations);
     },
+    setModelCustomizations: (state) => {
+      state.model.customizations = state.customizations
+    }
   },
 });
 
-export const { setModel, setProperty, setCustomizations } =
+export const { setModel, setProperty, setCustomizations, setModelCustomizations } =
   menuCreateSlice.actions;
 export const getModel = (state: RootState) => state.menuCreate.model;
 export const getCustomizations = (state: RootState) =>

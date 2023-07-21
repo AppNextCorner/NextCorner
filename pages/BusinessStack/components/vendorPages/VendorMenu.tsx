@@ -107,7 +107,6 @@ const VendorMenu = () => {
                   category={item}
                   menu={storeInfo.menu}
                   vendorName={storeInfo.name}
-                  location={storeInfo.location}
                 />
                 <View style={styles.margin}></View>
               </>

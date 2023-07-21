@@ -17,7 +17,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import OptionSelectionComponent from "components/menu/OptionSelectionComponent";
-import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import { useAppSelector } from "../../../store/hook";
 import useCart from "hooks/handleVendors/useCart.hook";
 import { auth } from "hooks/handleUsers/useFirebase";
 import useOrderButton from "hooks/handlePages/useOrderButton";
@@ -28,7 +28,7 @@ import { getCart } from "../../../store/slices/addToCartSessionSlice";
 import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 
 export default function ItemPage() {
-  const {initializeCart} =  useFetchCart();
+  const { initializeCart } = useFetchCart();
   React.useEffect(() => {
     // Call initializeCart when the component mounts to fetch and initialize the cart data
     initializeCart();
@@ -40,13 +40,14 @@ export default function ItemPage() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem }: any = route.params;
   const [vendorItem, setVendorItem] = useState<Iitem>(menuItem);
-
+console.log(business)
   const cart = useAppSelector(getCart);
   const businessName =
     !cart || cart.length === 0
       ? ""
-      : cart[0]?.inCart?.storeInfo?.storeName || "";
+      :  business; 
   console.log("name: ", businessName);
+  console.log(menuItem.storeInfo)
   const updateVendorItem = (updatedVendorItem: Iitem) => {
     setVendorItem(updatedVendorItem);
   };
@@ -143,7 +144,7 @@ export default function ItemPage() {
       </>
     );
   };
-
+  console.log(menuItem.customizations)
   return (
     <>
       <StatusBar style="light" />

@@ -5,19 +5,17 @@ import { useNavigation } from "@react-navigation/native";
 import useOrderButton from "hooks/handlePages/useOrderButton";
 import { AntDesign } from "@expo/vector-icons";
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
-import { location } from "../../typeDefinitions/interfaces/location.interface";
 
 interface IProps {
   menuItem: Iitem | null;
   vendorName: string | null;
-  location: location | null
 }
 
 const FeaturedTypeCard = (props: IProps) => {
   // Button hook to prevent multiple presses
   const { setOrder } = useOrderButton();
   // Data coming from the business to be sent towards the food details page
-  const { menuItem, vendorName, location } = props;
+  const { menuItem, vendorName} = props;
 
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
@@ -27,7 +25,6 @@ const FeaturedTypeCard = (props: IProps) => {
       //  Props data sent to food details to be able to display the details
       business: vendorName,
       menuItem: menuItem,
-      location: location,
     });
   };
   if(menuItem){

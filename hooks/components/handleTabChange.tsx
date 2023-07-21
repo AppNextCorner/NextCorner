@@ -11,7 +11,6 @@ const handleTabChange: any = (props: route) => {
   
   const tabLocation = tabList.map((tab) => tab.name).indexOf(tab);
   const TabIcon: any = tabList[tabLocation].icon;
-  console.log('tab icon', TabIcon)
   return (
     <TabIcon
       name={

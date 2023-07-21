@@ -35,7 +35,7 @@ const FeaturedList = (props: Props) => {
                   <FeaturedTypeCard
                     menuItem={item}
                     vendorName={vendorName}
-                    location={location}
+
                   />
                 </View>
               );
@@ -48,7 +48,6 @@ const FeaturedList = (props: Props) => {
           <FeaturedTypeCard
             menuItem={null}
             vendorName={vendorName}
-            location={location}
           />
         </View>
       )}

@@ -9,7 +9,7 @@ switch (apiStatus) {
     break;
   case "development":
     API = "https://nextcornerdevelopment.onrender.com";
-    break;
+    break; 
   default:
     API = `http://192.168.1.19:4020`;
     break;

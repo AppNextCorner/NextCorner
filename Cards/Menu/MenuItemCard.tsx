@@ -15,13 +15,10 @@ import { location } from "../../typeDefinitions/interfaces/location.interface";
 interface Props {
   menuItem: Iitem;
   vendorName?: string;
-  location?: location;
-
 }
 export default function MenuItemCard({
   menuItem,
   vendorName,
-  location,
   
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -37,7 +34,6 @@ export default function MenuItemCard({
     navigation.navigate("Item", {
       business: vendorName,
       menuItem: parse.cartData,
-      location: location,
     });
   };
   return (

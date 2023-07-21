@@ -1,19 +1,15 @@
-import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import { useRoute } from "@react-navigation/native";
 import { IOptions } from "../../../../typeDefinitions/interfaces/options.interface";
 import CustomContainer from "components/vendors/create/CustomContainer";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import {
   setCustomizations,
   getCustomizations,
 } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 import { debounce } from "hooks/components/handleTimeout";
-import { handlePropertyChange } from "hooks/components/handleChangeProperty";
-import { checkObjectProperties } from "hooks/components/helpers/checkForProp";
-import InputBox from "components/global/InputBox";
 import { customizationBoilerplate } from "constants/components/boilerplates";
 import CustomizationForm from "components/vendors/create/CustomizationForm";
 
@@ -29,6 +25,8 @@ const CreateCustomizations = () => {
   const customizations = useAppSelector(getCustomizations);
   const { custom }: IRoute = route.params as IRoute;
 
+  const [debouncer, setDebouncer] = useState<boolean>(false)
+
   const [selected, setSelected] = useState<IOptions[]>(
     customizations || custom
   );
@@ -38,10 +36,6 @@ const CreateCustomizations = () => {
 
   const debouncedDispatch = debounce((customizations: any) => {
     console.log("Dispatching customizations:", customizations);
-    // if (customizations.index >= 0) {
-    //   console.log("editing an object with customizations");
-    //   return dispatch(editCustomizations(customizations));
-    // }
     dispatch(setCustomizations(customizations));
   }, 500);
 
@@ -54,17 +48,20 @@ const CreateCustomizations = () => {
       <NextCornerVendorHeader />
       <View style={styles.page}>
         {/* Preview Container */}
-        <CustomContainer customizations={selected} setEditModel={setEdit} />
+        <CustomContainer debouncer={debouncer}
+              setDebouncer={setDebouncer} customizations={selected} setEditModel={setEdit} />
 
         {/* Form  */}
         <View style={styles.form}>
-          {edit !== null ? (
+          {edit !== null && !debouncer ? (
             <CustomizationForm
               editModel={edit}
               setEditModel={setEdit}
               selector={selected}
               addToSelector={setSelected}
               editing={true}
+              debouncer={debouncer}
+              setDebouncer={setDebouncer}
             />
           ) : (
             <CustomizationForm
@@ -73,6 +70,8 @@ const CreateCustomizations = () => {
               selector={selected}
               editing={false}
               addToSelector={setSelected}
+              debouncer={debouncer}
+              setDebouncer={setDebouncer}
             />
           )}
         </View>
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   inputContainer: { marginHorizontal: "5%" },
   page: { flex: 1, backgroundColor: "#fff" },
   add: { backgroundColor: "#fff" },
-  form: { flex: 2, backgroundColor: "#fff" },
+  form: { flex: 3, backgroundColor: "#fff" },
   editText: { fontSize: 20, fontWeight: "bold" },
   optionText: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
   subContainer: { margin: "5%", alignItems: "center" },

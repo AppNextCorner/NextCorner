@@ -1,13 +1,10 @@
 import * as ImagePicker from "expo-image-picker";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 import { Alert } from "react-native";
-import { useAppDispatch } from "../../store/hook";
-import { setUserMenu } from "../../store/slices/BusinessSlice/businessSessionSlice";
 import { useNavigation } from "@react-navigation/native";
 
 const usePhotoHandler = () => {
   const { updateBusinessInformation } = useBusinessInformation();
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const openImageLibrary = async (): Promise<string | null> => {
@@ -57,13 +54,20 @@ const usePhotoHandler = () => {
       const formData = new FormData();
       formData.append("image", JSON.parse(JSON.stringify(imageObj)));
       formData.append("payload", JSON.stringify(payload.payload));
-      await request(endpoint, formData);
+      console.log(formData);
+      await request(endpoint, formData)
+      .then((response: any) => {
+        console.log('Response:', response);
+      })
+      .catch((error: any) => {
+        console.error('Error handling the promise rejection:', error.response);
+      });;
       navigation.goBack();
       // Re-render the vendors with the new one added
       await updateBusinessInformation(uid);
     } catch (err: any) {
       Alert.alert(err.response.data.payload)
-      console.log(err.response.data);
+      console.log(err.response.data.payload);
     }
   };
   return {

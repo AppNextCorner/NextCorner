@@ -32,7 +32,6 @@ const PreviousOrdersComponent = (props: Props) => {
                 previousOrders={item}
                 vendorName={vendorName}
                 key={index}
-                location={location}
               />
             )}
           />

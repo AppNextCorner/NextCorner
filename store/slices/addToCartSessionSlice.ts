@@ -30,6 +30,7 @@ export const addToCartSessionSlice = createSlice({
     addCartItem: (state, action: PayloadAction<ICart>) => {
       state.data = [...state.data, action.payload as Draft<ICart>]; // Push the new item into the existing array
       console.log('new data: ', state.data);
+      console.log('new length of cart: ', state.data.length)
     },
 
     // Reducer to configure the amount of an item in the cart
@@ -39,12 +40,13 @@ export const addToCartSessionSlice = createSlice({
 
         // Adding the amount we want to increment
         const newAmountInCart = cartItem.inCart.amountInCart + action.payload.amount;
-        if (newAmountInCart >= 0) {
+        if (newAmountInCart > 0) {
           cartItem.inCart.amountInCart = newAmountInCart;
         } else {
           // Remove the item from the cart if amountInCart becomes less than 0
           draft.splice(action.payload.index, 1);
         }
+        
         AsyncStorage.setItem("cart", JSON.stringify(draft)); // Save updated data to Async Storage
       });
     },

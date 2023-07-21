@@ -22,11 +22,12 @@ import { getButton } from "../../../store/slices/addToCartSessionSlice";
 import MenuList from "cards/Menu/MenuList";
 import FeaturedList from "components/menu/FeaturedList";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
-import { getOrders } from "../../../store/slices/addToOrders";
+// import PreviousOrdersComponent from "components/menu/PreviousOrdersComponent";
+// import { getOrders } from "../../../store/slices/addToOrders";
 import AnnouncementList from "components/menu/AnnouncementList";
 import FullMenuList from "components/vendors/FullMenuList";
 import { vendorStructure } from "../../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 // import { IP } from "@env";
 
 interface IRoute {
@@ -35,6 +36,12 @@ interface IRoute {
 
 export default function MenuListPage() {
   const route = useRoute();
+  const { initializeCart } = useFetchCart();
+  React.useEffect(() => {
+    // Call initializeCart when the component mounts to fetch and initialize the cart data
+    initializeCart();
+  }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
+
   const { business }: IRoute = route.params as IRoute;
 
   const isClicked = useAppSelector(getButton); // helps prevent infinite orders being made
@@ -45,16 +52,13 @@ export default function MenuListPage() {
    * This code section is used to get the orders that have been previously ordered if they match with the current store
    */
 
-  const getOrderFromSlice = useAppSelector(getOrders);
-  const previousOrders = JSON.parse(JSON.stringify(getOrderFromSlice));
-
   // filter through all items in the cart and see if they match
-  const getSingleOrders = previousOrders
-    .map((item: any) => item.singleOrderList)
-    .flat();
-  const filterOrder = getSingleOrders.filter(
-    (val: any) => val.businessOrderedFrom === business.name
-  );
+  // const getSingleOrders = previousOrders
+  //   .map((item: any) => item.singleOrderList)
+  //   .flat();
+  // const filterOrder = getSingleOrders.filter(
+  //   (val: any) => val.businessOrderedFrom === business.name
+  // );
   //   Button function solves the issue of not having to use the build in header property in the navigation component -> uses a custom navigation button instead
   const goHome = () => {
     navigation.navigate("Home");
@@ -124,12 +128,12 @@ export default function MenuListPage() {
                 {/* Section for Featured Items*/}
               </View>
 
-              <PreviousOrdersComponent
+              {/* <PreviousOrdersComponent
                 menuData={business.menu}
                 location={business.location}
                 listData={filterOrder}
                 vendorName={business.name}
-              />
+              /> */}
 
               {/* ALL menu items located here */}
               <View style={styles.marginSet}>
@@ -149,7 +153,7 @@ export default function MenuListPage() {
                   category={item}
                   menu={business.menu}
                   vendorName={business.name}
-                  location={business.location}
+        
                 />
                 <View style={styles.margin}></View>
               </>

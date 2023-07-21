@@ -14,7 +14,7 @@ import { useIsFocused, useRoute } from "@react-navigation/native";
 
 interface Props {
   time?: vendorStructure;
-  location: location[];
+  location?: location[];
   scrollEnabled?: boolean;
   pointerEvents?: string;
   setDuration: Dispatch<SetStateAction<number>>;
@@ -25,8 +25,8 @@ export default function GoogleMapsMenuSection(props: Props) {
 
   const [mapFitted, setMapFitted] = useState(false);
   const [mapCoordinates, setMapCoordinates] = useState<mapRegion>({
-    latitude: parseFloat(location[0].latitude),
-    longitude: parseFloat(location[0].longitude),
+    latitude: parseFloat(location![0].latitude),
+    longitude: parseFloat(location![0].longitude),
     latitudeDelta: 0.0106,
     longitudeDelta: 0.0121,
   });
@@ -110,8 +110,8 @@ export default function GoogleMapsMenuSection(props: Props) {
   );
 
   const destination = {
-    latitude: parseFloat(location[0].latitude),
-    longitude: parseFloat(location[0].longitude),
+    latitude: parseFloat(location![0].latitude),
+    longitude: parseFloat(location![0].longitude),
   };
 
   // what is icon?
@@ -133,7 +133,7 @@ export default function GoogleMapsMenuSection(props: Props) {
           initialRegion={mapCoordinates}
           //onRegionChangeComplete={setMapCoordinates}
         >
-          <Marker coordinate={destination}>
+          <Marker coordinate={mapCoordinates}>
             <CustomMarker
               icon={
                 <MaterialCommunityIcons name="store" size={24} color="white" />
@@ -147,7 +147,7 @@ export default function GoogleMapsMenuSection(props: Props) {
           </Marker>
           <MapViewDirections
             origin={mapCoordinates}
-            destination={destination}
+            destination={mapCoordinates}
             apikey={
               process.env.googleDirectionsAPIKey
                 ? process.env.googleDirectionsAPIKey

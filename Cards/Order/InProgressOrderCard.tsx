@@ -2,32 +2,31 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import moment from "moment";
 import "moment-timezone";
-import UseOrders from "hooks/handleVendors/useOrders";
+import UseOrders from "hooks/handleVendors/useOrders.hook";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
-import order from "../../typeDefinitions/interfaces/order.interface";
-import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
-import { location } from "../../typeDefinitions/interfaces/location.interface";
 import { useIsFocused } from "@react-navigation/native";
+import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
+import { ICart } from "../../store/slices/addToCartSessionSlice";
 
 interface Props {
-  order: order;
+  order: Iorder;
 }
 const InProgressOrderCard = ({ order }: Props) => {
   const [_duration, setDuration] = useState(0);
   const [_distance, setDistance] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
 
-  const mapOrderItem: location[] = order.singleOrderList
-    .map((orderItem: orderItem) => orderItem.location)
-    .flat();
+  // const mapOrderItem: location[] = order.singleOrderList
+  //   .map((orderItem: orderItem) => orderItem.location)
+  //   .flat();
 
   const { updateOrder } = UseOrders();
 
   useEffect(() => {
     // Converting to seconds
-    const timer = order.timer * 60;
+    const timer = order.minutesToDone * 60;
     const returned_endate = moment(
-      new Date(order.createdAt),
+      new Date(order.createdAt!),
       "YYYY-M-D H:mm:ss"
     )
       .tz("America/Los_Angeles")
@@ -48,7 +47,7 @@ const InProgressOrderCard = ({ order }: Props) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [order.timer]);
+  }, [order.minutesToDone]);
 
   useEffect(() => {
     const updatedStatus = {
@@ -67,8 +66,8 @@ const InProgressOrderCard = ({ order }: Props) => {
   }, [timeLeft]);
   const isFocused = useIsFocused();
 
-  const businessOrderedText = order.singleOrderList.map(
-    (orderItem: orderItem) => orderItem.businessOrderedFrom
+  const businessOrderedText = order.orders.map(
+    (orderItem: ICart) => orderItem.storeName
   );
 
   return (
@@ -78,7 +77,7 @@ const InProgressOrderCard = ({ order }: Props) => {
           <GoogleMapsMenuSection
             scrollEnabled={false}
             pointerEvents={"none"}
-            location={mapOrderItem}
+            //location={null}
             setDuration={setDuration}
             setDistance={setDistance}
           />
@@ -89,7 +88,7 @@ const InProgressOrderCard = ({ order }: Props) => {
 
       <View style={styles.orderDetailTextContainer}>
         <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
-        <Text style={styles.orderStatusText}>{order.orderStatus}</Text>
+        <Text style={styles.orderStatusText}>{order.status}</Text>
         <Text style={styles.timeText}>
           Ready In:{" "}
           {timeLeft

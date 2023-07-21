@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
 import { Iitem } from "../../../../typeDefinitions/interfaces/item.interface";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import {
   getModel,
   setModel,
+  setModelCustomizations,
 } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 import { debounce } from "hooks/components/handleTimeout";
 
@@ -40,7 +41,10 @@ const CreateMenuItem = () => {
   React.useEffect(() => {
     const debouncedDispatch = debounce((updatedItem: Iitem) => {
       console.log("Debounced item has changed:", updatedItem);
+      
       dispatch(setModel(updatedItem));
+      dispatch(setModelCustomizations())
+  
     }, 300); // Set the debounce delay as per your needs (e.g., 300ms)
 
     debouncedDispatch(debouncedItem);
@@ -91,12 +95,12 @@ const CreateMenuItem = () => {
 
           <View style={styles.timeContainer}>
             {/* TODO: Fix on checking the correct image */}
-            <TouchableOpacity onPress={handleImageChange}>
+            <Pressable onPress={handleImageChange}>
               <View style={styles.imageForm}>
                 <Text>Add Image</Text>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => {
                 handleNavigationChange("VendorCustomizationCreate", {
                   custom: item.customizations,
@@ -106,7 +110,7 @@ const CreateMenuItem = () => {
               <View style={styles.imageForm}>
                 <Text>Add Customizations</Text>
               </View>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Price and time to prepare */}
@@ -206,22 +210,27 @@ const CreateMenuItem = () => {
               placeholder="Handmade tacos from..."
             />
           </View>
-          <TouchableOpacity
+          <Pressable
             style={styles.upload}
-            onPress={() =>
+            onPress={() => {
+              handlePropertyChange(setItem, "storeInfo", {
+                storeName: store.store.name,
+                storeInfo: store.store.id,
+              });
+              console.log('is running');
               upload(
                 item.image,
                 "/business/updateMenu",
                 makeImagePutRequest,
                 {
-                  payload: { store: store.store, newMenu: [item] },
+                  payload: { store: store.store, newMenu: [model] },
                 },
                 store.store.uid!
-              )
-            }
+              );
+            }}
           >
             <Text style={{ color: "#fff" }}>Upload Item</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </ScrollView>
     </>

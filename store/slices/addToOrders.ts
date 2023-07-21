@@ -3,14 +3,9 @@
  */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { createToken } from "hooks/handleUsers/useCreateToken";
-import { IP } from "@env";
-import { auth } from "../../hooks/handleUsers/useFirebase";
-import { API } from "constants/API";
 import { ICart } from "./addToCartSessionSlice";
+import { RootState } from "../store";
 
-const ORDERS_URL = `${API}/orders/`;
 
 export interface state {
   orders: ICart[];
@@ -21,7 +16,7 @@ export interface state {
 }
 
 export interface ITotalOrder {
-  orders: ITotalOrder[];
+  orders: state[];
 }
 
 // Initial state of the addToOrders slice
@@ -36,22 +31,27 @@ export const addToOrders = createSlice({
 
   // Reducers to handle synchronous actions
   reducers: {
-    
+    setOrders: (state, {payload}) => {
+        state.orders = payload
+        console.log('state orders: ', state.orders)
+    },
     updateOrderStatusReducer: (state, { payload }) => {
       // const orderItem = state.order.find((item) => item.id === payload.id);
       // orderItem.orderStatus = payload.status;
     },
+
   },
 });
 
 // Export the reducers
-export const { updateOrderStatusReducer } = addToOrders.actions;
+export const { updateOrderStatusReducer, setOrders} = addToOrders.actions;
 
-// Selectors to get specific state values
-export const getOrders = (state) => state.addToOrders.order;
-export const getTotal = (state) => state.addToOrders.total;
-export const getOrderBusinessName = (state) =>
-  state.addToOrders.orderItemBusinessName;
-export const getTime = (state) => state.addToOrders.time;
+
+// // Selectors to get specific state values
+export const getOrders = (state: RootState) => state.addToOrders.orders
+// export const getTotal = (state) => state.addToOrders.total;
+// export const getOrderBusinessName = (state) =>
+//   state.addToOrders.orderItemBusinessName;
+// export const getTime = (state) => state.addToOrders.time;
 
 export default addToOrders.reducer;

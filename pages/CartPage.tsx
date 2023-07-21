@@ -3,7 +3,7 @@
  * note: Total number of selected items, price, etc will need to be added here
  */
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppSelector } from "../store/hook";
 import { AntDesign } from "@expo/vector-icons";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -28,12 +28,6 @@ import { getCart } from "../store/slices/addToCartSessionSlice";
 const emptyImage = require("assets/emptyCartImage.png");
 
 const CartPage = () => {
-  // const {initializeCart} = useFetchCart()
-  // React.useEffect(() => {
-  //   // Call initializeCart when the component mounts to fetch and initialize the cart data
-  //   initializeCart();
-  // }, []); // Empty dependency array ensures this useEffect runs only once when the component mounts
-
   const { updateCartItemAmount } = useCart(); // be able to increment or decrement the amount in which ever cart item is updated from the user
   // navigation part of the screen
   const navigation = useNavigation<NavigationProp<any>>();
@@ -51,7 +45,7 @@ const CartPage = () => {
         <AntDesign name="arrowleft" size={30} color="black" />
       </Pressable>
 
-      {cart ? (
+      {cart.length > 0 ? (
         <>
           <FlatList
             ListFooterComponent={

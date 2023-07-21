@@ -9,14 +9,13 @@ interface Props {
   menu: Iitem[];
   category: string;
   vendorName: string;
-  location: location;
 }
 
 interface menuItem {
   item: Iitem;
 }
 const MenuList = React.memo(
-  ({ menu, category, vendorName, location }: Props) => {
+  ({ menu, category, vendorName }: Props) => {
     // category is a string that represents the category of food that the menu item represents: ex: Burger, Pizza, etc.
 
     // Optimized: Memoize the filtered array using React.useMemo
@@ -32,11 +31,10 @@ const MenuList = React.memo(
           <MenuItemCard
             menuItem={item}
             vendorName={vendorName}
-            location={location}
           />
         </View>
       ),
-      [vendorName, location]
+      [vendorName]
     );
 
     // Optimized: Memoize the keyExtractor function using React.useCallback

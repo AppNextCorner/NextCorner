@@ -9,7 +9,7 @@ import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
 const OrderButton = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const getCartFromSlice = useAppSelector(getCart);
-  const cart = JSON.parse(JSON.stringify(getCartFromSlice));
+  
   console.log('cart from slice: ', getCartFromSlice);
   const navigateCart = () => {
     navigation.navigate("Cart");
@@ -17,7 +17,7 @@ const OrderButton = () => {
   };
 
   // check if there are any items in the cart
-  if (cart.length > 0) {
+  if (getCartFromSlice.length > 0) {
     return (
       <TouchableOpacity
         style={styles.orderButton}
@@ -25,7 +25,7 @@ const OrderButton = () => {
       >
         <View style={styles.orderButtonContainer}>
           <Text style={styles.orderButtonText}>View Cart</Text>
-          <Text style={styles.cartLengthText}>{cart.length}</Text>
+          <Text style={styles.cartLengthText}>{getCartFromSlice.length}</Text>
         </View>
       </TouchableOpacity>
     );

@@ -5,7 +5,18 @@ export default function useFetchOrders() {
         const url = `/orders/get-orders-by-store-name/${name}`;
         const response = await makeGetRequest(url);
         console.log('invoming response', response)
-        return response;
+        return response.data;
     }
-    return { fetchOrdersByName };
+
+    const fetchOrdersByUid = async(uid: string) => {
+        console.log(uid);
+        const url = `/orders/get-orders-by-uid/${uid}`;
+        const response = await makeGetRequest(url);
+        console.log(response)
+        return response.data
+    }
+
+
+
+    return { fetchOrdersByName, fetchOrdersByUid, };
 }

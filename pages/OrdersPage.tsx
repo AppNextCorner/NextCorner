@@ -7,41 +7,47 @@ import {
   Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../store/hook";
-import { getOrderList, getOrders } from "../store/slices/addToOrders";
+import UseOrders from "hooks/handleVendors/useOrders.hook";
+import { useAppSelector,  } from "../store/hook";
 import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import order from "../typeDefinitions/interfaces/order.interface";
+import { Iorder } from "../typeDefinitions/interfaces/order.interface";
+
+import { getOrders } from "../store/slices/addToOrders";
 
 export default function OrdersPage() {
+  const orders = useAppSelector(getOrders);
+  const { getCurrentOrders } = UseOrders();
+  
   const [orderSelection, setOrderSelection] = useState(false);
-  const dispatch = useAppDispatch();
-  const getOrderFromSlice = useAppSelector(getOrders);
-  const orderData = JSON.parse(JSON.stringify(getOrderFromSlice));
-  const navigation = useNavigation();
-
-  const goToProgressPage = (order) => {
+ 
+  
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const goToProgressPage = (order: Iorder) => {
     navigation.navigate("InProgressOrder", { order });
   };
 
   useEffect(() => {
-    dispatch(getOrderList());
-  }, [dispatch]);
+    getCurrentOrders();
+  }, [])
 
-  const filterCompletedData = orderData.filter(
-    (item) => item.orderStatus === "Order taking longer than expected"
-  );
+  const filterCompletedData = orders.filter((item: Iorder) => {
+    console.log("item: ",item);
+    return item.status === "Order Not Completed";
+  });
 
   const finishedOrders = [
     ...new Map(
-      filterCompletedData.reverse().map((m) => [m.createdAt, m])
+      filterCompletedData.reverse().map((m: any) => [m.createdAt, m])
     ).values(),
   ];
 
-  const filterInProgressData = orderData.filter(
-    (item) => item.orderStatus === "In Progress"
+  console.log("not completed orders, ", filterCompletedData);
+
+  const filterInProgressData = orders.filter(
+    (item: Iorder) => item.status === "In Progress"
   );
 
   const inProgress = () => {

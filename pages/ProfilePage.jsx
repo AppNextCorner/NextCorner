@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
   // grabs the only user from the array as it has been already filtered out to include the current user
   console.log("user: ", user);
-  const mainUser = user[0] || {
+  const mainUser = {
     firstName: user.firstName,
     lastName: user.lastName,
   };

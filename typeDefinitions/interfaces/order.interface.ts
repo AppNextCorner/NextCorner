@@ -1,10 +1,11 @@
-import orderItem from "./orderItem.interface";
+import { ICart } from "../../store/slices/addToCartSessionSlice";
 
-export default interface order {
-    singleOrderList: orderItem[],
-    timer: number,
-    orderStatus: string, // Determines if the order is completed or not
-    userId: string,
-    createdAt: string,
-    id: string
-}
+export interface Iorder {
+    orders: ICart[];
+    minutesToDone: number;
+    status: string;
+    accepted: string
+    uid: string;
+    createdAt?: string;
+  }
+  

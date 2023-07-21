@@ -13,23 +13,33 @@ import { IOptions } from "../../../typeDefinitions/interfaces/options.interface"
 interface IProps {
   customizations: IOptions[];
   setEditModel: React.Dispatch<React.SetStateAction<null | IOptions>>;
+  setDebouncer: any;
+  debouncer: any
 }
 
 const CustomContainer = (props: IProps) => {
-  const { customizations, setEditModel } = props;
-  const editHandler = (item: IOptions, index: number) => {
-    const addIndex = {...item, index}
-    setEditModel(addIndex);
-   
+  const { customizations, setEditModel, debouncer, setDebouncer } = props;
+  const editHandler = (itemInput: IOptions, index: number) => {
+    setDebouncer(!debouncer)
+    const indexToRemove = customizations.findIndex((item: any) => item.name === itemInput.name);
+    
+    console.log("debounce", debouncer);
+    if (debouncer === false && indexToRemove !== -1) {
+      console.log("running debounce false");
+      const addIndex = null;
+      setEditModel(addIndex);
+    } else {
+      console.log("running debounce true");
+      const addIndex = { ...itemInput, index };
+      setEditModel(addIndex);
+    }
   };
-
   return (
     <View style={styles.page}>
       <View>
         <Text>Customize</Text>
       </View>
       <FlatList
-        style={{ backgroundColor: "red" }}
         data={customizations}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
@@ -79,9 +89,9 @@ const styles = StyleSheet.create({
   },
   optionCard: {
     backgroundColor: "#fff",
+    alignItems: "center",
     padding: 10,
     marginBottom: 10,
-    marginHorizontal: 20,
     flexDirection: "row",
     borderColor: "#d6d6d6",
     borderStyle: "solid",

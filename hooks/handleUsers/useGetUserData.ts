@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { setUser, logOut } from "../../store/slices/userSessionSlice";
 import { NextFn, User, onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch } from "../../store/hook";
-import { getOrderList } from "../../store/slices/addToOrders";
+//import { getOrderList } from "../../store/slices/addToOrders";
 import { auth } from "hooks/handleUsers/useFirebase";
 import { AppDispatch } from "../../typeDefinitions/action.type";
 import { makePostRequest } from "../../config/axios.config";
 import fetchBusinesses from "pages/BusinessStack/api/getBusinessess";
 import { setBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
 import { API } from "constants/API";
-import useCart from "hooks/handleVendors/useCart.hook";
 import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
+import UseOrders from "hooks/handleVendors/useOrders.hook";
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -19,6 +19,7 @@ import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
  */
 const useGetUserData = () => {
   const { initializeCart } = useFetchCart();
+  const { getCurrentOrders } = UseOrders();
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
@@ -33,8 +34,10 @@ const useGetUserData = () => {
     const url = "/auth/getUser";
     console.log("email: ", email);
     const response = await makePostRequest(url, { email: email });
-    console.log("response from user: ", response.data);
-    return response.data;
+    const data = response.data
+    console.log("response from user: ", data);
+    await dispatch(setUser(data.payload));
+    return data.payload;
   };
 
   const dispatchBusinesses = async () => {
@@ -58,12 +61,11 @@ const useGetUserData = () => {
         console.log("API: ", API);
         console.log(user);
         if (user && user.email) {
-          const data = await getUserData(user.email);
-          console.log("payload from user: ", data.payload);
-          dispatch(setUser(data.payload));
-          initializeCart();
-          dispatch(getOrderList());
+          const userData = await getUserData(user.email);
           dispatchBusinesses();
+          console.log('running below functions')
+          initializeCart();
+          getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
         } else {

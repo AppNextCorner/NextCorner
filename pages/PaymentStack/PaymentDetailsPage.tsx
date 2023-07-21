@@ -17,25 +17,23 @@ import {
   getCart,
 } from "../../store/slices/addToCartSessionSlice";
 import { useStripe } from "@stripe/stripe-react-native";
-import UseOrders from "hooks/handleVendors/useOrders";
-import { getUserz } from "../../store/slices/userSessionSlice";
-import { API } from "constants/API";
+import UseOrders from "hooks/handleVendors/useOrders.hook";
+import { getUser } from "../../store/slices/userSessionSlice";
 import { calculateTotal } from "hooks/handlePages/useCalculateTotal";
+import { makeDynamicPostRequest } from "../../config/axios.config";
 /**
  *
  * Be able to transition from the cart page to the order page with enabling the user to have access to between card payment method or pay in cash
  */
 const PaymentDetailsPage = () => {
   const [proceed, setProceed] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
   // Hooks to transition from cart towards order page
   // delete the current cart after grabbing and add to order instead
-  const { addCartToOrder, getCurrentOrder } = UseOrders();
+  const { addCartToOrder } = UseOrders();
 
   // grab user information from the current state of the user
-  const user = useAppSelector(getUserz);
-  const mainUser = user; // grab the only user from the list
-
+  const user = useAppSelector(getUser);
+  
   const getCartFromSlice = useAppSelector(getCart);
   console.log("cart from slice: ", getCartFromSlice);
   const totalCost = calculateTotal(getCartFromSlice).toString().slice(0, 10);
@@ -60,6 +58,21 @@ const PaymentDetailsPage = () => {
   // +getLocationOfBusiness.longitude
   const addTotal = parseFloat(totalCost);
   const plus = addTotal + addTotal / 10;
+  // Passing in the cart to the order to be delete it from the cart list and add it to the order list
+  const navigateToOrderComplete = async () => {
+    // fixing multi order bug with only making the button work once by disabling after this is called
+    setProceed(true);
+    
+    try {
+      await addCartToOrder(getCartFromSlice);
+      dispatch(deleteAllCartItems());
+      navigation.navigate("OrderPlaced");
+      // getCurrentCartItems();
+      // getCurrentOrder();
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     // const geoname = async () => {
     //   try {
@@ -95,21 +108,29 @@ const PaymentDetailsPage = () => {
   const navigateToAddPaymentMethod = async () => {
     try {
       //await handlePaymentMethodCreation();
-      const response = await fetch(`${API}/payment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeName,
+      const headers = [
+        {
+          name: "Content-Type",
+          value: "application/json",
         },
-        body: JSON.stringify({
+        {
+          name: "merchantDisplayName",
+          value: getCartFromSlice[0].inCart.storeInfo.storeName,
+        },
+      ];
+      const response = await makeDynamicPostRequest(
+        `/payment`,
+        {
           amount: totalCost,
-          name: mainUser.firstName + " " + mainUser.lastName,
-        }),
-      });
-      console.log("here is payment data: ", response);
+          name:user!.firstName + " " +user!.lastName,
+        },
+        headers
+      );
+
+      console.log("here is payment data: ", response.data);
       // getting the client secret after sending the request with client data
-      const data = await response.json();
-      if (!response.ok) {
+      const data = await response.data;
+      if (!response) {
         return Alert.alert(data.message);
       }
 
@@ -130,11 +151,10 @@ const PaymentDetailsPage = () => {
         console.error(initSheet.error);
         return Alert.alert(initSheet.error.message);
       }
-      
+
       // show the stripe API sheet -> update the clientSecret to the response data
       // Make sure data.client_secret is a valid value before calling presentPaymentSheet
-        const presentSheet = await stripe.presentPaymentSheet();
-      
+      const presentSheet = await stripe.presentPaymentSheet();
 
       console.log("Present Sheet", presentSheet);
       console.log("Client Secret", data.client_secret);
@@ -143,29 +163,13 @@ const PaymentDetailsPage = () => {
       if (presentSheet.error) {
         return Alert.alert(presentSheet.error.message);
       }
-      Alert.alert("Order Placed Successfully");
       navigateToOrderComplete();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       Alert.alert("Payment failed!");
     }
   };
 
-  // Passing in the cart to the order to be delete it from the cart list and add it to the order list
-  const navigateToOrderComplete = async () => {
-    // fixing multi order bug with only making the button work once by disabling after this is called
-    setProceed(true);
-    navigation.navigate("OrderPlaced");
-    try {
-      await addCartToOrder(getCartFromSlice);
-
-      dispatch(deleteAllCartItems());
-      // getCurrentCartItems();
-      // getCurrentOrder();
-    } catch (e) {
-      console.log(e);
-    }
-  };
   const goBack = () => navigation.goBack();
   return (
     <View style={styles.paymentPageContainer}>
