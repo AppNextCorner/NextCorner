@@ -1,13 +1,12 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {  Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Iitem } from "../../../../typeDefinitions/interfaces/item.interface";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import { TextInput } from "react-native-gesture-handler";
-import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import usePhotoHandler from "hooks/handleVendors/usePhotoHandler";
 import SelectCategoryDropDown from "components/vendors/SelectCategoryDropDown";
-import { makeImagePutRequest } from "../../../../config/axios.config";
+import { makeImagePostRequest } from "../../../../config/axios.config";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import EditingMenuItemCard from "cards/Vendors/EditingMenuItemCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -26,6 +25,7 @@ interface RouteParams {
 
 const CreateMenuItem = () => {
   // Hooks
+
   const route = useRoute();
   const model = useAppSelector(getModel);
   const dispatch = useAppDispatch();
@@ -40,7 +40,7 @@ const CreateMenuItem = () => {
 
   React.useEffect(() => {
     const debouncedDispatch = debounce((updatedItem: Iitem) => {
-      console.log("Debounced item has changed:", updatedItem);
+      // console.log("Debounced item has changed:", updatedItem);
       
       dispatch(setModel(updatedItem));
       dispatch(setModelCustomizations())
@@ -215,13 +215,12 @@ const CreateMenuItem = () => {
             onPress={() => {
               handlePropertyChange(setItem, "storeInfo", {
                 storeName: store.store.name,
-                storeInfo: store.store.id,
+                storeId: store.store.id,
               });
-              console.log('is running');
               upload(
                 item.image,
-                "/business/updateMenu",
-                makeImagePutRequest,
+                "item",
+                makeImagePostRequest,
                 {
                   payload: { store: store.store, newMenu: [model] },
                 },

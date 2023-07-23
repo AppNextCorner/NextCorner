@@ -128,7 +128,7 @@ const VendorsCreate = () => {
           onPress={() =>
             upload(
               structure.image,
-              "/business/createStore",
+              "vendor",
               makeImagePostRequest,
               { payload: structure },
               user?._id!,
