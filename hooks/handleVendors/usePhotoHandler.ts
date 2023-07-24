@@ -7,13 +7,16 @@ const usePhotoHandler = () => {
   const { updateBusinessInformation } = useBusinessInformation();
   const navigation = useNavigation();
 
+  // Class representing an Upload utility with methods for handling image uploads and data sending.
   class Upload {
     // Methods for handlers
 
+    // Private method to update vendors with the new one added, using the provided UID (user ID).
     private update = async (uid: string) => {
-      // Re-render the vendors with the new one added
       await updateBusinessInformation(uid);
     };
+
+    // Private method to create an image object with the provided endpoint and URI.
     private createImageObj = (endpoint: string, uri: string) => {
       return {
         name: `${new Date().getTime()}_${endpoint}.png`,
@@ -21,6 +24,8 @@ const usePhotoHandler = () => {
         type: "image/png", // Use the appropriate MIME type for your image file
       };
     };
+
+    // Private method to create a FormData object with the provided image object and payload.
     private createFormData = (imageObj: any, payload: any) => {
       const formData = new FormData();
       formData.append("image", imageObj);
@@ -29,6 +34,9 @@ const usePhotoHandler = () => {
     };
 
     // List of methods for sending data
+
+    // Handler method for uploading vendor data.
+    // It takes URI (image URI), payload (data to be sent), request (function to make the API request), and uid (user ID) as parameters.
     uploadHandler = {
       vendor: async (
         uri: string,
@@ -46,6 +54,9 @@ const usePhotoHandler = () => {
         await request(endpoint, formData);
         await this.update(uid);
       },
+
+      // Handler method for uploading item data.
+      // It takes URI (image URI), payload (data to be sent), request (function to make the API request), and uid (user ID) as parameters.
       item: async (
         uri: string,
         payload: any,
