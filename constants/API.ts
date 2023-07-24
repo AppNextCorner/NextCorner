@@ -9,11 +9,11 @@ switch (apiStatus) {
     break;
   case "development":
     API = "https://nextcornerdevelopment.onrender.com";
-    break; 
+    break;
   default:
-    API = `http://192.168.1.19:4020`;
+    API = `http://192.168.1.227:4020`;
     break;
 }
 
 export const url = { API_URL: API };
-console.log('url: ', url)
+console.log("url: ", url);

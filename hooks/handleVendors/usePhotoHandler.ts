@@ -1,64 +1,69 @@
 import * as ImagePicker from "expo-image-picker";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
-import { Alert, Platform } from "react-native";
+import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-class Upload {
-
-  // Methods for handlers
-  private createImageObj = (endpoint: string, uri: string) => {
-    return {
-      name: `${new Date().getTime()}_${endpoint}.png`,
-      uri: uri,
-      type: "image/png", // Use the appropriate MIME type for your image file
-    };
-  };
-  private createFormData = (imageObj: any, payload: any) => {
-    const formData = new FormData();
-    formData.append("image",  Platform.OS === "ios" ? JSON.parse(JSON.stringify(imageObj)) : imageObj);
-    formData.append("payload",  Platform.OS === "ios" ? JSON.stringify(payload): payload);
-    return formData;
-  };
-  
-  // List of methods for sending data
-  uploadHandler = {
-    vendor: async (
-      uri: string,
-      payload: any,
-      request: (reqUrl: string, payload: any) => any
-    ) => {
-      const endpoint = "/business/createStore";
-      const imageObj = this.createImageObj(endpoint, uri);
-      if (!imageObj.uri) {
-        return Alert.alert("Missing Image");
-      }
-
-      const formData = this.createFormData(imageObj,payload.payload);
-      console.log(formData);
-      await request(endpoint, formData);
-    },
-    item: async (
-      uri: string,
-      payload: any,
-      request: (reqUrl: string, payload: any) => any
-    ) => {
-      const endpoint = "/business/updateMenu";
-      const imageObj = this.createImageObj(endpoint, uri);
-      if (!imageObj.uri) {
-        return Alert.alert("Missing Image");
-      }
-
-      const formData = this.createFormData(imageObj, payload.payload);
-      console.log(formData);
-      await request(endpoint, formData);
-      // 
-      // we can make two classes, one for Android and another for IOS
-    },
-  };
-}
 const usePhotoHandler = () => {
   const { updateBusinessInformation } = useBusinessInformation();
   const navigation = useNavigation();
+
+  class Upload {
+    // Methods for handlers
+
+    private update = async (uid: string) => {
+      // Re-render the vendors with the new one added
+      await updateBusinessInformation(uid);
+    };
+    private createImageObj = (endpoint: string, uri: string) => {
+      return {
+        name: `${new Date().getTime()}_${endpoint}.png`,
+        uri: uri,
+        type: "image/png", // Use the appropriate MIME type for your image file
+      };
+    };
+    private createFormData = (imageObj: any, payload: any) => {
+      const formData = new FormData();
+      formData.append("image", imageObj);
+      formData.append("payload", JSON.stringify(payload));
+      return formData;
+    };
+
+    // List of methods for sending data
+    uploadHandler = {
+      vendor: async (
+        uri: string,
+        payload: any,
+        request: (reqUrl: string, payload: any) => any,
+        uid: string
+      ) => {
+        const endpoint = "/business/createStore";
+        const imageObj = this.createImageObj(endpoint, uri);
+        if (!imageObj.uri) {
+          return Alert.alert("Missing Image");
+        }
+        const formData = this.createFormData(imageObj, payload.payload);
+        console.log(formData);
+        await request(endpoint, formData);
+        await this.update(uid);
+      },
+      item: async (
+        uri: string,
+        payload: any,
+        request: (reqUrl: string, payload: any) => any,
+        uid: string
+      ) => {
+        const endpoint = "/business/updateMenu";
+        const imageObj = this.createImageObj(endpoint, uri);
+        if (!imageObj.uri) {
+          return Alert.alert("Missing Image");
+        }
+        const formData = this.createFormData(imageObj, payload.payload);
+        console.log(formData);
+        await request(endpoint, formData);
+        await this.update(uid);
+      },
+    };
+  }
 
   const openImageLibrary = async (): Promise<string | null> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -81,8 +86,8 @@ const usePhotoHandler = () => {
   };
 
   /**
-   * Show me 
-   * Method to upload a form to the server 
+   * Show me
+   * Method to upload a form to the server
    * @param uri The image being sent
    * @param uploadElement The type of upload element
    * @param request Type of request being sent
@@ -99,14 +104,14 @@ const usePhotoHandler = () => {
       //
 
       const handler = new Upload();
+
       if (uploadElement === "vendor") {
-        handler.uploadHandler.vendor(uri, payload, request); // these are the methods
+        await handler.uploadHandler.vendor(uri, payload, request, uid);
       } else if (uploadElement === "item") {
-        handler.uploadHandler.item(uri, payload, request);
+        await handler.uploadHandler.item(uri, payload, request, uid);
       }
+
       navigation.goBack();
-      // Re-render the vendors with the new one added
-      await updateBusinessInformation(uid);
     } catch (err: any) {
       Alert.alert(err.response.data.payload);
       console.log(err.response.data.payload);
