@@ -112,10 +112,7 @@ const usePhotoHandler = () => {
     uid: string
   ) => {
     try {
-      //
-
       const handler = new Upload();
-
       if (uploadElement === "vendor") {
         await handler.uploadHandler.vendor(uri, payload, request, uid);
       } else if (uploadElement === "item") {
