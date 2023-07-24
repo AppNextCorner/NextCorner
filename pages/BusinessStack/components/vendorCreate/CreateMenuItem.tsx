@@ -14,10 +14,12 @@ import { handlePropertyChange } from "hooks/components/handleChangeProperty";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import {
   getModel,
+  setCustomizations,
   setModel,
   setModelCustomizations,
 } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 import { debounce } from "hooks/components/handleTimeout";
+import { vendorBoilerplate } from "constants/components/boilerplates";
 
 interface RouteParams {
   store: { store: vendorStructure };
@@ -213,10 +215,14 @@ const CreateMenuItem = () => {
           <Pressable
             style={styles.upload}
             onPress={() => {
+              // Add store info to the menu item
               handlePropertyChange(setItem, "storeInfo", {
                 storeName: store.store.name,
                 storeId: store.store.id,
               });
+              // Reset values for the whole menu item
+              dispatch(setModel(vendorBoilerplate))
+              dispatch(setCustomizations([]))
               upload(
                 item.image,
                 "item",

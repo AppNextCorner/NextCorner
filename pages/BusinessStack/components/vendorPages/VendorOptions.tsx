@@ -34,7 +34,6 @@ const VendorOptions = () => {
   // Hooks
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
   const { store }: RouteParams = route.params as RouteParams;
 
   const buttons = [

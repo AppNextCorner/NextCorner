@@ -51,6 +51,8 @@ const Vendor = () => {
     navigation.navigate("VendorOptions", { store: store });
   };
 
+
+
   return (
     <Container>
       <NextCornerVendorHeader />

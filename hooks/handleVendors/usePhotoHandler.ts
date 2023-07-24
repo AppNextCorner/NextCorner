@@ -1,9 +1,11 @@
 import * as ImagePicker from "expo-image-picker";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 class Upload {
+
+  // Methods for handlers
   private createImageObj = (endpoint: string, uri: string) => {
     return {
       name: `${new Date().getTime()}_${endpoint}.png`,
@@ -13,11 +15,12 @@ class Upload {
   };
   private createFormData = (imageObj: any, payload: any) => {
     const formData = new FormData();
-    formData.append("image", imageObj);
-    formData.append("payload", JSON.stringify(payload));
+    formData.append("image",  Platform.OS === "ios" ? JSON.parse(JSON.stringify(imageObj)) : imageObj);
+    formData.append("payload",  Platform.OS === "ios" ? JSON.stringify(payload): payload);
     return formData;
   };
-
+  
+  // List of methods for sending data
   uploadHandler = {
     vendor: async (
       uri: string,
@@ -29,7 +32,8 @@ class Upload {
       if (!imageObj.uri) {
         return Alert.alert("Missing Image");
       }
-      const formData = this.createFormData(imageObj, payload.payload);
+
+      const formData = this.createFormData(imageObj,payload.payload);
       console.log(formData);
       await request(endpoint, formData);
     },
@@ -43,9 +47,12 @@ class Upload {
       if (!imageObj.uri) {
         return Alert.alert("Missing Image");
       }
+
       const formData = this.createFormData(imageObj, payload.payload);
       console.log(formData);
       await request(endpoint, formData);
+      // 
+      // we can make two classes, one for Android and another for IOS
     },
   };
 }
@@ -74,11 +81,12 @@ const usePhotoHandler = () => {
   };
 
   /**
-   *
-   * @param uri
-   * @param uploadElement
-   * @param request
-   * @param payload
+   * Show me 
+   * Method to upload a form to the server 
+   * @param uri The image being sent
+   * @param uploadElement The type of upload element
+   * @param request Type of request being sent
+   * @param payload The data being sent
    */
   const upload = async (
     uri: string,
@@ -88,9 +96,11 @@ const usePhotoHandler = () => {
     uid: string
   ) => {
     try {
+      //
+
       const handler = new Upload();
       if (uploadElement === "vendor") {
-        handler.uploadHandler.vendor(uri, payload, request);
+        handler.uploadHandler.vendor(uri, payload, request); // these are the methods
       } else if (uploadElement === "item") {
         handler.uploadHandler.item(uri, payload, request);
       }

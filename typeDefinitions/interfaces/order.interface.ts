@@ -7,5 +7,6 @@ export interface Iorder {
     accepted: string
     uid: string;
     createdAt?: string;
+    _id?: string;
   }
   

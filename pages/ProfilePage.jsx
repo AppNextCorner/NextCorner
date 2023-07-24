@@ -12,6 +12,7 @@ import { getUser, logOut } from "../store/slices/userSessionSlice";
 import { useNavigation } from "@react-navigation/native";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 export default function ProfilePage() {
+  // this is for test
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
   const navigation = useNavigation();

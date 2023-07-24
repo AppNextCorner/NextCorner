@@ -20,9 +20,9 @@ const axiosImageInstance = axios.create({
     common: {
       "Content-Type": "multipart/form-data",
     },
+    // try the if statemen
   },
 });
-
 const axiosDynamicInstance = axios.create({
   baseURL: url.API_URL,
 });
@@ -89,10 +89,10 @@ const makeDeleteRequest = async (reqUrl: string) => {
 // PostRequest, update the token then send a post request with url and payload using axios
 const makeImagePostRequest = async (reqUrl: string, payload: any) => {
   Platform.OS === "ios"
-    ? null
+    ?null
     : (axiosImageInstance.defaults.headers.post["Content-Type"] =
         "multipart/form-data");
-
+  console.log("headers: ", axiosImageInstance.defaults.headers);
   setUpdatedToken();
   return axiosImageInstance.post<any>(reqUrl, payload);
 };
