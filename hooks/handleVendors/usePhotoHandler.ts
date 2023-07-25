@@ -3,6 +3,22 @@ import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+// Define the type for the uploadHandler object
+type UploadHandlerType = {
+  vendor: (
+    uri: string,
+    payload: any,
+    request: (reqUrl: string, payload: any) => any,
+    uid: string
+  ) => Promise<void>;
+  item: (
+    uri: string,
+    payload: any,
+    request: (reqUrl: string, payload: any) => any,
+    uid: string
+  ) => Promise<void>;
+};
+
 const usePhotoHandler = () => {
   const { updateBusinessInformation } = useBusinessInformation();
   const navigation = useNavigation();
@@ -37,7 +53,7 @@ const usePhotoHandler = () => {
 
     // Handler method for uploading vendor data.
     // It takes URI (image URI), payload (data to be sent), request (function to make the API request), and uid (user ID) as parameters.
-    uploadHandler = {
+    uploadHandler: UploadHandlerType = {
       vendor: async (
         uri: string,
         payload: any,
@@ -63,7 +79,10 @@ const usePhotoHandler = () => {
         request: (reqUrl: string, payload: any) => any,
         uid: string
       ) => {
-        const endpoint = "/business/updateMenu";
+        // An item already exists
+        const endpoint = payload.payload._id
+          ? `/business/update-item`
+          : "/business/updateMenu";
         const imageObj = this.createImageObj(endpoint, uri);
         if (!imageObj.uri) {
           return Alert.alert("Missing Image");
@@ -96,6 +115,10 @@ const usePhotoHandler = () => {
     return null;
   };
 
+  function isUploadElement(key: string): key is keyof UploadHandlerType {
+    return key === "vendor" || key === "item" || key === "update-item";
+  }
+
   /**
    * Show me
    * Method to upload a form to the server
@@ -113,12 +136,16 @@ const usePhotoHandler = () => {
   ) => {
     try {
       const handler = new Upload();
-      if (uploadElement === "vendor") {
-        await handler.uploadHandler.vendor(uri, payload, request, uid);
-      } else if (uploadElement === "item") {
-        await handler.uploadHandler.item(uri, payload, request, uid);
+      // if (uploadElement === "vendor") {
+      //   await handler.uploadHandler.vendor(uri, payload, request, uid);
+      // } else if (uploadElement === "item") {
+      //   await handler.uploadHandler.item(uri, payload, request, uid);
+      // }
+      if (isUploadElement(uploadElement)) {
+        await handler.uploadHandler[uploadElement](uri, payload, request, uid);
+      } else {
+        console.log('invalid upload element')
       }
-
       navigation.goBack();
     } catch (err: any) {
       Alert.alert(err.response.data.payload);

@@ -1,4 +1,4 @@
-import {  Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Iitem } from "../../../../typeDefinitions/interfaces/item.interface";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -23,19 +23,23 @@ import { vendorBoilerplate } from "constants/components/boilerplates";
 
 interface RouteParams {
   store: { store: vendorStructure };
+  update?: boolean;
+  updateItem?: Iitem;
 }
 
 const CreateMenuItem = () => {
+  const route = useRoute();
+  // vendor is vendorStructure type
+  const { store, update, updateItem }: RouteParams =
+    route.params as RouteParams;
+
   // Hooks
 
-  const route = useRoute();
-  const model = useAppSelector(getModel);
+  const model = !updateItem ? useAppSelector(getModel) : updateItem;
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { openImageLibrary } = usePhotoHandler();
   const { upload } = usePhotoHandler();
-  // vendor is vendorStructure type
-  const { store }: RouteParams = route.params as RouteParams;
 
   const [item, setItem] = useState<Iitem>(model);
   const [debouncedItem, setDebouncedItem] = useState<Iitem>(item);
@@ -43,10 +47,9 @@ const CreateMenuItem = () => {
   React.useEffect(() => {
     const debouncedDispatch = debounce((updatedItem: Iitem) => {
       // console.log("Debounced item has changed:", updatedItem);
-      
+
       dispatch(setModel(updatedItem));
-      dispatch(setModelCustomizations())
-  
+      dispatch(setModelCustomizations());
     }, 300); // Set the debounce delay as per your needs (e.g., 300ms)
 
     debouncedDispatch(debouncedItem);
@@ -221,11 +224,12 @@ const CreateMenuItem = () => {
                 storeId: store.store.id,
               });
               // Reset values for the whole menu item
-              dispatch(setModel(vendorBoilerplate))
-              dispatch(setCustomizations([]))
+              dispatch(setModel(vendorBoilerplate));
+              dispatch(setCustomizations([]));
               upload(
                 item.image,
-                "item",
+                update ? "update-item" :"item",
+                // Check if the item is being updated or uploaded
                 makeImagePostRequest,
                 {
                   payload: { store: store.store, newMenu: [model] },
@@ -234,7 +238,9 @@ const CreateMenuItem = () => {
               );
             }}
           >
-            <Text style={{ color: "#fff" }}>Upload Item</Text>
+            <Text style={{ color: "#fff" }}>
+              {update ? "Edit" : "Upload Item"}
+            </Text>
           </Pressable>
         </View>
       </ScrollView>

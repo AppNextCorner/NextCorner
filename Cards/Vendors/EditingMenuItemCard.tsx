@@ -16,6 +16,8 @@ import { Feather } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import useUpdateMenu from "hooks/api/business/menu/useUpdateMenu";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface Props {
   menuItem: Iitem;
@@ -25,6 +27,8 @@ interface Props {
 
 const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
   const { deleteItem } = useUpdateMenu();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
   const swipeableContentPosition = useRef(new Animated.Value(0)).current;
   let limitTextAmount = menuItem.description.slice(0, 20) + "...";
 
@@ -62,7 +66,11 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
               },
             ]}
           >
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={(_event: GestureResponderEvent) =>
+                navigation.navigate("VendorMenuCreate", { menuItem })
+              }
+            >
               <Feather name="edit" size={30} color="#fff" />
             </TouchableOpacity>
           </Animated.View>
@@ -120,10 +128,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
   }
 
   return (
-    <TouchableOpacity
-      style={styles.foodCategoryStyle}
-      disabled={disabled}
-    >
+    <TouchableOpacity style={styles.foodCategoryStyle} disabled={disabled}>
       <View style={styles.card}>
         <View style={styles.imageBox}>
           <Image
@@ -140,9 +145,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
         <View style={styles.foodTexts}>
           <Text style={styles.categoryText}>{menuItem.name}</Text>
           <Text style={styles.descriptionOfItem}>{limitTextAmount}</Text>
-          <Text style={styles.priceText}>
-            ${Math.fround(menuItem.price)}
-          </Text>
+          <Text style={styles.priceText}>${Math.fround(menuItem.price)}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -153,7 +156,7 @@ export default EditingMenuItemCard;
 
 const styles = StyleSheet.create({
   animatedContainer: {
-    display: 'flex',
+    display: "flex",
     flex: 0,
     flexDirection: "row",
   },
@@ -202,7 +205,7 @@ const styles = StyleSheet.create({
     // Increase the image size
     padding: "30%",
     marginLeft: 25,
-    marginVertical: '15%',
+    marginVertical: "15%",
     borderRadius: 5,
   },
   card: {

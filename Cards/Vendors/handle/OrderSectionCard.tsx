@@ -1,6 +1,5 @@
 import {
   FlatList,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -14,6 +13,7 @@ interface IProps {
   acceptMethod?: (orderId: string) => Promise<void>;
   rejectMethod?: (orderId: string) => Promise<void>;
 }
+
 
 const OrderSectionCard = (props: IProps) => {
   const { order, acceptMethod, rejectMethod } = props;
@@ -44,4 +44,4 @@ const OrderSectionCard = (props: IProps) => {
 
 export default OrderSectionCard;
 
-const styles = StyleSheet.create({});
+
