@@ -6,6 +6,7 @@ import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { Iorder } from "../../../../typeDefinitions/interfaces/order.interface";
 import useHandleIncomingOrders from "../../../../classes/businessStack/vendors/IncomingOrders.class";
+import { toggleButton } from "../../../../styles/components/toggleStyles";
 interface RouteParams {
   store?: { store: vendorStructure };
 }
@@ -57,16 +58,16 @@ const VendorIncomingOrders = () => {
         <TouchableOpacity onPress={toggleHandler}>
           <View
             style={[
-              styles.toggleButton,
-              isToggleOn ? styles.toggleButtonOn : styles.toggleButtonOff,
+              toggleButton.toggleButton,
+              isToggleOn ? toggleButton.toggleButtonOn : toggleButton.toggleButtonOff,
             ]}
           >
             <View
               style={[
-                styles.toggleButtonCircle,
+                toggleButton.toggleButtonCircle,
                 isToggleOn
-                  ? styles.toggleButtonCircleOn
-                  : styles.toggleButtonCircleOff,
+                  ? toggleButton.toggleButtonCircleOn
+                  : toggleButton.toggleButtonCircleOff,
                 { transform: [{ translateX: isToggleOn ? 10 : -10 }] }, // Move the circle to the right when toggle is ON
               ]}
             />
@@ -100,36 +101,5 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center" },
   page: { flex: 1, backgroundColor: "#fff" },
   subHeader: { flex: 1, backgroundColor: "#fff" },
-  toggleButton: {
-    alignItems: "center",
-    width: 50,
-    height: 30,
-    marginHorizontal: "5%",
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    justifyContent: "center",
-    overflow: "hidden", // Ensure the inner circle stays within the toggleButton boundaries
-  },
-  toggleButtonOn: {
-    backgroundColor: "#78dbff",
-    borderColor: "#dee0df",
-  },
-  toggleButtonOff: {
-    backgroundColor: "#fff",
-    borderColor: "#dee0df",
-  },
-  toggleButtonCircle: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    position: "absolute", // Position the inner circle absolutely within the toggleButton
-  },
-  toggleButtonCircleOn: {
-    backgroundColor: "#fff",
-  },
-  toggleButtonCircleOff: {
-    backgroundColor: "#78dbff",
-  },
+
 });

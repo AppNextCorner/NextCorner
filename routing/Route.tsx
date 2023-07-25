@@ -3,12 +3,14 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
-import Vendor from "pages/BusinessStack/components/Vendor";
+import Vendor from "pages/BusinessStack/components/vendorPages/Vendor";
 import { user, vendors } from "constants/components/tabs";
 import handleCreateTabStack from "hooks/components/handleCreateTabStack";
 import HomePage from "pages/HomePage";
 import { screens, vendorScreens } from "constants/components/logged";
 import { loggedOutScreens } from "constants/components/loggedOut";
+import { useAppSelector } from "../store/hook";
+import { getUser } from "../store/slices/userSessionSlice";
 const Stack = createNativeStackNavigator();
 
 const VendorComponent = () => {
@@ -30,17 +32,18 @@ const HomeStackComponent = () => {
 
 export default function Route() {
   const { isDone, isLoggedIn } = useGetUserData();
-  console.log("isDone: ", isDone);
-  console.log("isloggedin: ", isLoggedIn);
+  useGetUserData();
+  const userFound = useAppSelector(getUser);
   if (isDone === true && isLoggedIn) {
     return (
       <>
         <NavigationContainer independent={true}>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/* User pages */}
-
-            {/* Tabs */}
-
+          <Stack.Navigator
+            initialRouteName={
+              userFound!.role === "user" ? "HomeStack" : "Vendor"
+            }
+            screenOptions={{ headerShown: false }}
+          >
             <Stack.Screen name="HomeStack" component={HomeStackComponent} />
 
             {screens.map((screen, index) => {

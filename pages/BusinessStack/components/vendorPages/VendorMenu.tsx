@@ -57,6 +57,7 @@ const VendorMenu = () => {
   if (store?.store !== selectedStore![0]) {
     storeInfo = selectedStore![0];
   }
+  console.log('store info: ', storeInfo)
   return (
     <>
       <View style={{ flex: 1, backgroundColor: "#fff" }}>

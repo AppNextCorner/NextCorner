@@ -11,58 +11,64 @@ import {
 } from "react-native";
 import useAddUser from "hooks/handleUsers/useAddUser";
 import { auth } from "hooks/handleUsers/useFirebase";
-import useGetUserData from "hooks/handleUsers/useGetUserData";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { toggleButton } from "../../styles/components/toggleStyles";
 
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
  */
 export default function SignUpPage() {
-  
   // form data
+  const [isToggleOn, setIsToggleOn] = useState(false);
   const [userData, setUserData] = useState<AppUser>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     phoneNumber: "",
+    role: "",
   });
- 
+
   const { makeUser } = useAddUser();
 
-  
+  // Toggle handler for when the store is open
+  const toggleHandler = () => {
+    setIsToggleOn(!isToggleOn);
+    const role = !isToggleOn ? "vendor" : "user";
+    console.log(role);
+    setUserData((prevStruct) => ({ ...prevStruct, role: role }));
+    console.log(userData);
+    console.log(userData);
+    console.log(userData);
+  };
+
   const handlePropertyChange = (property: string, text: string) => {
     setUserData((prevStructure) => ({
       ...prevStructure,
       [property]: text,
     }));
   };
-  const navigation = useNavigation<NativeStackNavigationProp<any>>()
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   // after gaining the input value - check if the form is complete and move them onto a user slice
-  const registerUser = async (
-   userData: AppUser
-  ) => {
+  const registerUser = async (userData: AppUser) => {
     // create a user with async thunk and through our backend, firebase admin will return a user
     const user = await makeUser(userData);
-    console.log(userData)
-    console.log('here is user: ', user)
+    console.log(userData);
+    console.log("here is user: ", user);
     // after creating the user, we could now use the same information passed in to login with
     if (user !== null) {
       signInWithEmailAndPassword(auth, userData.email, userData.password)
         // takes in the credentials from email and password
         .then((_userCredential) => {
-          console.log("cred: ",_userCredential)
-          navigation.navigate("HomeStack");
+          const route = userData.role === "user" ? "HomeStack" : "Vendor";
+          navigation.navigate(route, {name: route});
         })
-        .catch((err) => {
+        .catch((_err) => {
           // error message for lack of password characters, email existing, etc...
           Alert.alert(user.message);
         });
     }
-    console.log(user)
-
-    //dispatch(setUser(user));
     return user;
   };
 
@@ -78,22 +84,46 @@ export default function SignUpPage() {
           Welcome friend, enter your details to get started in ordering food
         </Text>
       </View>
+      <View style={styles.toggle}>
+        <Text>User</Text>
+
+        <TouchableOpacity onPress={toggleHandler}>
+          <View
+            style={[
+              toggleButton.toggleButton,
+              isToggleOn
+                ? toggleButton.toggleButtonOn
+                : toggleButton.toggleButtonOff,
+            ]}
+          >
+            <View
+              style={[
+                toggleButton.toggleButtonCircle,
+                isToggleOn
+                  ? toggleButton.toggleButtonCircleOn
+                  : toggleButton.toggleButtonCircleOff,
+                { transform: [{ translateX: isToggleOn ? 10 : -10 }] }, // Move the circle to the right when toggle is ON
+              ]}
+            />
+          </View>
+        </TouchableOpacity>
+        <Text>Vendor</Text>
+      </View>
+
       {/* Email and Password input - still needs to add confirm password feature */}
       <View style={styles.inputContainer}>
         <Text style={styles.inputText}>Email Address</Text>
         <TextInput
           style={styles.textInput}
-        
           onChangeText={(text) => {
-            handlePropertyChange('email', text)
+            handlePropertyChange("email", text);
           }}
           placeholder="email@gmail.com"
         />
         <Text style={styles.inputText}>Password</Text>
         <TextInput
           style={styles.textInput}
-          
-          onChangeText={(text) => handlePropertyChange('password', text)}
+          onChangeText={(text) => handlePropertyChange("password", text)}
           value={userData.password}
           placeholder="password"
         />
@@ -103,8 +133,7 @@ export default function SignUpPage() {
             <Text style={styles.inputText}>First Name</Text>
             <TextInput
               style={styles.nameInput}
-              
-              onChangeText={(text) => handlePropertyChange('firstName', text)}
+              onChangeText={(text) => handlePropertyChange("firstName", text)}
               value={userData.firstName}
               placeholder="Joe"
             />
@@ -113,8 +142,7 @@ export default function SignUpPage() {
             <Text style={styles.inputText}>Last Name</Text>
             <TextInput
               style={styles.nameInput}
-              
-              onChangeText={(text) => handlePropertyChange('lastName', text)}
+              onChangeText={(text) => handlePropertyChange("lastName", text)}
               value={userData.lastName}
               placeholder="bobaguard"
             />
@@ -124,18 +152,18 @@ export default function SignUpPage() {
         <Text style={styles.inputText}>Phone Number</Text>
         <TextInput
           style={styles.textInput}
-          
-          onChangeText={(text) => handlePropertyChange('phoneNumber', text)}
+          onChangeText={(text) => handlePropertyChange("phoneNumber", text)}
           value={userData.phoneNumber}
-          // Splice the dashes later
+          // Splice the dashes laterc
           placeholder="123-123-1234"
         />
       </View>
 
       <TouchableOpacity
-        onPress={() =>
-          registerUser(userData)
-        }
+        onPress={() => {
+          registerUser(userData);
+          console.log("here is role", userData.role);
+        }}
         style={styles.signInButton}
       >
         <Text style={styles.signInText}>Register</Text>
@@ -161,6 +189,7 @@ export default function SignUpPage() {
 }
 
 const styles = StyleSheet.create({
+  toggle: { flexDirection: "row", alignItems: "center" },
   nameInput: {
     width: 150,
     padding: "5%",

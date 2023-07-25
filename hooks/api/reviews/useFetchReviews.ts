@@ -28,8 +28,8 @@ export default function useFetchReviews() {
       const fetchedBusinesses = await fetchBusinesses();
       dispatch(setBusinesses(fetchedBusinesses));
       // update the state values
-      setReviews(fetchedReviews.payload);
-      setReviewByUser(fetchedReviews.users);
+      await setReviews(fetchedReviews.payload);
+      await setReviewByUser(fetchedReviews.users);
 
       // update business Info
       await updateBusinessInformation();

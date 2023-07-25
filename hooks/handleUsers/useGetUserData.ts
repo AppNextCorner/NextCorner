@@ -11,6 +11,8 @@ import { setBusinesses } from "../../store/slices/BusinessSlice/businessSessionS
 import { API } from "constants/API";
 import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 import UseOrders from "hooks/handleVendors/useOrders.hook";
+import useBusinessInformation from "hooks/api/business/useBusinessInformation";
+import AppUser from "../../typeDefinitions/interfaces/user.interface";
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -18,6 +20,7 @@ import UseOrders from "hooks/handleVendors/useOrders.hook";
  * @returns isDone - used to confirm that the authentication process has been completed
  */
 const useGetUserData = () => {
+  const { updateBusinessInformation } = useBusinessInformation();
   const { initializeCart } = useFetchCart();
   const { getCurrentOrders } = UseOrders();
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
@@ -34,7 +37,7 @@ const useGetUserData = () => {
     const url = "/auth/getUser";
     console.log("email: ", email);
     const response = await makePostRequest(url, { email: email });
-    const data = response.data
+    const data = response.data;
     console.log("response from user: ", data);
     await dispatch(setUser(data.payload));
     return data.payload;
@@ -61,9 +64,11 @@ const useGetUserData = () => {
         console.log("API: ", API);
         console.log(user);
         if (user && user.email) {
-          const userData = await getUserData(user.email);
+          const userData: AppUser = await getUserData(user.email);
           dispatchBusinesses();
-          console.log('running below functions')
+          updateBusinessInformation(userData._id);
+
+          console.log("running below functions");
           initializeCart();
           getCurrentOrders(userData);
           setIsDone(true);

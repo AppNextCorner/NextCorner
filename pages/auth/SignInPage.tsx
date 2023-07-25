@@ -12,9 +12,7 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import logo from "../../assets/logo.png";
-import { useAppDispatch } from "../../store/hook";
-import { getUsers, setUser } from "../../store/slices/userSessionSlice";
+const logo = require("../../assets/logo.png");
 import { useState } from "react";
 import { auth } from "hooks/handleUsers/useFirebase";
 // importing firebase
@@ -22,15 +20,16 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { useNavigation } from "@react-navigation/native";
 
+import { makePostRequest } from "../../config/axios.config";
+import AppUser from "../../typeDefinitions/interfaces/user.interface";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 /**
  * Used to authenticate an existing user with firebase authentication methods
  */
 export default function SignInPage() {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useAppDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   /* 
   Function that handles an existing account 
 */
@@ -38,8 +37,16 @@ export default function SignInPage() {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
     signInWithEmailAndPassword(auth, email, password) // firebase auth that requires password, email, and the auth status of the user
       // takes in the credentials from email and password
-      .then((_userCredential) => {
-        navigation.navigate("HomeStack", { screen: 'Home' });
+      .then(async (_userCredential) => {
+        const lambda = async (email: string): Promise<AppUser> => {
+          const url = "/auth/getUser";
+          const response = await makePostRequest(url, { email });
+          return response.data;
+        };
+        const user: AppUser = await lambda(email);
+        console.log("here is user: ", user);
+        const route = user.role === "user" ? "HomeStack" : "Vendor";
+        navigation.navigate(route);
       })
       .catch((err) => {
         console.log(err);

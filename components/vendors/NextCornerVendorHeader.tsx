@@ -31,12 +31,10 @@ const HeaderTitle = styled.Text`
 
 const NextCornerVendorHeader = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const goHome = async () => {
-    try {
-      navigation.goBack();
-    } catch (e) {
-      console.log(e);
-    }
+  const goHome = async() => {
+    console.log('can go back: ', navigation.canGoBack())
+    navigation.canGoBack() ? navigation.goBack() : await navigation.navigate("HomeStack", {screen: "Profile"})
+
   };
 
   return (

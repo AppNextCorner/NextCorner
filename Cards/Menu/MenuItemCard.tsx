@@ -5,8 +5,6 @@ import useOrderButton from "hooks/handlePages/useOrderButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 const logo = require('assets/logo.png')
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
-import { location } from "../../typeDefinitions/interfaces/location.interface";
-
 /**
  * The default business card item
  * @param {*} props - be able to pass additional properties through the cart after coming from the business property prior to this page

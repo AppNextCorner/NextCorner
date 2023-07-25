@@ -30,7 +30,6 @@ const FullMenuList = ({ menu, vendor, create }: Props) => {
           <MenuItemCard
             menuItem={item}
             vendorName={vendor.name}
-            location={vendor.location}
           />
         )}
       </>

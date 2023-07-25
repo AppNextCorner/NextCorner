@@ -1,4 +1,10 @@
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  FlatList,
+} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -15,7 +21,6 @@ interface IParams {
 export default function ReviewsPage() {
   const route = useRoute();
   const { vendorItem }: IParams = route.params as IParams;
-  console.log(vendorItem);
   const { fetchReviews, reviews, reviewByUser } = useFetchReviews();
   const isLoading = !reviews || !reviewByUser;
 
@@ -41,27 +46,25 @@ export default function ReviewsPage() {
 
   return (
     <>
-      <View>
+      <View style={styles.page}>
         {isLoading ? (
           <Text>Loading...</Text> // Render a loading message
         ) : (
-          /**
-           * Map through the review
-           *
-           * review is type ReviewInterface
-           *
-           */
-          reviews.map((review: any, index: number) => {
-            /**
-             * Get the user by finding the Id of review.user
-             * it is type AppUser
-             */
-            const user = reviewByUser.find(
-              (user: any) => user._id === review.user
-            );
-            // Pass in review and user to the ReviewCard component
-            return <ReviewCard review={review} user={user} key={index} />;
-          })
+          <View style={styles.reviewContainer}>
+          <FlatList
+            data={reviews}
+            renderItem={({ item, index }) => {
+              /**
+               * Get the user by finding the Id of review.user
+               * it is type AppUser
+               */
+              const user = reviewByUser.find(
+                (user: any) => user._id === item.user
+              );
+              return <ReviewCard review={item} user={user} key={index} />;
+            }}
+          />
+          </View>
         )}
         <TouchableOpacity
           onPress={() => {
@@ -84,7 +87,9 @@ export default function ReviewsPage() {
 }
 
 const styles = StyleSheet.create({
+  reviewContainer: {height: '75%', backgroundColor: '#fff'},
   createReviewBtn: {
     marginTop: "20%",
   },
+  page: {flex: 1, backgroundColor: '#fff'},
 });

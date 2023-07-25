@@ -5,9 +5,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppSelector } from "../../../../store/hook";
 import StoreWithImage from "cards/Misc/StoreImageCard";
-import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 const Container = styled.ScrollView`
   flex: 1;
   background-color: #fff;
@@ -43,22 +43,20 @@ const Card = styled.TouchableOpacity`
 `;
 const PromptVendor = styled.View``;
 
-
 const Vendor = () => {
   const stores = useAppSelector(getUserBusiness);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  console.log("here is stores:", stores)
   const goToVendorDetails = (store: vendorStructure) => {
     navigation.navigate("VendorOptions", { store: store });
   };
-
-
 
   return (
     <Container>
       <NextCornerVendorHeader />
 
       <PromptVendor></PromptVendor>
-      {stores![0] ? (
+      {stores && stores.length > 0 ? (
         <Card onPress={() => goToVendorDetails(stores![0])}>
           <StoreWithImage store={stores![0]} />
         </Card>

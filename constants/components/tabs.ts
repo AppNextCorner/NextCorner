@@ -2,7 +2,7 @@ import HomePage from "pages/HomePage";
 import OrdersPage from "pages/OrdersPage";
 import { NearbyVendors } from "pages/home/NearbyVendors";
 import ProfilePage from "pages/ProfilePage";
-import Vendor from "pages/BusinessStack/components/Vendor";
+import Vendor from "pages/BusinessStack/components/vendorPages/Vendor";
 import VendorMore from "pages/BusinessStack/components/vendorPages/VendorMore";
 import {
   MaterialCommunityIcons,
