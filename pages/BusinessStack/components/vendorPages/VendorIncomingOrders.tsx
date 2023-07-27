@@ -7,13 +7,17 @@ import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { Iorder } from "../../../../typeDefinitions/interfaces/order.interface";
 import useHandleIncomingOrders from "../../../../classes/businessStack/vendors/IncomingOrders.class";
 import { toggleButton } from "../../../../styles/components/toggleStyles";
+import { useAppSelector } from "../../../../store/hook";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 interface RouteParams {
   store?: { store: vendorStructure };
 }
 const VendorIncomingOrders = () => {
   const route = useRoute();
-  const { store }: RouteParams = route.params as RouteParams;
-  const storeName = store?.store.name!;
+  const stores = useAppSelector(getUserBusiness);
+  const store = stores !== null ? stores![0] : null
+  //const { store }: RouteParams = route.params as RouteParams;
+  const storeName = store!.name!;
 
   // Step 1: Use the custom hook to get the incomingOrders object
   const incomingOrders = useHandleIncomingOrders(storeName);

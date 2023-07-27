@@ -33,6 +33,7 @@ const CreateMenuItem = () => {
   const { store, update, updateItem }: RouteParams =
     route.params as RouteParams;
 
+    console.log("WHy is store?:", store);
   // Hooks
 
   const model = !updateItem ? useAppSelector(getModel) : updateItem;

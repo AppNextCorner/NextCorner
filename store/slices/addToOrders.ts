@@ -2,7 +2,7 @@
  * Purpose of the file: Contains Redux slice for managing order-related state and asynchronous actions.
  */
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { ICart } from "./addToCartSessionSlice";
 import { RootState } from "../store";
 

@@ -20,8 +20,10 @@ const VendorMenu = () => {
   const dispatch: any = useAppDispatch();
 
   // vendor is vendorStructure type
-  const { store }: RouteParams = route.params as RouteParams;
-  console.log("store: ", store!.store.menu);
+  //const { store }: RouteParams = route.params as RouteParams;
+  const stores= useAppSelector(getUserBusiness);
+  const store = stores![0]
+  console.log("store: ", stores);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
     // Reset the model and create a state
@@ -42,8 +44,8 @@ const VendorMenu = () => {
         amountInCart: 1,
         rating: 0,
         storeInfo: {
-          storeName: store!.store.name,
-          storeId: store!.store.id,
+          storeName: store!.name,
+          storeId: store!.id,
         },
       })
     );
@@ -53,8 +55,8 @@ const VendorMenu = () => {
   const selectedStore: vendorStructure[] | null | undefined =
     useAppSelector(getUserBusiness);
 
-  let storeInfo = store?.store!;
-  if (store?.store !== selectedStore![0]) {
+  let storeInfo = store!
+  if (storeInfo !== selectedStore![0]) {
     storeInfo = selectedStore![0];
   }
   console.log('store info: ', storeInfo)

@@ -1,17 +1,21 @@
-import { useAppDispatch} from "../../store/hook";
+import { useAppDispatch, useAppSelector} from "../../store/hook";
 import {
   ICart,
   addCartItem,
   configureItemAmountInCart,
+  getCart,
 } from "../../store/slices/addToCartSessionSlice";
 import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 // Custom hook useCart for managing the cart state and interactions
 export default function useCart() {
   const dispatch = useAppDispatch(); // Get the dispatch function from Redux store
+  const currentCart = useAppSelector(getCart);
+
   const { initializeCart } = useFetchCart(); // Custom hook to fetch and initialize the cart data
 
   // Function to add an item to the cart
   const addItemToCart = async (item: ICart) => {
+    console.log("current Data:", currentCart);
     console.log("adding item to cart:", [item]);
     await dispatch(addCartItem(item)); // Dispatch the action to add the item to the cart state
   };

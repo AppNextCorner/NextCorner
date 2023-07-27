@@ -6,6 +6,8 @@ import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/
 import { useNavigation, useRoute } from "@react-navigation/native";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
+import { useAppSelector } from "../../../../store/hook";
 const Container = styled.View`
   flex: 1;
 
@@ -31,11 +33,12 @@ interface RouteParams {
 }
 
 const VendorOptions = () => {
+  const stores = useAppSelector(getUserBusiness);
   // Hooks
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { store }: RouteParams = route.params as RouteParams;
-
+  // const { store }: RouteParams = route.params as RouteParams;
+  const store = stores![0]
   const buttons = [
     {
       name: "My Menu",

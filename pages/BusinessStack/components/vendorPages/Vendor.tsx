@@ -28,7 +28,7 @@ const CreateVendorContainer = styled.TouchableOpacity`
   margin: 5%;
   border-radius: 10px;
 `;
-const Card = styled.TouchableOpacity`
+const Card = styled.View`
   flex: 1;
   flex-direction: row;
   align-content: center;
@@ -46,10 +46,9 @@ const PromptVendor = styled.View``;
 const Vendor = () => {
   const stores = useAppSelector(getUserBusiness);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  console.log("here is stores:", stores)
-  const goToVendorDetails = (store: vendorStructure) => {
-    navigation.navigate("VendorOptions", { store: store });
-  };
+  // const goToVendorDetails = (store: vendorStructure) => {
+  //   navigation.navigate("VendorOptions", { store: store });
+  // };
 
   return (
     <Container>
@@ -57,7 +56,7 @@ const Vendor = () => {
 
       <PromptVendor></PromptVendor>
       {stores && stores.length > 0 ? (
-        <Card onPress={() => goToVendorDetails(stores![0])}>
+        <Card>
           <StoreWithImage store={stores![0]} />
         </Card>
       ) : (

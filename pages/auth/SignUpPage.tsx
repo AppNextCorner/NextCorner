@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  ScrollView,
 } from "react-native";
 import useAddUser from "hooks/handleUsers/useAddUser";
 import { auth } from "hooks/handleUsers/useFirebase";
@@ -77,7 +78,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <View style={styles.signInContainer}>
+    <ScrollView style={styles.signInContainer}>
       <View style={styles.headerTag}>
         <Text style={styles.mainHeader}>Create an account</Text>
         <Text>
@@ -184,7 +185,7 @@ export default function SignUpPage() {
               <Text style={styles.signInText}>Sign Up</Text>
             </TouchableOpacity>
           </View> */}
-    </View>
+    </ScrollView>
   );
 }
 

@@ -11,29 +11,40 @@ import { screens, vendorScreens } from "constants/components/logged";
 import { loggedOutScreens } from "constants/components/loggedOut";
 import { useAppSelector } from "../store/hook";
 import { getUser } from "../store/slices/userSessionSlice";
+import { getUserBusiness } from "../store/slices/BusinessSlice/businessSessionSlice";
+import ITab from "../typeDefinitions/interfaces/IComponents/tab.interface";
 const Stack = createNativeStackNavigator();
-
-const VendorComponent = () => {
-  const vendorStack = handleCreateTabStack({
-    tabList: vendors,
-    initialRoute: "Vendors",
-  });
-
-  return vendorStack || <Vendor />;
-};
-const HomeStackComponent = () => {
-  const homeStack = handleCreateTabStack({
-    tabList: user,
-    initialRoute: "Home",
-  });
-
-  return homeStack || <HomePage />;
-};
 
 export default function Route() {
   const { isDone, isLoggedIn } = useGetUserData();
   useGetUserData();
+
   const userFound = useAppSelector(getUser);
+
+  const VendorComponent = () => {
+    const store = useAppSelector(getUserBusiness);
+
+    const nullCheck = store === null ? false : store!.length > 0;
+    const blacklist = (!(nullCheck)) ? ["Orders", "Settings", "Menu"] : []; // Add menu later
+    const vendorTabList = vendors.filter(
+      (tab: ITab) => !blacklist.includes(tab.name)
+    );
+    const vendorStack = handleCreateTabStack({
+      tabList: vendorTabList,
+      initialRoute: "Vendors",
+    });
+
+    return vendorStack || <Vendor />;
+  };
+  const HomeStackComponent = () => {
+    const homeStack = handleCreateTabStack({
+      tabList: user,
+      initialRoute: "Home",
+    });
+
+    return homeStack || <HomePage />;
+  };
+
   if (isDone === true && isLoggedIn) {
     return (
       <>

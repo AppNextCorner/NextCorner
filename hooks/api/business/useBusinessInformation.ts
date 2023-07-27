@@ -13,6 +13,7 @@ export default function useBusinessInformation() {
 
   const updateUserStores = async (uid: string) => {
     const userBusinesses: vendorStructure[] = await fetchVendorBusiness(uid);
+    console.log("Here is true user soter: ", userBusinesses);
     dispatch(setUserBusiness(userBusinesses));
   };
 

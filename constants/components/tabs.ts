@@ -11,6 +11,9 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 import ITab from "../../typeDefinitions/interfaces/IComponents/tab.interface";
+import VendorIncomingOrders from "pages/BusinessStack/components/vendorPages/VendorIncomingOrders";
+import { Foundation } from '@expo/vector-icons';
+import VendorMenu from "pages/BusinessStack/components/vendorPages/VendorMenu";
 
 export const user: ITab[] = [
   {
@@ -52,7 +55,21 @@ export const vendors: ITab[] = [
     icon: MaterialCommunityIcons,
   },
   {
-    name: "More",
+    name: "Orders",
+    component: VendorIncomingOrders,
+    focusedName: 'clipboard-notes',
+    unfocused: 'clipboard-notes',
+    icon: Foundation
+  },
+  {
+    name: "Menu",
+    component: VendorMenu,
+    focusedName: 'food-outline',
+    unfocused: 'food-outline',
+    icon: MaterialCommunityIcons
+  },
+  {
+    name: "Settings",
     component: VendorMore,
     focusedName: "dots-horizontal-circle",
     unfocused: "dots-horizontal-circle-outline",
