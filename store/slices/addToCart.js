@@ -18,6 +18,7 @@ export const deleteItem = createAsyncThunk(
       const response = await axios.delete(
         POSTS_URL + "delete-item/" + cartItem.id
       );
+      
       return response.data; // Return a value synchronously using Async-await
     } catch (err) {
       if (err.response) {

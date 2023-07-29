@@ -38,21 +38,29 @@ const VendorOptions = () => {
   const route = useRoute();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   // const { store }: RouteParams = route.params as RouteParams;
-  const store = stores![0]
+  const store = stores![0];
   const buttons = [
     {
-      name: "My Menu",
-      navigate: "VendorMenu",
-      data: { store },
+      name: "Go to Consumer App",
+      navigate: "HomeStack",
+      screen: "Profile",
+      data: null,
     },
-    {
-      name: "Incoming Orders",
-      navigate: "VendorIncomingOrders",
-      data: { store },
-    }
+    // {
+    //   name: "My Menu",
+    //   navigate: "VendorMenu",
+    //   data: { store },
+    // },
+    // {
+    //   name: "Incoming Orders",
+    //   navigate: "VendorIncomingOrders",
+    //   data: { store },
+    // }
   ];
   const renderItem = ({ item }: ListRenderItemInfo<button>) => (
-    <Button  onPress={() => navigation.navigate(item.navigate, {store: item.data})}>
+    <Button
+      onPress={() => navigation.navigate(item.navigate, { screen: item.screen, store: item.data })}
+    >
       <ButtonContent>{item.name}</ButtonContent>
     </Button>
   );

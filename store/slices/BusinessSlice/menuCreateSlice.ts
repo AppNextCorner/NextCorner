@@ -26,7 +26,7 @@ const initialState: IEditMyMenuCreateState = {
     amountInCart: 1,
     rating: 0,
     storeInfo: {
-      storeName: "",
+      storeId: "",
       storeId: "",
 
       // selector and dispatch

@@ -13,7 +13,7 @@ import { getUserBusiness } from "../../../../store/slices/BusinessSlice/business
 import { setModel } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 
 const VendorMenu = () => {
-  const route = useRoute();
+
   const dispatch: any = useAppDispatch();
   const stores= useAppSelector(getUserBusiness);
   const store = stores![0]
@@ -38,7 +38,7 @@ const VendorMenu = () => {
         rating: 0,
         storeInfo: {
           storeName: store!.name,
-          storeId: store!.id,
+          storeId: store!._id,
         },
       })
     );
@@ -102,7 +102,7 @@ const VendorMenu = () => {
                 <MenuList
                   category={item}
                   menu={storeInfo.menu}
-                  vendorName={storeInfo.name}
+                  vendor={null}
                 />
                 <View style={styles.margin}></View>
               </>

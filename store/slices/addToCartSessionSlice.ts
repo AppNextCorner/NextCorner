@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // Interface for the items in the cart
 export interface ICart {
   inCart: Iitem;
-  storeName: string;
+  storeId: string;
   uid: string | undefined;
 }
 

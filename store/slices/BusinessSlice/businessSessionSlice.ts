@@ -22,7 +22,7 @@ export const businessSessionSlice = createSlice({
       state.userBusiness = action.payload;
     },
     setUserMenu: (state, action) => {
-      const vendorMatch = state.userBusiness?.filter((store) => store.id === action.payload.id)
+      const vendorMatch = state.userBusiness?.filter((store) => store._id === action.payload.id)
       vendorMatch![0].menu = action.payload.menu
     }
   },

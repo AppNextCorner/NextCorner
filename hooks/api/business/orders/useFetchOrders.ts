@@ -1,8 +1,8 @@
 import { makeGetRequest } from "../../../../config/axios.config";
 
 export default function useFetchOrders() {
-    const fetchOrdersByName = async(name: string | undefined) => {
-        const url = `/orders/get-orders-by-store-name/${name}`;
+    const fetchOrdersById = async(id: string | undefined) => {
+        const url = `/orders/get-orders-by-store-id/${id}`;
         const response = await makeGetRequest(url);
         console.log("response")
         console.log(response.data.orders)
@@ -20,5 +20,5 @@ export default function useFetchOrders() {
 
 
 
-    return { fetchOrdersByName, fetchOrdersByUid, };
+    return { fetchOrdersById, fetchOrdersByUid, };
 }

@@ -30,6 +30,7 @@ interface RouteParams {
 
 const CreateMenuItem = () => {
   const route = useRoute();
+  const [debouncer, setDebouncer] = React.useState(false);
   const userStore = useAppSelector(getUserBusiness)
   // vendor is vendorStructure type
   const store = userStore![0]
@@ -46,6 +47,51 @@ const CreateMenuItem = () => {
 
   const [item, setItem] = useState<Iitem>(model);
   const [debouncedItem, setDebouncedItem] = useState<Iitem>(item);
+  const [requestSent, setRequestSent] = React.useState(false); // State to track if the request has been sent
+
+  const handleDebouncedUpload = async () => {
+    try {
+      // Add store info to the menu item
+      handlePropertyChange(setItem, "storeInfo", {
+        storeName: store.name,
+        storeId: store._id,
+      });
+
+      // Reset values for the whole menu item
+      await upload(
+        item.image,
+        "item",
+        // Check if the item is being updated or uploaded
+        makeImagePostRequest,
+        {
+          payload: { store: store, newMenu: [debouncedItem] },
+        },
+        store.uid!
+      );
+      dispatch(setModel(vendorBoilerplate));
+      dispatch(setCustomizations([]));
+
+      // Set requestSent to true to indicate the request has been sent
+      setRequestSent(true);
+    } catch (error) {
+      // Handle any errors if necessary
+      console.error("Error during upload:", error);
+    }
+  };
+  const debouncedUpload = () => {
+    if (!debouncer) {
+      // If debouncer is false, set it to true and perform the action
+      console.log('please wait...')
+      setDebouncer(true);
+
+
+      // Call the handleDebouncedUpload function only if the request has not been sent yet
+      if (!requestSent) {
+        handleDebouncedUpload();
+      }
+    }
+  };
+
 
   React.useEffect(() => {
     const debouncedDispatch = debounce((updatedItem: Iitem) => {
@@ -221,25 +267,7 @@ const CreateMenuItem = () => {
           <Pressable
             style={styles.upload}
             onPress={() => {
-              // Add store info to the menu item
-              handlePropertyChange(setItem, "storeInfo", {
-                storeName: store.name,
-                storeId: store._id,
-              });
-              // Reset values for the whole menu item
-             
-              upload(
-                item.image,
-                "item",
-                // Check if the item is being updated or uploaded
-                makeImagePostRequest,
-                {
-                  payload: { store: store, newMenu: [debouncedItem] },
-                },
-                store.uid!
-              );
-              dispatch(setModel(vendorBoilerplate));
-              dispatch(setCustomizations([]));
+              debouncedUpload();
             }}
           >
             <Text style={{ color: "#fff" }}>

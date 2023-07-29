@@ -71,17 +71,17 @@ console.log(business)
   const goToCartButton = async () => {
     const userId = auth?.currentUser?.uid;
     setOrder(true);
-    if (cart.length === 0 || cart[0].storeName === business) {
+    if (cart.length === 0 || cart[0].storeId === business) {
       try {
         console.log("adding this item: ", {
           inCart: vendorItem,
           uid: userId,
-          storeName: menuItem.storeInfo.storeName,
+          storeId: menuItem.storeInfo.storeId,
         });
         await addItemToCart({
           inCart: vendorItem,
           uid: userId,
-          storeName: menuItem.storeInfo.storeName,
+          storeId: menuItem.storeInfo.storeId,
         });
 
         navigation.goBack();

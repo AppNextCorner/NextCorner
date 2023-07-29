@@ -13,6 +13,7 @@ import { useAppSelector } from "../store/hook";
 import { getUser } from "../store/slices/userSessionSlice";
 import { getUserBusiness } from "../store/slices/BusinessSlice/businessSessionSlice";
 import ITab from "../typeDefinitions/interfaces/IComponents/tab.interface";
+import IncomingOrderAlert from "cards/Alerts/Vendor/IncomingOrderAlert";
 const Stack = createNativeStackNavigator();
 
 export default function Route() {
@@ -37,7 +38,7 @@ export default function Route() {
 
     return (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
-        <Text>HELLO WORLD</Text>
+        {/* {store !== null ? <IncomingOrderAlert  /> : null} */}
         {vendorStack || <Vendor />}
         
       </View>

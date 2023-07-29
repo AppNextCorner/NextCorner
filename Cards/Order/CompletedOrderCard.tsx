@@ -15,7 +15,7 @@ const CompletedOrderCard = ({ completedOrder } : any) => {
   const addOrderPrice = Math.round(calculateOrderPrice.reduce((a: number, b: number) => a + b, 0));
 
   // Get the business name and the number of items in the order
-  const getBusinessName = completedOrder.orders[0].inCart.storeInfo.storeName
+  const getBusinessName = completedOrder.orders[0].inCart.storeInfo.storeId
   const getItemAmount = completedOrder.orders
 
   return (

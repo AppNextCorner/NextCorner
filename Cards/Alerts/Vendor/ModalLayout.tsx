@@ -1,7 +1,7 @@
-import { View, StyleSheet, Modal, Animated } from "react-native";
+import { View, StyleSheet, Animated } from "react-native";
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import COLORS from "../../../util/COLORS";
-
+import Modal from 'react-native-modal'
 type Props = {
   visible: boolean;
   children: ReactNode;
@@ -9,7 +9,7 @@ type Props = {
 
 const ModalLayout = ({ children, visible }: Props) => {
   const scaleValue = useRef(new Animated.Value(0)).current;
-  const [showModal, setShowModal] = useState(visible);
+  const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
     toggleModal();
@@ -33,7 +33,18 @@ const ModalLayout = ({ children, visible }: Props) => {
   };
 
   return (
-    <Modal transparent visible={showModal}>
+    // <Modal
+    //   isVisible={showModal}
+    //   backdropOpacity={0.5}
+    //   hasBackdrop={false}
+    //   backdropColor="#000"
+    //   // onBackdropPress={onDismiss} // Close the modal when tapping on the backdrop
+    //   // onBackButtonPress={onDismiss} // Close the modal when pressing the back button on Android
+    //   animationIn="zoomIn" // You can choose other animation types as well
+    //   animationOut="zoomOut"
+    //   useNativeDriver={true} // Set this to true for better performance
+
+    // >
       <View style={styles.container}>
         <Animated.View
           style={[styles.modalCon, { transform: [{ scale: scaleValue }] }]}
@@ -41,19 +52,29 @@ const ModalLayout = ({ children, visible }: Props) => {
           {children}
         </Animated.View>
       </View>
-    </Modal>
+    //</Modal>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    marginTop: '15%',
+    width: '100%',
+    zIndex: 2,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.modalbackgroundcolor,
+   
   },
 
   modalCon: {
+    borderColor: "#d6d6d6",
+    borderStyle: "solid",
+
+    borderWidth: 2,
+
+    top: 50,
     backgroundColor: "white",
     paddingHorizontal: 20,
     paddingVertical: 30,
@@ -62,5 +83,4 @@ const styles = StyleSheet.create({
     width: "80%",
   },
 });
-
 export default ModalLayout;

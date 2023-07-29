@@ -49,7 +49,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
               onPress={(event: GestureResponderEvent) =>
                 deleteItem(event, {
                   itemId: menuItem._id,
-                  vendorId: vendor._id,
+                  vendorId: vendor.id,
                 })
               }
             >

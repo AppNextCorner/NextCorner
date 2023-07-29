@@ -4,18 +4,19 @@ import React from "react";
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
 import MenuItemCard from "./MenuItemCard";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
+import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 
 interface Props {
   menu: Iitem[];
   category: string;
-  vendorName: string;
+  vendor: vendorStructure | null;
 }
 
 interface menuItem {
   item: Iitem;
 }
 const MenuList = React.memo(
-  ({ menu, category, vendorName }: Props) => {
+  ({ menu, category, vendor }: Props) => {
     // category is a string that represents the category of food that the menu item represents: ex: Burger, Pizza, etc.
 
     // Optimized: Memoize the filtered array using React.useMemo
@@ -30,11 +31,11 @@ const MenuList = React.memo(
         <View>
           <MenuItemCard
             menuItem={item}
-            vendorName={vendorName}
+            vendorId={vendor!._id}
           />
         </View>
       ),
-      [vendorName]
+      [vendor]
     );
 
     // Optimized: Memoize the keyExtractor function using React.useCallback

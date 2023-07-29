@@ -4,7 +4,7 @@ import useFetchOrders from "hooks/api/business/orders/useFetchOrders";
 import useUpdateOrders from "hooks/api/business/orders/useUpdateOrders";
 
 interface IHandleIncomingOrders {
-  storeName: string;
+  storeId: string;
   allOrders: Iorder[] | undefined;
   pendingOrdersList: Iorder[] | undefined;
   acceptedOrdersList: Iorder[] | undefined;
@@ -14,7 +14,7 @@ interface IHandleIncomingOrders {
   rejectOrder(orderId: string): Promise<void>;
 }
 
-const useHandleIncomingOrders = (storeName: string): IHandleIncomingOrders => {
+const useHandleIncomingOrders = (storeId: string): IHandleIncomingOrders => {
   const [allOrders, setAllOrders] = useState<Iorder[] | undefined>();
   const [pendingOrdersList, setPendingOrdersList] = useState<
     Iorder[] | undefined
@@ -25,13 +25,13 @@ const useHandleIncomingOrders = (storeName: string): IHandleIncomingOrders => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const { fetchOrdersByName } = useFetchOrders();
-      const orders: Iorder[] = await fetchOrdersByName(storeName);
+      const { fetchOrdersById } = useFetchOrders();
+      const orders: Iorder[] = await fetchOrdersById(storeId);
       setAllOrders(orders);
     };
 
     fetchOrders();
-  }, [storeName]);
+  }, [storeId]);
 
   useEffect(() => {
     if (allOrders) {
@@ -61,7 +61,7 @@ const useHandleIncomingOrders = (storeName: string): IHandleIncomingOrders => {
   };
 
   return {
-    storeName,
+    storeId,
     allOrders,
     pendingOrdersList,
     acceptedOrdersList,

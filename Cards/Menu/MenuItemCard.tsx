@@ -12,11 +12,11 @@ import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
  */
 interface Props {
   menuItem: Iitem;
-  vendorName?: string;
+  vendorId?: string;
 }
 export default function MenuItemCard({
   menuItem,
-  vendorName,
+  vendorId,
   
 }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
@@ -30,7 +30,7 @@ export default function MenuItemCard({
   const goToFoodDetails = () => {
     setOrder(false);
     navigation.navigate("Item", {
-      business: vendorName,
+      businessId: vendorId,
       menuItem: parse.cartData,
     });
   };

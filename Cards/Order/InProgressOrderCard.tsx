@@ -67,7 +67,7 @@ const InProgressOrderCard = ({ order }: Props) => {
   const isFocused = useIsFocused();
 
   const businessOrderedText = order.orders.map(
-    (orderItem: ICart) => orderItem.storeName
+    (orderItem: ICart) => orderItem.storeId
   );
 
   return (

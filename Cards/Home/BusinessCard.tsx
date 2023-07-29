@@ -33,12 +33,12 @@ export default function BusinessCard({
       checkForStyleChange === true
         ? {
             // For the category business list
-            height: 250,
-            width: "100%",
+            height: 175,
+            width: 250
           }
         : // for the default business list on home screen to display it smaller then the category business list
           {
-            height: 200,
+            height: 175,
             width: 175,
           };
     return change;

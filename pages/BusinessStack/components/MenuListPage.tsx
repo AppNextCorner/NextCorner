@@ -152,7 +152,7 @@ export default function MenuListPage() {
                 <MenuList
                   category={item}
                   menu={business.menu}
-                  vendorName={business.name}
+                  vendor={business}
         
                 />
                 <View style={styles.margin}></View>

@@ -115,7 +115,7 @@ const PaymentDetailsPage = () => {
         },
         {
           name: "merchantDisplayName",
-          value: getCartFromSlice[0].inCart.storeInfo.storeName,
+          value: getCartFromSlice[0].inCart.storeInfo.storeId,
         },
       ];
       const response = await makeDynamicPostRequest(
@@ -143,7 +143,7 @@ const PaymentDetailsPage = () => {
         customFlow: true,
         customerId: data.customer,
         customerEphemeralKeySecret: data.ephemeralKey,
-        merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeName,
+        merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeId,
         returnURL: "stripe-example://stripe-redirect",
       });
       // check for errors -> show / alert the user on the error message

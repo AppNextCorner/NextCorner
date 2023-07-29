@@ -20,8 +20,8 @@ export const vendorBoilerplate = {
   amountInCart: 1,
   rating: 0,
   storeInfo: {
-    storeName: "",
     storeId: "",
+    storeName: "",
 
     // selector and dispatch
   },

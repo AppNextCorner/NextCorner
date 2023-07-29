@@ -12,10 +12,10 @@ const VendorIncomingOrders = () => {
   const stores = useAppSelector(getUserBusiness);
   const store = stores !== null ? stores![0] : null
   //const { store }: RouteParams = route.params as RouteParams;
-  const storeName = store!.name!;
+  const storeId = store!.id!;
 
   // Step 1: Use the custom hook to get the incomingOrders object
-  const incomingOrders = useHandleIncomingOrders(storeName);
+  const incomingOrders = useHandleIncomingOrders(storeId);
 
   // Step 2: Create state variables for the toggle and orderes
   const [isToggleOn, setIsToggleOn] = useState(false);

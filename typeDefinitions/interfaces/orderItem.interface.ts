@@ -2,7 +2,7 @@ import { Iitem } from "./item.interface";
 
 export default interface orderItem {
   inCart: Iitem;
-  storeName: string;
+  storeId: string;
   uid: string;
   createdAt?: string;
 }
