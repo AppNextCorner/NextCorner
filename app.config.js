@@ -14,7 +14,12 @@ export default ({ config }) => ({
       googleMapsApiKey:process.env.GOOGLE_CLOUD_API_KEY,
     },
   },
-
-
+  updates: {
+    url: "https://u.expo.dev/5a9ef8e7-b74a-4d0d-9abd-85dc2e35be3f"
+  },
+  runtimeVersion: {
+    policy: "sdkVersion"
+  }
+  
 
 });

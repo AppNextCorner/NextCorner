@@ -1,9 +1,17 @@
 {
   "expo": {
-    "name": "nextcornerapp",
+    "extra": {
+      "eas": {
+        "projectId": "5a9ef8e7-b74a-4d0d-9abd-85dc2e35be3f"
+      }
+    },
+    "name": "NextCornerApp",
     "slug": "nextcornerapp",
-    "owner": "nextcorner",
+    "owner": "nextcornerapplication",
     "version": "1.0.0",
+    "production": {
+      "channel": "Developers/MVP-Iteration"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

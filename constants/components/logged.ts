@@ -1,6 +1,6 @@
 import ItemPage from "pages/BusinessStack/components/ItemPage";
 import MenuListPage from "pages/BusinessStack/components/MenuListPage";
-import ReviewCreatePage from "pages/BusinessStack/components/reviewCreatePage";
+import ReviewCreatePage from "pages/BusinessStack/components/ReviewCreatePage";
 import VendorsCreate from "pages/BusinessStack/components/vendorCreate/VendorsCreate";
 import ReviewsPage from "pages/BusinessStack/components/reviewsPage";
 import CreateCustomizations from "pages/BusinessStack/components/vendorCreate/CreateCustomizations";
