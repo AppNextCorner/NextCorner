@@ -11,19 +11,12 @@ import FullMenuList from "components/vendors/FullMenuList";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 import { setModel } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
-interface RouteParams {
-  store?: { store: vendorStructure };
-}
 
 const VendorMenu = () => {
   const route = useRoute();
   const dispatch: any = useAppDispatch();
-
-  // vendor is vendorStructure type
-  //const { store }: RouteParams = route.params as RouteParams;
   const stores= useAppSelector(getUserBusiness);
   const store = stores![0]
-  console.log("store: ", stores);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
     // Reset the model and create a state

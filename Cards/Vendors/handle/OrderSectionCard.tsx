@@ -3,6 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StyleSheet
 } from "react-native";
 import React from "react";
 import OrderPreviewCard from "./OrderPreviewCard";
@@ -21,11 +22,11 @@ const OrderSectionCard = (props: IProps) => {
     <View>
       {/* Accept or decline orders */}
       {acceptMethod !== undefined ? (
-        <View>
-          <TouchableOpacity onPress={() => acceptMethod!(order._id!)}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: 'blue'}]} onPress={() => acceptMethod!(order._id!)}>
             <Text>Accept</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => rejectMethod!(order._id!)}>
+          </TouchableOpacity >
+          <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]} onPress={() => rejectMethod!(order._id!)}>
             <Text>Decline</Text>
           </TouchableOpacity>
         </View>
@@ -44,4 +45,11 @@ const OrderSectionCard = (props: IProps) => {
 
 export default OrderSectionCard;
 
-
+const styles = StyleSheet.create({
+  buttonContainer: {flexDirection: 'row'},
+  button: {
+    padding: '3%',
+    marginHorizontal: '2%',
+    paddingHorizontal: '5%'
+  }
+})

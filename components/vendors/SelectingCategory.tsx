@@ -38,13 +38,13 @@ export default function SelectingCategory(props: IProps) {
   return (
     <View style={styles.chipContainer}>
       <FlatList
-        scrollEnabled={false}
+        scrollEnabled={true}
         ListHeaderComponent={
           <Text style={styles.header}>
             Select what category your store fits:
           </Text>
         }
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         numColumns={4}
         data={foodCategories.slice(0, 10)}
         renderItem={({ item }) => (

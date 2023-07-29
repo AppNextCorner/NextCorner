@@ -49,7 +49,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
               onPress={(event: GestureResponderEvent) =>
                 deleteItem(event, {
                   itemId: menuItem._id,
-                  vendorId: vendor.id,
+                  vendorId: vendor._id,
                 })
               }
             >
@@ -68,7 +68,7 @@ const EditingMenuItemCard = ({ menuItem, disabled, vendor }: Props) => {
           >
             <TouchableOpacity
               onPress={(_event: GestureResponderEvent) =>
-                navigation.navigate("VendorMenuCreate", { menuItem })
+                navigation.navigate("VendorMenuCreate", { update: true, updateItem: menuItem })
               }
             >
               <Feather name="edit" size={30} color="#fff" />

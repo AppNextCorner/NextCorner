@@ -49,33 +49,40 @@ export default function HomePage() {
                   showItem={onSelectCategory}
                 />
                 <>
-                <FlatList
-                  ListHeaderComponent={
-                    <View style={styles.businessHeaderContainer}></View>
-                  }
-                  style={styles.remainingCards}
-                  showsVerticalScrollIndicator={false}
-                  data={!categoryWasSelected ? vendors : filterBusinessCards}
-                  keyExtractor={(_item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <BusinessCard
-                      businessItem={item}
-                      checkForStyleChange={!checkForStyleChange}
+                  {categoryWasSelected ? (
+                    <FlatList
+                      ListHeaderComponent={
+                        <View style={styles.businessHeaderContainer}></View>
+                      }
+                      style={styles.remainingCards}
+                      showsVerticalScrollIndicator={false}
+                      data={filterBusinessCards}
+                      keyExtractor={(_item, index) => index.toString()}
+                      renderItem={({ item }) => (
+                        <BusinessCard
+                          businessItem={item}
+                          checkForStyleChange={!checkForStyleChange}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </>
+                  ) : null}
+                </>
               </>
             }
             keyExtractor={(_item, index) => index.toString()}
             data={categories}
-            
             // Main content of the page
             renderItem={({ item }) => {
+              // No Category button was selected
               if (!categoryWasSelected) {
                 const trendingRow = vendors.filter(
-                  (vendor: vendorStructure) => vendor.trending === item.name
+                  (vendor: vendorStructure) => {
+                    console.log("VENODOR:", vendor.trending);
+                    console.log("itemor:", item);
+                    return vendor.trending === item.name;
+                  }
                 );
+                console.log("trening row:", trendingRow);
                 return (
                   <BusinessListComponent
                     title={item.name}

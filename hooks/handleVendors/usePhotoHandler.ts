@@ -80,7 +80,8 @@ const usePhotoHandler = () => {
         uid: string
       ) => {
         // An item already exists
-        const endpoint = payload.payload._id
+        const newMenu = payload.payload.newMenu[0]
+        const endpoint = newMenu._id
           ? `/business/update-item`
           : "/business/updateMenu";
         const imageObj = this.createImageObj(endpoint, uri);

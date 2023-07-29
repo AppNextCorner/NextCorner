@@ -16,9 +16,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Iorder } from "../typeDefinitions/interfaces/order.interface";
 
 import { getOrders } from "../store/slices/addToOrders";
+import { getUser } from "../store/slices/userSessionSlice";
 
 export default function OrdersPage() {
   const orders = useAppSelector(getOrders);
+  const user = useAppSelector(getUser);
+  console.log(orders);
   const { getCurrentOrders } = UseOrders();
   
   const [orderSelection, setOrderSelection] = useState(false);
@@ -30,7 +33,7 @@ export default function OrdersPage() {
   };
 
   useEffect(() => {
-    getCurrentOrders();
+    getCurrentOrders(user);
   }, [])
 
   const filterCompletedData = orders.filter((item: Iorder) => {

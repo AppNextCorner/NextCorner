@@ -5,7 +5,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAppSelector } from "../../../../store/hook";
 import StoreWithImage from "cards/Misc/StoreImageCard";
-import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 const Container = styled.ScrollView`

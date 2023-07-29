@@ -71,7 +71,7 @@ console.log(business)
   const goToCartButton = async () => {
     const userId = auth?.currentUser?.uid;
     setOrder(true);
-    if (businessName === "" || menuItem.storeInfo.storeName === businessName) {
+    if (cart.length === 0 || cart[0].storeName === business) {
       try {
         console.log("adding this item: ", {
           inCart: vendorItem,

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { vendorStructure } from "../../../../typeDefinitions/interfaces/IVendor/vendorStructure";
-import { useRoute } from "@react-navigation/native";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { Iorder } from "../../../../typeDefinitions/interfaces/order.interface";
@@ -9,11 +7,8 @@ import useHandleIncomingOrders from "../../../../classes/businessStack/vendors/I
 import { toggleButton } from "../../../../styles/components/toggleStyles";
 import { useAppSelector } from "../../../../store/hook";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
-interface RouteParams {
-  store?: { store: vendorStructure };
-}
+
 const VendorIncomingOrders = () => {
-  const route = useRoute();
   const stores = useAppSelector(getUserBusiness);
   const store = stores !== null ? stores![0] : null
   //const { store }: RouteParams = route.params as RouteParams;

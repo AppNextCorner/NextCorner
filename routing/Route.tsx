@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -25,7 +25,7 @@ export default function Route() {
     const store = useAppSelector(getUserBusiness);
 
     const nullCheck = store === null ? false : store!.length > 0;
-    const blacklist = (!(nullCheck)) ? ["Orders", "Settings", "Menu"] : []; // Add menu later
+    const blacklist = !nullCheck ? ["Orders", "Settings", "Menu"] : []; // Add menu later
     const vendorTabList = vendors.filter(
       (tab: ITab) => !blacklist.includes(tab.name)
     );
@@ -33,8 +33,15 @@ export default function Route() {
       tabList: vendorTabList,
       initialRoute: "Vendors",
     });
+    console.log('re run')
 
-    return vendorStack || <Vendor />;
+    return (
+      <View style={{flex: 1, backgroundColor: '#fff'}}>
+        <Text>HELLO WORLD</Text>
+        {vendorStack || <Vendor />}
+        
+      </View>
+    );
   };
   const HomeStackComponent = () => {
     const homeStack = handleCreateTabStack({

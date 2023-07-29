@@ -6,6 +6,7 @@ import { Icategory } from "../categorySchema.interface";
 import { Itime } from "../vendorTime.interface";
 
 export interface vendorStructure {
+  _id?: string;
   name: string;
   image: string;
   // Replace with announcements later when vendor pages are finished
@@ -23,5 +24,4 @@ export interface vendorStructure {
   rating: number;
   status: status;
   storeStatus: string;
-  id?: string;
 }

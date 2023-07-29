@@ -16,7 +16,7 @@ interface IProps {
 
 const SelectCategoryDropDown = (props: IProps) => {
   const { store, setItem, handlePropertyChange } = props;
-  console.log("here is store:", store);
+
   return (
     <SelectDropdown
       showsVerticalScrollIndicator={true}

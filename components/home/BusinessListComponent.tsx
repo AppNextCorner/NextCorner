@@ -2,28 +2,42 @@ import { StyleSheet, View, Text, FlatList } from "react-native";
 import React from "react";
 import BusinessCard from "cards/Home/BusinessCard";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import useCategoryList from "hooks/handlePages/useCategoryList";
 interface Props {
-  title:string,
-  business:vendorStructure[],
-  styles?: any,
+  title: string;
+  business: vendorStructure[];
+  styles?: any;
 }
 
 const BusinessListComponent = React.memo((props: Props) => {
-  return (
-    <View >
-      <Text style={styles.title}>{props.title}</Text>
-      
+  const { checkForStyleChange } = useCategoryList();
+  console.log("BLC:", props.business);
+  if (props.business.length > 1) {
+    return (
+      <View>
+        <Text style={styles.title}>{props.title}</Text>
+
         <FlatList
           horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
           data={props.business}
-          keyExtractor={(item) => item.id!} // Assuming 'id' is a unique identifier property
-          renderItem={({ item }) => <BusinessCard create={false} businessItem={item} />}
+          keyExtractor={(_item, index) => index.toString()} // Assuming 'id' is a unique identifier property
+          renderItem={({ item }) => (
+            <BusinessCard
+              create={false}
+              businessItem={item}
+              checkForStyleChange={!checkForStyleChange}
+            />
+
+          )}
         />
-      <View style={styles.margin}></View>
-    </View>
-  );
+        <View style={styles.margin}></View>
+      </View>
+    );
+  } else {
+    return null;
+  }
 });
 
 export default BusinessListComponent;

@@ -20,6 +20,7 @@ import {
 } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
 import { debounce } from "hooks/components/handleTimeout";
 import { vendorBoilerplate } from "constants/components/boilerplates";
+import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 
 interface RouteParams {
   store: { store: vendorStructure };
@@ -29,11 +30,12 @@ interface RouteParams {
 
 const CreateMenuItem = () => {
   const route = useRoute();
+  const userStore = useAppSelector(getUserBusiness)
   // vendor is vendorStructure type
-  const { store, update, updateItem }: RouteParams =
+  const store = userStore![0]
+  const { update, updateItem }: RouteParams =
     route.params as RouteParams;
 
-    console.log("WHy is store?:", store);
   // Hooks
 
   const model = !updateItem ? useAppSelector(getModel) : updateItem;
@@ -47,8 +49,8 @@ const CreateMenuItem = () => {
 
   React.useEffect(() => {
     const debouncedDispatch = debounce((updatedItem: Iitem) => {
-      // console.log("Debounced item has changed:", updatedItem);
-
+      console.log("Debounced item has changed:", updatedItem);
+      
       dispatch(setModel(updatedItem));
       dispatch(setModelCustomizations());
     }, 300); // Set the debounce delay as per your needs (e.g., 300ms)
@@ -81,7 +83,7 @@ const CreateMenuItem = () => {
       <NextCornerVendorHeader />
       <ScrollView style={styles.page}>
         <View style={styles.previewContainer}>
-          <EditingMenuItemCard menuItem={item} vendor={store.store} />
+          <EditingMenuItemCard menuItem={item} vendor={store} />
         </View>
         <View style={styles.subHeaderContainer}>
           <Text style={styles.subHeader}>General Info: </Text>
@@ -193,7 +195,7 @@ const CreateMenuItem = () => {
           {/* Category Dropdown*/}
           <View style={styles.dropdown}>
             <SelectCategoryDropDown
-              store={store.store}
+              store={store}
               handlePropertyChange={handlePropertyChange}
               setItem={setItem}
             />
@@ -221,22 +223,23 @@ const CreateMenuItem = () => {
             onPress={() => {
               // Add store info to the menu item
               handlePropertyChange(setItem, "storeInfo", {
-                storeName: store.store.name,
-                storeId: store.store.id,
+                storeName: store.name,
+                storeId: store._id,
               });
               // Reset values for the whole menu item
-              dispatch(setModel(vendorBoilerplate));
-              dispatch(setCustomizations([]));
+             
               upload(
                 item.image,
-                update ? "update-item" :"item",
+                "item",
                 // Check if the item is being updated or uploaded
                 makeImagePostRequest,
                 {
-                  payload: { store: store.store, newMenu: [model] },
+                  payload: { store: store, newMenu: [debouncedItem] },
                 },
-                store.store.uid!
+                store.uid!
               );
+              dispatch(setModel(vendorBoilerplate));
+              dispatch(setCustomizations([]));
             }}
           >
             <Text style={{ color: "#fff" }}>

@@ -1,9 +1,8 @@
 import React from "react";
 import handleTabChange from "./handleTabChange";
-import {
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { defaultTabStyles } from "constants/components/styles/tabBarStyles";
+import { Text, View } from "react-native";
 
 interface TabScreen {
   name: string;
@@ -18,11 +17,7 @@ interface TabStackProps {
 const handleCreateTabStack: React.FC<TabStackProps> = (props) => {
   const { tabList, initialRoute } = props;
 
-  const screenOptions = ({
-    route,
-  }: {
-    route: { name: string };
-  }) => {
+  const screenOptions = ({ route }: { route: { name: string } }) => {
     return {
       tabBarIcon: ({ focused, color, size }: any) => {
         const tab = tabList.find((tab) => tab.name === route.name);
@@ -50,7 +45,10 @@ const handleCreateTabStack: React.FC<TabStackProps> = (props) => {
   const Tab = createBottomTabNavigator();
 
   return (
-    <Tab.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
+    <Tab.Navigator
+      initialRouteName={initialRoute}
+      screenOptions={screenOptions}
+    >
       {tabList.map((screen) => (
         <Tab.Screen
           key={screen.name}

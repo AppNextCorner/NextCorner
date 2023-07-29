@@ -195,12 +195,6 @@ const PaymentDetailsPage = () => {
                       style={styles.foodImages}
                       source={{ uri: `${item.image.toString()}` }}
                     />
-                    <Image
-                      style={styles.foodImages}
-                      source={{
-                        uri: `${item.image.toString()}`,
-                      }}
-                    />
                   </View>
                   <View style={styles.foodTexts}>
                     <Text style={styles.categoryText}>{item.name}</Text>

@@ -46,15 +46,14 @@ export default function StoreWithImage(props: Props) {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
-  ratingContainer: {
+    ratingContainer: {
     flexDirection: "row",
     flex: 1,
     alignItems: "center",
     marginLeft: "3%",
   },
-  ratingText: {
+    ratingText: {
     color: "#9a9c9a",
   },
   distanceText: {
@@ -73,11 +72,11 @@ const styles = StyleSheet.create({
     width: "100%",
     objectFit: "cover",
   },
-  vendorImageContainer: {
+    vendorImageContainer: {
     flex: 5,
     width: "100%",
   },
-  noVendorImage: {
+    noVendorImage: {
     flex: 1,
     width: 175,
     height: 250,
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     //alignSelf: "center",
     // objectFit: "scale-down",
   },
-  card: {
+    card: {
     width: "100%",
     height: 250,
     flex: 1,
@@ -98,22 +97,37 @@ const styles = StyleSheet.create({
   },
   foodTexts: {
     flexDirection: "row",
-    marginLeft: "2%",
-    marginVertical: "1%",
+    marginLeft: 20,
+
+    // NOTE: MARGIN left and right are bugging with percentage
+    // marginLeft: "2%",
+    // marginVertical: "1%",
     alignItems: "center",
   },
-  foodCategoryStyle: {
-    flex: 1,
-    flexDirection: "row",
-    alignContent: "center",
-    borderColor: "#f2f0f0",
-    borderStyle: "solid",
-    borderWidth: 3,
-    borderRadius: 10,
-    overflow: "hidden",
-    marginRight: 10,
-    marginLeft: 10,
-    marginBottom: 15,
-    paddingBottom: 7,
-  },
-});
+})
+
+// const styles = StyleSheet.create({
+
+
+
+
+
+
+
+
+
+//   foodCategoryStyle: {
+//     flex: 1,
+//     flexDirection: "row",
+//     alignContent: "center",
+//     borderColor: "#f2f0f0",
+//     borderStyle: "solid",
+//     borderWidth: 3,
+//     borderRadius: 10,
+//     overflow: "hidden",
+//     marginRight: 10,
+//     marginLeft: 10,
+//     marginBottom: 15,
+//     paddingBottom: 7,
+//   },
+// });
