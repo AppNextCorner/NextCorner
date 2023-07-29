@@ -1,7 +1,7 @@
 // Configuring API Url to use when developing
 
 export let API = "";
-const apiStatus: string = "local";
+const apiStatus: string = "development";
 
 switch (apiStatus) {
   case "production":
@@ -11,7 +11,7 @@ switch (apiStatus) {
     API = "https://nextcornerdevelopment.onrender.com";
     break;
   default:
-    API = `http://192.168.1.19:4020`;
+    API = ``;
     break;
 }
 

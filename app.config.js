@@ -5,7 +5,7 @@ dotenv.config();
 
 export default ({ config }) => ({
   ...config,
-  slug: 'next-corner',
+  slug: 'nextcorner-app',
   name: 'Next Corner',
   ios: {
     supportsTablet: true,
@@ -14,4 +14,7 @@ export default ({ config }) => ({
       googleMapsApiKey:process.env.GOOGLE_CLOUD_API_KEY,
     },
   },
+
+
+
 });
