@@ -83,7 +83,7 @@ const useGetUserData = () => {
         console.log(err);
       }
     };
-
+    console.log('auth: ', auth)
     // Attach the callback function to the onAuthStateChanged event
     onAuthStateChanged(auth, handleAuthStateChanged);
   }, [auth, dispatch]);

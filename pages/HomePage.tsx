@@ -79,7 +79,7 @@ export default function HomePage() {
                   (vendor: vendorStructure) => {
                     console.log("VENODOR:", vendor.trending);
                     console.log("itemor:", item);
-                    return vendor.trending === item.name;
+                    return vendor.trending !== item.name;
                   }
                 );
                 console.log("trening row:", trendingRow);

@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 export default function Route() {
   const { isDone, isLoggedIn } = useGetUserData();
   useGetUserData();
-
+  console.log("IS DONE: ",isDone, isLoggedIn)
   const userFound = useAppSelector(getUser);
 
   const VendorComponent = () => {
