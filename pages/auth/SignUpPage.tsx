@@ -62,7 +62,7 @@ export default function SignUpPage() {
       signInWithEmailAndPassword(auth, userData.email, userData.password)
         // takes in the credentials from email and password
         .then((_userCredential) => {
-          const route = userData.role === "user" ? "HomeStack" : "Vendor";
+          const route = userData.role === "user" ? "HomeStack" : "Vendors";
           navigation.navigate(route, {name: route});
         })
         .catch((_err) => {

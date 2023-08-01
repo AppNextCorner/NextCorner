@@ -18,9 +18,8 @@ const Stack = createNativeStackNavigator();
 
 export default function Route() {
   const { isDone, isLoggedIn } = useGetUserData();
-  useGetUserData();
+  //useGetUserData();
   console.log("IS DONE: ",isDone, isLoggedIn)
-  const userFound = useAppSelector(getUser);
 
   const VendorComponent = () => {
     const store = useAppSelector(getUserBusiness);
@@ -58,9 +57,7 @@ export default function Route() {
       <>
         <NavigationContainer independent={true}>
           <Stack.Navigator
-            initialRouteName={
-              userFound!.role === "user" ? "HomeStack" : "Vendor"
-            }
+
             screenOptions={{ headerShown: false }}
           >
             <Stack.Screen name="HomeStack" component={HomeStackComponent} />

@@ -16,7 +16,7 @@ const logo = require("../../assets/logo.png");
 import { useState } from "react";
 import { auth } from "hooks/handleUsers/useFirebase";
 // importing firebase
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, updateCurrentUser } from "firebase/auth";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -37,22 +37,29 @@ export default function SignInPage() {
     // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
     signInWithEmailAndPassword(auth, email, password) // firebase auth that requires password, email, and the auth status of the user
       // takes in the credentials from email and password
-      .then(async (_userCredential) => {
-        const lambda = async (email: string): Promise<AppUser> => {
-          const url = "/auth/getUser";
-          const response = await makePostRequest(url, { email });
-          return response.data;
-        };
-        const user: AppUser = await lambda(email);
-        console.log("here is user: ", user);
-        const route = user.role === "user" ? "HomeStack" : "Vendor";
-        navigation.navigate(route);
+      .then(async (userCredential) => {
+        console.log('user creds')
+        console.log(userCredential.user);
+        // const userFirebase = await userCredential.user
+        // updateCurrentUser(auth, userFirebase)
+        // const lambda = async (email: string): Promise<AppUser> => {
+        //   const url = "/auth/getUser";
+        //   const response = await makePostRequest(url, { email });
+        //   return response.data;
+        // };
+        // const user: AppUser = await lambda(email);
+        // console.log("here is user: ", user);
+        // const routeStack = user.role === "user" ? "HomeStack" : "Vendors";
+        // const route = user.role === "user" ? "Home" : "Vendors";
+        // navigation.navigate(routeStack, {screen: route});
+        navigation.navigate("HomeStack", {screen: "Home"})
       })
       .catch((err) => {
         console.log(err);
         // error message for lack of password characters, email existing, etc...
         Alert.alert(err.message);
       });
+    
   };
   const goToSignUp = () => {
     navigation.navigate("Register");
