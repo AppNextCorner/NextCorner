@@ -44,9 +44,9 @@ const InProgressPage = () => {
   const snapPoints = useMemo(() => ["20%", "100%"], []);
   return (
     <>
-      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    
         {/* //       {/* Helps with the google maps to be able to display it, be able to zoom in and out, and other touchable features */}
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1 , backgroundColor: "#fff" }}>
           <TouchableOpacity
             onPress={() => returnBack()}
             style={styles.goBackButton}
@@ -95,7 +95,7 @@ const InProgressPage = () => {
             />
           </BottomSheet>
         </GestureHandlerRootView>
-      </View>
+
     </>
   );
 };

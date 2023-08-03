@@ -77,12 +77,9 @@ export default function HomePage() {
               if (!categoryWasSelected) {
                 const trendingRow = vendors.filter(
                   (vendor: vendorStructure) => {
-                    console.log("VENODOR:", vendor.trending);
-                    console.log("itemor:", item);
-                    return vendor.trending !== item.name;
+                    return vendor.trending === item.name;
                   }
                 );
-                console.log("trening row:", trendingRow);
                 return (
                   <BusinessListComponent
                     title={item.name}

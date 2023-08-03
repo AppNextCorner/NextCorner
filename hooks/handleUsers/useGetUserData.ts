@@ -13,6 +13,8 @@ import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 import UseOrders from "hooks/handleVendors/useOrders.hook";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
+let url = `ws://192.168.1.19:4002/ws/debug`; // Default URL that will be used for logged out user
+export const websocket = new WebSocket(url);
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -73,8 +75,10 @@ const useGetUserData = () => {
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
+          url = `ws://192.168.1.19:4002/ws?user=${userData._id}`;
         } else {
           // User is signed out
+          url = `ws://192.168.1.19:4002/ws/debug`;
           dispatch(logOut());
           setIsDone(true);
           setIsLoggedIn(false);
@@ -83,7 +87,7 @@ const useGetUserData = () => {
         console.log(err);
       }
     };
-    console.log('auth: ', auth)
+    console.log("auth: ", auth);
     // Attach the callback function to the onAuthStateChanged event
     onAuthStateChanged(auth, handleAuthStateChanged);
   }, [auth, dispatch]);
@@ -93,7 +97,5 @@ const useGetUserData = () => {
     isLoggedIn,
   };
 };
-
-
 
 export default useGetUserData;

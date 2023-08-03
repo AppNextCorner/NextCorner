@@ -34,6 +34,7 @@ const CreateMenuItem = () => {
   const userStore = useAppSelector(getUserBusiness)
   // vendor is vendorStructure type
   const store = userStore![0]
+  console.log('store: ', store)
   const { update, updateItem }: RouteParams =
     route.params as RouteParams;
 

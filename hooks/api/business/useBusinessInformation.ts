@@ -13,7 +13,7 @@ export default function useBusinessInformation() {
 
   const updateUserStores = async (uid: string) => {
     const userBusinesses: vendorStructure[] = await fetchVendorBusiness(uid);
-    console.log("Here is true user soter: ", userBusinesses);
+    console.log("Here is true user store: ", userBusinesses);
     dispatch(setUserBusiness(userBusinesses));
   };
 
@@ -27,7 +27,7 @@ export default function useBusinessInformation() {
     // dispatch both the business and only if the user id is provided will the user store be changed
     dispatch(setBusinesses(newBusinessInfo));
     if (uid) {
-      updateUserStores(uid);
+      await updateUserStores(uid);
     }
   };
   return { updateBusinessInformation, updateUserStores };

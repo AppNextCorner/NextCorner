@@ -4,8 +4,8 @@ export default function useFetchOrders() {
     const fetchOrdersById = async(id: string | undefined) => {
         const url = `/orders/get-orders-by-store-id/${id}`;
         const response = await makeGetRequest(url);
-        console.log("response")
-        console.log(response.data.orders)
+        console.log("Response from backend: " + response.data.orders)
+        console.log(response.data)
         return response.data.orders;
     }
 
@@ -13,7 +13,7 @@ export default function useFetchOrders() {
         console.log(uid);
         const url = `/orders/get-orders-by-uid/${uid}`;
         const response = await makeGetRequest(url);
-        console.log(response)
+
         return response.data
     }
 

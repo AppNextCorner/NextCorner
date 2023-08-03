@@ -88,8 +88,7 @@ const PaymentDetailsPage = () => {
     // }
     // geoname()
   }, []);
-
-  /**
+    /**
    * The purpose of this method is to get the client's information on their credentials for card payments with Stripe API
    */
   // const handlePaymentMethodCreation = async () => {
@@ -143,7 +142,7 @@ const PaymentDetailsPage = () => {
         customFlow: true,
         customerId: data.customer,
         customerEphemeralKeySecret: data.ephemeralKey,
-        merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeId,
+        merchantDisplayName: getCartFromSlice[0].inCart.storeInfo.storeId!,
         returnURL: "stripe-example://stripe-redirect",
       });
       // check for errors -> show / alert the user on the error message

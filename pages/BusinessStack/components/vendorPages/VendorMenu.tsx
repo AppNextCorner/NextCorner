@@ -38,7 +38,7 @@ const VendorMenu = () => {
         rating: 0,
         storeInfo: {
           storeName: store!.name,
-          storeId: store!._id,
+          storeId: store!.id,
         },
       })
     );

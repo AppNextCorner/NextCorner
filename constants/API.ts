@@ -1,7 +1,7 @@
 // Configuring API Url to use when developing
 
 export let API = "";
-const apiStatus: string = "development";
+const apiStatus: string = "local";
 
 switch (apiStatus) {
   case "production":

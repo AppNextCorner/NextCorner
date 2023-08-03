@@ -40,19 +40,19 @@ export default function SignInPage() {
       .then(async (userCredential) => {
         console.log('user creds')
         console.log(userCredential.user);
-        // const userFirebase = await userCredential.user
-        // updateCurrentUser(auth, userFirebase)
-        // const lambda = async (email: string): Promise<AppUser> => {
-        //   const url = "/auth/getUser";
-        //   const response = await makePostRequest(url, { email });
-        //   return response.data;
-        // };
-        // const user: AppUser = await lambda(email);
-        // console.log("here is user: ", user);
-        // const routeStack = user.role === "user" ? "HomeStack" : "Vendors";
-        // const route = user.role === "user" ? "Home" : "Vendors";
-        // navigation.navigate(routeStack, {screen: route});
-        navigation.navigate("HomeStack", {screen: "Home"})
+        const userFirebase = await userCredential.user
+        updateCurrentUser(auth, userFirebase)
+        const lambda = async (email: string): Promise<AppUser> => {
+          const url = "/auth/getUser";
+          const response = await makePostRequest(url, { email });
+          return response.data;
+        };
+        const user: AppUser = await lambda(email);
+        console.log("here is user: ", user);
+        const routeStack = user.role === "user" ? "HomeStack" : "Vendors";
+        const route = user.role === "user" ? "Home" : "Vendors";
+        navigation.navigate(routeStack, {screen: route});
+        //navigation.navigate("HomeStack", {screen: "Home"})
       })
       .catch((err) => {
         console.log(err);

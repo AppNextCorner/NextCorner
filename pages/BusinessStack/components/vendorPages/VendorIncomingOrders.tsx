@@ -2,25 +2,49 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
-import { Iorder } from "../../../../typeDefinitions/interfaces/order.interface";
-import useHandleIncomingOrders from "../../../../classes/businessStack/vendors/IncomingOrders.class";
 import { toggleButton } from "../../../../styles/components/toggleStyles";
 import { useAppSelector } from "../../../../store/hook";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
+import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
 
 const VendorIncomingOrders = () => {
   const stores = useAppSelector(getUserBusiness);
-  const store = stores !== null ? stores![0] : null
+  const store = stores !== null ? stores![0] : null;
   //const { store }: RouteParams = route.params as RouteParams;
   const storeId = store!.id!;
+  const {
+    getPendingOrderList,
+    acceptOrder,
+    rejectOrder,
+    getAcceptedOrderList,
+  } = useHandleIncomingOrders();
 
   // Step 1: Use the custom hook to get the incomingOrders object
-  const incomingOrders = useHandleIncomingOrders(storeId);
+  // const callbackPending = useCallback(
+  //   async () => {return await getPendingOrderList(storeId)},
+  //   []
+  // );
+  // const pendingOrders =    getPendingOrderList(storeId);
+  //const pendingMemoOrder = useMemo(async() => {return await getPendingOrderList(storeId)}, [storeId])
+  const [pendingMemoOrder, setPendingMemoOrder] = useState<any[]>([]);
+  const [acceptedOrders, setAcceptedOrders] = useState<any[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const orders = await getPendingOrderList(storeId);
+      setPendingMemoOrder(orders);
+      const accepted = await getAcceptedOrderList(storeId);
+      setAcceptedOrders(accepted);
+    };
+
+    fetchData();
+  }, [storeId]);
+
+  console.log("no await:", pendingMemoOrder);
 
   // Step 2: Create state variables for the toggle and orderes
   const [isToggleOn, setIsToggleOn] = useState(false);
-  const [pendingOrders, setPendingOrders] = useState<Iorder[] | undefined>();
-  const [acceptedOrders, setAcceptedOrders] = useState<Iorder[] | undefined>();
+  // const [pendingOrders, setPendingOrders] = useState<Iorder[] | undefined>();
 
   // Toggle handler for when the store is open
   const toggleHandler = () => {
@@ -28,14 +52,13 @@ const VendorIncomingOrders = () => {
   };
 
   // Step 3: useEffect to update orders state when incomingOrders is available
-  useEffect(() => {
-   
-    setPendingOrders(incomingOrders?.pendingOrders);
-    setAcceptedOrders(incomingOrders?.acceptedOrders);
+  // useEffect(() => {
+  //   setPendingOrders(incomingOrders?.pendingOrders);
+  //   setAcceptedOrders(incomingOrders?.acceptedOrders);
 
-    console.log("Pending orders:", incomingOrders.pendingOrders);
-    console.log("Accepted orders:", incomingOrders.acceptedOrders);
-  }, [incomingOrders]);
+  //   console.log("Pending orders:", incomingOrders.pendingOrders);
+  //   console.log("Accepted orders:", incomingOrders.acceptedOrders);
+  // }, [incomingOrders]);
 
   return (
     <View style={styles.page}>
@@ -58,7 +81,9 @@ const VendorIncomingOrders = () => {
           <View
             style={[
               toggleButton.toggleButton,
-              isToggleOn ? toggleButton.toggleButtonOn : toggleButton.toggleButtonOff,
+              isToggleOn
+                ? toggleButton.toggleButtonOn
+                : toggleButton.toggleButtonOff,
             ]}
           >
             <View
@@ -73,17 +98,18 @@ const VendorIncomingOrders = () => {
           </View>
         </TouchableOpacity>
       </View>
+      <Text>Pending</Text>
       {/* Step 5: Display orders once they are available */}
-      {pendingOrders !== undefined && (
+      {pendingMemoOrder !== undefined && (
         <View>
           <AllOrdersList
-            orders={pendingOrders}
-            acceptMethod={incomingOrders?.acceptOrder}
-            rejectMethod={incomingOrders?.rejectOrder}
+            orders={pendingMemoOrder}
+            acceptMethod={acceptOrder}
+            rejectMethod={rejectOrder}
           />
         </View>
       )}
-
+      <Text>Accepted</Text>
       {acceptedOrders !== undefined && (
         <View>
           <AllOrdersList orders={acceptedOrders} />
@@ -100,5 +126,4 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center" },
   page: { flex: 1, backgroundColor: "#fff" },
   subHeader: { flex: 1, backgroundColor: "#fff" },
-
 });

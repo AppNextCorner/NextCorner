@@ -7,6 +7,7 @@ import {
 import { makePostRequest } from "../../config/axios.config";
 import { getUser } from "../../store/slices/userSessionSlice";
 import useFetchOrders from "hooks/api/business/orders/useFetchOrders";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 
 /**
  * After the user has entered the order, they should update the order list through the request to our backend.
@@ -16,10 +17,12 @@ import useFetchOrders from "hooks/api/business/orders/useFetchOrders";
  */
 
 const UseOrders = () => {
+
   console.log("use orders is running");
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
   const { fetchOrdersByUid } = useFetchOrders();
+  
 
   // going to run asynchronously when the order is fetched from the home page and/or the user has been logged in/ order page is fetched
   const getCurrentOrders = async (userFromParam?: any) => {
@@ -53,6 +56,10 @@ const UseOrders = () => {
     const orderList = {
       orders: cart,
       minutesToDone: sumOfTimes,
+      storeInfo: {
+        storeName: cart[0].inCart.storeInfo.storeName,
+        storeId: cart[0].inCart.storeInfo.storeId
+      },
       status: "Order Not Completed",
       accepted: "pending",
       uid: user!._id,
