@@ -58,7 +58,8 @@ const UseOrders = () => {
       minutesToDone: sumOfTimes,
       storeInfo: {
         storeName: cart[0].inCart.storeInfo.storeName,
-        storeId: cart[0].inCart.storeInfo.storeId
+        storeId: cart[0].inCart.storeInfo.storeId,
+        storeOwner: cart[0].inCart.storeInfo.storeOwner
       },
       status: "Order Not Completed",
       accepted: "pending",

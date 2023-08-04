@@ -11,11 +11,13 @@ import FullMenuList from "components/vendors/FullMenuList";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 import { setModel } from "../../../../store/slices/BusinessSlice/menuCreateSlice";
+import { getUser } from "../../../../store/slices/userSessionSlice";
 
 const VendorMenu = () => {
 
   const dispatch: any = useAppDispatch();
   const stores= useAppSelector(getUserBusiness);
+  const storeOwner = useAppSelector(getUser);
   const store = stores![0]
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToCreate = () => {
@@ -39,6 +41,7 @@ const VendorMenu = () => {
         storeInfo: {
           storeName: store!.name,
           storeId: store!.id,
+          storeOwner: storeOwner?._id
         },
       })
     );

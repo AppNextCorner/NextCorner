@@ -6,6 +6,7 @@ export interface Iorder {
     storeInfo: {
       storeName: string
       storeId: string
+      storeOwner?: string
     },
     status: string;
     accepted: string

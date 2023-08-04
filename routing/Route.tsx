@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import useGetUserData, { websocket } from "hooks/handleUsers/useGetUserData";
+import useGetUserData from "hooks/handleUsers/useGetUserData";
 import Vendor from "pages/BusinessStack/components/vendorPages/Vendor";
 import { user, vendors } from "constants/components/tabs";
 import handleCreateTabStack from "hooks/components/handleCreateTabStack";
@@ -13,14 +13,26 @@ import { useAppSelector } from "../store/hook";
 import { getUserBusiness } from "../store/slices/BusinessSlice/businessSessionSlice";
 import ITab from "../typeDefinitions/interfaces/IComponents/tab.interface";
 const Stack = createNativeStackNavigator();
+export const WebSocketContext = React.createContext(
+  new WebSocket(`ws://192.168.1.19:4002/ws/debug`)
+);
 
 export default function Route() {
-  const { isDone, isLoggedIn } = useGetUserData();
+  const { isDone, isLoggedIn, url } = useGetUserData();
+  console.log("websocket url: " + url);
+  const createdWebSocket = new WebSocket(url);
+
   const payload = {
-    type: "sent_order",
+    type: "send_incoming_order",
     payload: {
-      message: "Greetings from frontend!",
-      from: "your_username", // Replace "your_username" with the actual username of the sender
+      orders: [],
+      store_info: {},
+      minutes_to_done: 5,
+      status: 'Incomplete',
+      accepted: 'pending',
+      uid: '648d220045ba843985de5871',
+      user_name: 'henry benry',
+      vendor_id: '648d220045ba843985de5871'
     },
   };
 
@@ -42,6 +54,10 @@ export default function Route() {
         // //appendChatMessage(messageEvent);
         // console.log("new message created: ", new messageEvent());
         break;
+      case "incoming_order": 
+        console.log("received message from web socket: ", parseEvent);
+        alert("Ordered from: " + parseEvent.payload.user_name);
+        break;
       default:
         alert("unsupported message type");
         break;
@@ -51,8 +67,8 @@ export default function Route() {
     // Create a event Object with a event named send_message
     // Format as JSON and send
     console.log("event created: ", payload);
-    console.log("web socket: ", websocket);
-    websocket.send(JSON.stringify(payload));
+    console.log("web socket: ", createdWebSocket);
+    createdWebSocket.send(JSON.stringify(payload));
   }
 
   const sendFakeMessage = () => {
@@ -63,27 +79,25 @@ export default function Route() {
   };
   console.log("IS DONE: ", isDone, isLoggedIn);
 
-  websocket.onopen = (event) => {
+  createdWebSocket.onopen = (event) => {
     console.log("WebSocket connected:", event);
   };
 
-  // Messages that were received from the WebSocket server
-  websocket.onmessage = (event) => {
-    console.log("Received message:", event.data);
-    routeEvent(event);
-  };
-
-  websocket.onerror = (error) => {
+  createdWebSocket.onerror = (error) => {
     console.log("WebSocket error:", error);
   };
 
-  websocket.onclose = (event) => {
+  createdWebSocket.onclose = (event) => {
     console.log("WebSocket closed:", event);
   };
 
   const VendorComponent = () => {
     const store = useAppSelector(getUserBusiness);
-
+    // Messages that were received from the WebSocket server
+    createdWebSocket.onmessage = (event) => {
+      console.log("Received message:", event.data);
+      routeEvent(event);
+    };
     const nullCheck = store === null ? false : store!.length > 0;
     const blacklist = !nullCheck ? ["Orders", "Settings", "Menu"] : []; // Add menu later
     const vendorTabList = vendors.filter(
@@ -97,6 +111,9 @@ export default function Route() {
 
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <WebSocketContext.Provider
+          value={createdWebSocket}
+        ></WebSocketContext.Provider>
         {/* {store !== null ? <IncomingOrderAlert  /> : null} */}
         <TouchableOpacity
           onPress={sendFakeMessage}

@@ -15,6 +15,7 @@ export interface Iitem {
   storeInfo: {
     storeName: string;
     storeId: string | undefined;
+    storeOwner?: string;
   }
   createdAt?: string;
 }

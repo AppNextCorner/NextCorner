@@ -22,7 +22,7 @@ export const vendorBoilerplate = {
   storeInfo: {
     storeId: "",
     storeName: "",
-
+    storeOwner: "",
     // selector and dispatch
   },
 }
