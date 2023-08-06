@@ -1,8 +1,6 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, View } from "react-native";
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import useGetUserData from "hooks/handleUsers/useGetUserData";
 import Vendor from "pages/BusinessStack/components/vendorPages/Vendor";
 import { user, vendors } from "constants/components/tabs";
 import handleCreateTabStack from "hooks/components/handleCreateTabStack";
@@ -12,94 +10,139 @@ import { loggedOutScreens } from "constants/components/loggedOut";
 import { useAppSelector } from "../store/hook";
 import { getUserBusiness } from "../store/slices/BusinessSlice/businessSessionSlice";
 import ITab from "../typeDefinitions/interfaces/IComponents/tab.interface";
+import { WebSocketContext } from "../context/incomingOrderContext";
+import { userLocation } from "hooks/handlePages/useGoogleMaps";
+import AppNavigationContainer from "./AppNavigationContainer";
+import { useMapRegion } from "hooks/useMaps/useMapRegion";
+import { ParamListBase, RouteProp } from "@react-navigation/native";
+import { getAcceptedOrders } from "../store/slices/WebsocketSlices/IncomingOrderSlice";
+
+interface MemoizedScreenProps {
+  route: RouteProp<ParamListBase, string>;
+  navigation: any;
+}
+
+
 const Stack = createNativeStackNavigator();
-export const WebSocketContext = React.createContext(
-  new WebSocket(`ws://192.168.1.19:4002/ws/debug`)
-);
 
-export default function Route() {
-  const { isDone, isLoggedIn, url } = useGetUserData();
-  console.log("websocket url: " + url);
-  const createdWebSocket = new WebSocket(url);
+const WebsocketProviderWrapper: React.FC<{ children: React.ReactNode, websocket: WebSocket | null;}>= ({ children , websocket}) => {
+  return (
+    <WebSocketContext.Provider value={websocket!}>
+      {children}
+    </WebSocketContext.Provider>
+  );
+};
 
-  const payload = {
-    type: "send_incoming_order",
-    payload: {
-      orders: [],
-      store_info: {},
-      minutes_to_done: 5,
-      status: 'Incomplete',
-      accepted: 'pending',
-      uid: '648d220045ba843985de5871',
-      user_name: 'henry benry',
-      vendor_id: '648d220045ba843985de5871'
-    },
-  };
+interface IProps {
+  isDone: boolean;
+  isLoggedIn: boolean;
+  url: string;
+  websocket: WebSocket | null;
+}
 
-  function routeEvent(event: MessageEvent<any>) {
-    console.log("Event type", event.type);
-    const parseEvent = JSON.parse(event.data);
-    if (parseEvent.type === undefined) {
-      alert("no 'type' field in parseEvent");
-    }
-    switch (parseEvent.type) {
-      case "new_order":
-        // Format payload
-        console.log("received message from web socket: ", parseEvent);
+function useUserLocation(url: string, websocket: WebSocket | null, accepted: any) {
+  const [mapRegion, setMapRegion] = useMapRegion();
+  const [viewLocation, setViewLocation] = React.useState(false);
+  const getUserDataRef = accepted
+  const getUserData = getUserDataRef
 
-        if (parseEvent.payload.julian_boolean) {
-          alert("Julian Boolean");
+  const handleUserLocation = React.useCallback(
+    async (newRegion: any) => {
+      try {
+        setMapRegion(newRegion);
+      
+       const getUserUid = getUserData.map((order: any) => order.uid);
+        console.log('get user uid: ', getUserUid)
+        //Remove duplicates from array by comparing every first instance of a uid
+        const getUsersWhoOrdered = getUserUid.filter(function (item: any, pos: number) {
+          return getUserUid.indexOf(item) === pos;
+        });
+        console.log('get user data ref', getUsersWhoOrdered)
+        console.log('running handleUserLocation')
+
+        if (websocket) {
+          const sendRegion = {
+            type: "send_vendor_location",
+            payload: {
+              location: {
+                longitude: newRegion.longitude,
+                latitude: newRegion.latitude,
+              },
+              users: getUsersWhoOrdered,
+            },
+          };
+          console.log('sending to user')
+          websocket.send(JSON.stringify(sendRegion));
         }
-        // const messageEvent = Object.assign(NewMessageEvent, event);
-        // //appendChatMessage(messageEvent);
-        // console.log("new message created: ", new messageEvent());
-        break;
-      case "incoming_order": 
-        console.log("received message from web socket: ", parseEvent);
-        alert("Ordered from: " + parseEvent.payload.user_name);
-        break;
-      default:
-        alert("unsupported message type");
-        break;
-    }
-  }
-  function sendEvent(payload: any) {
-    // Create a event Object with a event named send_message
-    // Format as JSON and send
-    console.log("event created: ", payload);
-    console.log("web socket: ", createdWebSocket);
-    createdWebSocket.send(JSON.stringify(payload));
-  }
+      } catch (error) {
+        console.error("Error updating user location:", error);
+      }
+    },
+    [websocket, setMapRegion, accepted]
+  );
 
-  const sendFakeMessage = () => {
-    const newmessage = "Cool Message";
-    if (newmessage != null) {
-      sendEvent(payload);
-    }
-  };
-  console.log("IS DONE: ", isDone, isLoggedIn);
-
-  createdWebSocket.onopen = (event) => {
-    console.log("WebSocket connected:", event);
-  };
-
-  createdWebSocket.onerror = (error) => {
-    console.log("WebSocket error:", error);
-  };
-
-  createdWebSocket.onclose = (event) => {
-    console.log("WebSocket closed:", event);
-  };
-
-  const VendorComponent = () => {
-    const store = useAppSelector(getUserBusiness);
-    // Messages that were received from the WebSocket server
-    createdWebSocket.onmessage = (event) => {
-      console.log("Received message:", event.data);
-      routeEvent(event);
+  React.useEffect(() => {
+    const updateUserLocation = async () => {
+      try {
+        await userLocation(
+          setViewLocation,
+          setMapRegion,
+          mapRegion,
+          null,
+          handleUserLocation, // Sets the map region
+        );
+        console.log('updated user location')
+      } catch (error) {
+        console.error("Error updating user location:", error);
+      }
     };
+
+    const intervalId = setInterval(() => {
+      updateUserLocation();
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [url, handleUserLocation, mapRegion, getUserData]);
+
+  return { mapRegion, handleUserLocation };
+}
+
+export default function Route(props: IProps) {
+  const { isDone, isLoggedIn, url, websocket } = props;
+  const acceptedOrders = useAppSelector(getAcceptedOrders)
+  const { mapRegion, handleUserLocation } = useUserLocation(url, websocket, acceptedOrders);
+
+  console.log("Current map region:", mapRegion);
+
+  // React.useEffect(() => {
+  //   const updateUserLocation = async () => {
+  //     try {
+  //       await userLocation(
+  //         setViewLocation,
+  //         memoizedUserLocation,
+  //         mapRegion,
+  //         vendors
+  //       );
+  //     } catch (error) {
+  //       console.error("Error updating user location:", error);
+  //     }
+  //   };
+
+  //   const intervalId = setInterval(() => {
+  //     updateUserLocation();
+  //   }, 5000);
+
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, [url, memoizedUserLocation, mapRegion]);
+
+  const VendorComponent = React.memo(() => {
+    const store = useAppSelector(getUserBusiness);
     const nullCheck = store === null ? false : store!.length > 0;
-    const blacklist = !nullCheck ? ["Orders", "Settings", "Menu"] : []; // Add menu later
+    const blacklist = !nullCheck ? ["Orders", "Settings", "Menu"] : [];
     const vendorTabList = vendors.filter(
       (tab: ITab) => !blacklist.includes(tab.name)
     );
@@ -107,81 +150,100 @@ export default function Route() {
       tabList: vendorTabList,
       initialRoute: "Vendors",
     });
-    console.log("re run");
 
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        <WebSocketContext.Provider
-          value={createdWebSocket}
-        ></WebSocketContext.Provider>
-        {/* {store !== null ? <IncomingOrderAlert  /> : null} */}
-        <TouchableOpacity
-          onPress={sendFakeMessage}
-          style={{ marginTop: "20%" }}
-        >
-          <Text>Send messages</Text>
-        </TouchableOpacity>
         {vendorStack || <Vendor />}
       </View>
     );
-  };
-  const HomeStackComponent = () => {
+  });
+
+  const HomeStackComponent = React.memo(() => {
     const homeStack = handleCreateTabStack({
       tabList: user,
       initialRoute: "Home",
     });
 
     return homeStack || <HomePage />;
+  });
+
+  const ScreenWrapper = ({ children }: { children: React.ReactNode }) => {
+    return <>{children}</>;
   };
 
-  if (isDone === true && isLoggedIn) {
-    return (
-      <>
-        <NavigationContainer independent={true}>
+  const MemoizedVendorComponent: React.FC<{
+    route: RouteProp<ParamListBase, string>;
+    navigation: any;
+  }> = React.memo(VendorComponent);
+
+  const MemoizedHomeStackComponent: React.FC<MemoizedScreenProps> = React.memo(HomeStackComponent);
+
+  return (
+    <WebsocketProviderWrapper websocket={websocket}>
+      {isDone === true && isLoggedIn ? (
+        <AppNavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="HomeStack" component={HomeStackComponent} />
+            <Stack.Screen
+              name="HomeStack"
+              component={MemoizedHomeStackComponent}
+            />
 
             {screens.map((screen, index) => {
               const Component = (props: any) => <screen.component {...props} />;
+              const MemoizedComponent: React.FC<MemoizedScreenProps> = React.memo(Component);
               return (
-                <Stack.Screen
-                  key={index}
-                  name={screen.name}
-                  component={Component}
-                />
+                <Stack.Screen key={index} name={screen.name}>
+                  {(props) => (
+                    <ScreenWrapper>
+                      <MemoizedComponent {...props} />
+                    </ScreenWrapper>
+                  )}
+                </Stack.Screen>
               );
             })}
 
-            {/* Vendor Pages */}
-            <Stack.Screen name="Vendor" component={VendorComponent} />
+            <Stack.Screen name="Vendor">
+              {(props) => (
+                <ScreenWrapper>
+                  <MemoizedVendorComponent {...props} />
+                </ScreenWrapper>
+              )}
+            </Stack.Screen>
 
-            {/* Forms */}
-            {vendorScreens.map((screen, index) => (
-              <Stack.Screen
-                key={index}
-                name={screen.name}
-                component={screen.component}
-              />
-            ))}
+            {vendorScreens.map((screen, index) => {
+              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> = React.memo(screen.component);
+              return (
+                <Stack.Screen key={index} name={screen.name}>
+                  {(props) => (
+                    <ScreenWrapper>
+                      <MemoizedScreenComponent {...props} />
+                    </ScreenWrapper>
+                  )}
+                </Stack.Screen>
+              );
+            })}
           </Stack.Navigator>
-        </NavigationContainer>
-      </>
-    );
-  } else if (isDone === true && !isLoggedIn) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {loggedOutScreens.map((screen, index) => (
-            <Stack.Screen
-              key={index}
-              name={screen.name}
-              component={screen.component}
-            />
-          ))}
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  } else {
-    return <Text>fetching user...</Text>;
-  }
+        </AppNavigationContainer>
+      ) : isDone === true && !isLoggedIn ? (
+        <AppNavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {loggedOutScreens.map((screen, index) => {
+              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> = React.memo(screen.component);
+              return (
+                <Stack.Screen key={index} name={screen.name}>
+                  {(props) => (
+                    <ScreenWrapper>
+                      <MemoizedScreenComponent {...props} />
+                    </ScreenWrapper>
+                  )}
+                </Stack.Screen>
+              );
+            })}
+          </Stack.Navigator>
+        </AppNavigationContainer>
+      ) : (
+        <Text>fetching user...</Text>
+      )}
+    </WebsocketProviderWrapper>
+  );
 }

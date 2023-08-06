@@ -8,14 +8,7 @@ export const userLocation = async (
   vendors,
   callback
 ) => {
-  // Request permission to access the user's location
-  let { status } = await Location.requestForegroundPermissionsAsync();
 
-  // Check if permission was granted
-  if (status !== "granted") {
-    setErrorMsg("Permission to access location was denied");
-    return;
-  }
 
   // Get the user's current location
   let location = await Location.getCurrentPositionAsync({
@@ -32,19 +25,25 @@ export const userLocation = async (
 
   // Check if the mapRegion is already set
   if (mapRegion && mapRegion.latitude) {
-    // Check if the new region is significantly different from the current region
-    const isRegionSignificantlyDifferent =
-      Math.abs(mapRegion.latitude - newRegion.latitude) > 0.0001 ||
-      Math.abs(mapRegion.longitude - newRegion.longitude) > 0.0001;
+    // Calculate the threshold based on deltas
+const latitudeThreshold = mapRegion.latitudeDelta * 0.1;
+const longitudeThreshold = mapRegion.longitudeDelta * 0.1;
 
-    // If the region is significantly different, update the mapRegion
-    if (isRegionSignificantlyDifferent) {
-      setMapRegion(newRegion);
-    }
+// Check if the new region is significantly different from the current region
+const isRegionSignificantlyDifferent =
+  Math.abs(mapRegion.latitude - newRegion.latitude) > latitudeThreshold ||
+  Math.abs(mapRegion.longitude - newRegion.longitude) > longitudeThreshold;
+
+// If the region is significantly different, update the mapRegion
+if (isRegionSignificantlyDifferent) {
+  setMapRegion(newRegion);
+}
   } else {
     // If the mapRegion is not set, update it with the new region
     setMapRegion(newRegion);
   }
+
+  console.log('new region from cuseGoogleMaps: ', newRegion)
 
   // Set the viewLocation flag to true
   setViewLocation(true);

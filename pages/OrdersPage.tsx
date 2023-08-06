@@ -15,7 +15,7 @@ import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Iorder } from "../typeDefinitions/interfaces/order.interface";
 
-import { getOrders } from "../store/slices/addToOrders";
+import { getOrders, state } from "../store/slices/addToOrders";
 import { getUser } from "../store/slices/userSessionSlice";
 
 export default function OrdersPage() {
@@ -36,9 +36,9 @@ export default function OrdersPage() {
     getCurrentOrders(user);
   }, [])
 
-  const filterCompletedData = orders.filter((item: Iorder) => {
+  const filterCompletedData = orders.filter((item: state) => {
     console.log("item: ",item);
-    return item.status === "Order Not Completed";
+    return item.accepted === "accepted";
   });
 
   const finishedOrders = [
@@ -50,7 +50,7 @@ export default function OrdersPage() {
   console.log("not completed orders, ", filterCompletedData);
 
   const filterInProgressData = orders.filter(
-    (item: Iorder) => item.status === "In Progress"
+    (item: state) => item.accepted === "pending"
   );
 
   const inProgress = () => {

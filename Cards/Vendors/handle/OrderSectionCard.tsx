@@ -3,7 +3,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import React from "react";
 import OrderPreviewCard from "./OrderPreviewCard";
@@ -11,10 +11,9 @@ import { Iorder } from "../../../typeDefinitions/interfaces/order.interface";
 
 interface IProps {
   order: Iorder;
-  acceptMethod?: (orderId: string) => Promise<void>;
-  rejectMethod?: (orderId: string) => Promise<void>;
+  acceptMethod?: (targetUid: string, orderId: string) => Promise<void>;
+  rejectMethod?: (targetUid: string, orderId: string) => Promise<void>;
 }
-
 
 const OrderSectionCard = (props: IProps) => {
   const { order, acceptMethod, rejectMethod } = props;
@@ -23,10 +22,16 @@ const OrderSectionCard = (props: IProps) => {
       {/* Accept or decline orders */}
       {acceptMethod !== undefined ? (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: 'blue'}]} onPress={() => acceptMethod!(order._id!)}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "blue" }]}
+            onPress={() => acceptMethod!(order.uid, order._id!)}
+          >
             <Text>Accept</Text>
-          </TouchableOpacity >
-          <TouchableOpacity style={[styles.button, {backgroundColor: 'red'}]} onPress={() => rejectMethod!(order._id!)}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "red" }]}
+            onPress={() => rejectMethod!(order.uid, order._id!)}
+          >
             <Text>Decline</Text>
           </TouchableOpacity>
         </View>
@@ -39,6 +44,7 @@ const OrderSectionCard = (props: IProps) => {
         data={order.orders}
         renderItem={({ item }) => <OrderPreviewCard item={item.inCart} />}
       />
+     
     </View>
   );
 };
@@ -46,10 +52,10 @@ const OrderSectionCard = (props: IProps) => {
 export default OrderSectionCard;
 
 const styles = StyleSheet.create({
-  buttonContainer: {flexDirection: 'row'},
+  buttonContainer: { flexDirection: "row" },
   button: {
-    padding: '3%',
-    marginHorizontal: '2%',
-    paddingHorizontal: '5%'
-  }
-})
+    padding: "3%",
+    marginHorizontal: "2%",
+    paddingHorizontal: "5%",
+  },
+});

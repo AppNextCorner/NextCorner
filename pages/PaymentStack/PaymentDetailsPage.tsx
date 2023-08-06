@@ -35,7 +35,6 @@ const PaymentDetailsPage = () => {
   const user = useAppSelector(getUser);
   
   const getCartFromSlice = useAppSelector(getCart);
-  console.log("cart from slice: ", getCartFromSlice);
   const totalCost = calculateTotal(getCartFromSlice).toString().slice(0, 10);
   const dispatch = useAppDispatch();
 
@@ -64,13 +63,18 @@ const PaymentDetailsPage = () => {
     setProceed(true);
     
     try {
+
+
+
       await addCartToOrder(getCartFromSlice);
+
+
       dispatch(deleteAllCartItems());
       navigation.navigate("OrderPlaced");
       // getCurrentCartItems();
       // getCurrentOrder();
     } catch (e) {
-      console.log(e);
+      console.log("error submitting order: ",e);
     }
   };
   useEffect(() => {

@@ -7,8 +7,9 @@ import {
 import { makePostRequest } from "../../config/axios.config";
 import { getUser } from "../../store/slices/userSessionSlice";
 import useFetchOrders from "hooks/api/business/orders/useFetchOrders";
-import useGetUserData from "hooks/handleUsers/useGetUserData";
-
+import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
+import { useContext } from "react";
+import { WebSocketContext } from "../../context/incomingOrderContext";
 /**
  * After the user has entered the order, they should update the order list through the request to our backend.
  * - Be able to grab the order list from the backend when the function is called asynchronously
@@ -17,12 +18,11 @@ import useGetUserData from "hooks/handleUsers/useGetUserData";
  */
 
 const UseOrders = () => {
-
   console.log("use orders is running");
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
   const { fetchOrdersByUid } = useFetchOrders();
-  
+  const websocket = useContext(WebSocketContext);
 
   // going to run asynchronously when the order is fetched from the home page and/or the user has been logged in/ order page is fetched
   const getCurrentOrders = async (userFromParam?: any) => {
@@ -53,19 +53,28 @@ const UseOrders = () => {
     const sumOfTimes = orderItemTimes.reduce((a, b) => {
       return a + b;
     }, 0);
-    const orderList = {
+    const orderList: Iorder = {
       orders: cart,
-      minutesToDone: sumOfTimes,
+      minutesToDone: sumOfTimes, // Don't replace the minutes when the response is sent back
       storeInfo: {
         storeName: cart[0].inCart.storeInfo.storeName,
-        storeId: cart[0].inCart.storeInfo.storeId,
-        storeOwner: cart[0].inCart.storeInfo.storeOwner
+        storeId: cart[0].inCart.storeInfo.storeId!,
+        storeOwner: cart[0].inCart.storeInfo.storeOwner,
       },
       status: "Order Not Completed",
       accepted: "pending",
-      uid: user!._id,
+      location: { longitude: 0, latitude: 0 },
+      uid: user?._id!,
+      userName: user?.firstName + " " + user?.lastName,
     };
-    await makePostRequest(`/orders/place-order`, orderList);
+    const orderPlaced = await makePostRequest(`/orders/place-order`, orderList);
+
+    const payload = {
+      type: "send_incoming_order",
+      payload: orderPlaced.data.placedOrder
+    }
+    console.log('order placed from http: ', payload);
+    websocket.send(JSON.stringify(payload));
   };
   /**
    * The function runs when the timer has reached zero causing the order status to be changed and put into a new state with the completed orders.

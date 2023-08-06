@@ -33,7 +33,6 @@ export const addToOrders = createSlice({
   reducers: {
     setOrders: (state, {payload}) => {
         state.orders = payload
-        console.log('state orders: ', state.orders)
     },
     updateOrderStatusReducer: (state, { payload }) => {
       // const orderItem = state.order.find((item) => item.id === payload.id);

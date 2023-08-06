@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
-import { getCart, } from "../../store/slices/addToCartSessionSlice";
+import { getCart } from "../../store/slices/addToCartSessionSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
@@ -9,11 +9,9 @@ import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
 const OrderButton = () => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const getCartFromSlice = useAppSelector(getCart);
-  
-  console.log('cart from slice: ', getCartFromSlice);
+
   const navigateCart = () => {
     navigation.navigate("Cart");
-
   };
 
   // check if there are any items in the cart
@@ -54,8 +52,8 @@ const styles = StyleSheet.create({
     padding: "5%",
     borderRadius: 20,
     margin: "5%",
-    bottom: '10%',
-    width: '90%',
+    bottom: "10%",
+    width: "90%",
     position: "absolute",
   },
   orderButtonText: {

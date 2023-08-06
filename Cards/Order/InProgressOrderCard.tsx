@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import moment from "moment";
 import "moment-timezone";
@@ -7,20 +7,22 @@ import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSec
 import { useIsFocused } from "@react-navigation/native";
 import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
 import { ICart } from "../../store/slices/addToCartSessionSlice";
+import { WebSocketContext } from "../../context/incomingOrderContext";
 
 interface Props {
   order: Iorder;
 }
 const InProgressOrderCard = ({ order }: Props) => {
+  const websocket = useContext(WebSocketContext);
   const [_duration, setDuration] = useState(0);
   const [_distance, setDistance] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
-
+  const [vendorLocationTime, setVendorLocationTime] = useState(0);
   // const mapOrderItem: location[] = order.singleOrderList
   //   .map((orderItem: orderItem) => orderItem.location)
   //   .flat();
 
-  const { updateOrder } = UseOrders();
+  // const { updateOrder } = UseOrders();
 
   useEffect(() => {
     // Converting to seconds
@@ -49,6 +51,25 @@ const InProgressOrderCard = ({ order }: Props) => {
     };
   }, [order.minutesToDone]);
 
+websocket.onmessage = (event) => {
+    const parseEvent = JSON.parse(event.data);
+    console.log('parsed event location: ', parseEvent)
+    if (parseEvent.type === "vendor_location") {
+      // const sendRegion = {
+      //   type: "send_location",
+      //   payload: {
+      //     location: {
+      //       longitude: mapRegion.longitude,
+      //       latitude: mapRegion.latitude,
+      //     },
+      //   },
+      // };
+      console.log('parsed event location: ', parseEvent)
+      //createdWebSocket.send(JSON.stringify(sendRegion));
+    }
+  };
+  
+
   useEffect(() => {
     const updatedStatus = {
       ...order,
@@ -70,10 +91,12 @@ const InProgressOrderCard = ({ order }: Props) => {
     (orderItem: ICart) => orderItem.storeId
   );
 
+
+
   return (
     <View style={styles.orderContainer}>
       <View style={styles.googleMapImageContainer}>
-        {isFocused ? (
+        {/* {!isFocused ? (
           <GoogleMapsMenuSection
             scrollEnabled={false}
             pointerEvents={"none"}
@@ -83,12 +106,12 @@ const InProgressOrderCard = ({ order }: Props) => {
           />
         ) : (
           <></>
-        )}
+        )} */}
       </View>
 
       <View style={styles.orderDetailTextContainer}>
         <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
-        <Text style={styles.orderStatusText}>{order.status}</Text>
+        <Text style={styles.orderStatusText}>{order.accepted}</Text>
         <Text style={styles.timeText}>
           Ready In:{" "}
           {timeLeft

@@ -13,6 +13,8 @@ import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 import UseOrders from "hooks/handleVendors/useOrders.hook";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
+import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
+import { getAcceptedOrders, setInitialOrders } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -27,7 +29,12 @@ const useGetUserData = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [url, setUrl] = useState(`ws://192.168.1.19:4002/ws/debug`) // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
-
+  const {
+    getPendingOrderList,
+    acceptOrder,
+    rejectOrder,
+    getAcceptedOrderList,
+  } = useHandleIncomingOrders();
   /**
    * This post request sends an email and recieves data from the backend
    *
@@ -66,9 +73,16 @@ const useGetUserData = () => {
         console.log(user);
         if (user && user.email) {
           const userData: AppUser = await getUserData(user.email);
-          dispatchBusinesses();
-          updateBusinessInformation(userData._id);
 
+          dispatchBusinesses();
+          const updateVendor = await updateBusinessInformation(userData._id);
+          const pendingOrders = await getPendingOrderList(updateVendor.id);
+          const acceptedOrders = await getAcceptedOrderList(updateVendor.id);
+          console.log('orders: ', acceptedOrders.length)
+          dispatch(setInitialOrders({
+            accepted: acceptedOrders,
+            pending: pendingOrders,
+          }))
           console.log("running below functions");
           initializeCart();
           getCurrentOrders(userData);
@@ -94,7 +108,7 @@ const useGetUserData = () => {
   return {
     isDone,
     isLoggedIn,
-    url
+    url,
   };
 };
 

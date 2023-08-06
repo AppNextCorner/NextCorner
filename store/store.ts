@@ -9,6 +9,7 @@ import addToOrders from "./slices/addToOrders";
 import businessSessionReducer from "./slices/BusinessSlice/businessSessionSlice";
 import menuCreateSlice from "./slices/BusinessSlice/menuCreateSlice";
 import addToCartSessionSlice from "./slices/addToCartSessionSlice";
+import IncomingOrderSlice from "./slices/WebsocketSlices/IncomingOrderSlice";
 // import userSession from "./slices/userSession";
 
 export const store = configureStore({
@@ -21,7 +22,8 @@ export const store = configureStore({
     addToOrders: addToOrders,
     businessSession: businessSessionReducer,
     menuCreate: menuCreateSlice,
-    addToCartSessionSlice: addToCartSessionSlice
+    addToCartSessionSlice: addToCartSessionSlice,
+    IncomingOrderSlice: IncomingOrderSlice
   },
   devTools: true,
 });

@@ -55,7 +55,8 @@ const CreateMenuItem = () => {
       // Add store info to the menu item
       handlePropertyChange(setItem, "storeInfo", {
         storeName: store.name,
-        storeId: store._id,
+        storeId: store.id,
+        storeOwner: store.uid
       });
 
       // Reset values for the whole menu item

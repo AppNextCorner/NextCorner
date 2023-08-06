@@ -28,12 +28,9 @@ export const addToCartSessionSlice = createSlice({
   reducers: {
     // Reducer to add a new item to the cart
     addCartItem: (state, action) => {
-      console.log("old data: ", state.data);
       state.data = [...state.data, action.payload]; // Push the new item into the existing array
       AsyncStorage.setItem("cart", JSON.stringify(state.data));
       
-      console.log('new data: ', state.data);
-      console.log('new length of cart: ', state.data.length)
     },
 
     // Reducer to configure the amount of an item in the cart

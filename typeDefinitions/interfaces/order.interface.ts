@@ -12,6 +12,8 @@ export interface Iorder {
     accepted: string
     uid: string;
     createdAt?: string;
+    userName: string;
+    location: {longitude: number, latitude: number},
     _id?: string;
   }
   

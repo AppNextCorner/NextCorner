@@ -1,18 +1,19 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, Text } from "react-native";
 import React from "react";
 import { Iorder } from "../../../typeDefinitions/interfaces/order.interface";
 import OrderSectionCard from "cards/Vendors/handle/OrderSectionCard";
 
 interface IProps {
   orders: Iorder[] | undefined;
-  acceptMethod?: (orderId: string) => any;
-  rejectMethod?: (orderId: string) => any;
+  acceptMethod?: (targetUid: string, orderId: string) => any;
+  rejectMethod?: (targetUid: string, orderId: string) => any;
 }
 
 const AllOrdersList = (props: IProps) => {
   const { orders, acceptMethod, rejectMethod } = props;
   return (
     <>
+     <Text>{orders!.length}</Text>
       <FlatList
         data={orders}
         renderItem={({ item }) => (
@@ -28,5 +29,3 @@ const AllOrdersList = (props: IProps) => {
 };
 
 export default AllOrdersList;
-
-const styles = StyleSheet.create({});
