@@ -11,12 +11,23 @@ const OrderPreviewCard = (props: IProps) => {
   const { item } = props;
 
   return (
-    <View>
-      <Text>{item.name}</Text>
-    </View>
+    <>
+      <View style={styles.item}>
+        <Text style={[styles.text]}>{item.name}</Text>
+        <Text style={[styles.text, { textAlign: "right" }]}>
+          {item.amountInCart}
+        </Text>
+      </View>
+      {item.customizations.map((customization) => <View>
+        <Text>{customization.optionCustomizations.map()}</Text>
+      </View>)}
+    </>
   );
 };
 
 export default OrderPreviewCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  text: { flex: 1 },
+  item: { flexDirection: "row", marginVertical: "2.5%" },
+});

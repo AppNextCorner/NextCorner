@@ -76,8 +76,8 @@ const useGetUserData = () => {
 
           dispatchBusinesses();
           const updateVendor = await updateBusinessInformation(userData._id);
-          const pendingOrders = await getPendingOrderList(updateVendor.id);
-          const acceptedOrders = await getAcceptedOrderList(updateVendor.id);
+          const pendingOrders = updateVendor ? await getPendingOrderList(updateVendor.id) : [];
+          const acceptedOrders = updateVendor ? await getAcceptedOrderList(updateVendor.id) : [];
           console.log('orders: ', acceptedOrders.length)
           dispatch(setInitialOrders({
             accepted: acceptedOrders,
@@ -97,7 +97,7 @@ const useGetUserData = () => {
           setIsLoggedIn(false);
         }
       } catch (err) {
-        console.log(err);
+        console.log("error with fetching: ",err);
       }
     };
     console.log("auth: ", auth);

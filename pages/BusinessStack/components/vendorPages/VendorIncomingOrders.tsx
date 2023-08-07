@@ -45,8 +45,8 @@ const VendorIncomingOrders = () => {
       // This one needs testing, a lot of testing...
       dispatch(addIncomingOrder([incomingOrder]))
       }
-      if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
-        //
+      else if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
+        // / why fuck is this being calld???????????????????????????????????
         dispatch(removeFromPending(incomingOrder))
       }
     };
@@ -75,17 +75,14 @@ const VendorIncomingOrders = () => {
         <View>
           <NextCornerVendorHeader />
         </View>
-        <View style={styles.headerText}>
+        {/* <View style={styles.headerText}>
           <Text>Accepting</Text>
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.header}>
-        <View style={styles.subHeader}>
-          <Text>Orders</Text>
-        </View>
         {/* Step 3: Toggle Button */}
-        <TouchableOpacity onPress={toggleHandler}>
+        {/* <TouchableOpacity onPress={toggleHandler}>
           <View
             style={[
               toggleButton.toggleButton,
@@ -104,12 +101,14 @@ const VendorIncomingOrders = () => {
               ]}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <Text>Pending</Text>
+      <View style={styles.listHeaderContainer}>
+        <Text style={[styles.listHeader]}>Incoming Orders</Text>
+      </View>
       {/* Step 5: Display orders once they are available */}
       {pendingMemoOrder !== undefined && (
-        <View>
+        <View style={styles.list}>
           <AllOrdersList
             orders={pendingMemoOrder}
             acceptMethod={acceptOrder}
@@ -117,10 +116,16 @@ const VendorIncomingOrders = () => {
           />
         </View>
       )}
-      <Text>Accepted</Text>
+      <View style={styles.listHeaderContainer}>
+        <Text style={[styles.listHeader]}>Accepted Orders</Text>
+      </View>
+
       {acceptedOrders !== undefined && (
-        <View>
-          <AllOrdersList orders={acceptedOrders} />
+        <View style={styles.list}>
+          <AllOrdersList
+            completeMethod={() => console.log("hello")}
+            orders={acceptedOrders}
+          />
         </View>
       )}
     </View>
@@ -130,8 +135,11 @@ const VendorIncomingOrders = () => {
 export default VendorIncomingOrders;
 
 const styles = StyleSheet.create({
+  listHeaderContainer: {margin: '2.5%'},
+  listHeader: { fontWeight: "bold", fontSize: 17 },
+  list: { flex: 1 },
   headerText: { marginTop: "7.5%", fontWeight: "bold" },
   header: { flexDirection: "row", alignItems: "center" },
   page: { flex: 1, backgroundColor: "#fff" },
-  subHeader: { flex: 1, backgroundColor: "#fff" },
+  subHeader: { flex: 1, backgroundColor: "#fff", marginHorizontal: '5%' },
 });

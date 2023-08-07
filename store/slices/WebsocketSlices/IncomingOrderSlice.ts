@@ -23,7 +23,7 @@ export const IncomingOrderSlice = createSlice({
       state.pending = action.payload.pending;
     },
     addIncomingOrder: (state, action) => {
-      state.pending.push(action.payload.order[0]);
+      state.pending.push(action.payload[0]);
     },
     removeFromPending: (state, action) => {
       console.log("PAYLOAD:");

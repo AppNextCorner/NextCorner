@@ -14,7 +14,7 @@ const HeaderContainer = styled.View`
   flex-direction: row;
   align-items: center;
   padding: 5%;
-  padding-top: 15%;
+  padding-top: 20%;
   background-color: #fff;
 `;
 
@@ -39,9 +39,9 @@ const NextCornerVendorHeader = () => {
 
   return (
     <HeaderContainer>
-      <GoBackButton onPress={goHome}>
+      {/* <GoBackButton onPress={goHome}>
         <AntDesign name="arrowleft" size={30} color="black" />
-      </GoBackButton>
+      </GoBackButton> */}
       <HeaderLogoImage source={HomeIcon} />
       <HeaderTitle>Next Corner Vendors</HeaderTitle>
     </HeaderContainer>
