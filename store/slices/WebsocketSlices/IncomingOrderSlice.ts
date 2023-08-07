@@ -1,4 +1,4 @@
-import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { Iorder } from "../../../typeDefinitions/interfaces/order.interface";
 
@@ -19,27 +19,39 @@ export const IncomingOrderSlice = createSlice({
   reducers: {
     // Reducer to add a new item to the cart
     setInitialOrders: (state, action) => {
-        state.accepted = action.payload.accepted;
-        state.pending = action.payload.pending;
+      state.accepted = action.payload.accepted;
+      state.pending = action.payload.pending;
     },
     addIncomingOrder: (state, action) => {
-        
+      state.pending.push(action.payload.order[0]);
     },
-    removeFromPendiing: (state, action) => {
-
+    removeFromPending: (state, action) => {
+      console.log("PAYLOAD:");
+      console.log(action.payload);
+      state.pending = state.pending.filter(
+        (item) => item._id !== action.payload.id
+      );
     },
     addAcceptedOrder: (state, action) => {
-      // Remove from pending
-      state.pending = state.pending.filter((item) => item._id !== action.payload.order[0]._id)
+      //remove from pending
+      state.pending = state.pending.filter(
+        (item) => item._id !== action.payload[0]._id
+      );
       // Add to accepted
-      state.accepted = [...state.accepted, action.payload.order]
-    }
+      state.accepted.push(action.payload[0]);
+    },
   },
 });
 
-export const {setInitialOrders, addAcceptedOrder} = IncomingOrderSlice.actions;
-export const getAcceptedOrders = (state: RootState) => state.IncomingOrderSlice.accepted;
-export const getPendingOrders = (state: RootState) => state.IncomingOrderSlice.pending;
-
+export const {
+  setInitialOrders,
+  addAcceptedOrder,
+  addIncomingOrder,
+  removeFromPending,
+} = IncomingOrderSlice.actions;
+export const getAcceptedOrders = (state: RootState) =>
+  state.IncomingOrderSlice.accepted;
+export const getPendingOrders = (state: RootState) =>
+  state.IncomingOrderSlice.pending;
 
 export default IncomingOrderSlice.reducer;

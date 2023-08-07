@@ -4,92 +4,50 @@ import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { toggleButton } from "../../../../styles/components/toggleStyles";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
-import { getUserBusiness } from "../../../../store/slices/BusinessSlice/businessSessionSlice";
 import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
 import { useRoute } from "@react-navigation/native";
 import { WebSocketContext } from "../../../../context/incomingOrderContext";
 import {
-  addAcceptedOrder,
+  addIncomingOrder,
   getAcceptedOrders,
   getPendingOrders,
-  setInitialOrders,
+  removeFromPending,
 } from "../../../../store/slices/WebsocketSlices/IncomingOrderSlice";
-import {useUpdateEffect} from "hooks/api/orders/useUpdateEffect";
 const VendorIncomingOrders = () => {
-  const stores = useAppSelector(getUserBusiness);
   const getAcceptedOrdersList = useAppSelector(getAcceptedOrders)
   const getPendingOrdersList = useAppSelector(getPendingOrders)
-  const store = stores !== null ? stores![0] : null;
   const websocket = useContext(WebSocketContext);
   console.log("websocket vendor incoming", websocket);
   const route = useRoute();
   const dispatch = useAppDispatch();
   //const { store }: RouteParams = route.params as RouteParams;
-  const storeId = store!.id!;
   const {
-    getPendingOrderList,
     acceptOrder,
     rejectOrder,
-    getAcceptedOrderList,
   } = useHandleIncomingOrders();
 
-  // const callbackPending = useCallback(
-  //   async () => {return await getPendingOrderList(storeId)},
-  //   []
-  // );
-  // const pendingOrders =    getPendingOrderList(storeId);
-  //const pendingMemoOrder = useMemo(async() => {return await getPendingOrderList(storeId)}, [storeId])
   const [pendingMemoOrder, setPendingMemoOrder] = useState<any[]>(getPendingOrdersList);
   const [acceptedOrders, setAcceptedOrders] = useState<any[]>(getAcceptedOrdersList);
-  // Step 2: Fetch data and update state when storeId changes
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const orders = await getPendingOrderList(storeId);
-  //     setPendingMemoOrder(orders);
-  //     const accepted = await getAcceptedOrderList(storeId);
-  //     setAcceptedOrders(accepted);
-  //   };
-
-  //   fetchData();
-    
-  // }, [storeId]);
-
+  
+  useEffect(() => {
+    setPendingMemoOrder(getPendingOrdersList);
+    setAcceptedOrders(getAcceptedOrdersList);
+  })
   useEffect(() => {
     const handleWebSocketMessage = (event: any) => {
       const parseData = JSON.parse(event.data);
       Alert.alert(parseData.payload.userName);
-      if (parseData.type === "return_change_accepted") {
-        if (parseData.payload.accepted === "rejected") {
-          // Change from pending to accepted or decline
-          setPendingMemoOrder((prev) =>
-            prev.filter((item) => item._id !== parseData.payload.id)
-          );
-        } else {
-          const findOrderItem = pendingMemoOrder.find(
-            (item) => item._id === parseData.payload.id
-          );
-
-          // Update both pendingMemoOrder and acceptedOrders in one set call
-          setPendingMemoOrder((prev) =>
-            prev.filter((item) => item._id !== parseData.payload.id)
-          );
-          setAcceptedOrders((prev) => [...prev, findOrderItem]);
-          dispatch(addAcceptedOrder({
-            order: findOrderItem
-          }))
-        }
-      } else if (parseData.type === "incoming_order") {
-        if (
-          route.name === "Orders" &&
-          parseData.payload.accepted === "pending"
-        ) {
-          setPendingMemoOrder((prev) => [...prev, parseData.payload]);
-        } else if (
-          route.name === "Orders" &&
-          parseData.payload.accepted === "accepted"
-        ) {
-          setAcceptedOrders((prev) => [...prev, parseData.payload]);
-        }
+      const incomingOrder = parseData.payload
+      console.log(route.name)
+      console.log(parseData)
+     if (parseData.type === "incoming_order" && route.name === "Orders" && incomingOrder.accepted === "pending") {
+       
+      // This one needs testing, a lot of testing...
+      dispatch(addIncomingOrder([incomingOrder]))
+      }
+      if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
+        //
+        dispatch(removeFromPending(incomingOrder))
       }
     };
     websocket.onmessage = handleWebSocketMessage;

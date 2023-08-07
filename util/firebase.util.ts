@@ -1,12 +1,12 @@
-// import {
-//   apiKey,
-//   authDomain,
-//   projectId,
-//   storageBucket,
-//   messagingSenderId,
-//   appId,
-//   measurementId,
-// } from "../";
+import {
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+  measurementId,
+} from "../";
 
 export const firebaseConfig: any = {
   apiKey: process.env.apiKey!.replace(";", ""),

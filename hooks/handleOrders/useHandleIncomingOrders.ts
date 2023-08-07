@@ -3,9 +3,12 @@ import useUpdateOrders from "hooks/api/business/orders/useUpdateOrders";
 import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
 import { useContext } from "react";
 import { WebSocketContext } from "../../context/incomingOrderContext";
+import { addAcceptedOrder } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { useAppDispatch } from "../../store/hook";
 
 const useHandleIncomingOrders = () => {
   const { updateOrderAcceptStatus } = useUpdateOrders();
+  const dispatch = useAppDispatch();
   const { fetchOrdersById } = useFetchOrders();
   const webSocket = useContext(WebSocketContext);
   const getAllOrders = async (storeId: string) => {
@@ -23,9 +26,15 @@ const useHandleIncomingOrders = () => {
         id: orderId,
       },
     };
-
     webSocket.send(JSON.stringify(payload));
-    await updateOrderAcceptStatus({ orderId, newStatus: accepted });
+    const newAcceptedOrder = await updateOrderAcceptStatus({
+      orderId,
+      newStatus: accepted,
+    });
+
+    console.log("NEW ORDER: ", newAcceptedOrder);
+
+    dispatch(addAcceptedOrder([newAcceptedOrder]));
   };
 
   const rejectOrder = async (targetUid: string, orderId: string) => {
@@ -39,7 +48,12 @@ const useHandleIncomingOrders = () => {
       },
     };
     webSocket.send(JSON.stringify(payload));
-    await updateOrderAcceptStatus({ orderId, newStatus: accepted });
+    const rejectedOrder = await updateOrderAcceptStatus({
+      orderId,
+      newStatus: accepted,
+    });
+    console.log("rejectedOrder:");
+    console.log(rejectedOrder);
   };
 
   const getPendingOrderList = async (storeId: string) => {
