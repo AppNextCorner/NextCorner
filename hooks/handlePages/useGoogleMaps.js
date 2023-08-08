@@ -43,7 +43,6 @@ if (isRegionSignificantlyDifferent) {
     setMapRegion(newRegion);
   }
 
-  console.log('new region from cuseGoogleMaps: ', newRegion)
 
   // Set the viewLocation flag to true
   setViewLocation(true);

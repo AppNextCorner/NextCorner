@@ -2,13 +2,14 @@
  * Purpose of the file: It is used to display the business and its content by rendering multiple business and multiple horizontal list for each business
  */
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { BottomSheetFlatList, BottomSheetView } from "@gorhom/bottom-sheet";
-import order from "../../typeDefinitions/interfaces/order.interface";
 import { API } from "constants/API";
+import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
+import moment from "moment";
 
 interface Props {
-  order: order;
+  order: Iorder;
   distance: number;
   duration: number;
 }
@@ -21,10 +22,41 @@ export default function InProgressList({
   // grabbing the data of the trendingFood from the data folder
 
   // mapping through the data and retrieving the data from one order
-  const mapThroughOrder = order.singleOrderList.map(
+  const mapThroughOrder = order.orders.map(
     // What is getItemData
-    (getItemData: any) => getItemData.cartData
+    (getItemData: any) => getItemData.inCart
   );
+  const [timeLeft, setTimeLeft] = React.useState<number | undefined>();
+
+
+    // REFOCUSES THE SCREEN
+    useEffect(() => {
+      // Converting to seconds
+      const timer = order.minutesToDone * 60;
+      const returned_endate = moment(
+        new Date(order.createdAt!),
+        "YYYY-M-D H:mm:ss"
+      )
+        .tz("America/Los_Angeles")
+        .add(timer, "seconds")
+        .format("YYYY-MM-DD HH:mm:ss");
+  
+      const calculateDuration = () => {
+        const duration = moment().diff(returned_endate, "seconds");
+        if (duration < 0) {
+          setTimeLeft(duration);
+        } else {
+          setTimeLeft(0);
+        }
+      };
+  
+      const intervalId = setInterval(calculateDuration, 1000);
+  
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, [order.minutesToDone]);
+  
   return (
     // Used BottomSheetFlatList so the user can close the tab through the vertical scrollbar
     <>
@@ -41,8 +73,17 @@ export default function InProgressList({
    
         ListHeaderComponent={
           <View>
+              <Text style={styles.businessName}>
+            Ready In:{" "}
+            {timeLeft
+              ? timeLeft <= -60
+                ? Math.floor(Math.abs(timeLeft) / 60)
+                : "< 1"
+              : null}
+            min
+          </Text>
             <Text style={styles.businessName}>
-              {order.singleOrderList[0].businessOrderedFrom}
+              {order.storeInfo.storeName}
             </Text>
             <View style={styles.margin}></View>
           </View>

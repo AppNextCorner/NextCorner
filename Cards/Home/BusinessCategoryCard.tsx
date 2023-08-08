@@ -49,7 +49,7 @@ export default function BusinessCategoryCard(props: Props) {
       }}
     >
       <View {...imageBackgroundStyles}>
-        <Icon source={props.businessItem.foodType} />
+        {/* <Icon source={props.businessItem.foodType} /> */}
         <Text {...categoryTextStyle}>{props.businessItem.text}</Text>
       </View>
     </CategoryButton>
@@ -76,7 +76,7 @@ const styles = {
     align-content: center;
     border-radius: 15px;
     width: 75px;
-    height: 75px;
+    height: 25px;
     align-items: center;
     justify-content: center;
     shadow-color: #c2c3c4;
@@ -89,7 +89,7 @@ const styles = {
     align-content: center;
     border-radius: 15px;
     width: 75px;
-    height: 75px;
+    height: 25px;
     align-items: center;
     justify-content: center;
     shadow-color: #c2c3c4;

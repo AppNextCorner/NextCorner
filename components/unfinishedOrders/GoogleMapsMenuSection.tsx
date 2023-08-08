@@ -3,93 +3,47 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { StyleSheet, View, Text } from "react-native";
 import MapStyle from "../../constants/MapStyle.json";
 import MapViewDirections from "react-native-maps-directions";
-// import { googleDirectionsAPIKey } from "@env";
-import { userLocation } from "../../hooks/handlePages/useGoogleMaps";
-// icons
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import {location} from '../../typeDefinitions/interfaces/location.interface'
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
-import { useIsFocused, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 interface Props {
   time?: vendorStructure;
-  location?: location[];
+  location?: location;
+  userLocation: location;
   scrollEnabled?: boolean;
   pointerEvents?: string;
   setDuration: Dispatch<SetStateAction<number>>;
   setDistance: Dispatch<SetStateAction<number>>;
 }
 export default function GoogleMapsMenuSection(props: Props) {
-  const { location, setDuration, setDistance, scrollEnabled } = props;
+  const { userLocation, location, setDuration, setDistance, scrollEnabled } = props;
 
   const [mapFitted, setMapFitted] = useState(false);
-  const [mapCoordinates, setMapCoordinates] = useState<mapRegion>({
-    latitude: parseFloat(location![0].latitude),
-    longitude: parseFloat(location![0].longitude),
-    latitudeDelta: 0.0106,
-    longitudeDelta: 0.0121,
-  });
-  const mapRef = useRef<any>();
-
-  const updateUserLocation = useCallback(async () => {
-    const updatedMapCoordinates = await userLocation(
-      setMapFitted,
-      setMapCoordinates,
-      mapCoordinates
-    );
-    if (updatedMapCoordinates) {
-      setMapCoordinates(updatedMapCoordinates);
-    }
-    console.log("new coords: ", mapCoordinates);
-  }, []);
-
-  useEffect(() => {
-    const intervalId = setInterval(updateUserLocation, 5000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [updateUserLocation]);
-
-  useEffect(() => {
-    updateUserLocation();
-  }, []);
-
-  const isFocused = useIsFocused();
+  const mapRef = useRef<any>(location);
   const route = useRoute();
+  // useEffect(() => {
+  //   console.log('running changes in params')
+  //   // Logic to handle changes in userLocation or location
+  //   // This will run whenever userLocation or location changes
+  //   // Update your UI or perform any necessary logic here
+  // }, [userLocation, location]);
 
-  useEffect(() => {
-    if (isFocused) {
-      updateUserLocation();
-    }
-  }, [isFocused, updateUserLocation]);
-
-  useEffect(() => {
-    let intervalId: any;
-
-    if (isFocused) {
-      intervalId = setInterval(() => {
-        updateUserLocation();
-      }, 5000);
-    }
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [isFocused]);
-
+  // Check the region of the user
   useEffect(() => {
     const callback = (newRegion: mapRegion) => {
       console.log("new region:", newRegion);
     };
     console.log('route: ', route.name)
-    if (route.name === "Orders" && mapCoordinates && typeof callback === "function") {
-      callback(mapCoordinates);
+    if (route.name === "Orders" && location && typeof callback === "function") {
+      callback(location as any);
     }
-  }, [route.name, mapCoordinates]);
+  }, [route.name, location]);
 
+  // Create a route
   const traceRouteOnReady = useCallback(
-    // what is result?
     (result: any) => {
       setDistance(result.distance);
       setDuration(result.duration);
@@ -109,9 +63,9 @@ export default function GoogleMapsMenuSection(props: Props) {
     [mapFitted]
   );
 
-  const destination = {
-    latitude: parseFloat(location![0].latitude),
-    longitude: parseFloat(location![0].longitude),
+  const destination: location = {
+    latitude: location!.latitude,
+    longitude: location!.longitude
   };
 
   // what is icon?
@@ -121,7 +75,7 @@ export default function GoogleMapsMenuSection(props: Props) {
 
   return (
     <View style={styles.container}>
-      {mapCoordinates ? (
+      {location ? (
         <MapView
           scrollEnabled={scrollEnabled}
           ref={mapRef}
@@ -130,24 +84,24 @@ export default function GoogleMapsMenuSection(props: Props) {
           customMapStyle={MapStyle}
           provider={PROVIDER_GOOGLE}
           style={{ flex: 1, position: "relative" }}
-          initialRegion={mapCoordinates}
+          initialRegion={userLocation as any}
           //onRegionChangeComplete={setMapCoordinates}
         >
-          <Marker coordinate={mapCoordinates}>
+          <Marker coordinate={destination as any}>
             <CustomMarker
               icon={
                 <MaterialCommunityIcons name="store" size={24} color="white" />
               }
             />
           </Marker>
-          <Marker coordinate={mapCoordinates} anchor={{ x: 0.5, y: 0.5 }}>
+          <Marker coordinate={userLocation as any} anchor={{ x: 0.5, y: 0.5 }}>
             <CustomMarker
               icon={<Entypo name="home" size={24} color="white" />}
             />
           </Marker>
           <MapViewDirections
-            origin={mapCoordinates}
-            destination={mapCoordinates}
+            origin={userLocation as any}
+            destination={location as any}
             apikey={
               process.env.googleDirectionsAPIKey
                 ? process.env.googleDirectionsAPIKey

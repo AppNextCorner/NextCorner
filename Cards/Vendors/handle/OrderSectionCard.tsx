@@ -13,7 +13,7 @@ interface IProps {
   order: Iorder;
   acceptMethod?: (targetUid: string, orderId: string) => Promise<void>;
   rejectMethod?: (targetUid: string, orderId: string) => Promise<void>;
-  completeMethod?: (targetUid: string, orderId: string) => Promise<void>;
+  completeMethod?: (targetUid: string, orderId: string, order: Iorder) => Promise<void>;
 }
 
 const OrderSectionCard = (props: IProps) => {
@@ -70,9 +70,9 @@ const OrderSectionCard = (props: IProps) => {
         {completeMethod !== undefined ? (
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#7CDBFE" }]}
-            onPress={() => completeMethod!(order.uid, order._id!, )}
+            onPress={() => completeMethod!(order.uid, order._id!, order)}
           >
-            <Text style={styles.buttonText}>Picked Up</Text>
+            <Text style={styles.buttonText}>Pickup</Text>
           </TouchableOpacity>
         ) : (
           <>

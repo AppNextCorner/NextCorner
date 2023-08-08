@@ -1,27 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import moment from "moment";
 import "moment-timezone";
-import UseOrders from "hooks/handleVendors/useOrders.hook";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
 import { ICart } from "../../store/slices/addToCartSessionSlice";
 import { WebSocketContext } from "../../context/incomingOrderContext";
+import { location } from "../../typeDefinitions/interfaces/location.interface";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { WSLocation } from "pages/OrdersPage";
 
 interface Props {
   order: Iorder;
+  userLocation: location;
+  storeLocation: WSLocation;
 }
-const InProgressOrderCard = ({ order }: Props) => {
-  const websocket = useContext(WebSocketContext);
+const InProgressOrderCard = ({ order, userLocation, storeLocation }: Props) => {
   const [_duration, setDuration] = useState(0);
   const [_distance, setDistance] = useState(0);
+  const [location, setLocation] = useState<any>({
+    longitude: 0,
+    latitude: 0,
+    latitudeDelta: 0.0106,
+    longitudeDelta: 0.0121,
+  });
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
-  const [vendorLocationTime, setVendorLocationTime] = useState(0);
-  // const mapOrderItem: location[] = order.singleOrderList
-  //   .map((orderItem: orderItem) => orderItem.location)
-  //   .flat();
-
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const isFocused = useIsFocused();
   // const { updateOrder } = UseOrders();
 
   useEffect(() => {
@@ -50,26 +56,9 @@ const InProgressOrderCard = ({ order }: Props) => {
       clearInterval(intervalId);
     };
   }, [order.minutesToDone]);
-
-websocket.onmessage = (event) => {
-    const parseEvent = JSON.parse(event.data);
-    console.log('parsed event location: ', parseEvent)
-    if (parseEvent.type === "vendor_location") {
-      // const sendRegion = {
-      //   type: "send_location",
-      //   payload: {
-      //     location: {
-      //       longitude: mapRegion.longitude,
-      //       latitude: mapRegion.latitude,
-      //     },
-      //   },
-      // };
-      console.log('parsed event location: ', parseEvent)
-      //createdWebSocket.send(JSON.stringify(sendRegion));
-    }
+  const goToProgressPage = () => {
+    navigation.navigate("InProgressOrder", { order, userLocation});
   };
-  
-
   useEffect(() => {
     const updatedStatus = {
       ...order,
@@ -85,44 +74,54 @@ websocket.onmessage = (event) => {
       // Cleanup code (if any)
     };
   }, [timeLeft]);
-  const isFocused = useIsFocused();
 
   const businessOrderedText = order.orders.map(
     (orderItem: ICart) => orderItem.storeId
   );
 
-
-
   return (
-    <View style={styles.orderContainer}>
-      <View style={styles.googleMapImageContainer}>
-        {/* {!isFocused ? (
-          <GoogleMapsMenuSection
-            scrollEnabled={false}
-            pointerEvents={"none"}
-            //location={null}
-            setDuration={setDuration}
-            setDistance={setDistance}
-          />
-        ) : (
-          <></>
-        )} */}
-      </View>
+    <TouchableOpacity
+      onPress={
+        isFocused && userLocation.latitude !== 0
+        // && storeLocation.location.latitude !== 0
+          ? () => goToProgressPage()
+          : undefined
+      }
+    >
+      <View style={styles.orderContainer}>
+        <View style={styles.googleMapImageContainer}>
+          {userLocation.latitude !== 0
+          //&& storeLocation.location.latitude !== 0
+           ? (
+            <GoogleMapsMenuSection
+              scrollEnabled={false}
+              pointerEvents={"none"}
+              userLocation={userLocation}
+              location={storeLocation.location ? storeLocation.location : userLocation}
+              setDuration={setDuration}
+              setDistance={setDistance}
+            />
+          ) : (
+            // <></>
+            <></>
+          )}
+        </View>
 
-      <View style={styles.orderDetailTextContainer}>
-        <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
-        <Text style={styles.orderStatusText}>{order.accepted}</Text>
-        <Text style={styles.timeText}>
-          Ready In:{" "}
-          {timeLeft
-            ? timeLeft <= -60
-              ? Math.floor(Math.abs(timeLeft) / 60)
-              : "< 1"
-            : null}
-          min
-        </Text>
+        <View style={styles.orderDetailTextContainer}>
+          <Text style={styles.businessText}>{businessOrderedText[0]}</Text>
+          <Text style={styles.orderStatusText}>{order.accepted}</Text>
+          <Text style={styles.timeText}>
+            Ready In:{" "}
+            {timeLeft
+              ? timeLeft <= -60
+                ? Math.floor(Math.abs(timeLeft) / 60)
+                : "< 1"
+              : null}
+            min
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -3,7 +3,7 @@ import useUpdateOrders from "hooks/api/business/orders/useUpdateOrders";
 import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
 import { useContext } from "react";
 import { WebSocketContext } from "../../context/incomingOrderContext";
-import { addAcceptedOrder } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { addAcceptedOrder, removeFromAccepted, removeFromPending, } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
 import { useAppDispatch } from "../../store/hook";
 
 const useHandleIncomingOrders = () => {
@@ -52,26 +52,25 @@ const useHandleIncomingOrders = () => {
     });
   };
 
-  const completeOrder = async (targetUid: string, orderId: string) => {
+  const completeOrder = async (targetUid: string, orderId: string, order: Iorder) => {
     const status = "completed";
-
-    const updatedOrder = await updateOrderStatus({
-      orderId,
-      newStatus: status,
-    });
-
-    console.log("N:", updatedOrder);
     const payload = {
       type: "send_completed_order",
       payload: {
-        order: updatedOrder,
+        order,
         status,
         targetUid,
         orderId,
       },
     };
-    console.log("BELOW IS RUNNING!");
     webSocket.send(JSON.stringify(payload));
+    console.log('finished websocket')
+    const updated = await updateOrderStatus({
+      orderId,
+      newStatus: status,
+    });
+    dispatch(removeFromAccepted(updated));
+   
   };
 
   const getPendingOrderList = async (storeId: string) => {
@@ -102,3 +101,4 @@ const useHandleIncomingOrders = () => {
 };
 
 export default useHandleIncomingOrders;
+

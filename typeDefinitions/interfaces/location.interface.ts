@@ -1,4 +1,6 @@
 export interface location {
-  longitude: string;
-  latitude: string;
+  longitude: number | string;
+  latitude: number | string;
+  latitudeDelta?: number | string;
+  longitudeDelta?: number | string;
 }

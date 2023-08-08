@@ -23,13 +23,18 @@ export const IncomingOrderSlice = createSlice({
       state.pending = action.payload.pending;
     },
     addIncomingOrder: (state, action) => {
+      console.log("Here is incoming order:\n");
+      console.log(action.payload);
+      console.log("\n\n\n\n");
       state.pending.push(action.payload[0]);
     },
     removeFromPending: (state, action) => {
-      console.log("PAYLOAD:");
-      console.log(action.payload);
       state.pending = state.pending.filter(
         (item) => item._id !== action.payload.id
+      );
+
+      state.pending = state.pending.filter(
+        (item) => item._id !== action.payload
       );
     },
     addAcceptedOrder: (state, action) => {
@@ -40,6 +45,11 @@ export const IncomingOrderSlice = createSlice({
       // Add to accepted
       state.accepted.push(action.payload[0]);
     },
+    removeFromAccepted: (state, action) => {
+      state.accepted = state.accepted.filter(
+        (item) => item._id !== action.payload._id
+      );
+    },
   },
 });
 
@@ -48,6 +58,7 @@ export const {
   addAcceptedOrder,
   addIncomingOrder,
   removeFromPending,
+  removeFromAccepted,
 } = IncomingOrderSlice.actions;
 export const getAcceptedOrders = (state: RootState) =>
   state.IncomingOrderSlice.accepted;

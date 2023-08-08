@@ -4,98 +4,140 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-
-// for bottom modal
-import React, { useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import BottomSheet from "@gorhom/bottom-sheet";
 import GoogleMapsMenuSection from "components/unfinishedOrders/GoogleMapsMenuSection";
 import InProgressList from "components/unfinishedOrders/InProgressList";
 import { AntDesign } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import orderItem from "../../typeDefinitions/interfaces/orderItem.interface";
+import { WebSocketContext } from "../../context/incomingOrderContext";
 import { location } from "../../typeDefinitions/interfaces/location.interface";
-/**
- * Used to display the status, map, and the items that are currently in the progress of being made
- */
+import { userLocation } from "hooks/handlePages/useGoogleMaps";
+
 const InProgressPage = () => {
-  // used to get the current location and duration from the user's home to the business
+  const route: any = useRoute();
+  const { order }: any = route.params; // Fetch the order from route params
+
+  const bottomSheetRef = useRef(null);
+  const snapPoints = useMemo(() => ["20%", "100%"], []);
+
+  const [location, setLocation] = useState<any>({
+    longitude: 0,
+    latitude: 0,
+    latitudeDelta: 0.0106,
+    longitudeDelta: 0.0121,
+  });
+  const [localUserLocation, setLocalUserLocation] = useState<location>({
+    longitude: 0,
+    latitude: 0,
+    latitudeDelta: 0.0106,
+    longitudeDelta: 0.0121,
+  });
+
   const [duration, setDuration] = useState(0);
   const [distance, setDistance] = useState(0);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const route = useRoute();
 
   const returnBack = () => {
     navigation.goBack();
   };
   const isFocused = useIsFocused();
-
-  const { order }: any = route.params;
-
-  // items displayed on the Google Maps component after being passed in
-  const mapOrderItem: location[] = order.singleOrderList
-    .map((orderItem: orderItem) => orderItem.location)
-    .flat();
-
-  const bottomSheetRef = useRef(null); // set the initial bottom sheet to have nothing instantly until it is changed
+  const websocket = useContext(WebSocketContext);
+  const handleWebSocketMessage = (event: MessageEvent) => {
+    const parseEvent = JSON.parse(event.data);
+    if (
+      parseEvent.type === "vendor_location" &&
+      parseEvent.payload.order_id === order.storeInfo.storeOwner
+    ) {
   
-  // first value -> initial value / point to start with on the bottom
-  // second value -> final point where the modal is supposed to stop in with snapping to it when near it
-  const snapPoints = useMemo(() => ["20%", "100%"], []);
+      const newLocation = {
+        latitude: parseEvent.payload.location.latitude,
+        longitude: parseEvent.payload.location.longitude,
+        latitudeDelta: 0.0106,
+        longitudeDelta: 0.0121,
+      };
+      setLocation(newLocation);
+    }
+  };
+  // Attach the WebSocket event listener when the component is focused
+  isFocused
+    ? (websocket.onmessage = handleWebSocketMessage)
+    : (websocket.onmessage = null);
+  const [_viewLocation, setViewLocation] = useState(false);
+  // Update user location
+  const updateUserLocation = React.useCallback(async () => {
+    const updatedMapRegion = await userLocation(
+      setViewLocation,
+      setLocalUserLocation,
+      localUserLocation,
+      null
+    );
+    if (updatedMapRegion) {
+      console.log("updated region fro user, ", updatedMapRegion);
+      setLocalUserLocation(updatedMapRegion);
+      setViewLocation(true);
+    }
+  }, [localUserLocation]);
+
+  React.useEffect(() => {
+    const intervalId = setInterval(updateUserLocation, 5000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [updateUserLocation]);
+
   return (
     <>
-    
-        {/* //       {/* Helps with the google maps to be able to display it, be able to zoom in and out, and other touchable features */}
-        <GestureHandlerRootView style={{ flex: 1 , backgroundColor: "#fff" }}>
-          <TouchableOpacity
-            onPress={() => returnBack()}
-            style={styles.goBackButton}
-          >
-            <AntDesign name="arrowleft" size={30} color="white" />
-          </TouchableOpacity>
-          <View style={styles.headerContainer}>
-            <Text style={styles.pageHeader}>Your Order</Text>
-          </View>
-          {/* Google Maps component */}
-          <View
-            style={{
-              flex: 1,
-              margin: "2%",
-              marginTop: "40%",
-              borderRadius: 25,
-              overflow: "hidden",
-            }}
-          >
-            {isFocused ? (
-              <GoogleMapsMenuSection
-                time={order}
-                location={mapOrderItem}
-                setDuration={setDuration}
-                setDistance={setDistance}
-              />
-            ) : (
-              <></>
-            )}
-          </View>
-
-          {/* Our bottom modal containing the business and each individual menu */}
-          <BottomSheet
-            ref={bottomSheetRef}
-            // where the modal should be located based on the HandleSheetChanges event
-            index={0}
-            snapPoints={snapPoints}
-            style={styles.bottomSheetContainer}
-            backgroundStyle={styles.bottomSheetContainer}
-          >
-            {/* The vertical list to encompass all of the content we want to display in the bottom modal */}
-            <InProgressList
-              duration={duration}
-              distance={distance}
-              order={order}
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor: "#fff" }}>
+        <TouchableOpacity
+          onPress={() => returnBack()}
+          style={styles.goBackButton}
+        >
+          <AntDesign name="arrowleft" size={30} color="white" />
+        </TouchableOpacity>
+        <View style={styles.headerContainer}>
+          <Text style={styles.pageHeader}>Your Order</Text>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            margin: "2%",
+            marginTop: "40%",
+            borderRadius: 25,
+            overflow: "hidden",
+          }}
+        >
+          {isFocused
+             &&
+            localUserLocation.latitude !== 0 &&
+            location.latitude !== 0 ? (
+            <GoogleMapsMenuSection
+              time={order}
+              userLocation={localUserLocation}
+              location={location}
+              setDuration={setDuration}
+              setDistance={setDistance}
             />
-          </BottomSheet>
-        </GestureHandlerRootView>
-
+          ) : (
+            <></>
+          )}
+        </View>
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          style={styles.bottomSheetContainer}
+          backgroundStyle={styles.bottomSheetContainer}
+        >
+        
+          <InProgressList
+            duration={duration}
+            distance={distance}
+            order={order}
+          />
+        </BottomSheet>
+      </GestureHandlerRootView>
     </>
   );
 };

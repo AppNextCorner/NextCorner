@@ -7,7 +7,7 @@ interface IProps {
   orders: Iorder[] | undefined;
   acceptMethod?: (targetUid: string, orderId: string) => any;
   rejectMethod?: (targetUid: string, orderId: string) => any;
-  completeMethod?: (targetUid: string, orderId: string) => any;
+  completeMethod?: (targetUid: string, orderId: string, order: Iorder) => any;
 }
 
 const AllOrdersList = (props: IProps) => {

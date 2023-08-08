@@ -15,7 +15,8 @@ import { userLocation } from "hooks/handlePages/useGoogleMaps";
 import AppNavigationContainer from "./AppNavigationContainer";
 import { useMapRegion } from "hooks/useMaps/useMapRegion";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
-import { getAcceptedOrders } from "../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { addIncomingOrder, getAcceptedOrders } from "../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { auth } from "hooks/handleUsers/useFirebase";
 import { setCompleted } from "../store/slices/addToOrders";
 
 interface MemoizedScreenProps {
@@ -50,17 +51,17 @@ function useUserLocation(
 ) {
   const [mapRegion, setMapRegion] = useMapRegion();
   const [viewLocation, setViewLocation] = React.useState(false);
-  const getUserDataRef = accepted;
-  const getUserData = getUserDataRef;
+  const getUserDataRef = accepted
+  const getUserData = getUserDataRef
   const dispatch = useAppDispatch();
 
+  // NOTE TODO: MAKE ANOTHER OR ANOTHER WAY TO SEND THE LOCATION GLOBALLY FOR THE NEARBY VENDORS
   const handleUserLocation = React.useCallback(
     async (newRegion: any) => {
       try {
         setMapRegion(newRegion);
 
         const getUserUid = getUserData.map((order: any) => order.uid);
-        console.log("get user uid: ", getUserUid);
         //Remove duplicates from array by comparing every first instance of a uid
         const getUsersWhoOrdered = getUserUid.filter(function (
           item: any,
@@ -78,6 +79,7 @@ function useUserLocation(
                 latitude: newRegion.latitude,
               },
               users: getUsersWhoOrdered,
+              order_id: auth.currentUser!.uid,
             },
           };
           console.log("sending to user");
@@ -94,11 +96,27 @@ function useUserLocation(
     const handleWebSocketMessage = (event: any) => {
       const parsedData = JSON.parse(event.data);
       const order = parsedData.payload;
-      console.log(parsedData.type);
+      console.log("Here is parsed data:", parsedData)
+      if (parsedData.type === "incoming_order" && order.accepted === "pending") {
+        console.log("Incoming order",  order)
+        // This one needs testing, a lot of testing...
+        dispatch(addIncomingOrder([order]))
+        }
+      if(parsedData.type === "return_change_accepted" && order.accepted === "rejected"){
+
+        Alert.alert("Your order got rejected")
+      }
+
+      if(parsedData.type === "return_change_accepted" && order.accepted === "accepted"){
+
+        Alert.alert("Your order got accepted")
+      }
+
       if (parsedData.type === "completed_order") {
-        console.log(order.order._id);
+        console.log("hoist is target uid:", order.order._id);
+      
         Alert.alert(
-          `Order from ${order.order.storeInfo.storeName} got accepted!`
+          `Your Order from ${order.order.storeInfo.storeName} is complete!`
         );
         dispatch(setCompleted(order.order));
       }
@@ -133,37 +151,10 @@ function useUserLocation(
 
 export default function Route(props: IProps) {
   const { isDone, isLoggedIn, url, websocket } = props;
-  const acceptedOrders = useAppSelector(getAcceptedOrders);
-  const { mapRegion, handleUserLocation } = useUserLocation(
-    url,
-    websocket,
-    acceptedOrders
-  );
+  const acceptedOrders = useAppSelector(getAcceptedOrders)
+  const { mapRegion, handleUserLocation } = useUserLocation(url, websocket, acceptedOrders);
 
-  console.log("Current map region:", mapRegion);
-
-  // React.useEffect(() => {
-  //   const updateUserLocation = async () => {
-  //     try {
-  //       await userLocation(
-  //         setViewLocation,
-  //         memoizedUserLocation,
-  //         mapRegion,
-  //         vendors
-  //       );
-  //     } catch (error) {
-  //       console.error("Error updating user location:", error);
-  //     }
-  //   };
-
-  //   const intervalId = setInterval(() => {
-  //     updateUserLocation();
-  //   }, 5000);
-
-  //   return () => {
-  //     clearInterval(intervalId);
-  //   };
-  // }, [url, memoizedUserLocation, mapRegion]);
+  // console.log("Current map region:", mapRegion);
 
   const VendorComponent = React.memo(() => {
     const store = useAppSelector(getUserBusiness);

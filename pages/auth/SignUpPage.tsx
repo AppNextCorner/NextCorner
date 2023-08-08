@@ -28,7 +28,7 @@ export default function SignUpPage() {
     email: "",
     password: "",
     phoneNumber: "",
-    role: "",
+    role: "user",
   });
 
   const { makeUser } = useAddUser();

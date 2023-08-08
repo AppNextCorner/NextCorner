@@ -1,7 +1,7 @@
 
 export  interface mapRegion {
-    latitude: number,
-    longitude: number,
+    latitude: number | string,
+    longitude: number | string,
     latitudeDelta: number,
     longitudeDelta: number,
 }

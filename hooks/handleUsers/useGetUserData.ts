@@ -14,7 +14,7 @@ import UseOrders from "hooks/handleVendors/useOrders.hook";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
-import { getAcceptedOrders, setInitialOrders } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { setInitialOrders } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
 
 /**
  * Hook used to configure the user slice on redux by fetching the user data from the mongodb server and firebase auth to be able to access the data for that user from redux
@@ -27,12 +27,10 @@ const useGetUserData = () => {
   const { getCurrentOrders } = UseOrders();
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [url, setUrl] = useState(`ws://192.168.1.227:4002/ws/debug`) // Fixes login instead of redux
+  const [url, setUrl] = useState(`ws://192.168.1.19:4002/ws/debug`) // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
   const {
     getPendingOrderList,
-    acceptOrder,
-    rejectOrder,
     getAcceptedOrderList,
   } = useHandleIncomingOrders();
   /**
@@ -88,10 +86,10 @@ const useGetUserData = () => {
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData._id}`);
+          setUrl(`ws://192.168.1.19:4002/ws?uid=${userData._id}`);
         } else {
           // User is signed out
-          setUrl(`ws://192.168.1.227:4002/ws/debug`);
+          setUrl(`ws://192.168.1.19:4002/ws/debug`);
           dispatch(logOut());
           setIsDone(true);
           setIsLoggedIn(false);

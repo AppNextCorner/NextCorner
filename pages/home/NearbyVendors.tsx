@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import {
   StyleSheet,
   View,
@@ -15,44 +21,100 @@ import { Circle, Marker } from "react-native-maps";
 import MapStyle from "../../constants/MapStyle.json";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { getBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
-// import { getBusiness } from "../../store/slices/BusinessSlice/businessSlice";
-import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import { location } from "../../typeDefinitions/interfaces/location.interface";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { mapRegion } from "../../typeDefinitions/interfaces/mapRegion.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { API } from "constants/API";
-import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
+import { WebSocketContext } from "../../context/incomingOrderContext";
+import { WSLocation } from "pages/OrdersPage";
 const RADIUS = 1.25 * 1609.344; // Convert miles to meters
 export const NearbyVendors = () => {
+  const vendors = useAppSelector(getBusinesses);
   const isFocused = useIsFocused();
   const route = useRoute();
   const navigate = useNavigation<NativeStackNavigationProp<any>>();
 
-  const [mapRegion, setMapRegion] = useState<mapRegion>({
+  const [mapRegion, setMapRegion] = useState<any>({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0,
     longitudeDelta: 0,
   });
-  const [viewLocation, setViewLocation] = useState(false);
-  const vendors: vendorStructure[] = useAppSelector(getBusinesses);
   const mapRef = useRef<any>();
   const flatListRef = useRef<any>();
+  const [storeLocations, setStoreLocations] = useState<WSLocation[]>([]);
+  const [viewLocation, setViewLocation] = useState(false);
+
+  const websocket = useContext(WebSocketContext);
+ 
+  const handleWebSocketMessage = (event: MessageEvent) => {
+    const parseEvent = JSON.parse(event.data);
+    console.log("parse event", parseEvent);
+
+    
+    if (parseEvent.type === "vendor_location") {
+      console.log("here is location from vendor_location: ", parseEvent);
+      const newLocation: WSLocation = {
+        location: {
+          latitude: parseEvent.payload.location.latitude,
+          longitude: parseEvent.payload.location.longitude,
+          latitudeDelta: 0.0106,
+          longitudeDelta: 0.0121,
+        },
+        orderId: parseEvent.payload.order_id,
+      };
+      console.log("here is new location,", newLocation);
+      const findIfStoreExists = storeLocations.find(
+        (item: WSLocation) => item.orderId === newLocation.orderId
+      );
+      const objIndex = storeLocations.findIndex(
+        (obj) => obj.orderId == newLocation.orderId
+      );
+
+      // Copy
+      const copy = [...storeLocations];
+      copy[objIndex] = newLocation;
+
+      console.log("find store if exists", findIfStoreExists);
+      console.log("store locations: ", storeLocations);
+      // Check for the store -> Update the copy and replace the original with the copy -> else add a new location
+      findIfStoreExists
+        ? setStoreLocations(copy)
+        : setStoreLocations((prevState) => prevState.concat([newLocation]));
+    }
+  };
+
+
+    if (isFocused) {
+      console.log('run the websocket')
+      // Attach the WebSocket event listener when the component is focused
+      websocket.onmessage = handleWebSocketMessage;
+    } else {
+      // Remove the WebSocket event listener when the component is not focused
+      websocket.onmessage = null;
+    }
+
+
+  // ... rest of your component code ...
 
   // Filter vendors within the specified radius
   const filterVendorsByRadius = useCallback(() => {
     if (!mapRegion) return []; // Return an empty array if mapRegion is not set yet
 
-    const filteredVendors = vendors.filter((vendor: vendorStructure) => {
+    const filteredVendors = storeLocations.filter((location: WSLocation) => {
       const vendorLocation = {
-        latitude: vendor.location.latitude,
-        longitude: vendor.location.longitude,
+        latitude: location.location.latitude,
+        longitude: location.location.longitude,
       };
       const distance = haversineDistance(mapRegion, vendorLocation);
       return distance <= RADIUS;
     });
+    console.log('filtered vendors: from radius ', filteredVendors)
     return filteredVendors;
-  }, [mapRegion, vendors]);
+  }, [mapRegion, storeLocations]);
 
   // Update user location
   const updateUserLocation = useCallback(async () => {
@@ -60,13 +122,13 @@ export const NearbyVendors = () => {
       setViewLocation,
       setMapRegion,
       mapRegion,
-      vendors
+      null
     );
     if (updatedMapRegion) {
       setMapRegion(updatedMapRegion);
       setViewLocation(true);
     }
-  }, [vendors]);
+  }, []);
 
   useEffect(() => {
     if (isFocused) {
@@ -92,20 +154,24 @@ export const NearbyVendors = () => {
     const callback = (newRegion: mapRegion) => {
       console.log("new region:", newRegion);
     };
-    if (route.name === "Browse" && mapRegion && typeof callback === "function") {
+    if (
+      route.name === "Browse" &&
+      mapRegion &&
+      typeof callback === "function"
+    ) {
       callback(mapRegion);
     }
   }, [route.name, mapRegion]);
 
   // Calculate haversine distance between two points
   const haversineDistance = useCallback(
-    (point1: mapRegion, point2: location) => {
+    (point1: any, point2: any) => {
       const R = 6371e3; // Earth's radius in meters
-      const lat1 = toRadians(point1.latitude);
-      const lat2 = toRadians(parseFloat(point2.latitude));
-      const deltaLat = toRadians(parseFloat(point2.latitude) - point1.latitude);
+      const lat1 = toRadians(point1.latitude as number);
+      const lat2 = toRadians(point2.latitude as number);
+      const deltaLat = toRadians(point2.latitude as any - point1.latitude as any);
       const deltaLng = toRadians(
-        parseFloat(point2.longitude) - point1.longitude
+        point2.longitude - point1.longitude
       );
 
       const a =
@@ -124,8 +190,9 @@ export const NearbyVendors = () => {
 
   // get the day today to find the days open for the vendor
   const currentDate = new Date();
-  const currentDayString = currentDate.toLocaleDateString('en-US', {weekday: 'long'});
-  
+  const currentDayString = currentDate.toLocaleDateString("en-US", {
+    weekday: "long",
+  });
 
   const toRadians = useCallback((value: number) => {
     return (value * Math.PI) / 180;
@@ -168,7 +235,7 @@ export const NearbyVendors = () => {
             style={{ flex: 1, position: "relative" }}
             initialRegion={mapRegion}
           >
-            {filterVendorsByRadius().map((vendor, index) => (
+            {filterVendorsByRadius().map((location: WSLocation, index) => (
               <Marker
                 onPress={() => {
                   flatListRef.current.scrollToIndex({
@@ -177,8 +244,8 @@ export const NearbyVendors = () => {
                   });
                 }}
                 coordinate={{
-                  latitude: parseFloat(vendor.location.latitude),
-                  longitude: parseFloat(vendor.location.longitude),
+                  latitude: location.location.latitude as number,
+                  longitude: location.location.longitude as number,
                 }}
                 key={index}
               >
@@ -210,40 +277,48 @@ export const NearbyVendors = () => {
             style={styles.cardList}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({ item, index }) => {
-              // Find day index 
-              const indexOfDay = item.times.map( (currentTime) => currentTime.day).indexOf(currentDayString)
+              const findVendorByOrderId = vendors.find((vendor) => vendor.uid === item.orderId)
+              // Find day index
+              // const indexOfDay = item.times
+              //   .map((currentTime) => currentTime.day)
+              //   .indexOf(currentDayString);
               return (
-              <Pressable
-                onPress={() =>
-                  navigate.navigate("MenuList", { business: item })
-                }
-                key={index}
-                style={styles.card}
-              >
-                <Text style={styles.amountHeader}>
-                  {index + 1} of {filterVendorsByRadius().length}
-                </Text>
-                <View style={styles.cardContent}>
-                  <View>
-                    <View style={styles.status}></View>
-                    <Image
-                      style={styles.cardImage}
-                      source={{
-                        uri: `${API}/${item.image}`,
-                      }}
-                    />
+                <Pressable
+                  onPress={() =>
+                    navigate.navigate("MenuList", { business: findVendorByOrderId })
+                  }
+                  key={index}
+                  style={styles.card}
+                >
+                  <Text style={styles.amountHeader}>
+                    {index + 1} of {filterVendorsByRadius().length}
+                  </Text>
+                  <View style={styles.cardContent}>
+                    <View>
+                      <View style={styles.status}></View>
+                      <Image
+                        style={styles.cardImage}
+                        source={{
+                          uri: findVendorByOrderId?.image,
+                        }}
+                      />
+                    </View>
+                    <View style={styles.vendorInfo}>
+                      <Text style={styles.vendorName}>{findVendorByOrderId?.name}</Text>
+                      {/* <Text style={styles.description}>
+                        {item.times[indexOfDay].time.open}
+                      </Text> */}
+                    </View>
                   </View>
-                  <View style={styles.vendorInfo}>
-                    <Text style={styles.vendorName}>{item.name}</Text>
-                    <Text style={styles.description}>{item.times[indexOfDay].time.open}</Text>
-                  </View>
-                </View>
-              </Pressable>
-            )}}
+                </Pressable>
+              );
+            }}
           />
         </>
       )}
     </View>
+    // <>
+    // </>
   );
 };
 

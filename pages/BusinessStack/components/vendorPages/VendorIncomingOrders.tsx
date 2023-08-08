@@ -28,41 +28,28 @@ const VendorIncomingOrders = () => {
     getAcceptedOrdersList
   );
 
+  const handleWebSocketMessage = (event: any) => {
+    const parseData = JSON.parse(event.data)
+    const incomingOrder = parseData.payload
+   if (parseData.type === "incoming_order" && incomingOrder.accepted === "pending") {
+    // This one needs testing, a lot of testing...
+    dispatch(addIncomingOrder([incomingOrder]))
+    }
+    else if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
+      dispatch(removeFromPending(incomingOrder));
+    }
+  };
+
+  
   useEffect(() => {
     setPendingMemoOrder(getPendingOrdersList);
     setAcceptedOrders(getAcceptedOrdersList);
-  }, []);
-  useEffect(() => {
-    const handleWebSocketMessage = (event: any) => {
-      const parseData = JSON.parse(event.data);
-      // Alert.alert(parseData.payload.userName);
-      const incomingOrder = parseData.payload;
-      console.log(route.name);
-      console.log(parseData);
-      if (
-        parseData.type === "incoming_order" &&
-        route.name === "Orders" &&
-        incomingOrder.accepted === "pending"
-      ) {
-        // This one needs testing, a lot of testing...
-        dispatch(addIncomingOrder([incomingOrder]));
-      } else if (
-        parseData.type === "return_change_accepted" &&
-        route.name == "Orders" &&
-        incomingOrder.accepted === "rejected"
-      ) {
-        // / why fuck is this being calld???????????????????????????????????
-        dispatch(removeFromPending(incomingOrder));
-      }
-    };
+  }, [dispatch, websocket, handleWebSocketMessage]);
+
+
 
     websocket.onmessage = handleWebSocketMessage;
 
-    return () => {
-      // Cleanup function to unsubscribe from WebSocket when component is unmounted
-      websocket.onmessage = null;
-    };
-  }, []);
 
   // Step 2: Create state variables for the toggle and orderes
   const [isToggleOn, setIsToggleOn] = useState(false);
