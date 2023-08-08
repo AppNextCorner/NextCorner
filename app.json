@@ -1,10 +1,5 @@
 {
   "expo": {
-    "extra": {
-      "eas": {
-        "projectId": "5a9ef8e7-b74a-4d0d-9abd-85dc2e35be3f"
-      }
-    },
     "name": "NextCornerApp",
     "slug": "nextcornerapp",
     "owner": "nextcornerapplication",

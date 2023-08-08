@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React from "react";
 import { Iorder } from "../../../typeDefinitions/interfaces/order.interface";
 import OrderSectionCard from "cards/Vendors/handle/OrderSectionCard";
@@ -7,7 +7,7 @@ interface IProps {
   orders: Iorder[] | undefined;
   acceptMethod?: (targetUid: string, orderId: string) => any;
   rejectMethod?: (targetUid: string, orderId: string) => any;
-  completeMethod?: (targetUid: string, orderId: string) => Promise<void>;
+  completeMethod?: (targetUid: string, orderId: string) => any;
 }
 
 const AllOrdersList = (props: IProps) => {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
-import { toggleButton } from "../../../../styles/components/toggleStyles";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
 import { useRoute } from "@react-navigation/native";
@@ -14,42 +13,49 @@ import {
   removeFromPending,
 } from "../../../../store/slices/WebsocketSlices/IncomingOrderSlice";
 const VendorIncomingOrders = () => {
-  const getAcceptedOrdersList = useAppSelector(getAcceptedOrders)
-  const getPendingOrdersList = useAppSelector(getPendingOrders)
+  const getAcceptedOrdersList = useAppSelector(getAcceptedOrders);
+  const getPendingOrdersList = useAppSelector(getPendingOrders);
   const websocket = useContext(WebSocketContext);
   console.log("websocket vendor incoming", websocket);
   const route = useRoute();
   const dispatch = useAppDispatch();
   //const { store }: RouteParams = route.params as RouteParams;
-  const {
-    acceptOrder,
-    rejectOrder,
-  } = useHandleIncomingOrders();
+  const { acceptOrder, rejectOrder, completeOrder } = useHandleIncomingOrders();
 
-  const [pendingMemoOrder, setPendingMemoOrder] = useState<any[]>(getPendingOrdersList);
-  const [acceptedOrders, setAcceptedOrders] = useState<any[]>(getAcceptedOrdersList);
-  
+  const [pendingMemoOrder, setPendingMemoOrder] =
+    useState<any[]>(getPendingOrdersList);
+  const [acceptedOrders, setAcceptedOrders] = useState<any[]>(
+    getAcceptedOrdersList
+  );
+
   useEffect(() => {
     setPendingMemoOrder(getPendingOrdersList);
     setAcceptedOrders(getAcceptedOrdersList);
-  })
+  }, []);
   useEffect(() => {
     const handleWebSocketMessage = (event: any) => {
       const parseData = JSON.parse(event.data);
-      Alert.alert(parseData.payload.userName);
-      const incomingOrder = parseData.payload
-      console.log(route.name)
-      console.log(parseData)
-     if (parseData.type === "incoming_order" && route.name === "Orders" && incomingOrder.accepted === "pending") {
-       
-      // This one needs testing, a lot of testing...
-      dispatch(addIncomingOrder([incomingOrder]))
-      }
-      else if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
+      // Alert.alert(parseData.payload.userName);
+      const incomingOrder = parseData.payload;
+      console.log(route.name);
+      console.log(parseData);
+      if (
+        parseData.type === "incoming_order" &&
+        route.name === "Orders" &&
+        incomingOrder.accepted === "pending"
+      ) {
+        // This one needs testing, a lot of testing...
+        dispatch(addIncomingOrder([incomingOrder]));
+      } else if (
+        parseData.type === "return_change_accepted" &&
+        route.name == "Orders" &&
+        incomingOrder.accepted === "rejected"
+      ) {
         // / why fuck is this being calld???????????????????????????????????
-        dispatch(removeFromPending(incomingOrder))
+        dispatch(removeFromPending(incomingOrder));
       }
     };
+
     websocket.onmessage = handleWebSocketMessage;
 
     return () => {
@@ -57,7 +63,6 @@ const VendorIncomingOrders = () => {
       websocket.onmessage = null;
     };
   }, []);
-
 
   // Step 2: Create state variables for the toggle and orderes
   const [isToggleOn, setIsToggleOn] = useState(false);
@@ -123,7 +128,7 @@ const VendorIncomingOrders = () => {
       {acceptedOrders !== undefined && (
         <View style={styles.list}>
           <AllOrdersList
-            completeMethod={() => console.log("hello")}
+            completeMethod={completeOrder}
             orders={acceptedOrders}
           />
         </View>
@@ -135,11 +140,11 @@ const VendorIncomingOrders = () => {
 export default VendorIncomingOrders;
 
 const styles = StyleSheet.create({
-  listHeaderContainer: {margin: '2.5%'},
+  listHeaderContainer: { margin: "2.5%" },
   listHeader: { fontWeight: "bold", fontSize: 17 },
   list: { flex: 1 },
   headerText: { marginTop: "7.5%", fontWeight: "bold" },
   header: { flexDirection: "row", alignItems: "center" },
   page: { flex: 1, backgroundColor: "#fff" },
-  subHeader: { flex: 1, backgroundColor: "#fff", marginHorizontal: '5%' },
+  subHeader: { flex: 1, backgroundColor: "#fff", marginHorizontal: "5%" },
 });

@@ -22,10 +22,12 @@ interface MemoizedScreenProps {
   navigation: any;
 }
 
-
 const Stack = createNativeStackNavigator();
 
-const WebsocketProviderWrapper: React.FC<{ children: React.ReactNode, websocket: WebSocket | null;}>= ({ children , websocket}) => {
+const WebsocketProviderWrapper: React.FC<{
+  children: React.ReactNode;
+  websocket: WebSocket | null;
+}> = ({ children, websocket }) => {
   return (
     <WebSocketContext.Provider value={websocket!}>
       {children}
@@ -40,25 +42,32 @@ interface IProps {
   websocket: WebSocket | null;
 }
 
-function useUserLocation(url: string, websocket: WebSocket | null, accepted: any) {
+function useUserLocation(
+  url: string,
+  websocket: WebSocket | null,
+  accepted: any
+) {
   const [mapRegion, setMapRegion] = useMapRegion();
   const [viewLocation, setViewLocation] = React.useState(false);
-  const getUserDataRef = accepted
-  const getUserData = getUserDataRef
+  const getUserDataRef = accepted;
+  const getUserData = getUserDataRef;
 
   const handleUserLocation = React.useCallback(
     async (newRegion: any) => {
       try {
         setMapRegion(newRegion);
-      
-       const getUserUid = getUserData.map((order: any) => order.uid);
-        console.log('get user uid: ', getUserUid)
+
+        const getUserUid = getUserData.map((order: any) => order.uid);
+        console.log("get user uid: ", getUserUid);
         //Remove duplicates from array by comparing every first instance of a uid
-        const getUsersWhoOrdered = getUserUid.filter(function (item: any, pos: number) {
+        const getUsersWhoOrdered = getUserUid.filter(function (
+          item: any,
+          pos: number
+        ) {
           return getUserUid.indexOf(item) === pos;
         });
-        console.log('get user data ref', getUsersWhoOrdered)
-        console.log('running handleUserLocation')
+        console.log("get user data ref", getUsersWhoOrdered);
+        console.log("running handleUserLocation");
 
         if (websocket) {
           const sendRegion = {
@@ -71,7 +80,7 @@ function useUserLocation(url: string, websocket: WebSocket | null, accepted: any
               users: getUsersWhoOrdered,
             },
           };
-          console.log('sending to user')
+          console.log("sending to user");
           websocket.send(JSON.stringify(sendRegion));
         }
       } catch (error) {
@@ -82,6 +91,16 @@ function useUserLocation(url: string, websocket: WebSocket | null, accepted: any
   );
 
   React.useEffect(() => {
+    const handleWebSocketMessage = (event: any) => {
+      const parsedData = JSON.parse(event.data);
+      console.log("LE HOIST");
+      const order = parsedData.payload;
+      if (parsedData.type === "completed_order") {
+        console.log(parsedData);
+        alert(`Order from ${order.storeInfo.storeName} got accepted!`);
+      }
+    };
+    websocket!.onmessage = handleWebSocketMessage;
     const updateUserLocation = async () => {
       try {
         await userLocation(
@@ -89,9 +108,9 @@ function useUserLocation(url: string, websocket: WebSocket | null, accepted: any
           setMapRegion,
           mapRegion,
           null,
-          handleUserLocation, // Sets the map region
+          handleUserLocation // Sets the map region
         );
-        console.log('updated user location')
+        console.log("updated user location");
       } catch (error) {
         console.error("Error updating user location:", error);
       }
@@ -111,8 +130,12 @@ function useUserLocation(url: string, websocket: WebSocket | null, accepted: any
 
 export default function Route(props: IProps) {
   const { isDone, isLoggedIn, url, websocket } = props;
-  const acceptedOrders = useAppSelector(getAcceptedOrders)
-  const { mapRegion, handleUserLocation } = useUserLocation(url, websocket, acceptedOrders);
+  const acceptedOrders = useAppSelector(getAcceptedOrders);
+  const { mapRegion, handleUserLocation } = useUserLocation(
+    url,
+    websocket,
+    acceptedOrders
+  );
 
   console.log("Current map region:", mapRegion);
 
@@ -176,7 +199,8 @@ export default function Route(props: IProps) {
     navigation: any;
   }> = React.memo(VendorComponent);
 
-  const MemoizedHomeStackComponent: React.FC<MemoizedScreenProps> = React.memo(HomeStackComponent);
+  const MemoizedHomeStackComponent: React.FC<MemoizedScreenProps> =
+    React.memo(HomeStackComponent);
 
   return (
     <WebsocketProviderWrapper websocket={websocket}>
@@ -190,7 +214,8 @@ export default function Route(props: IProps) {
 
             {screens.map((screen, index) => {
               const Component = (props: any) => <screen.component {...props} />;
-              const MemoizedComponent: React.FC<MemoizedScreenProps> = React.memo(Component);
+              const MemoizedComponent: React.FC<MemoizedScreenProps> =
+                React.memo(Component);
               return (
                 <Stack.Screen key={index} name={screen.name}>
                   {(props) => (
@@ -211,7 +236,8 @@ export default function Route(props: IProps) {
             </Stack.Screen>
 
             {vendorScreens.map((screen, index) => {
-              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> = React.memo(screen.component);
+              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> =
+                React.memo(screen.component);
               return (
                 <Stack.Screen key={index} name={screen.name}>
                   {(props) => (
@@ -228,7 +254,8 @@ export default function Route(props: IProps) {
         <AppNavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {loggedOutScreens.map((screen, index) => {
-              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> = React.memo(screen.component);
+              const MemoizedScreenComponent: React.FC<MemoizedScreenProps> =
+                React.memo(screen.component);
               return (
                 <Stack.Screen key={index} name={screen.name}>
                   {(props) => (

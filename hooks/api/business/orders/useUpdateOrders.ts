@@ -7,5 +7,12 @@ export default function useUpdateOrders() {
     const response = await makePutRequest(url, payload);
     return response.data.updated;
   };
-  return { updateOrderAcceptStatus };
+
+  //payload : {orderId: id, newAcceptStatus: string}
+  const updateOrderStatus = async (payload: any) => {
+    const url = `/orders/update-status`;
+    const response = await makePutRequest(url, payload);
+    return response.data.updated;
+  };
+  return { updateOrderAcceptStatus, updateOrderStatus };
 }

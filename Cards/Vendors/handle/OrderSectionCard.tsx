@@ -70,7 +70,7 @@ const OrderSectionCard = (props: IProps) => {
         {completeMethod !== undefined ? (
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#7CDBFE" }]}
-            onPress={() => completeMethod!(order.uid, order._id!)}
+            onPress={() => completeMethod!(order.uid, order._id!, )}
           >
             <Text style={styles.buttonText}>Picked Up</Text>
           </TouchableOpacity>

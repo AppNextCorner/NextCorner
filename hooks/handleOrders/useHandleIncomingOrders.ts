@@ -7,7 +7,7 @@ import { addAcceptedOrder } from "../../store/slices/WebsocketSlices/IncomingOrd
 import { useAppDispatch } from "../../store/hook";
 
 const useHandleIncomingOrders = () => {
-  const { updateOrderAcceptStatus } = useUpdateOrders();
+  const { updateOrderAcceptStatus, updateOrderStatus } = useUpdateOrders();
   const dispatch = useAppDispatch();
   const { fetchOrdersById } = useFetchOrders();
   const webSocket = useContext(WebSocketContext);
@@ -46,12 +46,30 @@ const useHandleIncomingOrders = () => {
       },
     };
     webSocket.send(JSON.stringify(payload));
-    const rejectedOrder = await updateOrderAcceptStatus({
+    await updateOrderAcceptStatus({
       orderId,
       newStatus: accepted,
     });
-    console.log("rejectedOrder:");
-    console.log(rejectedOrder);
+  };
+
+  const completeOrder = async (targetUid: string, orderId: string) => {
+    const status = "completed";
+
+    const updatedOrder = await updateOrderStatus({
+      orderId,
+      newStatus: status,
+    });
+
+    const payload = {
+      type: "send_completed_order",
+      payload: {
+        order: updatedOrder,
+        status,
+        targetUid,
+        orderId,
+      },
+    };
+    webSocket.send(JSON.stringify(payload));
   };
 
   const getPendingOrderList = async (storeId: string) => {
@@ -69,13 +87,13 @@ const useHandleIncomingOrders = () => {
     const acceptedOrdes = allOrders.filter(
       (singleOrder: Iorder) => singleOrder.accepted === "accepted"
     );
-    console.log("Accepted Order list:", acceptedOrdes);
     return acceptedOrdes;
   };
 
   return {
     acceptOrder,
     rejectOrder,
+    completeOrder,
     getPendingOrderList,
     getAcceptedOrderList,
   };
