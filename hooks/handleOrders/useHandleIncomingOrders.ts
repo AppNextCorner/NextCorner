@@ -60,6 +60,7 @@ const useHandleIncomingOrders = () => {
       newStatus: status,
     });
 
+    console.log("N:", updatedOrder);
     const payload = {
       type: "send_completed_order",
       payload: {
@@ -69,6 +70,7 @@ const useHandleIncomingOrders = () => {
         orderId,
       },
     };
+    console.log("BELOW IS RUNNING!");
     webSocket.send(JSON.stringify(payload));
   };
 

@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import UseOrders from "hooks/handleVendors/useOrders.hook";
-import { useAppSelector,  } from "../store/hook";
+import { useAppSelector } from "../store/hook";
 import InProgressOrderCard from "../Cards/Order/InProgressOrderCard";
 import { useNavigation } from "@react-navigation/native";
 import CompletedOrderCard from "../Cards/Order/CompletedOrderCard";
@@ -21,12 +21,10 @@ import { getUser } from "../store/slices/userSessionSlice";
 export default function OrdersPage() {
   const orders = useAppSelector(getOrders);
   const user = useAppSelector(getUser);
-  console.log(orders);
   const { getCurrentOrders } = UseOrders();
-  
+
   const [orderSelection, setOrderSelection] = useState(false);
- 
-  
+
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const goToProgressPage = (order: Iorder) => {
     navigation.navigate("InProgressOrder", { order });
@@ -34,11 +32,11 @@ export default function OrdersPage() {
 
   useEffect(() => {
     getCurrentOrders(user);
-  }, [])
+  }, []);
 
   const filterCompletedData = orders.filter((item: state) => {
-    console.log("item: ",item);
-    return item.accepted === "accepted";
+    console.log("item: ", item);
+    return item.status === "completed";
   });
 
   const finishedOrders = [
@@ -50,7 +48,7 @@ export default function OrdersPage() {
   console.log("not completed orders, ", filterCompletedData);
 
   const filterInProgressData = orders.filter(
-    (item: state) => item.accepted === "pending"
+    (item: state) => item.status === "Order Not Completed"
   );
 
   const inProgress = () => {

@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, Alert } from "react-native";
 import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Vendor from "pages/BusinessStack/components/vendorPages/Vendor";
@@ -7,7 +7,7 @@ import handleCreateTabStack from "hooks/components/handleCreateTabStack";
 import HomePage from "pages/HomePage";
 import { screens, vendorScreens } from "constants/components/logged";
 import { loggedOutScreens } from "constants/components/loggedOut";
-import { useAppSelector } from "../store/hook";
+import { useAppDispatch, useAppSelector } from "../store/hook";
 import { getUserBusiness } from "../store/slices/BusinessSlice/businessSessionSlice";
 import ITab from "../typeDefinitions/interfaces/IComponents/tab.interface";
 import { WebSocketContext } from "../context/incomingOrderContext";
@@ -16,6 +16,7 @@ import AppNavigationContainer from "./AppNavigationContainer";
 import { useMapRegion } from "hooks/useMaps/useMapRegion";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
 import { getAcceptedOrders } from "../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { setCompleted } from "../store/slices/addToOrders";
 
 interface MemoizedScreenProps {
   route: RouteProp<ParamListBase, string>;
@@ -51,6 +52,7 @@ function useUserLocation(
   const [viewLocation, setViewLocation] = React.useState(false);
   const getUserDataRef = accepted;
   const getUserData = getUserDataRef;
+  const dispatch = useAppDispatch();
 
   const handleUserLocation = React.useCallback(
     async (newRegion: any) => {
@@ -66,8 +68,6 @@ function useUserLocation(
         ) {
           return getUserUid.indexOf(item) === pos;
         });
-        console.log("get user data ref", getUsersWhoOrdered);
-        console.log("running handleUserLocation");
 
         if (websocket) {
           const sendRegion = {
@@ -93,11 +93,14 @@ function useUserLocation(
   React.useEffect(() => {
     const handleWebSocketMessage = (event: any) => {
       const parsedData = JSON.parse(event.data);
-      console.log("LE HOIST");
       const order = parsedData.payload;
+      console.log(parsedData.type);
       if (parsedData.type === "completed_order") {
-        console.log(parsedData);
-        alert(`Order from ${order.storeInfo.storeName} got accepted!`);
+        console.log(order.order._id);
+        Alert.alert(
+          `Order from ${order.order.storeInfo.storeName} got accepted!`
+        );
+        dispatch(setCompleted(order.order));
       }
     };
     websocket!.onmessage = handleWebSocketMessage;
