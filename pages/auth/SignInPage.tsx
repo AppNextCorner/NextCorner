@@ -8,103 +8,137 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
-  Alert,
   StyleSheet,
   Image,
+  ScrollView,
+  Platform,
 } from "react-native";
 const logo = require("../../assets/logo.png");
 import { useState } from "react";
-import { auth } from "hooks/handleUsers/useFirebase";
-// importing firebase
-import { signInWithEmailAndPassword, updateCurrentUser } from "firebase/auth";
-
 import { useNavigation } from "@react-navigation/native";
-
-import { makePostRequest } from "../../config/axios.config";
-import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { KeyboardAvoidingView } from "react-native";
+import { keyboardVerticalOffset } from "../../helpers/keyboardOffset";
+import authHandlers from "hooks/handleUsers/handleUserAuth";
 /**
  * Used to authenticate an existing user with firebase authentication methods
  */
 export default function SignInPage() {
+  const { handleAuth } = authHandlers();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [roleChooser, setRoleChooser] = useState(true);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   /* 
   Function that handles an existing account 
 */
-  const handleSignIn = async () => {
-    // prebuilt function from firebase to handle sign in request by taking in email and pass state and auth coming from firebase/auth
-    signInWithEmailAndPassword(auth, email, password) // firebase auth that requires password, email, and the auth status of the user
-      // takes in the credentials from email and password
-      .then(async (userCredential) => {
-        console.log('user creds')
-        console.log(userCredential.user);
-        const userFirebase = await userCredential.user
-        updateCurrentUser(auth, userFirebase)
-        const lambda = async (email: string): Promise<AppUser> => {
-          const url = "/auth/getUser";
-          const response = await makePostRequest(url, { email });
-          return response.data;
-        };
-        const user: AppUser = await lambda(email);
-        console.log("here is user: ", user);
-        const routeStack = user.role === "user" ? "HomeStack" : "Vendors";
-        const route = user.role === "user" ? "Home" : "Vendors";
-        navigation.navigate(routeStack, {screen: route});
-        //navigation.navigate("HomeStack", {screen: "Home"})
-      })
-      .catch((err) => {
-        console.log(err);
-        // error message for lack of password characters, email existing, etc...
-        Alert.alert(err.message);
-      });
-    
-  };
+  // "/auth/getUser"
+
   const goToSignUp = () => {
     navigation.navigate("Register");
   };
 
   // loading the sign in page
   return (
-    <View style={styles.signInContainer}>
-      <View style={styles.logoContainer}>
-        <Image style={styles.logo} source={logo} />
-      </View>
+    <KeyboardAvoidingView
+      style={styles.signInContainer}
+      enabled
+      behavior={Platform.OS === "ios" ? "position" : "height"}
+      keyboardVerticalOffset={keyboardVerticalOffset(-225, 0)}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+      >
+        <View style={styles.logoContainer}>
+          <Image style={styles.logo} source={logo} />
+        </View>
 
-      <View style={styles.headerTag}>
-        <Text style={styles.mainHeader}>Login to your account</Text>
-      </View>
-      {/* Email and Password input - still needs to add confirm password feature */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputText}>Email Address</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(text) => {
-            setEmail(text);
-          }}
-          placeholder="email@gmail.com"
-        />
-        <Text style={styles.inputText}>Password</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={setPassword}
-          value={password}
-          placeholder="password"
-        />
-      </View>
+        <View style={styles.headerTag}>
+          <Text style={styles.mainHeader}>Welcome Back</Text>
+          <Text style={styles.subHeader}>Sign in to your account</Text>
+        </View>
 
-      <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
-        <Text style={styles.signInText}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.createAccountButton} onPress={goToSignUp}>
-        <Text style={styles.createAccountText}>Create an Account</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.roleContainer}>
+          <TouchableOpacity
+            onPress={() => setRoleChooser(false)}
+            style={styles.roleButton}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                {
+                  color: !roleChooser ? "#78DBFF" : "#979797",
+                  textDecorationLine: !roleChooser ? "underline" : "none",
+                },
+              ]}
+            >
+              Consumer
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setRoleChooser(true)}
+            style={styles.roleButton}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                {
+                  color: roleChooser ? "#78DBFF" : "#979797",
+                  textDecorationLine: roleChooser ? "underline" : "none",
+                },
+              ]}
+            >
+              Vendor
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {/* Email and Password input - still needs to add confirm password feature */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputText}>Email Address</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+            placeholder="email@gmail.com"
+          />
+          <Text style={styles.inputText}>Password</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="password"
+          />
+        </View>
+
+        <TouchableOpacity
+          style={styles.signInButton}
+          onPress={() => handleAuth("/auth/getUser", {email, password}, roleChooser, ["password", "email"])}
+        >
+          <Text style={styles.signInText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.createAccountButton}
+          onPress={goToSignUp}
+        >
+          <Text style={styles.createAccountText}>Create an Account</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  roleButton: { padding: "5%", marginHorizontal: "7.5%" },
+  roleText: { fontSize: 16 },
+  roleContainer: {
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  subHeader: {
+    textAlign: "center",
+  },
   logoContainer: {
     display: "flex",
     alignItems: "center",

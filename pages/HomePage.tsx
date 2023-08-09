@@ -3,7 +3,7 @@
  * - Displays business based on location or depending on the section from either the category or default sections
  */
 import { StyleSheet, View, FlatList } from "react-native";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import HeaderComponent from "components/home/HeaderComponent";
 import { StatusBar } from "expo-status-bar";
 import BusinessCard from "cards/Home/BusinessCard";
@@ -28,10 +28,37 @@ export default function HomePage() {
 
   const isClicked = useAppSelector(getButton);
   const vendors: vendorStructure[] = useAppSelector(getBusinesses);
+  const [topVendors, setTopVendors] = useState<vendorStructure[][]>([]);
   // Only re-render the data in the dependency when it changes values
   const filterBusinessCards = useMemo(() => {
     return vendors.filter((i) => i.category.id == categoryId);
   }, [categoryId, vendors]);
+
+  const updateTopVendors = React.useCallback(() => {
+    let copyTrending = [...topVendors];
+
+    for (let i = 0; i < categories.length; i++) {
+      let trending: vendorStructure[] = [];
+      for (let j = 0; j < vendors.length; j++) {
+        console.log(vendors[j].trending, categories[i].name);
+        if (vendors[j].trending === categories[i].name) {
+          trending.push(vendors[j]);
+        }
+      }
+
+      console.log("trending row here: ", trending);
+      if (trending.length > 0) {
+        copyTrending.push(trending);
+      }
+    }
+    console.log("copy trending: " + JSON.stringify(copyTrending));
+    setTopVendors(copyTrending);
+  }, [vendors, topVendors, categories]);
+
+  // Make sures the function is called when the updateTopVendors dependencies changes
+  React.useEffect(() => {
+    updateTopVendors();
+  }, [vendors, categories]);
 
   return (
     <>
@@ -74,19 +101,24 @@ export default function HomePage() {
             // Main content of the page
             renderItem={({ item }) => {
               // No Category button was selected
-              if (!categoryWasSelected) {
-                const trendingRow = vendors.filter(
-                  (vendor: vendorStructure) => {
-                    return vendor.trending === item.name;
-                  }
+              if (!categoryWasSelected && topVendors.length > 0) {
+                // Find index of trending category
+                const findIndexOfTrendingCategory = topVendors.findIndex(
+                  (nestedArray: vendorStructure[]) =>
+                    nestedArray.length > 0 &&
+                    nestedArray[0].trending === item.name
                 );
-                return (
-                  <BusinessListComponent
-                    title={item.name}
-                    business={trendingRow}
-                  />
-                );
+
+                if (findIndexOfTrendingCategory !== -1) {
+                  return (
+                    <BusinessListComponent
+                      title={item.name}
+                      business={topVendors[findIndexOfTrendingCategory]}
+                    />
+                  );
+                }
               }
+
               return null;
             }}
           />

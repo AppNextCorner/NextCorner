@@ -12,7 +12,8 @@ interface Props {
 const BusinessListComponent = React.memo((props: Props) => {
   const { checkForStyleChange } = useCategoryList();
   // console.log("BLC:", props.business);
-  if (props.business.length > 1) {
+  console.log('props business: ', props.business);
+  if (props.business.length >= 1) {
     return (
       <View>
         <Text style={styles.title}>{props.title}</Text>

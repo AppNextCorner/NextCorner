@@ -47,12 +47,10 @@ interface IProps {
 function useUserLocation(
   url: string,
   websocket: WebSocket | null,
-  accepted: any
 ) {
   const [mapRegion, setMapRegion] = useMapRegion();
-  const [viewLocation, setViewLocation] = React.useState(false);
-  const getUserDataRef = accepted
-  const getUserData = getUserDataRef
+  const [_viewLocation, setViewLocation] = React.useState(false);
+  const acceptedOrders = useAppSelector(getAcceptedOrders)
   const dispatch = useAppDispatch();
 
   // NOTE TODO: MAKE ANOTHER OR ANOTHER WAY TO SEND THE LOCATION GLOBALLY FOR THE NEARBY VENDORS
@@ -61,7 +59,7 @@ function useUserLocation(
       try {
         setMapRegion(newRegion);
 
-        const getUserUid = getUserData.map((order: any) => order.uid);
+        const getUserUid = acceptedOrders.map((order: any) => order.uid);
         //Remove duplicates from array by comparing every first instance of a uid
         const getUsersWhoOrdered = getUserUid.filter(function (
           item: any,
@@ -89,7 +87,7 @@ function useUserLocation(
         console.error("Error updating user location:", error);
       }
     },
-    [websocket, setMapRegion, accepted]
+    [websocket, setMapRegion, acceptedOrders]
   );
 
   React.useEffect(() => {
@@ -144,15 +142,13 @@ function useUserLocation(
     return () => {
       clearInterval(intervalId);
     };
-  }, [url, handleUserLocation, mapRegion, getUserData]);
-
-  return { mapRegion, handleUserLocation };
+  }, [ mapRegion, acceptedOrders]);
 }
 
 export default function Route(props: IProps) {
   const { isDone, isLoggedIn, url, websocket } = props;
-  const acceptedOrders = useAppSelector(getAcceptedOrders)
-  const { mapRegion, handleUserLocation } = useUserLocation(url, websocket, acceptedOrders);
+ 
+  {isDone && isLoggedIn ? useUserLocation(url, websocket) : null}
 
   // console.log("Current map region:", mapRegion);
 

@@ -9,19 +9,21 @@ import {
   Text,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import useAddUser from "hooks/handleUsers/useAddUser";
 import { auth } from "hooks/handleUsers/useFirebase";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { toggleButton } from "../../styles/components/toggleStyles";
-
+import { keyboardVerticalOffset } from "../../helpers/keyboardOffset";
+import authHandlers from "hooks/handleUsers/handleUserAuth";
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
  */
 export default function SignUpPage() {
-  // form data
-  const [isToggleOn, setIsToggleOn] = useState(false);
+  const {handleAuth} = authHandlers();
   const [userData, setUserData] = useState<AppUser>({
     firstName: "",
     lastName: "",
@@ -30,19 +32,7 @@ export default function SignUpPage() {
     phoneNumber: "",
     role: "user",
   });
-
-  const { makeUser } = useAddUser();
-
-  // Toggle handler for when the store is open
-  const toggleHandler = () => {
-    setIsToggleOn(!isToggleOn);
-    const role = !isToggleOn ? "vendor" : "user";
-    console.log(role);
-    setUserData((prevStruct) => ({ ...prevStruct, role: role }));
-    console.log(userData);
-    console.log(userData);
-    console.log(userData);
-  };
+  const [roleChooser, setRoleChooser] = useState(true);
 
   const handlePropertyChange = (property: string, text: string) => {
     setUserData((prevStructure) => ({
@@ -51,145 +41,144 @@ export default function SignUpPage() {
     }));
   };
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  // after gaining the input value - check if the form is complete and move them onto a user slice
-  const registerUser = async (userData: AppUser) => {
-    // create a user with async thunk and through our backend, firebase admin will return a user
-    const user = await makeUser(userData);
-    console.log(userData);
-    console.log("here is user: ", user);
-    // after creating the user, we could now use the same information passed in to login with
-    if (user !== null) {
-      signInWithEmailAndPassword(auth, userData.email, userData.password)
-        // takes in the credentials from email and password
-        .then((_userCredential) => {
-          const route = userData.role === "user" ? "HomeStack" : "Vendors";
-          navigation.navigate(route, {name: route});
-        })
-        .catch((_err) => {
-          // error message for lack of password characters, email existing, etc...
-          Alert.alert(user.message);
-        });
-    }
-    return user;
-  };
-
   const goToLoginPage = () => {
     navigation.navigate("Login");
   };
 
   return (
-    <ScrollView style={styles.signInContainer}>
-      <View style={styles.headerTag}>
-        <Text style={styles.mainHeader}>Create an account</Text>
-        <Text>
-          Welcome friend, enter your details to get started in ordering food
-        </Text>
-      </View>
-      <View style={styles.toggle}>
-        <Text>User</Text>
-
-        <TouchableOpacity onPress={toggleHandler}>
-          <View
-            style={[
-              toggleButton.toggleButton,
-              isToggleOn
-                ? toggleButton.toggleButtonOn
-                : toggleButton.toggleButtonOff,
-            ]}
-          >
-            <View
-              style={[
-                toggleButton.toggleButtonCircle,
-                isToggleOn
-                  ? toggleButton.toggleButtonCircleOn
-                  : toggleButton.toggleButtonCircleOff,
-                { transform: [{ translateX: isToggleOn ? 10 : -10 }] }, // Move the circle to the right when toggle is ON
-              ]}
-            />
-          </View>
-        </TouchableOpacity>
-        <Text>Vendor</Text>
-      </View>
-
-      {/* Email and Password input - still needs to add confirm password feature */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputText}>Email Address</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(text) => {
-            handlePropertyChange("email", text);
-          }}
-          placeholder="email@gmail.com"
-        />
-        <Text style={styles.inputText}>Password</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(text) => handlePropertyChange("password", text)}
-          value={userData.password}
-          placeholder="password"
-        />
-        {/* Name container */}
-        <View style={styles.userNameContainer}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.inputText}>First Name</Text>
-            <TextInput
-              style={styles.nameInput}
-              onChangeText={(text) => handlePropertyChange("firstName", text)}
-              value={userData.firstName}
-              placeholder="Joe"
-            />
-          </View>
-          <View style={styles.nameContainer}>
-            <Text style={styles.inputText}>Last Name</Text>
-            <TextInput
-              style={styles.nameInput}
-              onChangeText={(text) => handlePropertyChange("lastName", text)}
-              value={userData.lastName}
-              placeholder="bobaguard"
-            />
-          </View>
+    <KeyboardAvoidingView
+      
+      
+      style={styles.signInContainer}
+      enabled
+      behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+      keyboardVerticalOffset={keyboardVerticalOffset(-110, 0)}
+    >
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' keyboardDismissMode='on-drag'>
+        <View style={styles.headerTag}>
+          <Text style={styles.mainHeader}>Create an account</Text>
+          <Text>
+            Welcome friend, enter your details to get started in ordering food
+          </Text>
         </View>
-        {/* Phone Number Container */}
-        <Text style={styles.inputText}>Phone Number</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={(text) => handlePropertyChange("phoneNumber", text)}
-          value={userData.phoneNumber}
-          // Splice the dashes laterc
-          placeholder="123-123-1234"
-        />
-      </View>
+       
 
-      <TouchableOpacity
-        onPress={() => {
-          registerUser(userData);
-          console.log("here is role", userData.role);
-        }}
-        style={styles.signInButton}
-      >
-        <Text style={styles.signInText}>Register</Text>
-      </TouchableOpacity>
-      {/* Navigate to login page through this text button */}
-      <TouchableOpacity
-        onPress={() => goToLoginPage()}
-        style={styles.loginAccountButton}
-      >
-        <Text style={styles.loginAccountText}>Have an account? Login Here</Text>
-      </TouchableOpacity>
-
-      {/* <View>
-            <TouchableOpacity
-              style={styles.signInButton}
-              onPress={handleCreateAccount}
+        <View style={styles.roleContainer}>
+          <TouchableOpacity
+            onPress={() => setRoleChooser(false)}
+            style={styles.roleButton}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                {
+                  color: !roleChooser ? "#78DBFF" : "#979797",
+                  textDecorationLine: !roleChooser ? "underline" : "none",
+                },
+              ]}
             >
-              <Text style={styles.signInText}>Sign Up</Text>
-            </TouchableOpacity>
-          </View> */}
-    </ScrollView>
+              Consumer
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setRoleChooser(true)}
+            style={styles.roleButton}
+          >
+            <Text
+              style={[
+                styles.roleText,
+                {
+                  color: roleChooser ? "#78DBFF" : "#979797",
+                  textDecorationLine: roleChooser ? "underline" : "none",
+                },
+              ]}
+            >
+              Vendor
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Email and Password input - still needs to add confirm password feature */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputText}>Email Address</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => {
+              handlePropertyChange("email", text);
+            }}
+            placeholder="email@gmail.com"
+          />
+          <Text style={styles.inputText}>Password</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => handlePropertyChange("password", text)}
+            value={userData.password}
+            placeholder="password"
+          />
+          {/* Name container */}
+          <View style={styles.userNameContainer}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.inputText}>First Name</Text>
+              <TextInput
+                style={styles.nameInput}
+                onChangeText={(text) => handlePropertyChange("firstName", text)}
+                value={userData.firstName}
+                placeholder="Joe"
+              />
+            </View>
+            <View style={styles.nameContainer}>
+              <Text style={styles.inputText}>Last Name</Text>
+              <TextInput
+                style={styles.nameInput}
+                onChangeText={(text) => handlePropertyChange("lastName", text)}
+                value={userData.lastName}
+                placeholder="bobaguard"
+              />
+            </View>
+          </View>
+          {/* Phone Number Container */}
+          <Text style={styles.inputText}>Phone Number</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={(text) => handlePropertyChange("phoneNumber", text)}
+            value={userData.phoneNumber}
+            // Splice the dashes laterc
+            placeholder="123-123-1234"
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={() =>
+          handleAuth('/auth/signup', userData, roleChooser, ["firstName", "lastName", "email", "password", "phoneNumber", "role"])}
+          //    {
+          //   registerUser(userData);
+          //   console.log("here is role", userData.role);
+          // }}
+          style={styles.signInButton}
+        >
+          <Text style={styles.signInText}>Register</Text>
+        </TouchableOpacity>
+        {/* Navigate to login page through this text button */}
+        <TouchableOpacity
+          onPress={() => goToLoginPage()}
+          style={styles.loginAccountButton}
+        >
+          <Text style={styles.loginAccountText}>
+            Have an account? Login Here
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  roleButton: { padding: "5%", marginHorizontal: "7.5%" },
+  roleText: { fontSize: 16 },
+  roleContainer: {
+    justifyContent: "center",
+    flexDirection: "row",
+  },
   toggle: { flexDirection: "row", alignItems: "center" },
   nameInput: {
     width: 150,

@@ -1,6 +1,8 @@
 import {
+  FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -23,6 +25,7 @@ import CreateCategories from "./CreateCategories";
 import { useAppSelector } from "../../../../store/hook";
 import { getUser } from "../../../../store/slices/userSessionSlice";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
+import { keyboardVerticalOffset } from "../../../../helpers/keyboardOffset";
 
 /**
  *
@@ -30,14 +33,14 @@ import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
  */
 const VendorsCreate = () => {
   const { upload, openImageLibrary } = usePhotoHandler();
-  const user = useAppSelector(getUser)
+  const user = useAppSelector(getUser);
 
   // const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [menuStructure] = useState<Iitem[]>([]);
   // const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
   const [structure, setStructure] = useState<vendorStructure>({
     name: "",
-    image: "",
+    image: "https://cdn.vectorstock.com/i/preview-1x/06/03/vendor-snack-icon-flat-store-market-vector-45320603.jpg",
     // Replace with announcements later when vendor pages are finished
     announcements: {
       cards: [],
@@ -74,53 +77,66 @@ const VendorsCreate = () => {
     const response: string | null = await openImageLibrary();
     handlePropertyChange("image", response);
   };
-  const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 0;
+  
   return (
-    <View style={{ flex: 1, paddingTop: '5%', backgroundColor: '#fff' }}>
+    <View style={{ flex: 1, paddingTop: "5%", backgroundColor: "#fff" }}>
       <NextCornerVendorHeader />
       <KeyboardAvoidingView
         behavior="padding"
         style={styles.page}
-        enabled={Platform.OS === "ios" ? true : false}
-        keyboardVerticalOffset={keyboardVerticalOffset}
+        enabled={true}
+        keyboardVerticalOffset={keyboardVerticalOffset(50, 0)}
       >
-        <View style={styles.cardPreview}>
-          <BusinessCard
-            disabled={true}
-            businessItem={structure}
-            checkForStyleChange={true}
-            create={true}
-          />
-        </View>
+        <FlatList
+         showsVerticalScrollIndicator={false}
+         keyboardShouldPersistTaps="always"
+         keyboardDismissMode="on-drag"
+          renderItem={null}
+          ListHeaderComponent={
+            <>
+              <View style={{ flex: 1 }}>
+                <BusinessCard
+                  disabled={true}
+                  businessItem={structure}
+                  checkForStyleChange={false}
+                  create={true}
+                />
+              </View>
+              <View>
+                <View style={styles.inputContainer}>
+                  <Text>Store Name: </Text>
+                  <TextInput
+                    value={structure.name}
+                    onChangeText={(text) => handlePropertyChange("name", text)}
+                    placeholder="John Doe's Stand"
+                  />
+                </View>
 
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text>Store Name: </Text>
-            <TextInput
-              value={structure.name}
-              onChangeText={(text) => handlePropertyChange("name", text)}
-              placeholder="John Doe's Stand"
-            />
-          </View>
+                <TouchableOpacity onPress={handleImageChange}>
+                  <View style={styles.imageForm}>
+                    <Text>Upload Store Banner</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
 
-          <TouchableOpacity onPress={handleImageChange}>
-            <View style={styles.imageForm}>
-              <Text>Upload Store Banner</Text>
-            </View>
-          </TouchableOpacity>
-          <View style={styles.categoriesContainer}>
-            <SelectingCategory
-              chooseCategory={handlePropertyChange}
-              form={structure}
-            />
-            <CreateCategories
-              chooseCategory={handlePropertyChange}
-              form={structure}
-            />
-          </View>
-
+              <View style={styles.categoriesContainer}>
+                <SelectingCategory
+                  chooseCategory={handlePropertyChange}
+                  form={structure}
+                />
+                <CreateCategories
+                  chooseCategory={handlePropertyChange}
+                  form={structure}
+                />
+              </View>
+            </>
+          }
+          data={null}
+         
+          style={styles.form}
+        >
           {/* <SelectingTime times={structure.times} chooseTime={handlePropertyChange}/> */}
-        </View>
+        </FlatList>
       </KeyboardAvoidingView>
       <View style={styles.uploadContainer}>
         <TouchableOpacity
@@ -131,7 +147,7 @@ const VendorsCreate = () => {
               "vendor",
               makeImagePostRequest,
               { payload: structure },
-              user?._id!,
+              user?._id!
             )
           }
         >
@@ -157,11 +173,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   uploadContainer: {
-    paddingBottom: '7.5%',
-    backgroundColor: '#fff',
+    paddingBottom: "7.5%",
+    backgroundColor: "#fff",
+    flex: 0.075,
   },
   upload: {
-    
+    flex: 1,
     alignSelf: "center",
     paddingVertical: 10,
     paddingHorizontal: 20,
