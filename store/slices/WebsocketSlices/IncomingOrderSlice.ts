@@ -39,11 +39,14 @@ export const IncomingOrderSlice = createSlice({
     },
     addAcceptedOrder: (state, action) => {
       //remove from pending
-      state.pending = state.pending.filter(
-        (item) => item._id !== action.payload[0]._id
-      );
+
+      console.log("HERE IS ACTION:", action.payload)
+      console.log(action.payload)
+      // state.pending = state.pending.filter(
+        // (item) => item._id !== action.payload[0]._id
+      // );
       // Add to accepted
-      state.accepted.push(action.payload[0]);
+      // state.accepted.push(action.payload[0]);
     },
     removeFromAccepted: (state, action) => {
       state.accepted = state.accepted.filter(
