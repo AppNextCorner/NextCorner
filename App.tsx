@@ -61,7 +61,9 @@ export default function App() {
     let websocket: WebSocket | null = null;
 
     function connectWebSocket() {
-      // get your id handy
+      // get your idd handy
+
+      // put yoyur id and ip
       websocket = new WebSocket(
         `ws://192.168.1.227:4002/ws?uid=649c81bc7405e86a8581caa1`
       );
