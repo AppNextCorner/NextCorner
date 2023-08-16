@@ -3,7 +3,11 @@ import useUpdateOrders from "hooks/api/business/orders/useUpdateOrders";
 import { Iorder } from "../../typeDefinitions/interfaces/order.interface";
 import { useContext } from "react";
 import { WebSocketContext } from "../../context/incomingOrderContext";
-import { addAcceptedOrder, removeFromAccepted, removeFromPending, } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import {
+  addAcceptedOrder,
+  removeFromAccepted,
+  removeFromPending,
+} from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
 import { useAppDispatch } from "../../store/hook";
 
 const useHandleIncomingOrders = () => {
@@ -52,7 +56,11 @@ const useHandleIncomingOrders = () => {
     });
   };
 
-  const completeOrder = async (targetUid: string, orderId: string, order: Iorder) => {
+  const completeOrder = async (
+    targetUid: string,
+    orderId: string,
+    order: Iorder
+  ) => {
     const status = "completed";
     const payload = {
       type: "send_completed_order",
@@ -64,19 +72,19 @@ const useHandleIncomingOrders = () => {
       },
     };
     webSocket.send(JSON.stringify(payload));
-    console.log('finished websocket')
+    console.log("finished websocket");
     const updated = await updateOrderStatus({
       orderId,
       newStatus: status,
     });
     dispatch(removeFromAccepted(updated));
-   
   };
 
   const getPendingOrderList = async (storeId: string) => {
     const allOrders = await getAllOrders(storeId);
     const pendingOrders = allOrders.filter(
-      (singleOrder: Iorder) => singleOrder.accepted === "pending"
+      (singleOrder: Iorder) =>
+        singleOrder.accepted === "pending" && singleOrder.status !== "completed"
     );
     console.log("Pending Order List:", pendingOrders);
     return pendingOrders;
@@ -86,7 +94,9 @@ const useHandleIncomingOrders = () => {
     const allOrders = await getAllOrders(storeId);
 
     const acceptedOrdes = allOrders.filter(
-      (singleOrder: Iorder) => singleOrder.accepted === "accepted"
+      (singleOrder: Iorder) =>
+        singleOrder.accepted === "accepted" &&
+        singleOrder.status !== "completed"
     );
     return acceptedOrdes;
   };
@@ -102,4 +112,4 @@ const useHandleIncomingOrders = () => {
 
 export default useHandleIncomingOrders;
 
-// 
+//

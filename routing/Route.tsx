@@ -15,7 +15,10 @@ import { userLocation } from "hooks/handlePages/useGoogleMaps";
 import AppNavigationContainer from "./AppNavigationContainer";
 import { useMapRegion } from "hooks/useMaps/useMapRegion";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
-import { addIncomingOrder, getAcceptedOrders } from "../store/slices/WebsocketSlices/IncomingOrderSlice";
+import {
+  addIncomingOrder,
+  getAcceptedOrders,
+} from "../store/slices/WebsocketSlices/IncomingOrderSlice";
 import { auth } from "hooks/handleUsers/useFirebase";
 import { setCompleted } from "../store/slices/addToOrders";
 
@@ -44,13 +47,10 @@ interface IProps {
   websocket: WebSocket | null;
 }
 
-function useUserLocation(
-  url: string,
-  websocket: WebSocket | null,
-) {
+function useUserLocation(url: string, websocket: WebSocket | null) {
   const [mapRegion, setMapRegion] = useMapRegion();
   const [_viewLocation, setViewLocation] = React.useState(false);
-  const acceptedOrders = useAppSelector(getAcceptedOrders)
+  const acceptedOrders = useAppSelector(getAcceptedOrders);
   const dispatch = useAppDispatch();
 
   // NOTE TODO: MAKE ANOTHER OR ANOTHER WAY TO SEND THE LOCATION GLOBALLY FOR THE NEARBY VENDORS
@@ -94,25 +94,30 @@ function useUserLocation(
     const handleWebSocketMessage = (event: any) => {
       const parsedData = JSON.parse(event.data);
       const order = parsedData.payload;
-      console.log("Here is parsed data:", parsedData)
-      if (parsedData.type === "incoming_order" && order.accepted === "pending") {
-        console.log("Incoming order",  order)
-        // This one needs testing, a lot of testing...
-        dispatch(addIncomingOrder([order]))
-        }
-      if(parsedData.type === "return_change_accepted" && order.accepted === "rejected"){
-
-        Alert.alert("Your order got rejected")
+      console.log("Here is parsed data:", parsedData);
+      if (
+        parsedData.type === "incoming_order" &&
+        order.accepted === "pending"
+      ) {
+        dispatch(addIncomingOrder([order]));
+      }
+      if (
+        parsedData.type === "return_change_accepted" &&
+        order.accepted === "rejected"
+      ) {
+        Alert.alert("Your order got rejected");
       }
 
-      if(parsedData.type === "return_change_accepted" && order.accepted === "accepted"){
-
-        Alert.alert("Your order got accepted")
+      if (
+        parsedData.type === "return_change_accepted" &&
+        order.accepted === "accepted"
+      ) {
+        Alert.alert("Your order got accepted");
       }
 
       if (parsedData.type === "completed_order") {
         console.log("hoist is target uid:", order.order._id);
-      
+
         Alert.alert(
           `Your Order from ${order.order.storeInfo.storeName} is complete!`
         );
@@ -142,13 +147,15 @@ function useUserLocation(
     return () => {
       clearInterval(intervalId);
     };
-  }, [ mapRegion, acceptedOrders]);
+  }, [websocket, mapRegion, acceptedOrders]);
 }
 
 export default function Route(props: IProps) {
   const { isDone, isLoggedIn, url, websocket } = props;
- 
-  {isDone && isLoggedIn ? useUserLocation(url, websocket) : null}
+
+  {
+    isDone && isLoggedIn ? useUserLocation(url, websocket) : null;
+  }
 
   // console.log("Current map region:", mapRegion);
 

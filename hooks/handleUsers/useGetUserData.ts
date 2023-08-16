@@ -86,7 +86,7 @@ const useGetUserData = () => {
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.1.19:4002/ws?uid=${userData._id}`);
+          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData._id}`);
         } else {
           // User is signed out
           setUrl(`ws://192.168.1.19:4002/ws/debug`);

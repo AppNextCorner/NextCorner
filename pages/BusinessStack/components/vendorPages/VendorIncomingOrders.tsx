@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
