@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { ICart } from "../../store/slices/addToCartSessionSlice";
 import {
   setOrders,
-  updateOrderStatusReducer,
 } from "../../store/slices/addToOrders";
 import { makePostRequest } from "../../config/axios.config";
 import { getUser } from "../../store/slices/userSessionSlice";

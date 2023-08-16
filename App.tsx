@@ -9,8 +9,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
 import * as Location from "expo-location";
-import { useAppSelector } from "./store/hook";
-import { getAcceptedOrders } from "./store/slices/WebsocketSlices/IncomingOrderSlice";
 
 export default function App() {
   LogBox.ignoreLogs([
@@ -60,15 +58,86 @@ export default function App() {
       );
     }
 
-    const websocket = new WebSocket(url)
-    console.log('url for web socket: ', url)
-    return <Route isDone={isDone} isLoggedIn={isLoggedIn} url={url} websocket={websocket} />;
+    let websocket: WebSocket | null = null;
+
+    function connectWebSocket() {
+      // get your id handy
+      websocket = new WebSocket(
+        `ws://192.168.1.227:4002/ws?uid=649c81bc7405e86a8581caa1`
+      );
+      websocket.addEventListener("open", () => {
+        console.log("WebSocket connection opened");
+        // You can perform any necessary setup or send initial messages here
+      });
+
+      websocket.addEventListener("message", (event) => {
+        console.log("Received message:", event.data);
+        // Handle incoming messages here
+      });
+
+      websocket.addEventListener("close", () => {
+        console.log("WebSocket connection closed");
+        // Reconnect the WebSocket after a delay
+        setTimeout(connectWebSocket, 5000); // Example: reconnect after 1 second
+      });
+
+      websocket.addEventListener("error", (error) => {
+        console.error("WebSocket error:", error);
+        // Handle errors here
+      });
+    }
+
+    // Start the initial WebSocket connection
+    connectWebSocket();
+
+    // const websocket = new WebSocket(url);
+    // websocket.addEventListener("close", () => {
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    //   console.log("IS CLOSING!\n");
+    // });
+    // websocket.addEventListener("open", () => {
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    //   console.log("IS OPENING\n");
+    // });
+    console.log("url for web socket: ", url);
+    return (
+      <Route
+        isDone={isDone}
+        isLoggedIn={isLoggedIn}
+        url={url}
+        websocket={websocket}
+      />
+    );
   };
 
   return (
     <Provider store={store}>
       <StripeProvider
-        publishableKey={process.env.STRIPE_API_KEY ? process.env.STRIPE_API_KEY : ""}
+        publishableKey={
+          process.env.STRIPE_API_KEY ? process.env.STRIPE_API_KEY : ""
+        }
       >
         <GestureHandlerRootView style={{ flex: 1 }}>
           <NavigationContainer independent={true}>

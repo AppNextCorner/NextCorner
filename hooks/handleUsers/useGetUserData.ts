@@ -27,12 +27,10 @@ const useGetUserData = () => {
   const { getCurrentOrders } = UseOrders();
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [url, setUrl] = useState(`ws://192.168.1.19:4002/ws/debug`) // Fixes login instead of redux
+  const [url, setUrl] = useState(`ws://192.168.1.227:4002/ws/debug`); // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
-  const {
-    getPendingOrderList,
-    getAcceptedOrderList,
-  } = useHandleIncomingOrders();
+  const { getPendingOrderList, getAcceptedOrderList } =
+    useHandleIncomingOrders();
   /**
    * This post request sends an email and recieves data from the backend
    *
@@ -58,7 +56,7 @@ const useGetUserData = () => {
       console.log("Error fetching businesses:", error);
     }
   };
-
+  let userData: AppUser | null = null;
   useEffect(() => {
     /**
      * Checking if the user is authenticated in firebase, and if so, then fetch the data of the user
@@ -70,43 +68,52 @@ const useGetUserData = () => {
         console.log("API: ", API);
         console.log(user);
         if (user && user.email) {
-          const userData: AppUser = await getUserData(user.email);
+          userData = await getUserData(user.email);
 
           dispatchBusinesses();
-          const updateVendor = await updateBusinessInformation(userData._id);
-          const pendingOrders = updateVendor ? await getPendingOrderList(updateVendor.id) : [];
-          const acceptedOrders = updateVendor ? await getAcceptedOrderList(updateVendor.id) : [];
-          console.log('orders: ', acceptedOrders.length)
-          dispatch(setInitialOrders({
-            accepted: acceptedOrders,
-            pending: pendingOrders,
-          }))
+          const updateVendor = await updateBusinessInformation(userData!._id);
+          const pendingOrders = updateVendor
+            ? await getPendingOrderList(updateVendor.id)
+            : [];
+          const acceptedOrders = updateVendor
+            ? await getAcceptedOrderList(updateVendor.id)
+            : [];
+          console.log("orders: ", acceptedOrders.length);
+          dispatch(
+            setInitialOrders({
+              accepted: acceptedOrders,
+              pending: pendingOrders,
+            })
+          );
           console.log("running below functions");
           initializeCart();
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData._id}`);
+          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData!._id}`);
+          console.log("URL URL URL");
+          console.log(url);
         } else {
           // User is signed out
-          setUrl(`ws://192.168.1.19:4002/ws/debug`);
           dispatch(logOut());
           setIsDone(true);
           setIsLoggedIn(false);
         }
       } catch (err) {
-        console.log("error with fetching: ",err);
+        console.log("error with fetching: ", err);
       }
     };
     console.log("auth: ", auth);
     // Attach the callback function to the onAuthStateChanged event
     onAuthStateChanged(auth, handleAuthStateChanged);
-  }, [auth, dispatch]);
+  }, [auth]);
 
   return {
     isDone,
+    userData,
     isLoggedIn,
     url,
+    setUrl,
   };
 };
 

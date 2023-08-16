@@ -29,27 +29,29 @@ const VendorIncomingOrders = () => {
   );
 
   const handleWebSocketMessage = (event: any) => {
-    const parseData = JSON.parse(event.data)
-    const incomingOrder = parseData.payload
-   if (parseData.type === "incoming_order" && incomingOrder.accepted === "pending") {
-    // This one needs testing, a lot of testing...
-    dispatch(addIncomingOrder([incomingOrder]))
-    }
-    else if(parseData.type === "return_change_accepted" && route.name == "Orders" && incomingOrder.accepted === "rejected"){
+    const parseData = JSON.parse(event.data);
+    const incomingOrder = parseData.payload;
+    if (
+      parseData.type === "incoming_order" &&
+      incomingOrder.accepted === "pending"
+    ) {
+      // This one needs testing, a lot of testing...
+      dispatch(addIncomingOrder([incomingOrder]));
+    } else if (
+      parseData.type === "return_change_accepted" &&
+      route.name == "Orders" &&
+      incomingOrder.accepted === "rejected"
+    ) {
       dispatch(removeFromPending(incomingOrder));
     }
   };
 
-  
   useEffect(() => {
     setPendingMemoOrder(getPendingOrdersList);
     setAcceptedOrders(getAcceptedOrdersList);
   }, [dispatch, websocket, handleWebSocketMessage]);
 
-
-
-    websocket.onmessage = handleWebSocketMessage;
-
+  websocket.onmessage = handleWebSocketMessage;
 
   // Step 2: Create state variables for the toggle and orderes
   const [isToggleOn, setIsToggleOn] = useState(false);

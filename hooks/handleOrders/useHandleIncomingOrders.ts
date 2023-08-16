@@ -35,7 +35,6 @@ const useHandleIncomingOrders = () => {
       orderId,
       newStatus: accepted,
     });
-
     dispatch(addAcceptedOrder([newAcceptedOrder]));
   };
 
