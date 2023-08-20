@@ -26,9 +26,15 @@ export const IncomingOrderSlice = createSlice({
       state.pending.push(action.payload[0]);
     },
     removeFromPending: (state, action) => {
-      state.pending = state.pending.filter((item) => 
-         item._id !== action.payload
-      );
+      const index = state.pending
+        .map((item) => item._id)
+        .indexOf(action.payload);
+      state.pending.splice(index, 1);
+      console.log("new state pending length:");
+      // const newArr = state.pending.filter(
+      //   (item) => item._id !== action.payload
+      // );
+      // state.pending = newArr;
     },
     addAcceptedOrder: (state, action) => {
       state.pending = state.pending.filter(

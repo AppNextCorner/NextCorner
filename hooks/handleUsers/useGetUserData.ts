@@ -25,9 +25,10 @@ const useGetUserData = () => {
   const { updateBusinessInformation } = useBusinessInformation();
   const { initializeCart } = useFetchCart();
   const { getCurrentOrders } = UseOrders();
+  const [user, changeUser] = useState<AppUser | null>(null);
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [url, setUrl] = useState(`ws://192.168.1.19:4002/ws/debug`); // Fixes login instead of redux
+  const [url, setUrl] = useState(`ws://192.168.1.227:4002/ws/debug`); // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
   const { getPendingOrderList, getAcceptedOrderList } =
     useHandleIncomingOrders();
@@ -56,6 +57,7 @@ const useGetUserData = () => {
       console.log("Error fetching businesses:", error);
     }
   };
+
   let userData: AppUser | null = null;
   useEffect(() => {
     /**
@@ -69,7 +71,7 @@ const useGetUserData = () => {
         console.log(user);
         if (user && user.email) {
           userData = await getUserData(user.email);
-
+          changeUser(userData);
           dispatchBusinesses();
           const updateVendor = await updateBusinessInformation(userData!._id);
           const pendingOrders = updateVendor
@@ -85,14 +87,11 @@ const useGetUserData = () => {
               pending: pendingOrders,
             })
           );
-          console.log("running below functions");
           initializeCart();
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.1.19:4002/ws?uid=${userData!._id}`);
-          console.log("URL URL URL");
-          console.log(url);
+          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData!._id}`);
         } else {
           // User is signed out
           dispatch(logOut());
@@ -110,6 +109,7 @@ const useGetUserData = () => {
   return {
     isDone,
     userData,
+    user,
     isLoggedIn,
     url,
     setUrl,

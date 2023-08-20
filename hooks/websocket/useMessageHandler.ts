@@ -1,24 +1,12 @@
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import incomingOrder from "./handlers/incomingOrder";
-import completedOrder from "./handlers/completedOrder";
-import userAlertAcceptedOrder from "./handlers/acceptedOrder";
-import { getUser } from "../../store/slices/userSessionSlice";
-import { getPendingOrders } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { useAppDispatch } from "../../store/hook";
+import { addIncomingOrder } from "../../store/slices/WebsocketSlices/IncomingOrderSlice";
+import { Alert } from "react-native";
+import { setCompleted } from "../../store/slices/addToOrders";
+import AppUser from "../../typeDefinitions/interfaces/user.interface";
 interface IEvent {
-  [key: string]: (
-    event: Record<string, any>,
-    dispatcher: (param: any) => any,
-    extra?: Record<string, any> | undefined
-  ) => void | any;
+  [key: string]: (event: Record<string, any>, userData: AppUser) => void | any;
 }
-
-// List of the event handlers
-const eventList: IEvent = {
-  incoming_order: incomingOrder,
-  return_change_accepted: userAlertAcceptedOrder,
-  completed_order: completedOrder,
-};
 
 /**
  * Handler to call a function depending on the type from the event data
@@ -26,27 +14,62 @@ const eventList: IEvent = {
  */
 const useMessageHandler = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(getUser);
-  const pendingList = useAppSelector(getPendingOrders);
 
-  
-  const role = user?.role;
-  const extra = {
-    role,
-    pending: pendingList 
-  }
-  console.log("mesg handler is running!");
+  /**
+   * Places the incoming order inside the vendor list
+   * @param event - Our data containing the type of event and payload of event
+   * @param dispatcher - Using react redux dispatch for global update
+   */
+  const incomingOrder = (event: Record<string, any>, user: AppUser) => {
+    const order = event.payload;
+    console.log("SUPREME DATA");
+    console.log(order);
+    console.log(user.role);
+    console.log(order.accepted === "pending" && user.role === "vendor");
+    console.log("incoming order handler running!", order);
+    if (order.accepted === "pending" && user.role === "vendor") {
+      dispatch(addIncomingOrder([order]));
+    }
+  };
+
+  const userAlertAcceptedOrder = (
+    event: Record<string, any>,
+    user: AppUser
+  ) => {
+    const order = event.payload;
+    console.log("accepted handler is running!");
+    if (order.accepted === "accepted" && user.role === "user") {
+      Alert.alert("Your order got accepted, awesome");
+    } else if (order.accepted === "rejected" && user.role === "user") {
+      Alert.alert("Your order got rejected");
+    }
+  };
+
+  const completedOrder = (event: Record<string, any>, user: AppUser) => {
+    const payload = event.payload;
+    if (user.role === "user") {
+      Alert.alert(
+        `Your Order from ${payload.order.storeInfo.storeName} is complete!`
+      );
+    }
+
+    dispatch(setCompleted(payload.order));
+  };
+  let eventList: IEvent = {
+    incoming_order: incomingOrder,
+    return_change_accepted: userAlertAcceptedOrder,
+    completed_order: completedOrder,
+  };
 
   // Get the function from the event type as a key
   const routeEvent = useCallback(
-    (event: MessageEvent) => {
+    (event: MessageEvent, userData: AppUser) => {
       const data = JSON.parse(event.data);
       console.log("data in useMsgHandler: ", data);
       const eventHandler = eventList[data.type];
 
       if (eventHandler) {
-        console.log("event handler was found");
-        eventHandler(data, dispatch, extra);
+        eventHandler(data, userData);
       }
     },
     [dispatch]

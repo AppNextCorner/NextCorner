@@ -19,8 +19,8 @@ export default function App() {
   // BUG: When entering for the first time, the app refreshes, then it later works without refreshing
   const Root = () => {
     // Call useGetUserData here to fetch user data and authentication status
-    const { isDone, isLoggedIn, url } = useGetUserData();
-    const  {routeEvent} = useMessageHandler()
+    const { isDone, isLoggedIn, url, user } = useGetUserData();
+    const { routeEvent } = useMessageHandler();
     // const getAcceptedOrderList = useAppSelector(getAcceptedOrders)
     // console.log("accepted order list: ",getAcceptedOrderList);
     const [locationPermissionStatus, setLocationPermissionStatus] = useState(
@@ -61,26 +61,25 @@ export default function App() {
     }
 
     let websocket: WebSocket | null = null;
-let count : number = 0;
+    let count: number = 0;
     function connectWebSocket() {
       // get your idd handy
 
       // put yoyur id and ip
       websocket = new WebSocket(
-        `ws://192.168.1.19:4002/ws?uid=648d220045ba843985de5871`
+        `ws://192.168.1.227:4002/ws?uid=649c81bc7405e86a8581caa1`
       );
       websocket.addEventListener("open", () => {
         console.log("WebSocket connection opened\n\n\n\n\n\n\n\n\n\n\n\n");
         count++;
-        console.log(count)
+        console.log(count);
         // You can perform any necessary setup or send initial messages here
       });
 
       websocket.addEventListener("message", (event) => {
         console.log("Received message:", event.data);
         // Handle incoming messages here
-        isDone && isLoggedIn ? routeEvent(event) : null;
-
+        isDone && isLoggedIn && user ? routeEvent(event, user) : null;
       });
 
       websocket.addEventListener("close", () => {
@@ -98,37 +97,6 @@ let count : number = 0;
     // Start the initial WebSocket connection
     connectWebSocket();
 
-    // const websocket = new WebSocket(url);
-    // websocket.addEventListener("close", () => {
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    //   console.log("IS CLOSING!\n");
-    // });
-    // websocket.addEventListener("open", () => {
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    //   console.log("IS OPENING\n");
-    // });
     console.log("url for web socket: ", url);
     return (
       <Route
