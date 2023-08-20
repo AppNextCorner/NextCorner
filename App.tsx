@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
 import * as Location from "expo-location";
+import useMessageHandler from "hooks/websocket/useMessageHandler";
 
 export default function App() {
   LogBox.ignoreLogs([
@@ -19,6 +20,7 @@ export default function App() {
   const Root = () => {
     // Call useGetUserData here to fetch user data and authentication status
     const { isDone, isLoggedIn, url } = useGetUserData();
+    const  {routeEvent} = useMessageHandler()
     // const getAcceptedOrderList = useAppSelector(getAcceptedOrders)
     // console.log("accepted order list: ",getAcceptedOrderList);
     const [locationPermissionStatus, setLocationPermissionStatus] = useState(
@@ -59,22 +61,26 @@ export default function App() {
     }
 
     let websocket: WebSocket | null = null;
-
+let count : number = 0;
     function connectWebSocket() {
       // get your idd handy
 
       // put yoyur id and ip
       websocket = new WebSocket(
-        `ws://192.168.1.227:4002/ws?uid=649c81bc7405e86a8581caa1`
+        `ws://192.168.1.19:4002/ws?uid=648d220045ba843985de5871`
       );
       websocket.addEventListener("open", () => {
-        console.log("WebSocket connection opened");
+        console.log("WebSocket connection opened\n\n\n\n\n\n\n\n\n\n\n\n");
+        count++;
+        console.log(count)
         // You can perform any necessary setup or send initial messages here
       });
 
       websocket.addEventListener("message", (event) => {
         console.log("Received message:", event.data);
         // Handle incoming messages here
+        isDone && isLoggedIn ? routeEvent(event) : null;
+
       });
 
       websocket.addEventListener("close", () => {

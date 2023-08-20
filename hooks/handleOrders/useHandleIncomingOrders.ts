@@ -27,7 +27,7 @@ const useHandleIncomingOrders = () => {
       payload: {
         accepted,
         targetUid,
-        id: orderId,
+        orderId,
       },
     };
     webSocket.send(JSON.stringify(payload));
@@ -45,9 +45,14 @@ const useHandleIncomingOrders = () => {
       payload: {
         accepted,
         targetUid,
-        id: orderId,
+        orderId,
       },
     };
+
+    console.log("Order id:", orderId)
+    dispatch(removeFromPending(orderId));
+
+    console.log("HERE IS THE ORDERID", orderId);
     webSocket.send(JSON.stringify(payload));
     await updateOrderAcceptStatus({
       orderId,

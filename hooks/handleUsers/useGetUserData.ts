@@ -27,7 +27,7 @@ const useGetUserData = () => {
   const { getCurrentOrders } = UseOrders();
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [url, setUrl] = useState(`ws://192.168.1.227:4002/ws/debug`); // Fixes login instead of redux
+  const [url, setUrl] = useState(`ws://192.168.1.19:4002/ws/debug`); // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
   const { getPendingOrderList, getAcceptedOrderList } =
     useHandleIncomingOrders();
@@ -90,7 +90,7 @@ const useGetUserData = () => {
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.1.227:4002/ws?uid=${userData!._id}`);
+          setUrl(`ws://192.168.1.19:4002/ws?uid=${userData!._id}`);
           console.log("URL URL URL");
           console.log(url);
         } else {
@@ -103,7 +103,6 @@ const useGetUserData = () => {
         console.log("error with fetching: ", err);
       }
     };
-    console.log("auth: ", auth);
     // Attach the callback function to the onAuthStateChanged event
     onAuthStateChanged(auth, handleAuthStateChanged);
   }, [auth]);

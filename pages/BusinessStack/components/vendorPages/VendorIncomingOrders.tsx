@@ -4,20 +4,16 @@ import NextCornerVendorHeader from "components/vendors/NextCornerVendorHeader";
 import AllOrdersList from "components/vendors/handle/AllOrdersList";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import useHandleIncomingOrders from "hooks/handleOrders/useHandleIncomingOrders";
-import { useRoute } from "@react-navigation/native";
 import { WebSocketContext } from "../../../../context/incomingOrderContext";
 import {
-  addIncomingOrder,
   getAcceptedOrders,
   getPendingOrders,
-  removeFromPending,
 } from "../../../../store/slices/WebsocketSlices/IncomingOrderSlice";
 const VendorIncomingOrders = () => {
   const getAcceptedOrdersList = useAppSelector(getAcceptedOrders);
   const getPendingOrdersList = useAppSelector(getPendingOrders);
   const websocket = useContext(WebSocketContext);
   console.log("websocket vendor incoming", websocket);
-  const route = useRoute();
   const dispatch = useAppDispatch();
   //const { store }: RouteParams = route.params as RouteParams;
   const { acceptOrder, rejectOrder, completeOrder } = useHandleIncomingOrders();
@@ -28,39 +24,20 @@ const VendorIncomingOrders = () => {
     getAcceptedOrdersList
   );
 
-  const handleWebSocketMessage = (event: any) => {
-    const parseData = JSON.parse(event.data);
-    const incomingOrder = parseData.payload;
-    if (
-      parseData.type === "incoming_order" &&
-      incomingOrder.accepted === "pending"
-    ) {
-      // This one needs testing, a lot of testing...
-      dispatch(addIncomingOrder([incomingOrder]));
-    } else if (
-      parseData.type === "return_change_accepted" &&
-      route.name == "Orders" &&
-      incomingOrder.accepted === "rejected"
-    ) {
-      dispatch(removeFromPending(incomingOrder));
-    }
-  };
-
   useEffect(() => {
     setPendingMemoOrder(getPendingOrdersList);
     setAcceptedOrders(getAcceptedOrdersList);
-  }, [dispatch, websocket, handleWebSocketMessage]);
+  }, [dispatch, websocket, ]);
 
-  websocket.onmessage = handleWebSocketMessage;
 
   // Step 2: Create state variables for the toggle and orderes
-  const [isToggleOn, setIsToggleOn] = useState(false);
+  // const [isToggleOn, setIsToggleOn] = useState(false);
   // const [pendingOrders, setPendingOrders] = useState<Iorder[] | undefined>();
 
   // Toggle handler for when the store is open
-  const toggleHandler = () => {
-    setIsToggleOn(!isToggleOn);
-  };
+  // // // const toggleHandler = () => {
+  // //   setIsToggleOn(!isToggleOn);
+  // };
 
   return (
     <View style={styles.page}>

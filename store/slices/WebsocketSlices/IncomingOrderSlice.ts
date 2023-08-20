@@ -23,25 +23,14 @@ export const IncomingOrderSlice = createSlice({
       state.pending = action.payload.pending;
     },
     addIncomingOrder: (state, action) => {
-      console.log("Here is incoming order:\n");
-      console.log(action.payload);
-      console.log("\n\n\n\n");
       state.pending.push(action.payload[0]);
     },
     removeFromPending: (state, action) => {
-      state.pending = state.pending.filter(
-        (item) => item._id !== action.payload.id
-      );
-
-      state.pending = state.pending.filter(
-        (item) => item._id !== action.payload
+      state.pending = state.pending.filter((item) => 
+         item._id !== action.payload
       );
     },
     addAcceptedOrder: (state, action) => {
-      //remove from pending
-
-      // console.log("HERE IS ACTION:", action.payload)
-      // console.log(action.payload)
       state.pending = state.pending.filter(
         (item) => item._id !== action.payload[0]._id
       );

@@ -75,30 +75,12 @@ const UseOrders = () => {
     console.log('order placed from http: ', payload);
     websocket.send(JSON.stringify(payload));
   };
-  /**
-   * The function runs when the timer has reached zero causing the order status to be changed and put into a new state with the completed orders.
-   * @param {*} updatedStatus - the updated value of the order status in our order
-   *
-   */
-  const updateOrder = async (updatedStatus: any) => {
-    const itemStatus = {
-      status: updatedStatus.orderStatus,
-      id: updatedStatus.id,
-    };
-    try {
-      // change the state of the order status through the global state to display the order status
-      dispatch(updateOrderStatusReducer(itemStatus));
-      // send in axios put request to change the status whether the order is completed or no in our backend
-      dispatch(updateOrderStatusReducer(itemStatus));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+
+
 
   return {
     addCartToOrder,
     getCurrentOrders,
-    updateOrder,
   };
 };
 

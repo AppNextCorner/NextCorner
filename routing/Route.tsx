@@ -47,12 +47,10 @@ interface IProps {
   websocket: WebSocket | null;
 }
 
-function useUserLocation(url: string, websocket: WebSocket | null) {
+function useUserLocation(websocket: WebSocket | null) {
   const [mapRegion, setMapRegion] = useMapRegion();
   const [_viewLocation, setViewLocation] = React.useState(false);
   const acceptedOrders = useAppSelector(getAcceptedOrders);
-  const dispatch = useAppDispatch();
-
   // NOTE TODO: MAKE ANOTHER OR ANOTHER WAY TO SEND THE LOCATION GLOBALLY FOR THE NEARBY VENDORS
   const handleUserLocation = React.useCallback(
     async (newRegion: any) => {
@@ -89,60 +87,20 @@ function useUserLocation(url: string, websocket: WebSocket | null) {
     },
     [websocket, setMapRegion, acceptedOrders]
   );
-
   React.useEffect(() => {
-    const handleWebSocketMessage = (event: any) => {
-      const parsedData = JSON.parse(event.data);
-      const order = parsedData.payload;
-      console.log("Here is parsed data:", parsedData);
-      if (
-        parsedData.type === "incoming_order" &&
-        order.accepted === "pending"
-      ) {
-        dispatch(addIncomingOrder([order]));
-      }
-      if (
-        parsedData.type === "return_change_accepted" &&
-        order.accepted === "rejected"
-      ) {
-        Alert.alert("Your order got rejected");
-      }
-
-      if (
-        parsedData.type === "return_change_accepted" &&
-        order.accepted === "accepted"
-      ) {
-        Alert.alert("Your order got accepted");
-      }
-
-      if (parsedData.type === "completed_order") {
-        console.log("hoist is target uid:", order.order._id);
-
-        Alert.alert(
-          `Your Order from ${order.order.storeInfo.storeName} is complete!`
-        );
-        dispatch(setCompleted(order.order));
-      }
-    };
-    websocket!.onmessage = handleWebSocketMessage;
-    const updateUserLocation = async () => {
-      try {
-        await userLocation(
-          setViewLocation,
-          setMapRegion,
-          mapRegion,
-          null,
-          handleUserLocation // Sets the map region
-        );
-        console.log("updated user location");
-      } catch (error) {
-        console.error("Error updating user location:", error);
-      }
-    };
-
+   
     const intervalId = setInterval(() => {
-      updateUserLocation();
+      auth.currentUser !== null
+        ? userLocation(
+            setViewLocation,
+            setMapRegion,
+            mapRegion,
+            null,
+            handleUserLocation // Sets the map region
+          )
+        : clearInterval(intervalId);
     }, 5000);
+    
 
     return () => {
       clearInterval(intervalId);
@@ -151,10 +109,10 @@ function useUserLocation(url: string, websocket: WebSocket | null) {
 }
 
 export default function Route(props: IProps) {
-  const { isDone, isLoggedIn, url, websocket } = props;
+  const { isDone, isLoggedIn, websocket } = props;
 
   {
-    isDone && isLoggedIn ? useUserLocation(url, websocket) : null;
+    isDone && isLoggedIn ? useUserLocation(websocket) : null;
   }
 
   // console.log("Current map region:", mapRegion);

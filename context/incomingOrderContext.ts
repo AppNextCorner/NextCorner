@@ -1,5 +1,5 @@
 import React from "react";
 
 export const WebSocketContext = React.createContext(
-  new WebSocket(`ws://192.168.1.227:4002/ws/debug`)
+  new WebSocket(`ws://192.168.1.19:4002/ws?uid=648d220045ba843985de5871`)
 );
