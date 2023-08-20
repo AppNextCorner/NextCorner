@@ -40,7 +40,8 @@ const VendorsCreate = () => {
   // const [timeStructure, setTimeStructure] = useState<time[]>(vendorTime);
   const [structure, setStructure] = useState<vendorStructure>({
     name: "",
-    image: "https://cdn.vectorstock.com/i/preview-1x/06/03/vendor-snack-icon-flat-store-market-vector-45320603.jpg",
+    image:
+      "https://cdn.vectorstock.com/i/preview-1x/06/03/vendor-snack-icon-flat-store-market-vector-45320603.jpg",
     // Replace with announcements later when vendor pages are finished
     announcements: {
       cards: [],
@@ -59,7 +60,7 @@ const VendorsCreate = () => {
     menu: menuStructure,
     uid: user?._id,
     rating: 0,
-    trending: "",
+    trending: [""],
     storeStatus: "Not Approved",
     status: {
       text: "",
@@ -77,7 +78,7 @@ const VendorsCreate = () => {
     const response: string | null = await openImageLibrary();
     handlePropertyChange("image", response);
   };
-  
+
   return (
     <View style={{ flex: 1, paddingTop: "5%", backgroundColor: "#fff" }}>
       <NextCornerVendorHeader />
@@ -88,9 +89,9 @@ const VendorsCreate = () => {
         keyboardVerticalOffset={keyboardVerticalOffset(50, 0)}
       >
         <FlatList
-         showsVerticalScrollIndicator={false}
-         keyboardShouldPersistTaps="always"
-         keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
           renderItem={null}
           ListHeaderComponent={
             <>
@@ -132,7 +133,6 @@ const VendorsCreate = () => {
             </>
           }
           data={null}
-         
           style={styles.form}
         >
           {/* <SelectingTime times={structure.times} chooseTime={handlePropertyChange}/> */}

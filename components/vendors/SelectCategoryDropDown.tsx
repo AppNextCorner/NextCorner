@@ -3,7 +3,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import React, { Dispatch, SetStateAction } from "react";
 import { vendorStructure } from "../../typeDefinitions/interfaces/IVendor/vendorStructure";
 import { Iitem } from "../../typeDefinitions/interfaces/item.interface";
-
+import { foodCategories } from "constants/vendorCategories";
 interface IProps {
   store: vendorStructure;
   handlePropertyChange: (
@@ -16,7 +16,7 @@ interface IProps {
 
 const SelectCategoryDropDown = (props: IProps) => {
   const { store, setItem, handlePropertyChange } = props;
-
+  const categories = foodCategories.map((food) => food.text);
   return (
     <SelectDropdown
       showsVerticalScrollIndicator={true}
@@ -24,7 +24,8 @@ const SelectCategoryDropDown = (props: IProps) => {
       buttonTextStyle={{ fontSize: 15 }}
       buttonStyle={styles.dropdown}
       dropdownStyle={{ backgroundColor: "#fff", borderRadius: 10 }}
-      data={store.itemCategories}
+      // MUST UPDATE BELOW
+      data={categories}
       onSelect={(selected: string) => {
         handlePropertyChange(setItem, "category", selected);
       }}

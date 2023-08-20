@@ -20,9 +20,9 @@ export interface vendorStructure {
   category: Icategory;
   menu: Iitem[];
   uid?: string;
-  trending: string;
+  trending: string[];
   rating: number;
   status: status;
   storeStatus: string;
-  id?: string
+  id?: string;
 }

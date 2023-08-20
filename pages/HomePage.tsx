@@ -28,31 +28,24 @@ export default function HomePage() {
 
   const isClicked = useAppSelector(getButton);
   const vendors: vendorStructure[] = useAppSelector(getBusinesses);
-  const [topVendors, setTopVendors] = useState<vendorStructure[][]>([]);
+  const [topVendors, setTopVendors] = useState<vendorStructure[]>([]);
   // Only re-render the data in the dependency when it changes values
   const filterBusinessCards = useMemo(() => {
     return vendors.filter((i) => i.category.id == categoryId);
   }, [categoryId, vendors]);
 
   const updateTopVendors = React.useCallback(() => {
-    let copyTrending = [...topVendors];
-
+    const arr = [];
     for (let i = 0; i < categories.length; i++) {
-      let trending: vendorStructure[] = [];
       for (let j = 0; j < vendors.length; j++) {
-        console.log(vendors[j].trending, categories[i].name);
-        if (vendors[j].trending === categories[i].name) {
-          trending.push(vendors[j]);
+        for (let k = 0; k < vendors[j].trending.length; k++) {
+          if (vendors[j].trending[k] === categories[i].name) {
+            arr.push(vendors[j]);
+          }
         }
       }
-
-      console.log("trending row here: ", trending);
-      if (trending.length > 0) {
-        copyTrending.push(trending);
-      }
     }
-    console.log("copy trending: " + JSON.stringify(copyTrending));
-    setTopVendors(copyTrending);
+    setTopVendors(arr);
   }, [vendors, topVendors, categories]);
 
   // Make sures the function is called when the updateTopVendors dependencies changes
@@ -102,21 +95,29 @@ export default function HomePage() {
             renderItem={({ item }) => {
               // No Category button was selected
               if (!categoryWasSelected && topVendors.length > 0) {
-                // Find index of trending category
-                const findIndexOfTrendingCategory = topVendors.findIndex(
-                  (nestedArray: vendorStructure[]) =>
-                    nestedArray.length > 0 &&
-                    nestedArray[0].trending === item.name
-                );
+                console.log("Here is top Vendors:");
+                console.log(topVendors);
 
-                if (findIndexOfTrendingCategory !== -1) {
-                  return (
-                    <BusinessListComponent
-                      title={item.name}
-                      business={topVendors[findIndexOfTrendingCategory]}
-                    />
-                  );
+                for (let i = 0; i < topVendors.length; i++) {
+                  for (let j = 0; j < topVendors[i].trending.length; j++) {
+                    if (topVendors[i].trending[j] === item.name) {
+                      return (
+                        <BusinessListComponent
+                          title={item.name}
+                          business={[topVendors[i]]}
+                        />
+                      );
+                    }
+                  }
                 }
+                // if (findIndexOfTrendingCategory !== -1) {
+                //   return (
+                //     <BusinessListComponent
+                //       title={item.name}
+                //       business={topVendors[findIndexOfTrendingCategory]}
+                //     />
+                //   );
+                // }
               }
 
               return null;

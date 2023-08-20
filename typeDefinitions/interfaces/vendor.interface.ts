@@ -16,7 +16,7 @@ export interface vendor {
   categoryId: number;
   trendingCategory: string;
   rating: number;
-  trending: string;
+  trending: string[];
   status: status;
   id?: string;
 }

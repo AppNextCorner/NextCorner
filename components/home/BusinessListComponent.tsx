@@ -11,7 +11,7 @@ interface Props {
 
 const BusinessListComponent = React.memo((props: Props) => {
   const { checkForStyleChange } = useCategoryList();
-  // console.log("BLC:", props.business);
+  console.log("BLC:", props.business);
   if (props.business.length >= 1) {
     return (
       <View>
@@ -29,7 +29,6 @@ const BusinessListComponent = React.memo((props: Props) => {
               businessItem={item}
               checkForStyleChange={!checkForStyleChange}
             />
-
           )}
         />
         <View style={styles.margin}></View>

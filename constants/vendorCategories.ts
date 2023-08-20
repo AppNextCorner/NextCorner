@@ -2,28 +2,28 @@ import { featured } from "../typeDefinitions/interfaces/IVendor/featured";
 import { vendorCategory } from "../typeDefinitions/interfaces/vendorCategory.interface";
 
 export const categories: featured[] = [
-  { name: "Burger", id: 1 },
-  { name: "Cheap", id: 2 },
-  { name: "Best Reviews", id: 3 },
+  { name: "Best Reviews", id: 1 },
+  { name: "Best Tacos", id: 2 },
+  { name: "Best Drinks", id: 3 },
 ];
 export const foodCategories: vendorCategory[] = [
   {
-    text: "Grains",
+    text: "Tacos",
     foodType: require("assets/CategoryIcons/bread.png"),
     key: 1,
   },
   {
-    text: "Burger",
+    text: "Fruits",
     foodType: require("assets/CategoryIcons/burger.png"),
     key: 2,
   },
   {
-    text: "Burrito",
+    text: "Nieves",
     foodType: require("assets/CategoryIcons/burrito.png"),
     key: 3,
   },
   {
-    text: "Hot Dog",
+    text: "Drinks",
     foodType: require("assets/CategoryIcons/corndog.png"),
     key: 4,
   },
@@ -42,5 +42,4 @@ export const foodCategories: vendorCategory[] = [
     foodType: require("assets/CategoryIcons/pizza.png"),
     key: 7,
   },
-  
 ];
