@@ -5,6 +5,7 @@ export const categories: featured[] = [
   { name: "Best Reviews", id: 1 },
   { name: "Best Tacos", id: 2 },
   { name: "Best Drinks", id: 3 },
+  { name: "Best Fruits", id: 4 },
 ];
 export const foodCategories: vendorCategory[] = [
   {

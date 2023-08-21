@@ -40,14 +40,10 @@ export default function ItemPage() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { business, menuItem }: any = route.params;
   const [vendorItem, setVendorItem] = useState<Iitem>(menuItem);
-console.log(business)
   const cart = useAppSelector(getCart);
-  const businessName =
-    !cart || cart.length === 0
-      ? ""
-      :  business; 
+  const businessName = !cart || cart.length === 0 ? "" : business;
   console.log("name: ", businessName);
-  console.log(menuItem.storeInfo)
+  console.log(menuItem.storeInfo);
   const updateVendorItem = (updatedVendorItem: Iitem) => {
     setVendorItem(updatedVendorItem);
   };
@@ -144,7 +140,7 @@ console.log(business)
       </>
     );
   };
-  console.log(menuItem.customizations)
+  console.log(menuItem.customizations);
   return (
     <>
       <StatusBar style="light" />

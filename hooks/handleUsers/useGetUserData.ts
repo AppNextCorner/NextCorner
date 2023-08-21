@@ -43,7 +43,6 @@ const useGetUserData = () => {
     console.log("email: ", email);
     const response = await makePostRequest(url, { email: email });
     const data = response.data;
-    console.log("response from user: ", data);
     await dispatch(setUser(data.payload));
     return data.payload;
   };
@@ -67,8 +66,6 @@ const useGetUserData = () => {
       user: User | null
     ) => {
       try {
-        console.log("API: ", API);
-        console.log(user);
         if (user && user.email) {
           userData = await getUserData(user.email);
           changeUser(userData);
@@ -80,7 +77,6 @@ const useGetUserData = () => {
           const acceptedOrders = updateVendor
             ? await getAcceptedOrderList(updateVendor.id)
             : [];
-          console.log("orders: ", acceptedOrders.length);
           dispatch(
             setInitialOrders({
               accepted: acceptedOrders,

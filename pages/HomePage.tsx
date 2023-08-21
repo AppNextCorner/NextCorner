@@ -95,9 +95,6 @@ export default function HomePage() {
             renderItem={({ item }) => {
               // No Category button was selected
               if (!categoryWasSelected && topVendors.length > 0) {
-                console.log("Here is top Vendors:");
-                console.log(topVendors);
-
                 for (let i = 0; i < topVendors.length; i++) {
                   for (let j = 0; j < topVendors[i].trending.length; j++) {
                     if (topVendors[i].trending[j] === item.name) {
@@ -110,14 +107,6 @@ export default function HomePage() {
                     }
                   }
                 }
-                // if (findIndexOfTrendingCategory !== -1) {
-                //   return (
-                //     <BusinessListComponent
-                //       title={item.name}
-                //       business={topVendors[findIndexOfTrendingCategory]}
-                //     />
-                //   );
-                // }
               }
 
               return null;

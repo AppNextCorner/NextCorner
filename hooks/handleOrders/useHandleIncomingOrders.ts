@@ -88,7 +88,6 @@ const useHandleIncomingOrders = () => {
       (singleOrder: Iorder) =>
         singleOrder.accepted === "pending" && singleOrder.status !== "completed"
     );
-    console.log("Pending Order List:", pendingOrders);
     return pendingOrders;
   };
 

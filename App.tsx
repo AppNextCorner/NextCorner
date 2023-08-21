@@ -97,7 +97,6 @@ export default function App() {
     // Start the initial WebSocket connection
     connectWebSocket();
 
-    console.log("url for web socket: ", url);
     return (
       <Route
         isDone={isDone}

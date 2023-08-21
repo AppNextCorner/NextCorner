@@ -13,9 +13,7 @@ const VendorIncomingOrders = () => {
   const getAcceptedOrdersList = useAppSelector(getAcceptedOrders);
   const getPendingOrdersList = useAppSelector(getPendingOrders);
   const websocket = useContext(WebSocketContext);
-  console.log("websocket vendor incoming", websocket);
   const dispatch = useAppDispatch();
-  //const { store }: RouteParams = route.params as RouteParams;
   const { acceptOrder, rejectOrder, completeOrder } = useHandleIncomingOrders();
 
   const [pendingMemoOrder, setPendingMemoOrder] =
@@ -27,17 +25,7 @@ const VendorIncomingOrders = () => {
   useEffect(() => {
     setPendingMemoOrder(getPendingOrdersList);
     setAcceptedOrders(getAcceptedOrdersList);
-  }, [dispatch, websocket, ]);
-
-
-  // Step 2: Create state variables for the toggle and orderes
-  // const [isToggleOn, setIsToggleOn] = useState(false);
-  // const [pendingOrders, setPendingOrders] = useState<Iorder[] | undefined>();
-
-  // Toggle handler for when the store is open
-  // // // const toggleHandler = () => {
-  // //   setIsToggleOn(!isToggleOn);
-  // };
+  }, [dispatch, websocket, rejectOrder]);
 
   return (
     <View style={styles.page}>
