@@ -24,7 +24,7 @@ const authHandlers = () => {
       Alert.alert("required fields", requiredFields);
       return;
     }
-    const lambda = async (userData: any): Promise<AppUser> => {
+    const lambda = async (userData: AppUser): Promise<AppUser> => {
       const response = await makePostRequest(url, userData)
         .then((response) => {
           return response.data.payload;

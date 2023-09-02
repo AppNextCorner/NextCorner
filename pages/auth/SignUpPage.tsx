@@ -1,5 +1,4 @@
 import { useNavigation } from "@react-navigation/native";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
   View,
@@ -7,23 +6,19 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import useAddUser from "hooks/handleUsers/useAddUser";
-import { auth } from "hooks/handleUsers/useFirebase";
 import AppUser from "../../typeDefinitions/interfaces/user.interface";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { toggleButton } from "../../styles/components/toggleStyles";
 import { keyboardVerticalOffset } from "../../helpers/keyboardOffset";
 import authHandlers from "hooks/handleUsers/handleUserAuth";
 /**
  * Creating a new user through a request to our redux slice and login the user after an account has been created
  */
 export default function SignUpPage() {
-  const {handleAuth} = authHandlers();
+  const { handleAuth } = authHandlers();
   const [userData, setUserData] = useState<AppUser>({
     firstName: "",
     lastName: "",
@@ -47,25 +42,29 @@ export default function SignUpPage() {
 
   return (
     <KeyboardAvoidingView
-      
-      
       style={styles.signInContainer}
       enabled
-      behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+      behavior={Platform.OS === "ios" ? "position" : "height"}
       keyboardVerticalOffset={keyboardVerticalOffset(-110, 0)}
     >
-      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps='always' keyboardDismissMode='on-drag'>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+      >
         <View style={styles.headerTag}>
           <Text style={styles.mainHeader}>Create an account</Text>
           <Text>
             Welcome friend, enter your details to get started in ordering food
           </Text>
         </View>
-       
 
         <View style={styles.roleContainer}>
           <TouchableOpacity
-            onPress={() => setRoleChooser(false)}
+            onPress={() => {
+              handlePropertyChange("role", "user");
+              setRoleChooser(false);
+            }}
             style={styles.roleButton}
           >
             <Text
@@ -81,7 +80,10 @@ export default function SignUpPage() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setRoleChooser(true)}
+            onPress={() => {
+              handlePropertyChange("role", "vendor");
+              setRoleChooser(true);
+            }}
             style={styles.roleButton}
           >
             <Text
@@ -104,7 +106,7 @@ export default function SignUpPage() {
           <TextInput
             style={styles.textInput}
             onChangeText={(text) => {
-              handlePropertyChange("email", text);
+              handlePropertyChange("email", text.toLowerCase());
             }}
             placeholder="email@gmail.com"
           />
@@ -149,11 +151,15 @@ export default function SignUpPage() {
 
         <TouchableOpacity
           onPress={() =>
-          handleAuth('/auth/signup', userData, roleChooser, ["firstName", "lastName", "email", "password", "phoneNumber", "role"])}
-          //    {
-          //   registerUser(userData);
-          //   console.log("here is role", userData.role);
-          // }}
+            handleAuth("/auth/signup", userData, roleChooser, [
+              "firstName",
+              "lastName",
+              "email",
+              "password",
+              "phoneNumber",
+              "role",
+            ])
+          }
           style={styles.signInButton}
         >
           <Text style={styles.signInText}>Register</Text>

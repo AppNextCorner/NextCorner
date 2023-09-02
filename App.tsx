@@ -67,7 +67,8 @@ export default function App() {
 
       // put yoyur id and ip
       websocket = new WebSocket(
-        `ws://192.168.1.227:4002/ws?uid=649c81bc7405e86a8581caa1`
+        url
+        // `ws://192.168.0.20:4002/ws?uid=649c81bc7405e86a8581caa1`
       );
       websocket.addEventListener("open", () => {
         console.log("WebSocket connection opened\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -77,7 +78,8 @@ export default function App() {
       });
 
       websocket.addEventListener("message", (event) => {
-        console.log("Received message:", event.data);
+        // console.log(url);
+        // console.log("Received message:", event.data);
         // Handle incoming messages here
         isDone && isLoggedIn && user ? routeEvent(event, user) : null;
       });

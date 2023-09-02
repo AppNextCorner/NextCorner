@@ -22,36 +22,31 @@ const useMessageHandler = () => {
    */
   const incomingOrder = (event: Record<string, any>, user: AppUser) => {
     const order = event.payload;
-    console.log("SUPREME DATA");
-    console.log(order);
-    console.log(user.role);
-    console.log(order.accepted === "pending" && user.role === "vendor");
-    console.log("incoming order handler running!", order);
-    if (order.accepted === "pending" && user.role === "vendor") {
-      dispatch(addIncomingOrder([order]));
-    }
+    dispatch(addIncomingOrder([order]));
   };
-
+  // TOO DOO Change this code so that only users with roles get alerts
   const userAlertAcceptedOrder = (
     event: Record<string, any>,
     user: AppUser
   ) => {
     const order = event.payload;
     console.log("accepted handler is running!");
-    if (order.accepted === "accepted" && user.role === "user") {
+    if (order.accepted === "accepted") {
+      // make it so only a user role gets this msg
       Alert.alert("Your order got accepted, awesome");
-    } else if (order.accepted === "rejected" && user.role === "user") {
+    } else if (order.accepted === "rejected") {
+      // make it so only a user role gets this msg
       Alert.alert("Your order got rejected");
     }
   };
 
   const completedOrder = (event: Record<string, any>, user: AppUser) => {
     const payload = event.payload;
-    if (user.role === "user") {
-      Alert.alert(
-        `Your Order from ${payload.order.storeInfo.storeName} is complete!`
-      );
-    }
+    // if (user.role === "user") {
+    Alert.alert(
+      `Your Order from ${payload.order.storeInfo.storeName} is complete!`
+    );
+    // }
 
     dispatch(setCompleted(payload.order));
   };
