@@ -8,7 +8,7 @@ import { AppDispatch } from "../../typeDefinitions/action.type";
 import { makePostRequest } from "../../config/axios.config";
 import fetchBusinesses from "pages/BusinessStack/api/getBusinessess";
 import { setBusinesses } from "../../store/slices/BusinessSlice/businessSessionSlice";
-import { API } from "constants/API";
+import { wsUrl } from "constants/API";
 import { useFetchCart } from "hooks/api/business/menu/useFetchCart";
 import UseOrders from "hooks/handleVendors/useOrders.hook";
 import useBusinessInformation from "hooks/api/business/useBusinessInformation";
@@ -28,11 +28,7 @@ const useGetUserData = () => {
   const [user, changeUser] = useState<AppUser | null>(null);
   const [isDone, setIsDone] = useState(false); // runs when the authentication has been initialized whether a user is authenticated or not
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Dummy endpoint
-  const [url, setUrl] = useState(
-    `ws://192.168.0.20:4002`
-  ); 
+  const [url, setUrl] = useState(`${wsUrl}?uid=0000000`); // Fixes login instead of redux
   const dispatch: AppDispatch = useAppDispatch();
   const { getPendingOrderList, getAcceptedOrderList } =
     useHandleIncomingOrders();
@@ -91,8 +87,9 @@ const useGetUserData = () => {
           getCurrentOrders(userData);
           setIsDone(true);
           setIsLoggedIn(true);
-          setUrl(`ws://192.168.0.20:4002/ws?uid=${userData!._id}`);
+          setUrl(`${wsUrl}?uid=${userData!._id}`);
         } else {
+          setUrl(`${wsUrl}?uid=000000`);
           // User is signed out
           dispatch(logOut());
           setIsDone(true);

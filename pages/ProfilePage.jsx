@@ -94,14 +94,14 @@ export default function ProfilePage() {
 
       {vendorPortal()}
 
-      <View> 
+      {/* <View> 
         <Pressable
         style={styles.logOutButton}
         onPress={() => changeRoleToVendor(user._id)}
         >
           <Text style={styles.logOutTextButton}>Become a Vendor</Text>
         </Pressable>
-      </View>
+      </View> */}
 
         <View style={styles.logOutContainer}>
           <Pressable

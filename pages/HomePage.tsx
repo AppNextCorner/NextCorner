@@ -35,6 +35,7 @@ export default function HomePage() {
   }, [categoryId, vendors]);
 
   const updateTopVendors = React.useCallback(() => {
+    console.log('trending: ', categories)
     const arr = [];
     for (let i = 0; i < categories.length; i++) {
       for (let j = 0; j < vendors.length; j++) {

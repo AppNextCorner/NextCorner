@@ -10,6 +10,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import useGetUserData from "hooks/handleUsers/useGetUserData";
 import * as Location from "expo-location";
 import useMessageHandler from "hooks/websocket/useMessageHandler";
+import { wsUrl } from "constants/API";
 
 export default function App() {
   LogBox.ignoreLogs([
